@@ -39,10 +39,14 @@ cp zcat-ui/ONBOARDING.md "$OUT/docs/" 2>/dev/null || true
 # resolves against the stylesheet that consumes it (src/components/shell.css),
 # not against this document, so it already points at /docs/icons/. Rewriting it
 # here would break every icon — see the trap in HANDOFF §5.
+# The sidebar's "Basic Template" link is NOT a literal href — the NAV registry
+# stores it as '@template.html' and the renderer strips the '@'. It needs the
+# same rewrite or it 404s from the site root.
 sed -e 's|href="\.\./zcat\.css|href="zcat.css|g' \
     -e 's|src="\.\./zcat\.js|src="zcat.js|g' \
     -e 's|src="icons/|src="docs/icons/|g' \
     -e 's|href="template\.html"|href="docs/template.html"|g' \
+    -e "s|'@template\.html'|'@docs/template.html'|g" \
     zcat-ui/docs/playground.html > "$OUT/index.html"
 
 # Slate needs this inside the deployed directory (CLI < 1.27 pattern).
