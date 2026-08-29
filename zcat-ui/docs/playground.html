@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=94">
+  <link rel="stylesheet" href="../zcat.css?v=95">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -481,6 +481,34 @@ Q4. CRITIQUE YOUR OWN SCREEN BEFORE SHOWING ME. Render it, look at the
     like the same layout side by side, you have failed: redesign, don't tweak.
 
 HARD RULES (violating these is the failure mode)
+- 100% FEATURE COVERAGE. EVERY tab, field, column, button, link, filter, copy
+  icon, menu item and action in what I give you must exist in what you build.
+  Rearranging, regrouping and repositioning are expected. DROPPING is not —
+  not because a screen felt crowded, not because you judged something
+  redundant, not silently. If you believe something should go, ASK ME FIRST and
+  wait; telling me afterwards is not the same thing. Before you show me a
+  screen, count the features in my input and count them in your page.
+- SUPPLY THE STATES A WIREFRAME NEVER DRAWS. Wireframes show one happy path —
+  a full table, a filled form. Real screens have more, and providing them is
+  basic senior-designer work, not extra credit. For every screen, work out and
+  build the states it implies:
+  * EMPTY — no data yet, or a filter that matched nothing. Use .zc-empty
+    (illustration + heading + one-line explanation + the action that fixes it).
+    A first-run empty state and a no-search-results one are different screens.
+  * LOADING — .zc-skeleton for content, .zc-progress where there is progress.
+  * ERROR / permission denied, where the flow can fail.
+  * SELECTION — if a table has checkboxes it needs its default, single-select
+    and multi-select bars.
+  Tell me which states you added. If a state genuinely does not apply, say so
+  rather than skipping it silently.
+- ONE PRIMARY BUTTON PER SCREEN. Exactly one filled button
+  (data-variant="fill") is the page's call to action — the single thing you
+  most want the user to do. Count every fill button visible at once, including
+  the one that opens a popup; demote the rest to outline, grey or ghost. Two
+  filled buttons side by side means neither is the primary. A popup's own
+  footer action is a separate surface and does not count against the page.
+  Destructive actions are never the page's primary CTA — they belong in a
+  Danger Zone or a three-dot menu.
 - A WIREFRAME IS A FEATURE LIST, NOT A LAYOUT. Take from it WHAT must exist —
   every tab, field, column, button, action. Do not take HOW it is arranged.
   100% of the features must survive; the arrangement must not. If my wireframe
