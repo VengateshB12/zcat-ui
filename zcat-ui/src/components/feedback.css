@@ -102,9 +102,14 @@
   color: var(--zc-attention-text-body);
 }
 
-/* Type: message — single row, gap 4 */
+/* Type: message — gap 4.
+   align-items must be flex-start, NOT center: centring is only correct while
+   the message is one line, and the moment it wraps the icon drifts to the
+   middle of the block instead of staying with the sentence it belongs to.
+   The 2px nudge below optically centres the 16px icon on the first 20px line,
+   so this reads correctly at one line and at ten. */
 .zc-attention[data-type="message"] {
-  align-items: center;
+  align-items: flex-start;
   gap: var(--zc-space-4);
 }
 .zc-attention__message {

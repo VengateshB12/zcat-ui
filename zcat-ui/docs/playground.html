@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=96">
+  <link rel="stylesheet" href="../zcat.css?v=97">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -481,6 +481,18 @@ Q4. CRITIQUE YOUR OWN SCREEN BEFORE SHOWING ME. Render it, look at the
     like the same layout side by side, you have failed: redesign, don't tweak.
 
 HARD RULES (violating these is the failure mode)
+- NEVER ADD A STATE SWITCHER. Do not put a "Preview" dropdown, a debug toggle
+  or any control that flips between states — that is a developer's harness, not
+  a product screen, and it would ship to a real user. Build the states as a REAL
+  FLOW that a person walks through: the empty screen with its create button →
+  the create popup → the populated list → click a row → the detail screen →
+  its loading state. Separate files (functions-empty.html, functions.html,
+  function-detail.html) or genuine in-page navigation, each one reachable by
+  doing the thing a user would do. Tell me the entry point and how to walk it.
+- SUB HEADER PRIMARY TABS CARRY NO ICONS. Text only, even when the wireframe
+  draws an icon on every tab. Icons in a primary tab row add noise to the one
+  element that should read as a clean line of words. (Secondary tabs may take
+  an icon where it genuinely disambiguates.)
 - 100% FEATURE COVERAGE. EVERY tab, field, column, button, link, filter, copy
   icon, menu item and action in what I give you must exist in what you build.
   Rearranging, regrouping and repositioning are expected. DROPPING is not —
@@ -526,7 +538,10 @@ HARD RULES (violating these is the failure mode)
   service has no logo in that set, use the closest one and tell me. Never
   invent a logo and never substitute a stroke icon for it.
   So the only parts a page may change are: the side menu's content and item
-  icons, the SUB HEADER, and the container's content. A wireframe showing a
+  icons, the SUB HEADER, and the container's content. If the service you are
+  building for has no logo in the *-color.svg set, pick ANY existing one from
+  that set and tell me which — an empty or invented logo is never acceptable,
+  and a blank service chip means you changed something you should not have. A wireframe showing a
   different rail or topbar is describing its own product, not ours — keep ours.
 - DETAIL PAGES: the entity name, its status badge and the back affordance live
   in the SUB HEADER — the Back Nav round-button variant in the left group, with
@@ -538,6 +553,12 @@ HARD RULES (violating these is the failure mode)
   Header TITLE becomes that item's name — the row you clicked, the card you
   opened — shown with the Back Nav beside it. The title always names what you
   are looking at, never the section you came from.
+- A LONE FIELD IN A POPUP LOOKS BROKEN. Popup form controls stretch to the
+  body's full width — never leave one narrow field floating in a wide popup.
+  If a step has a single short input, either let it span the full width or pair
+  it with its natural companion on one row (region + version, port + database).
+  A wizard step with one small field usually means the steps were split too
+  finely: merge it into the step it belongs with.
 - POPUP ANATOMY IS FIXED. There is NO close (X) in any popup variant — a
   wireframe that draws one is wrong; dismissal is the footer's Cancel. Footer
   buttons are real .zc-btn components, never text links: a simple form is
