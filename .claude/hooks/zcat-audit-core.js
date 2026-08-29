@@ -308,19 +308,52 @@ function __zcatAudit() {
       msg: "page does not start from .zc-layout — every product screen is built inside the Catalyst shell (rail, topbar, sidemenu, subheader, container), never as a floating card",
       sel: "(page)" });
 
-  /* ── 19. Primary tabs belong in the Sub Header, never the container ─ */
-  if (subheader) {
+  /* ── 19. Primary tabs belong in the Sub Header, never the container ─
+     Deliberately NOT gated on a sub header existing: a page that omits the sub
+     header and drops its primary tabs into the container is the very case this
+     rule exists to catch, and the old `if (subheader)` guard let it through. */
+  {
     const containerTabs = [...document.querySelectorAll(".zc-layout__container .zc-tabs")]
       .filter(vis).filter(t => t.getAttribute("data-type") !== "secondary" &&
                                !t.closest(".zc-popup, .zc-fullpopup, .zc-cheader"));
     for (const t of containerTabs)
       fail("TABS IN CONTAINER",
-        "page-level tabs are sitting in the container — primary tabs MUST live in the Sub Header (.zc-layout__subheader-tabs); only section-scoped tabs may sit inside the container, as data-type=\"secondary\" in the Container Header", t);
+        "page-level tabs are sitting in the container — primary tabs MUST live in the Sub Header (.zc-layout__subheader-tabs); only section-scoped tabs may sit inside the container, as data-type=\"secondary\" in the Container Header. A wireframe drawing them in the container is low fidelity, not an instruction", t);
     const shTabs = [...document.querySelectorAll(".zc-layout__subheader .zc-tabs")].filter(vis);
     if (!shTabs.length && containerTabs.length)
-      F.push({ rule: "SUB HEADER HAS NO TABS",
-        msg: "this page has tabs but the Sub Header has none — the Sub Header is where the page's primary tab level lives",
+      F.push({ rule: subheader ? "SUB HEADER HAS NO TABS" : "NO SUB HEADER FOR PAGE TABS",
+        msg: subheader
+          ? "this page has tabs but the Sub Header has none — the Sub Header is where the page's primary tab level lives"
+          : "this page has page-level tabs but no Sub Header at all — add the Sub Header and put the primary tabs in its tabs row",
         sel: "(subheader)" });
+  }
+
+  /* ── 19b. An action bar must not be one lonely button ───────────────
+     A primary action floating on the right with an empty left half is the
+     "assembled, not designed" tell. The Container Header has two sides on
+     purpose: actions right, and a heading / Search / filters left. */
+  {
+    const hasText = el => (el.textContent || "").trim().length > 0;
+    for (const ch of [...document.querySelectorAll(".zc-cheader")].filter(vis)) {
+      const left = ch.querySelector(".zc-cheader__left");
+      const right = ch.querySelector(".zc-cheader__right");
+      const rightBtns = right ? [...right.querySelectorAll(".zc-btn")].filter(vis) : [];
+      const leftFilled = left && (hasText(left) || left.querySelector("input, .zc-search-wrap, .zc-select-shell, .zc-tabs"));
+      if (rightBtns.length && !leftFilled)
+        fail("LONE ACTION BUTTON",
+          "this Container Header has actions on the right but nothing on the left — put the section heading, a Search field or the filters there; a primary button floating alone against empty space is the assembled-not-designed tell", ch);
+    }
+    /* Buttons stacked directly above a table with no Container Header at all */
+    for (const tw of [...document.querySelectorAll(".zc-layout__container .zc-table-wrap")].filter(vis)) {
+      const prev = tw.previousElementSibling;
+      if (!prev || prev.classList.contains("zc-cheader")) continue;
+      const btns = [...prev.querySelectorAll(".zc-btn")].filter(vis);
+      const hasLeft = prev.querySelector(".zc-search-wrap, .zc-select-shell, .zc-cheader__title") ||
+                      (prev.textContent || "").replace(/\s+/g, " ").trim().length > btns.reduce((n, b) => n + (b.textContent || "").trim().length, 0) + 2;
+      if (btns.length && !hasLeft)
+        fail("ACTION BAR NOT A CONTAINER HEADER",
+          "buttons are sitting above this table in a hand-made row — that bar is the Container Header (.zc-cheader), with actions right and a heading / Search / filters left", prev);
+    }
   }
 
   /* ── 20. Hand-built controls instead of components ─────────────────── */

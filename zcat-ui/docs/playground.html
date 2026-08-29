@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=89">
+  <link rel="stylesheet" href="../zcat.css?v=91">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -443,8 +443,85 @@ ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
    get overlooked — General Details, Container Side Menu, Empty State, Attention
    Box, Timeline, Stepper, Tour, Code Block, Key Value fields. Check
    ONBOARDING.md before hand-building anything.
+5. MAP EVERY ELEMENT TO A COMPONENT **AND ITS VARIANT** before you write any
+   markup, and show me that mapping. For each thing in my requirement name the
+   zc-* component AND which variant/props you will use — e.g. "entity header ->
+   Sub Header, Back Nav + title + Status Badge", "page tabs -> .zc-tabs
+   data-type='primary' in the sub header tabs row", "field list -> General
+   Details". If you cannot name a component and a variant for something, you
+   are about to hand-build it: stop, re-check ONBOARDING.md, and ask me.
+   Most components already have the variant you need — look before you build.
 
 HARD RULES (violating these is the failure mode)
+- A WIREFRAME IS A FEATURE LIST, NOT A LAYOUT. Take from it WHAT must exist —
+  every tab, field, column, button, action. Do not take HOW it is arranged.
+  100% of the features must survive; the arrangement must not. If my wireframe
+  and your page look like the same layout side by side, you have failed even
+  though every feature is present. Wireframes are drawn quickly and put things
+  wherever there was room; our components already say where things go.
+- DETAIL PAGES: the entity name, its status badge and the back affordance live
+  in the SUB HEADER — the Back Nav round-button variant in the left group, with
+  the plain title and a Status Badge beside it. Do not hand-build an entity
+  header block inside the container, and do not put a breadcrumb frame there
+  instead. Supporting facts (engine, region, size) belong in the content as
+  General Details or stat cards, not stacked under a hand-made title.
+- POPUP ANATOMY IS FIXED. There is NO close (X) in any popup variant — a
+  wireframe that draws one is wrong; dismissal is the footer's Cancel. Footer
+  buttons are real .zc-btn components, never text links: a simple form is
+  Cancel (data-variant="grey") then the action (data-variant="fill"
+  data-color="primary"); a wizard is Back (grey) pushed to the far LEFT with
+  .zc-popup__footer-back, then Cancel (grey) and Continue (fill) on the right.
+  A blue "Cancel" written as a link is not our component. Popup widths are
+  fixed — 550px, or 414px with data-size="small". Never set a custom width.
+  A wizard's step indicator is the real .zc-stepper, in the header area under
+  the title, never in the body.
+- ICONS ARE LINE ICONS, FROM OUR SET, FULL STOP. Every icon comes from
+  zcat-ui/docs/icons/ and is stroke-only — bind stroke to currentColor at
+  stroke-width 1.3, never fill it. No emoji, no Unicode glyphs, no third-party
+  icon packs, and no coloured product artwork (a dolphin for MySQL, an elephant
+  for PostgreSQL, a coloured cloud). If a wireframe shows brand artwork, map it
+  to the closest line icon from our set and tell me which you chose. The one
+  exception is a SERVICE LOGO in the shell, which must be an existing
+  *-color.svg from docs/icons/ — never a stroke icon file, and never anywhere
+  else.
+- SELECTION CARDS ARE A COMPONENT. A list of choosable options — engines,
+  instance sizes, plans — is .zc-card with data-state="selected" and a
+  <span class="zc-card__check"></span> inside; the blue corner check is built
+  in. Do not hand-build a bordered box with a radio in the corner, and do not
+  compose your own indicator onto a card. For a numeric range use the real
+  .zc-slider. Check ONBOARDING.md before building any chooser.
+- CREATE AND EDIT ARE ALWAYS POPUPS. Never put editable inputs on a page.
+  A detail or settings screen is READ-ONLY: show the values with General
+  Details (.zc-gdetails), stat cards or plain read-only text, and put the way
+  in behind an Edit action — a three-dot menu on the section, or an Edit
+  button in the Container Header — which opens a .zc-popup with the fields and
+  Cancel + Save. A wireframe that draws form fields and an "Apply changes"
+  button straight on the page is describing WHAT is editable, not HOW to build
+  it; convert it to read-only display plus an edit popup. The only inputs
+  allowed to sit directly on a settings page are instant-apply toggles
+  (something that takes effect the moment you flip it, with no Save).
+  Destructive actions go last, in a Danger Zone at the bottom or in the
+  three-dot menu, and always confirm in a popup.
+- NEVER LEAVE AN ACTION BUTTON FLOATING ALONE. Any bar above a table or list
+  is the Container Header (.zc-cheader): actions on the RIGHT, and something
+  real on the LEFT — a section heading, a Search field, or the filters. A
+  primary button sitting by itself on the right with empty space beside it is
+  wrong every time. If the requirement gives you nothing for the left, use the
+  section heading or a Search — do not ship the empty half. And do not build
+  that bar out of divs: it is .zc-cheader.
+- TAB PLACEMENT — the rule broken most often. If a page has ONE level of tabs,
+  they are the PAGE's tabs and they belong in the SUB HEADER, full width, as
+  <div class="zc-tabs zc-layout__subheader-tabs" data-type="primary"> inside
+  the sub header's second row. NEVER put page-level tabs inside the container.
+  Wireframes almost always draw them inside the container — that is the
+  wireframe being low-fidelity, NOT a layout instruction. Copying it is a
+  failure even though the wireframe "said" so.
+  Two levels of tabs: the primary level goes in the Sub Header, and only the
+  secondary level may sit inside the container, as data-type="secondary" in
+  the Container Header. Section-scoped tabs (tabs that switch content within
+  one card or panel) may sit in the container as secondary.
+  Exactly ONE tab carries data-state="active", and the visible content must be
+  that tab's content.
 - Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css">
   and <script src="zcat-ui/zcat.js" defer><\/script>. Never copy rules out of it,
   never restyle a zc-* class, never write a raw hex — every colour is a
