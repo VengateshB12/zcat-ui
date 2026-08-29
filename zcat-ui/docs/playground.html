@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=91">
+  <link rel="stylesheet" href="../zcat.css?v=92">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -451,6 +451,34 @@ ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
    Details". If you cannot name a component and a variant for something, you
    are about to hand-build it: stop, re-check ONBOARDING.md, and ask me.
    Most components already have the variant you need — look before you build.
+
+DESIGN IT — THIS IS THE PART THAT DECIDES IF I LIKE IT
+Following the rules below only makes a screen CORRECT. Correct and boring is
+still a failure. Components are building material, not the design.
+
+Q1. NAME THE QUALITY BAR AND LOOK AT IT. Pick the production screen this page
+    should feel like from reference-screenshots/ in the repo (with the MCP
+    connected, zcat_get_screenshot_patterns maps page type -> screenshot).
+    OPEN THE PNG and look at it — do not just cite the filename. Tell me which
+    one you picked and which patterns you are taking from it: how it groups
+    things, where it puts weight, how dense it is.
+Q2. GIVE ME 2-3 COMPOSITION DIRECTIONS BEFORE BUILDING. For each: the layout in
+    one line, and the user task it optimises for. Then your pick and why the
+    others lose. One option means you took the literal one — the wireframe's.
+    Think in relationships: what sits BESIDE what, what is promoted, what
+    collapses into a card, what becomes a summary row across the top.
+Q3. VARY EMPHASIS. If every section heading is the same size, every card the
+    same padding, and everything is one column stacked down the page, nothing
+    is important and the screen reads as a list of components. Use scale,
+    position, whitespace and grouping to say what matters. A dashboard needs
+    hierarchy and scanning; a log needs density; a form needs clarity; a detail
+    page needs relationships. Do not apply one formula to every screen.
+Q4. CRITIQUE YOUR OWN SCREEN BEFORE SHOWING ME. Render it, look at the
+    screenshot next to the reference, and answer honestly: what does a user
+    understand in 3 seconds? Does the eye land on the most important thing?
+    Name the WEAKEST thing on the screen — there always is one — and fix it.
+    "It follows the rules" is not an answer. If your page and my wireframe look
+    like the same layout side by side, you have failed: redesign, don't tweak.
 
 HARD RULES (violating these is the failure mode)
 - A WIREFRAME IS A FEATURE LIST, NOT A LAYOUT. Take from it WHAT must exist —
