@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=84">
+  <link rel="stylesheet" href="../zcat.css?v=85">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -396,16 +396,32 @@
   </div>
   <nav id="nav"></nav>
   <script type="text/plain" id="first-prompt-src">
-Build my requirement with the zcat UI component library in the zcat-ui/ folder.
+Build my requirement with the zcat UI component library.
   Library:  https://github.com/VengateshB12/zcat-ui
   Rules:    the zcat MCP at https://zcat.catalystappsail.in/mcp
+  Docs:     https://zcatdocs.onslate.in
+
+SET UP FIRST (do this yourself — do not ask me to)
+A. If there is no zcat-ui/ folder here, get one:
+     git clone https://github.com/VengateshB12/zcat-ui.git
+   Then use the zcat-ui/ folder inside it, or copy that folder next to my pages.
+B. If the zcat MCP is not already connected, connect it. It is public — no key,
+   no login, just a URL. In Claude Code:
+     claude mcp add --transport http zcat https://zcat.catalystappsail.in/mcp
+   In Cursor or another editor, add the same URL to its MCP settings file. Tell
+   me if it needs a restart to take effect. If you cannot connect it, say so and
+   carry on using the rules files inside the repo — but tell me they may be
+   older than the server's.
+C. Link the library in every page you create, unmodified:
+     <link rel="stylesheet" href="zcat-ui/zcat.css">
+     <script src="zcat-ui/zcat.js" defer><\/script>
 
 BEFORE WRITING ANY CODE
 1. Read zcat-ui/ONBOARDING.md fully — it is the contract. The component API
    tables there are authoritative; docs/playground.html render functions and the
    usage comments at the top of each src/components/*.css file are the reference
    markup. Do not invent markup shapes.
-2. If the zcat MCP is connected, it is the CURRENT source of the design rules —
+2. The zcat MCP is the CURRENT source of the design rules —
    prefer it over any rules file on disk, which may be a stale copy. Use
    zcat_get_hard_rules, zcat_get_decision_rules (read only the topic you need),
    zcat_get_sample_data and zcat_search_components / zcat_search_icons. Apply
@@ -3348,21 +3364,16 @@ const COMPONENTS = {
            '</div>';
 
       h += '<div><h3>How to use it in a project</h3><ol class="doc-steps">' +
-        stepEl(1, 'Clone the library',
-          '<p>Pull the repo, then copy <code>zcat-ui/</code> into your project — or work in the clone directly. There is no build step and no dependencies.</p>' +
-          '<pre class="doc-code">' + esc('git clone https://github.com/VengateshB12/zcat-ui.git') + '</pre>' +
-          '<p>Run <code>git pull</code> whenever you want the latest components.</p>') +
-        stepEl(2, 'Link the two files',
-          '<p>Add them once, unmodified. <code>zcat.js</code> auto-initialises every component, including markup you inject later.</p>' +
-          '<pre class="doc-code">' + esc('<link rel="stylesheet" href="zcat-ui/zcat.css">\n<script src="zcat-ui/zcat.js" defer></scr' + 'ipt>') + '</pre>') +
-        stepEl(3, 'Connect the zcat MCP',
-          '<p>The design rules live on a server, not in the repo, so they stay current without pulling again. It serves the hard rules, the decision rules by topic, realistic sample data, the tokens, and component and icon search.</p>' +
-          '<pre class="doc-code">' + esc('https://zcat.catalystappsail.in/mcp') + '</pre>') +
-        stepEl(4, 'Open a build chat with the first prompt',
-          '<p>Paste the prompt below into Claude, Cursor or any coding agent. It points the agent at the contract in <code>ONBOARDING.md</code> and sets the rules before any code is written.</p>') +
-        stepEl(5, 'Give your requirement',
-          '<p>Text, a screenshot, or a PRD. The agent lists back every screen and state it found — including the empty and create/edit states — and confirms with you before building.</p>') +
-        '</ol></div>';
+        stepEl(1, 'Paste the prompt into your coding agent',
+          '<p>Claude, Cursor, or anything else with a terminal. The prompt does the setup itself — it clones the library, connects the zcat MCP for the live design rules, links the two files, and reads the contract in <code>ONBOARDING.md</code> before writing a line of code.</p>' +
+          '<p>Nothing to install and nothing to configure first. The MCP is public — no key, no login.</p>') +
+        stepEl(2, 'Describe what you want built',
+          '<p>Text, a wireframe, a screenshot, or a PRD. The agent lists back every screen and state it found — including the empty and create/edit states — and confirms with you before building.</p>') +
+        '</ol>' +
+        '<p class="doc-lead" style="margin-top:16px">Prefer to set up by hand? Clone <code>' +
+        esc('github.com/VengateshB12/zcat-ui') + '</code>, add the MCP URL <code>' +
+        esc('https://zcat.catalystappsail.in/mcp') + '</code> to your editor, and link ' +
+        '<code>zcat.css</code> + <code>zcat.js</code>. Run <code>git pull</code> for the latest components.</p></div>';
 
       h += '<div><div class="doc-actions"><h3 style="margin:0">The first prompt</h3>' +
            '<span style="display:inline-flex;gap:10px">' +
