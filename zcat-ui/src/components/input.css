@@ -1,0 +1,998 @@
+/* =============================================================================
+   zcat — Text Input, Password, Number, Textarea, Search, Combobox, Select
+   Sizes: Large(44), Default(36), Small(32), Extra Small(28)
+   States: Default, Hover, Active, Disabled, Filled, Error
+
+   Usage:
+     <div class="zc-input-group">
+       <label class="zc-label">Label <span class="zc-label__required">*</span></label>
+       <div class="zc-input-wrap" data-size="default" data-state="default">
+         <svg class="zc-input__icon zc-input__icon--left">...</svg>
+         <input class="zc-input" type="text" placeholder="Placeholder">
+         <svg class="zc-input__icon zc-input__icon--right">...</svg>
+       </div>
+       <span class="zc-helper" data-state="default">Helper text</span>
+     </div>
+   ============================================================================= */
+
+/* ── Label ── */
+.zc-label {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  font-family: var(--zc-font-primary);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-input-text-label);
+  margin-bottom: var(--zc-space-2);
+}
+.zc-label__required {
+  color: var(--zc-body-text-danger);
+}
+.zc-label__optional {
+  font-weight: 400;
+  color: var(--zc-body-text-light);
+}
+.zc-label__icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.73; /* 1.3 at 16px viewBox, scaled to render at 12px */
+  fill: none;
+}
+.zc-label[data-state="disabled"] { color: var(--zc-input-text-disabled); }
+.zc-label[data-state="disabled"] .zc-label__required { color: var(--zc-input-text-disabled); }
+.zc-label[data-state="disabled"] .zc-label__optional { color: var(--zc-input-text-disabled); }
+
+/* ── Helper Text ── */
+.zc-helper {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-input-text-helper);
+  margin-top: var(--zc-space-4);
+}
+.zc-helper[data-state="error"]   { color: var(--zc-input-text-error); }
+.zc-helper[data-state="success"] { color: var(--zc-input-text-success); }
+.zc-helper[data-state="warning"] { color: var(--zc-input-text-warning); }
+.zc-helper[data-state="disabled"] { color: var(--zc-input-text-disabled); }
+.zc-helper__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.49; /* 1.3 at 16px viewBox, scaled to render at 14px */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.zc-helper[data-size="small"] { font-size: 10px; line-height: 12px; }
+
+/* ── Input Wrapper ── */
+.zc-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--zc-input-bg-default);
+  border: var(--zc-border-default) solid var(--zc-input-border-default);
+  border-radius: var(--zc-radius-6);
+  transition: border-color 0.15s, background-color 0.15s;
+  cursor: text;
+}
+
+/* Sizes */
+.zc-input-wrap, .zc-input-wrap[data-size="default"] {
+  height: 36px;
+  padding: 0 var(--zc-space-8);
+  gap: var(--zc-space-6);
+}
+.zc-input-wrap[data-size="small"] {
+  height: 28px;
+  padding: 0 var(--zc-space-6);
+  gap: var(--zc-space-4);
+}
+.zc-input-wrap[data-size="xs"] {
+  height: 24px;
+  padding: 0 var(--zc-space-4);
+  gap: var(--zc-space-2);
+  border-radius: var(--zc-radius-4);
+}
+
+/* States */
+.zc-input-wrap:hover, .zc-input-wrap[data-state="hover"] {
+  background: var(--zc-input-bg-hover);
+  border-color: var(--zc-input-border-hover);
+}
+.zc-input-wrap:focus-within, .zc-input-wrap[data-state="active"] {
+  background: var(--zc-input-bg-active);
+  border-color: var(--zc-input-border-active);
+}
+.zc-input-wrap[data-state="error"] {
+  background: var(--zc-input-bg-error);
+  border-color: var(--zc-input-border-error);
+}
+.zc-input-wrap[data-state="disabled"] {
+  background: var(--zc-input-bg-disabled);
+  border-color: var(--zc-input-border-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Input element ── */
+.zc-input {
+  flex: 1 1 0%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-input-text-default);
+}
+.zc-input-wrap[data-size="xs"] .zc-input { font-size: 12px; line-height: 16px; }
+.zc-input::placeholder { color: var(--zc-input-text-placeholder); opacity: 1; }
+.zc-input:disabled { color: var(--zc-input-text-disabled); cursor: not-allowed; }
+.zc-input:disabled::placeholder { color: var(--zc-input-text-disabled); }
+
+/* ── Icons inside input ── */
+.zc-input__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: var(--zc-input-icon-default);
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.zc-input-wrap:focus-within .zc-input__icon { stroke: var(--zc-input-icon-active); }
+.zc-input-wrap[data-state="error"] .zc-input__icon { stroke: var(--zc-input-icon-error); }
+.zc-input-wrap[data-state="disabled"] .zc-input__icon { stroke: var(--zc-input-icon-disabled); }
+
+/* ── Textarea ──
+   Usage: <div class="zc-input-wrap zc-input-wrap--textarea" data-size="default">
+            <textarea class="zc-input zc-textarea" rows="4"></textarea>
+          </div>
+*/
+.zc-input-wrap--textarea {
+  height: auto;
+  align-items: flex-start;
+  padding: var(--zc-space-8) var(--zc-space-10);
+}
+.zc-textarea {
+  resize: none;
+  min-height: 48px;
+}
+.zc-textarea-count {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-body-text-light);
+  text-align: right;
+  margin-top: var(--zc-space-4);
+  flex-shrink: 0;
+}
+
+/* Helper text + character count on one row */
+.zc-input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zc-space-8);
+}
+.zc-input-footer .zc-textarea-count { margin-left: auto; }
+
+/* ── Password toggle ── */
+.zc-input__toggle {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  stroke: var(--zc-input-icon-default);
+  fill: none;
+}
+
+/* ── Number input stepper ── */
+.zc-input-stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+}
+.zc-input-stepper__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 14px;
+  cursor: pointer;
+  color: var(--zc-input-icon-default);
+  background: transparent;
+  border: none;
+  border-radius: var(--zc-radius-2);
+}
+.zc-input-stepper__btn:hover { background: var(--zc-body-bg-hover); }
+
+/* ── Select / Dropdown trigger ──
+   Same as input but with chevron-down icon
+   Usage: <div class="zc-input-wrap zc-select-wrap" data-size="default">
+            <span class="zc-input zc-select__value">Selected</span>
+            <svg class="zc-select__chevron">...</svg>
+          </div>
+*/
+.zc-select-wrap { cursor: pointer; }
+.zc-select__value {
+  flex: 1 1 0%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zc-select__value--placeholder { color: var(--zc-input-text-placeholder); }
+.zc-select__chevron {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: var(--zc-input-icon-default);
+  fill: none;
+  transition: transform 0.2s;
+}
+.zc-select-wrap[data-state="active"] .zc-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Search Bar ── */
+.zc-search-wrap .zc-input__icon--left { stroke: var(--zc-body-icon-light); }
+.zc-search-wrap .zc-input__clear {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  stroke: var(--zc-body-icon-light);
+  fill: none;
+  display: none;
+}
+.zc-search-wrap[data-state="filled"] .zc-input__clear { display: block; }
+
+/* ── Currency prefix ── */
+.zc-input__prefix {
+  font-size: 14px;
+  color: var(--zc-body-text-secondary);
+  flex-shrink: 0;
+  padding-right: var(--zc-space-8);
+  border-right: var(--zc-border-default) solid var(--zc-body-border-default);
+  margin-right: var(--zc-space-8);
+}
+
+/* ── OTP Input ──
+   Usage: <div class="zc-otp" data-size="default" data-digits="6">
+            <input class="zc-otp__box" maxlength="1">...
+          </div>
+*/
+.zc-otp {
+  display: flex;
+  gap: var(--zc-space-8);
+}
+.zc-otp__box {
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  border: var(--zc-border-default) solid var(--zc-input-border-default);
+  border-radius: var(--zc-radius-6);
+  background: var(--zc-input-bg-default);
+  font-family: var(--zc-font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--zc-input-text-default);
+  outline: none;
+}
+.zc-otp__box:focus { border-color: var(--zc-input-border-active); }
+.zc-otp[data-size="large"] .zc-otp__box  { width: 44px; height: 44px; font-size: 16px; }
+.zc-otp[data-size="small"] .zc-otp__box  { width: 32px; height: 32px; font-size: 12px; }
+
+/* ── Token / Tag Input ──
+   Usage: <div class="zc-input-wrap zc-token-wrap" data-size="default">
+            <span class="zc-tag" data-color="primary" data-size="small">...</span>
+            <input class="zc-input">
+          </div>
+*/
+.zc-token-wrap {
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 36px;
+  padding: var(--zc-space-4) var(--zc-space-8);
+  gap: var(--zc-space-4);
+}
+
+/* =============================================================================
+   Dropdown / Search / File Upload / Link Box / Key-Value / Double / Inline Edit
+   NOTE: Figma has Text Box gap=s6 but Dropdown/Search/Upload gap=s4.
+   Standardised on s6 (6px) everywhere — flagged for Figma cleanup.
+   ============================================================================= */
+
+/* ── OTP (Text Box style & sizes) ── */
+.zc-otp { display: flex; gap: var(--zc-space-8); }
+.zc-otp__box {
+  width: 36px; height: 36px; text-align: center;
+  border: var(--zc-border-default) solid var(--zc-input-border-default);
+  border-radius: var(--zc-radius-6);
+  background: var(--zc-input-bg-default);
+  font-family: var(--zc-font-primary);
+  font-size: 14px; line-height: 20px; font-weight: 400;
+  color: var(--zc-input-text-default);
+  outline: none; transition: border-color .15s, background-color .15s;
+}
+.zc-otp__box::placeholder { color: var(--zc-input-text-placeholder); }
+.zc-otp__box:hover { background: var(--zc-input-bg-hover); border-color: var(--zc-input-border-hover); }
+.zc-otp__box:focus { background: var(--zc-input-bg-active); border-color: var(--zc-input-border-active); }
+.zc-otp[data-state="error"] .zc-otp__box { border-color: var(--zc-input-border-error); background: var(--zc-input-bg-error); }
+.zc-otp[data-state="disabled"] .zc-otp__box {
+  background: var(--zc-input-bg-disabled); border-color: var(--zc-input-border-disabled);
+  color: var(--zc-input-text-disabled); cursor: not-allowed;
+}
+.zc-otp[data-size="small"] .zc-otp__box { width: 28px; height: 28px; }
+.zc-otp[data-size="xs"] .zc-otp__box { width: 24px; height: 24px; font-size: 12px; line-height: 16px; border-radius: var(--zc-radius-4); }
+.zc-otp__sep { display: flex; align-items: center; color: var(--zc-input-text-placeholder); }
+
+/* ── Number stepper (stacked arrows) ──
+   Named .zc-numstepper: organisms.css owns .zc-stepper for the
+   multi-step progress indicator, a different component. */
+.zc-numstepper {
+  display: flex; flex-direction: column; flex-shrink: 0;
+  width: 14px; height: 28px;
+}
+.zc-stepper__btn {
+  width: 14px; height: 14px; padding: 0; border: none; background: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--zc-input-icon-default);
+}
+.zc-stepper__btn:hover { color: var(--zc-input-icon-active); }
+.zc-stepper__btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Password reveal toggle ── */
+.zc-input__reveal {
+  width: 16px; height: 16px; flex-shrink: 0; cursor: pointer;
+  display: block; stroke: var(--zc-input-icon-default); fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.zc-input__reveal:hover { stroke: var(--zc-input-icon-active); }
+
+/* ── Link Box ── */
+.zc-linkbox {
+  display: flex; align-items: center; height: 36px; width: 100%;
+  background: var(--zc-cards-bg-secondary);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-radius: var(--zc-radius-6);
+  padding-left: var(--zc-space-8);
+  overflow: hidden;
+}
+.zc-linkbox__text {
+  flex: 1 1 0%; min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 14px; line-height: 20px;
+  color: var(--zc-input-text-default);
+}
+.zc-linkbox__copy {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--zc-cards-bg-secondary);
+  border-left: var(--zc-border-default) solid var(--zc-body-border-default);
+  align-self: stretch;
+  cursor: pointer;
+}
+.zc-linkbox__copy svg { width: 16px; height: 16px; stroke: var(--zc-input-icon-default); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-linkbox__copy:hover svg { stroke: var(--zc-input-icon-active); }
+.zc-linkbox[data-state="hover"] { border-color: var(--zc-input-border-hover); }
+.zc-linkbox--inside { flex-direction: row; }
+.zc-linkbox__inline-label {
+  flex-shrink: 0; padding-right: var(--zc-space-8);
+  font-size: 12px; font-weight: 600; color: var(--zc-input-text-label);
+}
+.zc-linkbox-row { display: flex; align-items: center; gap: var(--zc-space-8); }
+.zc-linkbox-row > .zc-label { margin-bottom: 0; flex-shrink: 0; }
+
+/* ── Double Field (joined dropdown + input) ── */
+/* Two controls joined into one field. Either child may be a plain
+   .zc-input-wrap or a .zc-select-shell wrapping one. */
+.zc-doublefield { display: flex; align-items: center; width: 100%; }
+.zc-doublefield > :first-child { width: 170px; flex: 0 0 170px; margin-right: -1px; }
+.zc-doublefield > :last-child  { flex: 1 1 0%; min-width: 0; width: auto; }
+.zc-doublefield > :first-child .zc-input-wrap,
+.zc-doublefield > :first-child.zc-input-wrap {
+  border-top-right-radius: 0; border-bottom-right-radius: 0;
+}
+.zc-doublefield > :last-child .zc-input-wrap,
+.zc-doublefield > :last-child.zc-input-wrap {
+  border-top-left-radius: 0; border-bottom-left-radius: 0;
+}
+.zc-doublefield .zc-input-wrap:focus-within { z-index: 1; position: relative; }
+
+/* ── Key Value row ── */
+.zc-kvfield {
+  display: flex; align-items: center;
+  gap: var(--zc-space-10); padding: var(--zc-space-6);
+  border-radius: var(--zc-radius-6); width: 100%;
+}
+.zc-kvfield[data-state="hover"] { background: var(--zc-input-bg-keyvalue-hover); }
+.zc-kvfield[data-state="error"] { background: var(--zc-input-bg-keyvalue-hover); }
+.zc-kvfield__btn:disabled { opacity: .4; cursor: not-allowed; }
+.zc-kvfield__btn:disabled:hover { background: var(--zc-body-border-default); }
+.zc-kvfield__fields { display: flex; flex: 1 1 0%; min-width: 0; gap: var(--zc-space-16); align-items: center; }
+.zc-kvfield__fields > * { flex: 1 1 0%; min-width: 0; }
+/* Figma: 2x3 grid of 3px dots on a 4px pitch → 7x11px. */
+.zc-kvfield__drag {
+  display: grid; grid-template-columns: repeat(2, 3px); gap: 1px;
+  flex-shrink: 0; cursor: grab; align-self: center;
+}
+.zc-kvfield__drag i { width: 3px; height: 3px; border-radius: 3px; background: var(--zc-input-border-default); display: block; }
+.zc-kvfield__btn {
+  width: 24px; height: 24px; flex-shrink: 0; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--zc-body-border-default);
+  border: none; border-radius: var(--zc-radius-full); cursor: pointer;
+}
+.zc-kvfield__btn svg { width: 12px; height: 12px; stroke: var(--zc-input-text-default); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.zc-kvfield__btn:hover { background: var(--zc-input-border-default); }
+
+/* ── Inline Edit ── */
+.zc-inline {
+  display: inline-flex; align-items: center; gap: var(--zc-space-8);
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 14px; line-height: 20px; color: var(--zc-body-text-primary);
+  border: var(--zc-border-default) solid transparent;
+  border-radius: var(--zc-radius-4); padding: 0 var(--zc-space-4);
+  min-height: 24px;
+}
+.zc-inline__icon { width: 14px; height: 14px; flex-shrink: 0; display: none; stroke: var(--zc-input-icon-default); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-inline:hover, .zc-inline[data-state="hover"] { background: var(--zc-body-bg-hover); }
+.zc-inline:hover .zc-inline__icon,
+.zc-inline[data-state="hover"] .zc-inline__icon { display: block; }
+.zc-inline[data-state="active"] {
+  background: var(--zc-input-bg-active);
+  border-color: var(--zc-input-border-active);
+}
+.zc-inline[data-state="active"] .zc-inline__icon { display: block; }
+.zc-inline__input {
+  border: none; background: transparent; outline: none;
+  font: inherit; color: inherit; min-width: 120px;
+}
+
+/* ── File Upload dropzone (Large) ── */
+.zc-upload-zone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--zc-space-4); height: 118px; width: 100%;
+  background: var(--zc-input-bg-default);
+  border: var(--zc-border-default) dashed var(--zc-input-border-default);
+  border-radius: var(--zc-radius-6); cursor: pointer;
+  font-size: 14px; line-height: 20px; color: var(--zc-input-text-placeholder);
+}
+.zc-upload-zone:hover, .zc-upload-zone[data-state="hover"] {
+  background: var(--zc-input-bg-hover); border-color: var(--zc-input-border-hover);
+}
+.zc-upload-zone svg { width: 24px; height: 24px; stroke: var(--zc-input-icon-default); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-upload-file {
+  display: flex; align-items: center; gap: var(--zc-space-8);
+  padding: var(--zc-space-8); width: 100%;
+  border: var(--zc-border-default) solid var(--zc-input-border-default);
+  border-radius: var(--zc-radius-6); background: var(--zc-input-bg-default);
+}
+.zc-upload-file__name { flex: 1 1 0%; min-width: 0; font-size: 14px; line-height: 20px; color: var(--zc-input-text-default); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zc-upload-file__meta { font-size: 12px; line-height: 16px; color: var(--zc-body-text-light); flex-shrink: 0; }
+.zc-upload-progress { height: 4px; width: 100%; background: var(--zc-body-border-default); border-radius: var(--zc-radius-full); overflow: hidden; margin-top: var(--zc-space-4); }
+.zc-upload-progress i { display: block; height: 100%; background: var(--zc-input-border-active); border-radius: var(--zc-radius-full); }
+
+/* ── Hide native browser controls (we render our own) ── */
+.zc-input[type="number"]::-webkit-outer-spin-button,
+.zc-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.zc-input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+.zc-input[type="password"]::-ms-reveal,
+.zc-input[type="password"]::-ms-clear { display: none; }
+.zc-input::-webkit-credentials-auto-fill-button,
+.zc-input::-webkit-strong-password-auto-fill-button {
+  visibility: hidden; display: none !important; pointer-events: none;
+  margin: 0; width: 0; height: 0;
+}
+.zc-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+
+/* ── Search clear (shown only once text is entered) ── */
+.zc-input__clear {
+  width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; display: none;
+  stroke: var(--zc-input-icon-default); fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.zc-search-wrap.is-filled .zc-input__clear { display: block; }
+.zc-input__clear:hover { stroke: var(--zc-input-icon-active); }
+
+/* ── Link Box: copy button is always a square matching the box height ── */
+/* Figma: Icon Container is a fixed square with its own full border; the parent's
+   overflow + radius clip the outer corners. Shadow only when the URL is clipped. */
+.zc-linkbox__copy { border-radius: 0; box-shadow: none; }
+.zc-linkbox[data-size="small"] .zc-linkbox__copy { width: 28px; height: 28px; }
+.zc-linkbox.is-clipped .zc-linkbox__copy {
+  box-shadow: -4px 0 6px -2px var(--zc-body-bg-body);
+}
+.zc-linkbox[data-size="small"] .zc-linkbox__copy { width: 28px; height: 28px; }
+.zc-linkbox[data-size="small"] { height: 28px; }
+
+/* Overflow behaviours */
+.zc-linkbox__text[data-overflow="scroll"] {
+  overflow-x: auto; text-overflow: clip; scrollbar-width: none;
+}
+.zc-linkbox__text[data-overflow="scroll"]::-webkit-scrollbar { display: none; }
+.zc-linkbox__text[data-overflow="tooltip"] { cursor: help; }
+
+/* ── Dropdown Menu (Figma: Dropdown Menu, node 444:4342) ──
+   Type: Default | Default with Button | Multi Select | Multi Select with Button | Empty 1 | Empty 2
+   Size: Default (36px rows) | Small (28px rows).  Boolean: Show Search box
+*/
+.zc-select-shell { position: relative; width: 100%; }
+.zc-menu {
+  position: absolute; top: calc(100% + var(--zc-space-4)); left: 0;
+  z-index: 100; min-width: 160px; width: 100%;
+  display: none; flex-direction: column;
+  background: var(--zc-menu-bg-default);
+  border: var(--zc-border-default) solid var(--zc-menu-border);
+  border-radius: var(--zc-radius-6);
+  box-shadow: 0 4px 14px -4px var(--zc-body-bg-body);
+  max-height: 300px; overflow: hidden;
+}
+.zc-menu.is-open { display: flex; }
+.zc-menu__body { padding: var(--zc-space-8); overflow-y: auto; flex: 1 1 auto; }
+.zc-menu__heading {
+  font-family: var(--zc-font-primary); font-weight: 600;
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-menu-text-heading);
+  padding: 0 var(--zc-space-4) var(--zc-space-2);
+}
+.zc-menu__search { padding: var(--zc-space-6) 0 var(--zc-space-8); }
+.zc-menu__heading + .zc-menu__search { padding-top: var(--zc-space-4); }
+
+/* Rows */
+.zc-menu__item {
+  display: flex; align-items: center; gap: var(--zc-space-4);
+  min-height: 36px; padding: var(--zc-space-8) var(--zc-space-4);
+  border-radius: var(--zc-radius-4); cursor: pointer;
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 14px; line-height: 20px;
+  color: var(--zc-menu-text-default);
+}
+.zc-menu__item:hover { background: var(--zc-menu-bg-hover); }
+.zc-menu__item[aria-selected="true"] { background: var(--zc-menu-bg-selected); }
+.zc-menu__item[aria-disabled="true"] { color: var(--zc-menu-text-disabled); cursor: not-allowed; }
+.zc-menu__label { flex: 1 1 0%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Optional leading icon in a menu row (action menus: edit / delete / …) */
+.zc-menu__icon {
+  width: 16px; height: 16px; flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.zc-menu__check {
+  width: 16px; height: 16px; flex-shrink: 0; display: block;
+  stroke: var(--zc-menu-icon-check); fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+  visibility: hidden;
+}
+.zc-menu__item[aria-selected="true"] .zc-menu__check { visibility: visible; }
+
+/* Small size: 28px rows, Body 3 type */
+.zc-menu[data-size="small"] .zc-menu__item {
+  min-height: 28px; padding: var(--zc-space-6) var(--zc-space-4);
+  font-size: 12px; line-height: 16px;
+}
+
+/* Multi select: checkbox row */
+.zc-menu__box {
+  width: 14px; height: 14px; flex-shrink: 0;
+  border: var(--zc-border-default) solid var(--zc-check-border-default);
+  border-radius: var(--zc-radius-4);
+  background: var(--zc-check-bg-default);
+  display: flex; align-items: center; justify-content: center;
+  margin-right: var(--zc-space-4);
+}
+.zc-menu__box svg { width: 8px; height: 8px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; visibility: hidden; }
+.zc-menu__item[aria-selected="true"] .zc-menu__box { background: var(--zc-check-bg-checked); border-color: var(--zc-check-bg-checked); }
+.zc-menu__item[aria-selected="true"] .zc-menu__box svg { visibility: visible; }
+.zc-menu--multi .zc-menu__item[aria-selected="true"] .zc-menu__check { display: none; }
+
+/* ── Dropdown Ghost (Figma set 1250:11160, Input fields page) ──
+   Project-switcher trigger: square avatar chip (initials + status dot) +
+   label + chevron; opens the standard Dropdown Menu via .zc-select-shell.
+   States: Default transparent · Hover/Open = input-bg-hover, radius 6.
+   Sizes: Default 36 (label 14/20) · Small 28 (label 12/16).
+   Figma authors the Default-state avatar at 29px (odd) while Hover/Active
+   use 36 — normalised to the 36 geometry per §2.2 (flagged). The status
+   dot is Figma's 8px BADGE/Background/Green chip. */
+.zc-ghostdd-shell { width: auto; display: inline-flex; }
+.zc-ghostdd {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--zc-radius-6);
+  cursor: pointer;
+  background: transparent;
+}
+.zc-ghostdd:hover,
+.zc-ghostdd[data-open] { background: var(--zc-input-bg-hover); }
+.zc-ghostdd__avatar {
+  position: relative;
+  width: 36px; height: 36px;
+  padding: var(--zc-space-4);
+  border-radius: var(--zc-radius-6);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.zc-ghostdd__avatar-box {
+  width: 100%; height: 100%;
+  border-radius: var(--zc-radius-6);
+  background: var(--zc-shade-green-4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--zc-font-primary);
+  font-weight: 600; font-size: 12px; line-height: 16px;
+  color: var(--zc-shade-green-1);
+}
+.zc-ghostdd__status {
+  position: absolute;
+  right: 2px; bottom: 2px;
+  width: 8px; height: 8px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-badge-solid-success-bg); /* Figma: BADGE/Background/Green */
+}
+.zc-ghostdd__box {
+  display: inline-flex; align-items: center;
+  gap: var(--zc-space-2);
+  padding: var(--zc-space-2) var(--zc-space-6);
+  border-radius: var(--zc-radius-6);
+}
+.zc-ghostdd__label {
+  font-family: var(--zc-font-primary);
+  font-weight: 400; font-size: 14px; line-height: 20px;
+  color: var(--zc-body-text-primary);
+  white-space: nowrap;
+}
+.zc-ghostdd__chevron {
+  width: 16px; height: 16px; flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+  color: var(--zc-body-text-primary);
+  transition: transform 0.15s;
+}
+.zc-ghostdd[data-open] .zc-ghostdd__chevron { transform: rotate(180deg); }
+.zc-ghostdd__icon {
+  width: 14px; height: 14px; flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+  color: var(--zc-body-text-primary);
+}
+/* Small: 28px shell, 12/16 label */
+.zc-ghostdd[data-size="small"] .zc-ghostdd__avatar { width: 28px; height: 28px; }
+.zc-ghostdd[data-size="small"] .zc-ghostdd__label { font-size: 12px; line-height: 16px; }
+
+/* Footer button */
+.zc-menu__footer {
+  flex-shrink: 0; border-top: var(--zc-border-default) solid var(--zc-menu-border);
+  background: var(--zc-menu-bg-default);
+  box-shadow: 0 -2px 14px -6px var(--zc-body-bg-body);
+}
+/* The footer action is a Buttons instance (ghost / primary) in Figma.
+   Use .zc-btn and only make it fill the footer width. */
+.zc-menu__footer .zc-btn { width: 100%; border-radius: var(--zc-radius-6); }
+
+/* Empty states */
+.zc-menu--empty .zc-menu__body {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--zc-space-20); padding-top: var(--zc-space-20);
+}
+.zc-menu__empty {
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 12px; line-height: 16px; color: var(--zc-menu-text-light);
+}
+.zc-menu__footer--inline { display: flex; align-items: center; height: 36px; padding-left: var(--zc-space-16); }
+.zc-menu__footer--inline .zc-menu__create {
+  font-size: 14px; line-height: 20px; font-weight: 600;
+  color: var(--zc-menu-text-default); background: none; border: none; cursor: pointer;
+  font-family: var(--zc-font-primary);
+}
+.zc-menu__footer--inline .zc-menu__create em { font-style: normal; color: var(--zc-body-text-theme); }
+
+.zc-select-wrap[data-open="true"] .zc-select__chevron { transform: rotate(180deg); }
+
+/* ── Inline edit: real editing ── */
+.zc-inline__input { border: none; background: transparent; outline: none; font: inherit; color: inherit; min-width: 60px; }
+.zc-inline.is-editing { background: var(--zc-input-bg-active); border-color: var(--zc-input-border-active); }
+.zc-inline.is-editing .zc-inline__icon { display: block; }
+
+/* ── File upload: real picker ── */
+.zc-upload-input { display: none; }
+.zc-upload-trigger { cursor: pointer; }
+.zc-upload-list { display: flex; flex-direction: column; gap: var(--zc-space-8); margin-top: var(--zc-space-8); }
+
+/* ── Key Value: live hover + drag to reorder ── */
+.zc-kvfield:hover { background: var(--zc-input-bg-keyvalue-hover); }
+.zc-kvfield.is-dragging { opacity: .5; }
+.zc-kvfield.is-dragover { position: relative; }
+.zc-kvfield.is-dragover::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 2px;
+  background: var(--zc-input-border-active); border-radius: 2px; pointer-events: none;
+}
+.zc-kvfield.is-dragging { opacity: .4; background: var(--zc-input-bg-keyvalue-hover); }
+.zc-kvfield__drag { cursor: grab; }
+.zc-kvfield__drag:active { cursor: grabbing; }
+
+/* ── Chip (Figma: Chip, node 429:2608) ──
+   State: Default | Hover | Disabled.  Size: Default (24px) | Small (20px)
+   Booleans: Icon Left, Close, Text
+*/
+.zc-chip {
+  display: inline-flex; align-items: center; gap: var(--zc-space-4);
+  height: 24px; padding: var(--zc-space-2) var(--zc-space-4);
+  border: var(--zc-border-default) solid var(--zc-chip-border-default);
+  border-radius: var(--zc-radius-4);
+  background: var(--zc-chip-bg-default);
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-chip-text-default);
+  max-width: 100%; flex-shrink: 0;
+}
+.zc-chip__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zc-chip__icon { width: 14px; height: 14px; flex-shrink: 0; display: block; stroke: var(--zc-chip-icon-default); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-chip__close {
+  width: 16px; height: 16px; flex-shrink: 0; padding: 0; border: none;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border-radius: var(--zc-radius-full); cursor: pointer;
+}
+.zc-chip__close svg { width: 12px; height: 12px; stroke: var(--zc-chip-icon-close); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-chip__close:hover {
+  background: var(--zc-btn-grey-bg-hover);   /* Figma: buttons-grey-backgrounds-hover */
+  border-radius: var(--zc-radius-full);
+}
+.zc-chip__close:hover svg { stroke: var(--zc-chip-icon-close-hover); }
+.zc-chip__close { transition: background-color .15s; }
+
+.zc-chip:hover, .zc-chip[data-state="hover"] {
+  background: var(--zc-chip-bg-hover); border-color: var(--zc-chip-border-hover);
+}
+.zc-chip[data-state="disabled"] {
+  background: var(--zc-chip-bg-disabled); border-color: var(--zc-chip-border-disabled);
+  color: var(--zc-chip-text-disabled); pointer-events: none;
+}
+.zc-chip[data-state="disabled"] .zc-chip__icon,
+.zc-chip[data-state="disabled"] .zc-chip__close svg { stroke: var(--zc-chip-text-disabled); }
+
+.zc-chip[data-size="small"] { height: 20px; }
+.zc-chip[data-size="small"] .zc-chip__icon { width: 12px; height: 12px; }
+.zc-chip[data-size="small"] .zc-chip__close { width: 12px; height: 12px; }
+
+/* Chips inside a Dropdown trigger (multi-select filled state).
+   The field keeps its selected size; the chevron is always pinned right. */
+.zc-select-wrap--chips { flex-wrap: nowrap; }
+.zc-select-wrap--chips .zc-select__value { flex: 1 1 0%; min-width: 0; }
+/* Auto margin pins the chevron right when the value is intrinsic-width.
+   With a flex:1 chips strip or comma wrap the margin would eat all free space,
+   so reset it there. */
+.zc-select-wrap .zc-select__chevron { margin-left: auto; }
+.zc-select-wrap--chips .zc-select__chevron,
+.zc-select-wrap:has(.zc-comma-wrap) .zc-select__chevron { margin-left: 0; }
+.zc-select-wrap--chips .zc-chips { flex: 1 1 0%; min-width: 0; }
+
+/* ── Chip overflow inside a multi-select Dropdown trigger ──
+   data-overflow="count"  → one row, hidden chips collapse into a "+N" chip
+                            (hover/focus the +N to see the rest)
+   data-overflow="scroll" → one row, scrolls horizontally
+   data-overflow="wrap"   → chips wrap onto multiple rows (field grows)
+*/
+.zc-chips { display: flex; align-items: center; gap: var(--zc-space-4); flex: 1 1 0%; min-width: 0; }
+
+.zc-select-wrap--chips[data-overflow="count"] { flex-wrap: nowrap; }
+/* No overflow:hidden here — chips that don't fit are display:none'd instead,
+   so the "+N" tooltip can escape the strip instead of being clipped by it. */
+.zc-select-wrap--chips[data-overflow="count"] .zc-chips { flex-wrap: nowrap; }
+.zc-select-wrap--chips[data-overflow="count"] .zc-chip.is-hidden { display: none; }
+
+.zc-select-wrap--chips[data-overflow="scroll"] { flex-wrap: nowrap; }
+.zc-select-wrap--chips[data-overflow="scroll"] .zc-chips {
+  flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+}
+.zc-select-wrap--chips[data-overflow="scroll"] .zc-chips::-webkit-scrollbar { display: none; }
+
+/* Wrap is the one mode where the field is allowed to grow */
+.zc-select-wrap--chips[data-overflow="wrap"] { flex-wrap: wrap; height: auto; padding-top: var(--zc-space-4); padding-bottom: var(--zc-space-4); }
+.zc-select-wrap--chips[data-overflow="wrap"][data-size="default"] { min-height: 36px; }
+.zc-select-wrap--chips[data-overflow="wrap"][data-size="small"] { min-height: 28px; }
+.zc-select-wrap--chips[data-overflow="wrap"][data-size="xs"] { min-height: 24px; }
+.zc-select-wrap--chips[data-overflow="wrap"] .zc-chips { flex-wrap: wrap; }
+
+/* The "+N" counter chip */
+.zc-chip--more {
+  cursor: default; position: relative; flex-shrink: 0;
+  background: var(--zc-chip-bg-hover);
+  border-color: var(--zc-chip-border-hover);
+  font-weight: 500;
+}
+.zc-chip--more[hidden] { display: none; }
+
+/* Popover listing the chips that didn't fit */
+/* Uses the Tooltip surface (dark) rather than a menu panel */
+.zc-chip-overflow {
+  position: absolute; top: calc(100% + var(--zc-space-8)); right: 0;
+  z-index: 110; display: none;
+  min-width: 140px; max-width: 240px; max-height: 180px; overflow-y: auto;
+  padding: var(--zc-space-6);
+  background: var(--zc-tooltip-bg);
+  border: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-radius: var(--zc-radius-6);
+  filter: drop-shadow(2px 2px 5px var(--zc-body-bg-body));
+}
+/* Arrow, matching the Tooltip component */
+.zc-chip-overflow::before {
+  content: ''; position: absolute; top: -5px; right: 12px;
+  width: 10px; height: 10px;
+  background: var(--zc-tooltip-bg);
+  border-left: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-top: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-top-left-radius: 1px;
+  transform: rotate(45deg);
+}
+.zc-chip--more:hover .zc-chip-overflow,
+.zc-chip--more:focus-within .zc-chip-overflow { display: block; }
+/* Rows inside the overflow tooltip — each removable */
+.zc-chip-overflow__item {
+  display: flex; align-items: center; gap: var(--zc-space-6);
+  padding: var(--zc-space-4) var(--zc-space-6);
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-tooltip-text);
+  border-radius: var(--zc-radius-4);
+}
+.zc-chip-overflow__item:hover { background: rgba(255, 255, 255, 0.08); }
+.zc-chip-overflow__label {
+  flex: 1 1 0%; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.zc-overflow-close {
+  width: 16px; height: 16px; flex-shrink: 0; padding: 0; border: none;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border-radius: var(--zc-radius-full); cursor: pointer;
+}
+.zc-overflow-close svg { width: 12px; height: 12px; stroke: var(--zc-tooltip-text); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-overflow-close:hover { background: rgba(255, 255, 255, 0.16); }
+.zc-overflow-close:hover svg { stroke: var(--zc-tooltip-text); }
+
+/* ── Comma-separated overflow: truncate + hover tooltip, or scroll ── */
+.zc-comma-wrap { position: relative; flex: 1 1 0%; min-width: 0; display: flex; align-items: center; }
+.zc-comma-wrap .zc-select__value--comma { flex: 1 1 0%; min-width: 0; }
+.zc-comma-wrap[data-overflow="scroll"] .zc-select__value--comma {
+  overflow-x: auto; text-overflow: clip; scrollbar-width: none;
+}
+.zc-comma-wrap[data-overflow="scroll"] .zc-select__value--comma::-webkit-scrollbar { display: none; }
+.zc-comma-wrap .zc-chip-overflow { left: 0; right: auto; }
+.zc-comma-wrap.is-clipped:hover .zc-chip-overflow,
+.zc-comma-wrap.is-clipped:focus-within .zc-chip-overflow { display: block; }
+.zc-comma-wrap[data-overflow="scroll"] .zc-chip-overflow { display: none !important; }
+
+/* ── Chip size follows the Dropdown size (field height never changes) ── */
+.zc-select-wrap--chips[data-size="default"] .zc-chip { height: 24px; }
+.zc-select-wrap--chips[data-size="small"] .zc-chip,
+.zc-select-wrap--chips[data-size="xs"] .zc-chip { height: 20px; }
+.zc-select-wrap--chips[data-size="small"] .zc-chip .zc-chip__icon,
+.zc-select-wrap--chips[data-size="xs"] .zc-chip .zc-chip__icon { width: 12px; height: 12px; }
+.zc-select-wrap--chips[data-size="small"] .zc-chip .zc-chip__close,
+.zc-select-wrap--chips[data-size="xs"] .zc-chip .zc-chip__close { width: 12px; height: 12px; }
+
+/* Comma display — plain text instead of chips */
+.zc-select__value--comma { color: var(--zc-input-text-default); }
+
+/* ── Menu: no-match empty state (shown while searching) ── */
+.zc-menu__noresult {
+  display: none;
+  padding: var(--zc-space-16) var(--zc-space-8);
+  text-align: center;
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-menu-text-light);
+}
+.zc-menu.is-empty .zc-menu__noresult { display: block; }
+.zc-menu.is-empty .zc-menu__item { display: none; }
+
+/* ── Autocomplete ── */
+.zc-autocomplete { position: relative; width: 100%; }
+.zc-autocomplete .zc-menu { top: calc(100% + var(--zc-space-4)); }
+.zc-menu__create-inline {
+  display: flex; align-items: center; justify-content: flex-start;
+  gap: var(--zc-space-4);
+  width: 100%; height: 36px; padding: 0 var(--zc-space-8);
+  background: none; border: none; cursor: pointer;
+  font-family: var(--zc-font-primary); font-weight: 600;
+  font-size: 14px; line-height: 20px;
+  color: var(--zc-menu-text-default); text-align: left;
+  white-space: nowrap; overflow: hidden;
+}
+.zc-menu__create-inline svg { flex-shrink: 0; width: 16px; height: 16px; stroke: var(--zc-body-text-theme); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.zc-menu__create-inline em { overflow: hidden; text-overflow: ellipsis; }
+.zc-menu__create-inline:hover { background: var(--zc-menu-bg-hover); }
+.zc-menu__create-inline em { font-style: normal; color: var(--zc-body-text-theme); font-weight: 500; }
+
+/* ── Inline edit: editing shows an input plus save / cancel icon buttons ── */
+.zc-inline__actions { display: none; align-items: center; gap: var(--zc-space-4); }
+.zc-inline.is-editing { gap: var(--zc-space-8); border-color: transparent; background: none; padding: 0; }
+.zc-inline.is-editing .zc-inline__actions { display: inline-flex; }
+.zc-inline.is-editing .zc-inline__icon { display: none; }
+.zc-inline__field {
+  display: flex; align-items: center; height: 36px;
+  padding: 0 var(--zc-space-8);
+  background: var(--zc-input-bg-active);
+  border: var(--zc-border-default) solid var(--zc-input-border-active);
+  border-radius: var(--zc-radius-6);
+}
+.zc-inline__field .zc-inline__input { font-size: 14px; line-height: 20px; min-width: 180px; }
+
+/* ── File Upload (Figma: File Upload 780:21060) ──
+   Compact trigger row (36px) or Large dropzone (118px, solid border).
+   File rows: folder icon + name + optional status + remove.
+   States: Default / Hover / Pressed / Uploading / Uploaded / Error
+*/
+.zc-upload-zone {
+  border-style: solid;             /* Figma uses a solid border, not dashed */
+  gap: var(--zc-space-6);
+}
+.zc-upload-zone svg { width: 24px; height: 24px; }
+
+.zc-upload-list { gap: 0; }
+.zc-upload-file {
+  gap: var(--zc-space-6);
+  border-radius: 0;
+  border-top-width: 0;
+}
+.zc-upload-list .zc-upload-file:first-child {
+  border-top-width: var(--zc-border-default);
+  border-top-left-radius: var(--zc-radius-6);
+  border-top-right-radius: var(--zc-radius-6);
+}
+.zc-upload-list .zc-upload-file:last-child {
+  border-bottom-left-radius: var(--zc-radius-6);
+  border-bottom-right-radius: var(--zc-radius-6);
+}
+.zc-upload-list .zc-upload-file:only-child { border-radius: var(--zc-radius-6); }
+
+.zc-upload-file__icon {
+  width: 16px; height: 16px; flex-shrink: 0; display: block;
+  stroke: var(--zc-input-icon-default); fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.zc-upload-file__name { color: var(--zc-input-text-default); }
+.zc-upload-file__status {
+  flex-shrink: 0; font-size: 12px; line-height: 16px;
+  color: var(--zc-input-text-error);
+}
+.zc-upload-file__remove, .zc-upload-file__retry {
+  width: 16px; height: 16px; flex-shrink: 0; padding: 0; border: none;
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+/* Remove / retry sit at the secondary icon tone, lifting to primary on hover */
+.zc-upload-file__remove svg, .zc-upload-file__retry svg {
+  width: 14px; height: 14px; stroke: var(--zc-body-icon-secondary); fill: none;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke .15s;
+}
+.zc-upload-file__remove:hover svg, .zc-upload-file__retry:hover svg { stroke: var(--zc-body-icon-primary); }
+
+/* Uploading — placeholder-toned text + spinning loader */
+.zc-upload-file[data-state="uploading"] .zc-upload-file__name { color: var(--zc-input-text-placeholder); }
+.zc-upload-file[data-state="uploading"] .zc-upload-file__icon { animation: zc-spin 1s linear infinite; }
+@keyframes zc-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .zc-upload-file[data-state="uploading"] .zc-upload-file__icon { animation: none; }
+}
+
+/* Error row */
+.zc-upload-file[data-state="error"] {
+  background: var(--zc-input-bg-error);
+  border-color: var(--zc-input-border-error);
+}
+.zc-upload-file[data-state="error"] .zc-upload-file__icon { stroke: var(--zc-input-text-error); }

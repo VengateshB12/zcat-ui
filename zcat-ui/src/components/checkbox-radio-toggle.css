@@ -1,0 +1,232 @@
+/* =============================================================================
+   zcat — Checkbox, Radio, Toggle
+   Built from Figma canvas 429:7231 (verified via get_design_context +
+   get_variable_defs on Check Box 429:7790, Radio 776:4888, Toggle 776:4939):
+
+     Shared label anatomy: main row gap 8 · control↔title gap 8 · title 14/20
+     semibold #101F3E · sub text 12/16 #4D618A indented 22px (36px for toggle)
+     Label colours do NOT change when disabled (per Figma).
+
+     Checkbox  14×14 r4 · unchecked: bg/border per state · checked/indeterminate:
+               solid fill, no border, 8×8 glyph stroke 1.3
+     Radio     14×14 round · selected: solid fill + 3px white dot (r=3), no border
+     Toggle    track 28×18 r14 · knob 14×14 round, inset 2px, travels 10px
+               off: bordered track · on: solid fill, no border
+
+     States (one Figma token family for all three):
+       default   bg #FFFFFF border #D6DDEF
+       hover     bg #E7EEFE border #7DA2FB
+       disabled  bg #F7F8FB border #EFF2FA
+       checked   #2A65F0 · checked hover #0755F2 · checked disabled #7DA2FB
+       glyph #FFFFFF · glyph disabled #E7EEFE
+   ============================================================================= */
+
+/* ── Shared label wrapper ── */
+.zc-checkbox,
+.zc-radio,
+.zc-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--zc-space-2);
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+}
+.zc-checkbox__row,
+.zc-radio__row,
+.zc-toggle__row {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+}
+.zc-checkbox__label,
+.zc-radio__label,
+.zc-toggle__label {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-check-text-default);
+  white-space: nowrap;
+}
+.zc-checkbox__desc,
+.zc-radio__desc,
+.zc-toggle__desc {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-check-text-secondary);
+  padding-left: var(--zc-space-22); /* 14 control + 8 gap */
+}
+.zc-toggle__desc { padding-left: var(--zc-space-36); } /* 28 track + 8 gap */
+/* Sub text with no heading sits inline beside the control — the row's gap
+   spaces it, so the below-the-label indent must not apply. */
+.zc-checkbox__row .zc-checkbox__desc,
+.zc-radio__row .zc-radio__desc,
+.zc-toggle__row .zc-toggle__desc { padding-left: 0; align-self: center; }
+
+.zc-checkbox__input,
+.zc-radio__input,
+.zc-toggle__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.zc-checkbox:has(.zc-checkbox__input:disabled),
+.zc-radio:has(.zc-radio__input:disabled),
+.zc-toggle:has(.zc-toggle__input:disabled) { cursor: not-allowed; }
+
+/* ── Checkbox box ── */
+.zc-checkbox__box {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: var(--zc-border-default) solid var(--zc-check-border-default);
+  border-radius: var(--zc-radius-4);
+  background: var(--zc-check-bg-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.zc-checkbox:hover .zc-checkbox__input:not(:disabled):not(:checked):not(:indeterminate) + .zc-checkbox__box {
+  background: var(--zc-check-bg-hover);
+  border-color: var(--zc-check-border-hover);
+}
+/* Glyphs: 8×8 viewBox, stroke 1.3 (Figma --border-medium), round caps */
+.zc-checkbox__box::after {
+  content: '';
+  display: none;
+  width: 8px;
+  height: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.66667 2.15L3 5.81667L1.33333 4.15' stroke='%23FFFFFF' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+.zc-checkbox__input:checked + .zc-checkbox__box,
+.zc-checkbox__input:indeterminate + .zc-checkbox__box {
+  background: var(--zc-check-bg-checked);
+  border-color: transparent;
+}
+.zc-checkbox__input:checked + .zc-checkbox__box::after,
+.zc-checkbox__input:indeterminate + .zc-checkbox__box::after { display: block; }
+.zc-checkbox:hover .zc-checkbox__input:not(:disabled):checked + .zc-checkbox__box,
+.zc-checkbox:hover .zc-checkbox__input:not(:disabled):indeterminate + .zc-checkbox__box {
+  background: var(--zc-check-bg-checked-hover);
+}
+.zc-checkbox__input:indeterminate + .zc-checkbox__box::after {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.66667 4H6.33333' stroke='%23FFFFFF' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.zc-checkbox__input:disabled + .zc-checkbox__box {
+  background: var(--zc-check-bg-disabled);
+  border-color: var(--zc-check-border-disabled);
+}
+.zc-checkbox__input:disabled:checked + .zc-checkbox__box,
+.zc-checkbox__input:disabled:indeterminate + .zc-checkbox__box {
+  background: var(--zc-check-bg-disabled-checked);
+  border-color: transparent;
+}
+.zc-checkbox__input:disabled:checked + .zc-checkbox__box::after {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.66667 2.15L3 5.81667L1.33333 4.15' stroke='%23E7EEFE' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.zc-checkbox__input:disabled:indeterminate + .zc-checkbox__box::after {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.66667 4H6.33333' stroke='%23E7EEFE' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ── Radio circle ── */
+.zc-radio__circle {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: var(--zc-border-default) solid var(--zc-check-border-default);
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-check-bg-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.zc-radio:hover .zc-radio__input:not(:disabled):not(:checked) + .zc-radio__circle {
+  background: var(--zc-check-bg-hover);
+  border-color: var(--zc-check-border-hover);
+}
+.zc-radio__circle::after {
+  content: '';
+  display: none;
+  width: 6px;  /* Figma dot r=3 */
+  height: 6px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-check-icon-check);
+}
+.zc-radio__input:checked + .zc-radio__circle {
+  background: var(--zc-check-bg-checked);
+  border-color: transparent;
+}
+.zc-radio__input:checked + .zc-radio__circle::after { display: block; }
+.zc-radio:hover .zc-radio__input:not(:disabled):checked + .zc-radio__circle {
+  background: var(--zc-check-bg-checked-hover);
+}
+.zc-radio__input:disabled + .zc-radio__circle {
+  background: var(--zc-check-bg-disabled);
+  border-color: var(--zc-check-border-disabled);
+}
+.zc-radio__input:disabled:checked + .zc-radio__circle {
+  background: var(--zc-check-bg-disabled-checked);
+  border-color: transparent;
+}
+.zc-radio__input:disabled:checked + .zc-radio__circle::after {
+  background: var(--zc-check-icon-check-disabled);
+}
+
+/* ── Toggle / Switch ── */
+.zc-toggle__track {
+  width: 28px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: var(--zc-radius-14);
+  background: var(--zc-toggle-bg-off);
+  border: var(--zc-border-default) solid var(--zc-check-border-default);
+  position: relative;
+  transition: background 0.2s, border-color 0.2s;
+}
+.zc-toggle__track::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-toggle-thumb-off);
+  transition: transform 0.2s, background 0.2s;
+}
+.zc-toggle:hover .zc-toggle__input:not(:disabled):not(:checked) + .zc-toggle__track {
+  background: var(--zc-check-bg-hover);
+  border-color: var(--zc-check-border-hover);
+}
+.zc-toggle:hover .zc-toggle__input:not(:disabled):not(:checked) + .zc-toggle__track::after {
+  background: var(--zc-toggle-thumb-off-hover);
+}
+.zc-toggle__input:checked + .zc-toggle__track {
+  background: var(--zc-toggle-bg-on);
+  border-color: transparent;
+}
+.zc-toggle__input:checked + .zc-toggle__track::after {
+  transform: translateX(10px);
+  background: var(--zc-toggle-thumb-on);
+}
+.zc-toggle:hover .zc-toggle__input:not(:disabled):checked + .zc-toggle__track {
+  background: var(--zc-toggle-bg-on-hover);
+}
+.zc-toggle__input:disabled + .zc-toggle__track {
+  background: var(--zc-toggle-bg-disabled);
+  border-color: var(--zc-check-border-disabled);
+}
+.zc-toggle__input:disabled + .zc-toggle__track::after {
+  background: var(--zc-toggle-thumb-off-disabled);
+}
+.zc-toggle__input:disabled:checked + .zc-toggle__track {
+  background: var(--zc-toggle-bg-on-disabled);
+  border-color: transparent;
+}
+.zc-toggle__input:disabled:checked + .zc-toggle__track::after {
+  background: var(--zc-toggle-thumb-on-disabled);
+}

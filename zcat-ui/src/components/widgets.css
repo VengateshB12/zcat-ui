@@ -1,0 +1,522 @@
+/* =============================================================================
+   zcat Design System — Widgets
+   Code Block, Profile Menu, Notifications panel, Timeline
+
+   Figma sources:
+   - Code Block set     node 13064:8261 (padding 14, radius 10, mono 12/20,
+                        viewer + editor backgrounds)
+   - Profile Menu       node 2356:27295 (400px panel, hero header, appearance
+                        cards, accent swatches, resources grid)
+   - Notifications      node 6064:12205 (460px panel, tabs bar, filters row,
+                        dashed-divider items)
+   - Timeline           node 2734:32074 (20px colour markers, dashed connector)
+
+   Buttons, inputs, tabs, badges and avatars inside these components are the
+   EXISTING components (.zc-btn, .zc-input-wrap, .zc-tabs, .zc-badge,
+   .zc-avatar) supplied by markup — not restyled here; only layout containers
+   and size overrides are provided.
+   ============================================================================= */
+
+/* ── Code Block (node 13064:8261) ── */
+.zc-codeblock {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: var(--zc-space-10);
+  padding: var(--zc-space-14);
+  background: var(--zc-codeblock-bg);
+  border: var(--zc-border-default) solid var(--zc-codeblock-border);
+  border-radius: var(--zc-radius-10);
+  font-family: var(--zc-font-mono);
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--zc-codeblock-text);
+  overflow: auto;
+}
+
+.zc-codeblock[data-type="editor"] {
+  background: var(--zc-codeblock-bg-writer);
+}
+
+/* Line-number gutter — Figma viewer gutter is #4D618A,
+   which is the --zc-body-text-secondary token value. */
+.zc-codeblock__lines {
+  flex-shrink: 0;
+  color: var(--zc-body-text-secondary);
+  text-align: right;
+  user-select: none;
+  white-space: pre;
+}
+
+.zc-codeblock__code {
+  flex: 1;
+  min-width: 0;
+  white-space: pre;
+}
+
+/* The code slot is authored as a <pre>, whose UA styles (margin 1em and its own
+   monospace at font-size:smaller) would otherwise beat the font set on
+   .zc-codeblock and push the block open. The docs page was masking this with an
+   inline margin:0;font:inherit — the library owns it now. */
+.zc-codeblock__code,
+.zc-codeblock__lines {
+  margin: 0;
+  font: inherit;
+}
+
+/* Syntax highlighting spans */
+.zc-code-k  { color: var(--zc-code-syntax-keyword); }
+.zc-code-i  { color: var(--zc-code-syntax-ident); }
+.zc-code-s  { color: var(--zc-code-syntax-string); }
+.zc-code-s2 { color: var(--zc-code-syntax-string-alt); }
+.zc-code-c  { color: var(--zc-code-syntax-comment); }
+
+/* Copy affordance — consumer places a rounded ghost-grey icon .zc-btn;
+   sized down to 24x24 with a 12px icon here. */
+.zc-codeblock__copy {
+  position: absolute;
+  top: var(--zc-space-14);
+  right: var(--zc-space-14);
+}
+
+.zc-codeblock__copy .zc-btn[data-content="icon"] {
+  width: 24px;
+  height: 24px;
+}
+
+.zc-codeblock__copy .zc-btn[data-content="icon"] svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Profile Menu (node 2356:27295) ── */
+.zc-profilemenu {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  background: var(--zc-cards-bg-primary);
+  border-left: var(--zc-border-default) solid var(--zc-profilenav-border-outer);
+  border-right: var(--zc-border-default) solid var(--zc-profilenav-border-outer);
+  font-family: var(--zc-font-primary);
+}
+
+.zc-profilemenu__section {
+  padding: var(--zc-space-16) var(--zc-space-32);
+  border-bottom: var(--zc-border-default) solid var(--zc-profilenav-border);
+}
+
+/* The divider separates sections, so the last one must not draw one against the
+   menu's own bottom edge. The docs page was cancelling this inline. */
+.zc-profilemenu__section:last-child {
+  border-bottom: none;
+}
+
+.zc-profilemenu__section-heading {
+  margin-bottom: var(--zc-space-16);
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-profilenav-text-heading);
+}
+
+/* Hero header section */
+.zc-profilemenu__section[data-hero] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-16);
+  padding-top: var(--zc-space-32);
+  background: var(--zc-profilenav-bg);
+  text-align: center;
+}
+
+/* Size override for the existing .zc-avatar in the hero */
+.zc-profilemenu__avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.zc-profilemenu__name {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-profilenav-text-heading);
+}
+
+.zc-profilemenu__meta {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--zc-profilenav-text-sub);
+}
+
+/* Close X — consumer's ghost-grey icon .zc-btn, positioned here */
+.zc-profilemenu__close {
+  position: absolute;
+  top: var(--zc-space-32);
+  right: var(--zc-space-32);
+}
+
+.zc-profilemenu__close svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Appearance theme cards */
+.zc-profilemenu__themecard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-10);
+  width: 102px;
+  padding: var(--zc-space-6);
+  background: var(--zc-cards-bg-primary);
+  border: var(--zc-border-default) solid transparent;
+  border-radius: var(--zc-radius-6);
+  cursor: pointer;
+}
+
+.zc-profilemenu__themecard[data-state="selected"] {
+  border-color: var(--zc-cards-border-selected);
+}
+
+.zc-profilemenu__themecard[data-state="selected"] .zc-profilemenu__themecard-label {
+  color: var(--zc-body-text-theme);
+}
+
+.zc-profilemenu__preview {
+  display: flex;
+  width: 90px;
+  height: 62px;
+  border: var(--zc-border-default) solid var(--zc-profilenav-border-outer);
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+}
+
+/* Figma sidebar is 31px — odd; rounded up 1px to 32px */
+.zc-profilemenu__preview-sidebar {
+  flex-shrink: 0;
+  width: 32px;
+}
+
+.zc-profilemenu__preview-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-6);
+}
+
+/* Figma rules are 3px tall — odd; rounded up 1px to 4px */
+.zc-profilemenu__preview-line {
+  height: 4px;
+  border-radius: var(--zc-radius-2);
+}
+
+/* Light preview swatch (fixed light literals via appearance tokens) */
+.zc-profilemenu__preview[data-theme-preview="light"] {
+  background: var(--zc-cards-bg-primary);
+}
+.zc-profilemenu__preview[data-theme-preview="light"] .zc-profilemenu__preview-sidebar {
+  background: var(--zc-profilenav-appearance-light);
+}
+.zc-profilemenu__preview[data-theme-preview="light"] .zc-profilemenu__preview-line:nth-child(1) {
+  background: var(--zc-profilenav-appearance-light-line);
+}
+.zc-profilemenu__preview[data-theme-preview="light"] .zc-profilemenu__preview-line:nth-child(2) {
+  background: var(--zc-profilenav-appearance-light-2);
+}
+
+/* Dark preview swatch */
+.zc-profilemenu__preview[data-theme-preview="dark"] {
+  background: var(--zc-profilenav-appearance-dark);
+}
+.zc-profilemenu__preview[data-theme-preview="dark"] .zc-profilemenu__preview-sidebar {
+  background: var(--zc-profilenav-appearance-dark-bg);
+}
+.zc-profilemenu__preview[data-theme-preview="dark"] .zc-profilemenu__preview-line:nth-child(1) {
+  background: var(--zc-profilenav-appearance-dark-line);
+}
+.zc-profilemenu__preview[data-theme-preview="dark"] .zc-profilemenu__preview-line:nth-child(2) {
+  background: var(--zc-profilenav-appearance-dark-2);
+}
+
+/* Accent swatches */
+.zc-profilemenu__accent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--zc-radius-4);
+  cursor: pointer;
+}
+
+.zc-profilemenu__accent[data-accent="blue"] {
+  background: var(--zc-profilenav-theme);
+}
+
+.zc-profilemenu__accent[data-accent="pink"] {
+  background: var(--zc-profilenav-theme-2);
+}
+
+/* Selected accent shows the consumer-supplied 16px white tick */
+.zc-profilemenu__accent svg {
+  display: none;
+  width: 16px;
+  height: 16px;
+  stroke: var(--zc-body-icon-white);
+}
+
+.zc-profilemenu__accent[data-state="selected"] svg {
+  display: block;
+}
+
+/* Resources grid */
+.zc-profilemenu__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--zc-space-24);
+  row-gap: var(--zc-space-16);
+}
+
+.zc-profilemenu__grid-item {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--zc-profilenav-text-heading);
+}
+
+.zc-profilemenu__grid-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--zc-profilenav-icon-light);
+}
+
+/* ── Notifications panel (node 6064:12205) ── */
+.zc-notifications {
+  display: flex;
+  flex-direction: column;
+  width: 460px;
+  background: var(--zc-cards-bg-primary);
+  border-left: var(--zc-border-default) solid var(--zc-profilenav-border-outer);
+  border-right: var(--zc-border-default) solid var(--zc-profilenav-border-outer);
+  font-family: var(--zc-font-primary);
+}
+
+/* Tabs bar — Figma bg #F7FAFF: matched by --zc-chip-bg-hover (#F7FAFF).
+   (Same value also on --zc-input-bg-hover/-active; chip token chosen
+   as the closest surface-tint semantic.) Tabs inside are the existing
+   .zc-tabs component. */
+.zc-notifications__tabsbar {
+  position: relative;
+  padding-top: var(--zc-space-16);
+  padding-inline: var(--zc-space-16);
+  background: var(--zc-chip-bg-hover);
+  border-bottom: var(--zc-border-default) solid var(--zc-profilenav-border);
+}
+
+/* Close X — consumer's ghost-grey icon .zc-btn, positioned here */
+.zc-notifications__close {
+  position: absolute;
+  top: var(--zc-space-14);
+  right: var(--zc-space-16);
+}
+
+/* Filters row — consumer supplies real small selects/buttons */
+.zc-notifications__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+  padding: var(--zc-space-16);
+  background: var(--zc-chip-bg-hover); /* same Figma #F7FAFF surface as tabsbar */
+  border-bottom: var(--zc-border-default) solid var(--zc-profilenav-border);
+}
+
+.zc-notifications__filters-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+}
+
+.zc-notifications__divider {
+  width: 0;
+  height: 20px;
+  border-left: var(--zc-border-default) solid var(--zc-body-border-default);
+}
+
+/* Notification item */
+.zc-notifications__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-16) var(--zc-space-24);
+  border-bottom: var(--zc-border-default) dashed var(--zc-body-border-outerdivider);
+}
+
+/* Head row: 24px .zc-avatar + title + trailing .zc-badge */
+.zc-notifications__item-head {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+}
+
+.zc-notifications__item-title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-body-text-primary);
+}
+
+.zc-notifications__item-head .zc-badge {
+  margin-left: auto;
+}
+
+/* Body indents under the 24px avatar + 6px gap */
+.zc-notifications__item-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-10);
+  padding-left: var(--zc-space-30);
+}
+
+.zc-notifications__message {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-body-text-secondary);
+}
+
+.zc-notifications__message b,
+.zc-notifications__message strong {
+  font-weight: 600;
+}
+
+.zc-notifications__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+}
+
+/* Timestamp — Figma #A6B1C9 = --zc-body-text-disabled */
+.zc-notifications__time {
+  margin-left: auto;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-body-text-disabled);
+}
+
+/* ── Timeline (node 2734:32074) ──
+   Figma defines markers + connector only; the content anatomy
+   (title/time/desc) below is our addition. */
+.zc-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.zc-timeline__entry {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--zc-space-10);
+  padding-bottom: var(--zc-space-50);
+}
+
+.zc-timeline__entry:last-child {
+  padding-bottom: 0;
+}
+
+/* Dashed connector between markers (skipped on the last entry) */
+.zc-timeline__entry:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  bottom: 0;
+  width: 0;
+  border-left: var(--zc-border-default) dashed var(--zc-timeline-line);
+}
+
+/* Marker */
+.zc-timeline__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--zc-radius-full);
+}
+
+.zc-timeline__dot::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: var(--zc-radius-full);
+}
+
+.zc-timeline__dot[data-color="green"]  { background: var(--zc-timeline-bg-green); }
+.zc-timeline__dot[data-color="green"]::after  { background: var(--zc-timeline-dot-green); }
+.zc-timeline__dot[data-color="blue"]   { background: var(--zc-timeline-bg-blue); }
+.zc-timeline__dot[data-color="blue"]::after   { background: var(--zc-timeline-dot-blue); }
+.zc-timeline__dot[data-color="orange"] { background: var(--zc-timeline-bg-orange); }
+.zc-timeline__dot[data-color="orange"]::after { background: var(--zc-timeline-dot-orange); }
+.zc-timeline__dot[data-color="red"]    { background: var(--zc-timeline-bg-red); }
+.zc-timeline__dot[data-color="red"]::after    { background: var(--zc-timeline-dot-red); }
+.zc-timeline__dot[data-color="grey"]   { background: var(--zc-timeline-bg-grey); }
+.zc-timeline__dot[data-color="grey"]::after   { background: var(--zc-timeline-dot-grey); }
+
+/* Icon marker — Figma padding is 5px (odd); rounded down 1px to 4px.
+   Consumer supplies a 12x12 svg; stroke follows the colour's dot token. */
+.zc-timeline__dot[data-type="icon"] {
+  width: 24px;
+  height: 24px;
+  padding: var(--zc-space-4);
+}
+
+.zc-timeline__dot[data-type="icon"]::after {
+  content: none;
+}
+
+.zc-timeline__dot[data-type="icon"] svg {
+  width: 12px;
+  height: 12px;
+}
+
+.zc-timeline__dot[data-color="green"] svg  { stroke: var(--zc-timeline-dot-green); }
+.zc-timeline__dot[data-color="blue"] svg   { stroke: var(--zc-timeline-dot-blue); }
+.zc-timeline__dot[data-color="orange"] svg { stroke: var(--zc-timeline-dot-orange); }
+.zc-timeline__dot[data-color="red"] svg    { stroke: var(--zc-timeline-dot-red); }
+.zc-timeline__dot[data-color="grey"] svg   { stroke: var(--zc-timeline-dot-grey); }
+
+/* Content — our addition (see note above) */
+.zc-timeline__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-2);
+}
+
+.zc-timeline__title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-body-text-primary);
+}
+
+.zc-timeline__time,
+.zc-timeline__desc {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-body-text-secondary);
+}

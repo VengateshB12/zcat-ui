@@ -1,0 +1,115 @@
+/* =============================================================================
+   zcat Design System — Spacing, Radius & Border Tokens
+   From Figma Global_Values collection
+   ============================================================================= */
+
+:root {
+  /* ── Spacing Scale (27 values) ── */
+  --zc-space-1: 1px;
+  --zc-space-2: 2px;
+  --zc-space-3: 3px;
+  --zc-space-4: 4px;
+  --zc-space-5: 5px;
+  --zc-space-6: 6px;
+  --zc-space-8: 8px;
+  --zc-space-10: 10px;
+  --zc-space-12: 12px;
+  --zc-space-14: 14px;
+  --zc-space-16: 16px;
+  --zc-space-18: 18px;
+  --zc-space-20: 20px;
+  --zc-space-22: 22px;
+  --zc-space-24: 24px;
+  --zc-space-26: 26px;
+  --zc-space-28: 28px;
+  --zc-space-30: 30px;
+  --zc-space-32: 32px;
+  --zc-space-36: 36px;
+  --zc-space-40: 40px;
+  --zc-space-44: 44px;
+  --zc-space-48: 48px;
+  --zc-space-50: 50px;
+  --zc-space-64: 64px;
+  --zc-space-80: 80px;
+  --zc-space-120: 120px;
+
+  /* ── Border Radius (8 values) ── */
+  --zc-radius-2: 2px;
+  --zc-radius-4: 4px;
+  --zc-radius-6: 6px;    /* default for buttons, inputs, cards */
+  --zc-radius-10: 10px;
+  --zc-radius-14: 14px;
+  --zc-radius-18: 18px;
+  --zc-radius-20: 20px;
+  --zc-radius-full: 1000px; /* pill / circle */
+
+  /* ── Border Width (6 values) ── */
+  --zc-border-hairline: 0.5px;
+  --zc-border-default: 1px;
+  --zc-border-medium: 1.3px;
+  --zc-border-focus: 1.5px;
+  --zc-border-heavy: 2px;
+  --zc-border-thick: 4px;
+
+  /* ── Elevation / Box Shadows ── */
+  --zc-shadow-1: 0 1px 3px var(--zc-shadow-with-opacity);
+  --zc-shadow-2: 0 2px 8px var(--zc-shadow-with-opacity);
+  --zc-shadow-3: 0 4px 16px var(--zc-shadow-with-opacity);
+  --zc-shadow-4: 0 8px 24px var(--zc-shadow-with-opacity);
+  --zc-shadow-5: 0 12px 32px var(--zc-shadow-with-opacity);
+}
+
+/* ── Spacing Utility Classes ── */
+.zc-p-0  { padding: 0; }
+.zc-p-2  { padding: var(--zc-space-2); }
+.zc-p-4  { padding: var(--zc-space-4); }
+.zc-p-6  { padding: var(--zc-space-6); }
+.zc-p-8  { padding: var(--zc-space-8); }
+.zc-p-10 { padding: var(--zc-space-10); }
+.zc-p-12 { padding: var(--zc-space-12); }
+.zc-p-14 { padding: var(--zc-space-14); }
+.zc-p-16 { padding: var(--zc-space-16); }
+.zc-p-20 { padding: var(--zc-space-20); }
+.zc-p-24 { padding: var(--zc-space-24); }
+.zc-p-32 { padding: var(--zc-space-32); }
+.zc-p-40 { padding: var(--zc-space-40); }
+.zc-p-48 { padding: var(--zc-space-48); }
+.zc-p-64 { padding: var(--zc-space-64); }
+
+.zc-px-4  { padding-inline: var(--zc-space-4); }
+.zc-px-8  { padding-inline: var(--zc-space-8); }
+.zc-px-12 { padding-inline: var(--zc-space-12); }
+.zc-px-16 { padding-inline: var(--zc-space-16); }
+.zc-px-20 { padding-inline: var(--zc-space-20); }
+.zc-px-24 { padding-inline: var(--zc-space-24); }
+.zc-px-32 { padding-inline: var(--zc-space-32); }
+
+.zc-py-4  { padding-block: var(--zc-space-4); }
+.zc-py-8  { padding-block: var(--zc-space-8); }
+.zc-py-12 { padding-block: var(--zc-space-12); }
+.zc-py-16 { padding-block: var(--zc-space-16); }
+.zc-py-20 { padding-block: var(--zc-space-20); }
+.zc-py-24 { padding-block: var(--zc-space-24); }
+
+.zc-m-0  { margin: 0; }
+.zc-m-4  { margin: var(--zc-space-4); }
+.zc-m-8  { margin: var(--zc-space-8); }
+.zc-m-12 { margin: var(--zc-space-12); }
+.zc-m-16 { margin: var(--zc-space-16); }
+.zc-m-20 { margin: var(--zc-space-20); }
+.zc-m-24 { margin: var(--zc-space-24); }
+
+.zc-mx-auto { margin-inline: auto; }
+
+.zc-gap-0  { gap: 0; }
+.zc-gap-2  { gap: var(--zc-space-2); }
+.zc-gap-4  { gap: var(--zc-space-4); }
+.zc-gap-6  { gap: var(--zc-space-6); }
+.zc-gap-8  { gap: var(--zc-space-8); }
+.zc-gap-10 { gap: var(--zc-space-10); }
+.zc-gap-12 { gap: var(--zc-space-12); }
+.zc-gap-16 { gap: var(--zc-space-16); }
+.zc-gap-20 { gap: var(--zc-space-20); }
+.zc-gap-24 { gap: var(--zc-space-24); }
+.zc-gap-32 { gap: var(--zc-space-32); }
+.zc-gap-40 { gap: var(--zc-space-40); }

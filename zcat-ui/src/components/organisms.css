@@ -1,0 +1,514 @@
+/* =============================================================================
+   zcat — Organisms: Modal/Popup, Card, Dropdown Menu, Sidemenu, Header,
+          Sub Header, Container Header, Stepper, Timeline, File Upload,
+          Date Picker, Code Block, Link Box, Carousel, Product Tour
+   ============================================================================= */
+
+/* ── Card ── Figma set 448:704 · State = Default | Hover | Selected | Disabled
+   Bare container (no internal anatomy or padding in Figma): radius 6, 1px
+   border, overflow hidden.
+   Default #FFFFFF/#EBEEF6 · Hover #FBFBFB/#DDE4F6 + 0 0 6px 1px shadow ·
+   Selected #E7EEFE/#2A65F0 + top-left check badge · Disabled #F7F8FB/#EFF2FA */
+.zc-card {
+  position: relative;
+  background: var(--zc-cards-bg-primary);
+  border: var(--zc-border-default) solid var(--zc-cards-border-default);
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.zc-card:hover:not([data-state]),
+.zc-card[data-state="hover"] {
+  background: var(--zc-cards-bg-hover);
+  border-color: var(--zc-cards-border-hover);
+  box-shadow: 0 0 6px 1px var(--zc-shadow-default);
+  cursor: pointer;
+}
+.zc-card[data-state="selected"] {
+  background: var(--zc-cards-bg-selected);
+  border-color: var(--zc-cards-border-selected);
+}
+.zc-card[data-state="disabled"] {
+  background: var(--zc-cards-bg-disabled);
+  border-color: var(--zc-cards-border-disabled);
+}
+/* Selected check badge — 14px, blue, top-left/bottom-right corners r6,
+   8×8 white tick (stroke 1.3, mirrors --zc-check-icon-check #FFFFFF) */
+.zc-card__check {
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+  background: var(--zc-check-bg-checked);
+  border-radius: var(--zc-radius-6) 0 var(--zc-radius-6) 0;
+}
+.zc-card__check::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.66667 2.15L3 5.81667L1.33333 4.15' stroke='%23FFFFFF' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.zc-card[data-state="selected"] .zc-card__check { display: flex; }
+
+/* ── Dropdown Menu ──
+   Usage: <div class="zc-dropdown-menu">
+            <div class="zc-dropdown-menu__search">
+              <input class="zc-input" placeholder="Search...">
+            </div>
+            <div class="zc-dropdown-menu__list">
+              <div class="zc-dropdown-menu__heading">Group</div>
+              <button class="zc-dropdown-menu__item" data-state="selected">
+                <svg class="zc-dropdown-menu__check">...</svg>
+                <span>Option 1</span>
+              </button>
+              <button class="zc-dropdown-menu__item">
+                <span>Option 2</span>
+              </button>
+            </div>
+          </div>
+*/
+.zc-dropdown-menu {
+  background: var(--zc-menu-bg-default);
+  border: var(--zc-border-default) solid var(--zc-menu-border);
+  border-radius: var(--zc-radius-6);
+  box-shadow: var(--zc-shadow-3);
+  min-width: 200px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 60;
+}
+.zc-dropdown-menu__search {
+  padding: var(--zc-space-8);
+  border-bottom: var(--zc-border-default) solid var(--zc-menu-border);
+}
+.zc-dropdown-menu__list {
+  padding: var(--zc-space-4) 0;
+}
+.zc-dropdown-menu__heading {
+  padding: var(--zc-space-6) var(--zc-space-12);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--zc-menu-text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.zc-dropdown-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  width: 100%;
+  padding: var(--zc-space-8) var(--zc-space-12);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-menu-text-default);
+  transition: background 0.1s;
+  text-align: left;
+}
+.zc-dropdown-menu__item:hover { background: var(--zc-menu-bg-hover); color: var(--zc-menu-text-hover); }
+.zc-dropdown-menu__item[data-state="selected"] { background: var(--zc-menu-bg-selected); }
+.zc-dropdown-menu__item:disabled { color: var(--zc-menu-text-disabled); background: var(--zc-menu-bg-disabled); cursor: not-allowed; }
+.zc-dropdown-menu__check {
+  width: 16px;
+  height: 16px;
+  stroke: var(--zc-menu-icon-check);
+  fill: none;
+  stroke-width: 1.5;
+  flex-shrink: 0;
+}
+.zc-dropdown-menu__divider {
+  height: 1px;
+  background: var(--zc-menu-border);
+  margin: var(--zc-space-4) 0;
+}
+
+/* ── Main Header ──
+   Usage: <header class="zc-header">
+            <div class="zc-header__left">
+              <span class="zc-service-name">Product Name</span>
+            </div>
+            <div class="zc-header__right">
+              <button class="zc-btn zc-btn--icon-only" data-variant="ghost" data-color="grey">...</button>
+            </div>
+          </header>
+*/
+.zc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 var(--zc-space-16);
+  background: var(--zc-header-bg);
+  border-bottom: var(--zc-border-default) solid var(--zc-header-border);
+  flex-shrink: 0;
+}
+.zc-header__left, .zc-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+}
+
+/* ── Sub Header ── */
+.zc-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 var(--zc-space-24);
+  background: var(--zc-subheader-bg);
+  border-bottom: var(--zc-border-default) solid var(--zc-subheader-border);
+  flex-shrink: 0;
+}
+
+/* ── Container Header ──
+   Usage: <div class="zc-container-header">
+            <div class="zc-container-header__left">
+              <h2 class="zc-h6">Feature Name</h2>
+              <span class="zc-badge" data-style="subtle" data-color="grey">12</span>
+            </div>
+            <div class="zc-container-header__right">
+              <button class="zc-btn" data-variant="fill" data-color="primary">Create</button>
+            </div>
+          </div>
+*/
+.zc-container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--zc-space-16) var(--zc-space-24);
+  gap: var(--zc-space-12);
+}
+.zc-container-header__left {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  flex: 1 1 0%;
+}
+.zc-container-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  flex-shrink: 0;
+}
+
+/* ── Stepper ── Figma 1067:8280 / _Stepper_Source 1067:8188
+   Step: 26px number circle (12/16 600) + content col (heading 12/16 600,
+   sub 10/12 400, both max-w 150 ellipsis), gap 4 · drop-shadow 0 2px 3px
+   on the circle (not when disabled) · Active/Completed/Disabled add an
+   inner 20px ring · dividers are 1px dashed lines that flex-fill
+   (Figma stroke-dasharray 2 2 approximated by CSS `dashed`).             */
+.zc-stepper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--zc-space-20) var(--zc-space-4);
+  font-family: var(--zc-font-primary);
+}
+.zc-stepper__step {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+  padding-right: var(--zc-space-4);
+  flex-shrink: 0;
+}
+.zc-stepper__number {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: var(--zc-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  filter: drop-shadow(0 2px 3px var(--zc-shadow-default));
+}
+/* inner 20px ring for active/completed/disabled */
+.zc-stepper__number::after {
+  content: '';
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: var(--zc-radius-full);
+  border: var(--zc-border-default) solid var(--zc-stepper-border-active);
+}
+.zc-stepper__step[data-state="default"] .zc-stepper__number {
+  background: var(--zc-stepper-bg-default);
+  color: var(--zc-stepper-text-default);
+  border: var(--zc-border-default) solid var(--zc-stepper-border-default);
+}
+.zc-stepper__step[data-state="active"] .zc-stepper__number {
+  background: var(--zc-stepper-bg-active);
+  color: var(--zc-stepper-text-number);
+}
+.zc-stepper__step[data-state="completed"] .zc-stepper__number {
+  background: var(--zc-stepper-bg-completed);
+  color: var(--zc-stepper-text-number);
+}
+.zc-stepper__step[data-state="disabled"] .zc-stepper__number {
+  background: var(--zc-stepper-bg-disabled);
+  color: var(--zc-stepper-text-disabled);
+  border: var(--zc-border-default) solid var(--zc-stepper-divider-disabled);
+  filter: none;
+}
+.zc-stepper__step[data-state="active"] .zc-stepper__number::after,
+.zc-stepper__step[data-state="completed"] .zc-stepper__number::after { display: block; }
+.zc-stepper__step[data-state="disabled"] .zc-stepper__number::after {
+  display: block;
+  border-color: var(--zc-stepper-border-disabled);
+}
+
+.zc-stepper__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-2);
+  text-align: left;
+  min-width: 0;
+}
+.zc-stepper__label {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zc-stepper__step[data-state="default"] .zc-stepper__label   { color: var(--zc-stepper-text-default); }
+.zc-stepper__step[data-state="active"] .zc-stepper__label    { color: var(--zc-stepper-text-active); }
+.zc-stepper__step[data-state="completed"] .zc-stepper__label { color: var(--zc-stepper-text-completed); }
+.zc-stepper__step[data-state="disabled"] .zc-stepper__label  { color: var(--zc-stepper-text-disabled); }
+.zc-stepper__sub {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--zc-stepper-text-default); /* Figma stepper/text/sub-text #4D618A */
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zc-stepper__step[data-state="disabled"] .zc-stepper__sub { color: var(--zc-stepper-text-disabled); }
+
+.zc-stepper__divider {
+  flex: 1 1 0%;
+  min-width: 24px;
+  border-top: var(--zc-border-default) dashed var(--zc-stepper-divider-default);
+}
+.zc-stepper__divider[data-state="active"]    { border-top-color: var(--zc-stepper-divider-active); }
+.zc-stepper__divider[data-state="completed"] {
+  border-top-color: var(--zc-stepper-divider-completed);
+  /* DESIGNER OVERRIDE 2026-08-27: a finished leg reads as a SOLID line
+     (Figma dashes every divider); pending and active stay dashed. */
+  border-top-style: solid;
+}
+.zc-stepper__divider[data-state="disabled"]  { border-top-color: var(--zc-stepper-divider-disabled); }
+
+/* ── File Upload ──
+   Types: Button, Dropzone, Uploading, Uploaded
+   Usage: <div class="zc-file-upload" data-type="dropzone" data-state="default">
+            <svg class="zc-file-upload__icon">upload-cloud</svg>
+            <p class="zc-file-upload__text">Drag & drop or click to upload</p>
+            <span class="zc-file-upload__hint">PNG, JPG up to 10MB</span>
+          </div>
+*/
+.zc-file-upload[data-type="dropzone"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--zc-space-8);
+  padding: var(--zc-space-24) var(--zc-space-16);
+  border: var(--zc-border-default) dashed var(--zc-body-border-divider);
+  border-radius: var(--zc-radius-6);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  text-align: center;
+}
+.zc-file-upload[data-type="dropzone"]:hover,
+.zc-file-upload[data-type="dropzone"][data-state="hover"] {
+  background: var(--zc-body-bg-hover);
+  border-color: var(--zc-body-border-hover);
+}
+.zc-file-upload__icon {
+  width: 32px;
+  height: 32px;
+  stroke: var(--zc-body-icon-light);
+  fill: none;
+  stroke-width: 1.5;
+}
+.zc-file-upload__text { font-size: 14px; color: var(--zc-body-text-primary); }
+.zc-file-upload__hint { font-size: 12px; color: var(--zc-body-text-light); }
+
+/* File list item */
+.zc-file-item {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-10);
+  padding: var(--zc-space-8) var(--zc-space-12);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-radius: var(--zc-radius-6);
+}
+.zc-file-item__info { flex: 1 1 0%; }
+.zc-file-item__name { font-size: 14px; color: var(--zc-body-text-primary); display: block; }
+.zc-file-item__size { font-size: 12px; color: var(--zc-body-text-light); }
+.zc-file-item__remove {
+  cursor: pointer;
+  width: 16px; height: 16px;
+  stroke: var(--zc-body-icon-light);
+  fill: none;
+}
+
+/* ── Image ── */
+.zc-image {
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+  background: var(--zc-loader-content-primary);
+}
+.zc-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Slider ── */
+.zc-slider {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: var(--zc-loader-progress-track);
+  border-radius: var(--zc-radius-full);
+}
+.zc-slider__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--zc-loader-progress-primary);
+  border-radius: var(--zc-radius-full);
+}
+.zc-slider__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-loader-progress-primary);
+  border: var(--zc-border-heavy) solid var(--zc-cards-bg-primary);
+  box-shadow: var(--zc-shadow-1);
+  cursor: pointer;
+}
+
+/* ── Key Value Pair ── */
+.zc-kv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-4);
+}
+.zc-kv__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--zc-space-16);
+}
+.zc-kv__key {
+  flex-shrink: 0;
+  width: 140px;
+  font-size: 14px;
+  color: var(--zc-body-text-secondary);
+}
+.zc-kv__value {
+  flex: 1 1 0%;
+  font-size: 14px;
+  color: var(--zc-body-text-primary);
+}
+
+/* ── Service Menu ── */
+.zc-service-menu {
+  width: 56px;
+  background: linear-gradient(180deg, var(--zc-servicemenu-bg-top), var(--zc-servicemenu-bg-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--zc-space-8) 0;
+  gap: var(--zc-space-4);
+  border-right: var(--zc-border-default) solid var(--zc-servicemenu-border);
+  flex-shrink: 0;
+  height: 100%;
+}
+.zc-service-menu__item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--zc-radius-6);
+  cursor: pointer;
+  background: var(--zc-servicemenu-icon-bg-default);
+  transition: background 0.15s;
+}
+.zc-service-menu__item[data-state="active"] { background: var(--zc-servicemenu-icon-bg-active); }
+.zc-service-menu__item svg {
+  width: 20px; height: 20px;
+  stroke: var(--zc-servicemenu-icon);
+  fill: none; stroke-width: 1.5;
+}
+
+
+/* ── Graph Card (Figma frames 13302:12827 / 12846 / 12865, Referance Templates) ──
+   Card shell: bg cards-primary, 1px cards-border-default, radius 6.
+   Header row: pad 6 14, reuses the Container Header anatomy (title 16/20
+   semibold + info icon + badge, description 12/16 secondary, right cluster).
+   Chart area: 200px, bg body-bg. Figma's chart area is a labelled placeholder
+   ONLY — the plotted SVG (axes, gridlines, series, labels) is our addition
+   using the Figma GRAPH tokens (text-1/2/3, axis, line-2); series colours
+   reuse graph-primary/secondary (no Figma series palette exists — flagged). */
+.zc-graphcard {
+  display: flex;
+  flex-direction: column;
+  background: var(--zc-cards-bg-primary);
+  border: var(--zc-border-default) solid var(--zc-cards-border-default);
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+  font-family: var(--zc-font-primary);
+}
+.zc-graphcard__header {
+  padding: var(--zc-space-6) var(--zc-space-14);
+  flex-shrink: 0;
+}
+.zc-graphcard__chart {
+  position: relative;
+  height: 200px;
+  background: var(--zc-body-bg-body);
+}
+.zc-graphcard__chart svg { display: block; width: 100%; height: 100%; }
+.zc-graphcard__axis   { stroke: var(--zc-graph-axis); stroke-width: 1; }
+.zc-graphcard__grid   { stroke: var(--zc-graph-line-2); stroke-width: 1; }
+.zc-graphcard__tick {
+  font-family: var(--zc-font-primary);
+  font-size: 10px;
+  fill: var(--zc-graph-text-3);
+}
+.zc-graphcard__series { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.zc-graphcard__legend {
+  display: flex; align-items: center;
+  gap: var(--zc-space-12);
+  padding: var(--zc-space-6) var(--zc-space-14);
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-graph-text-2);
+}
+.zc-graphcard__dot { width: 8px; height: 8px; border-radius: var(--zc-radius-full); display: inline-block; margin-right: var(--zc-space-4); }

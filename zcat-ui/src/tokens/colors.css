@@ -1,0 +1,1818 @@
+/* =============================================================================
+   zcat Design System — Color Tokens
+   493 color variables from Figma Mode collection (Light + Dark)
+   Generated from: design-tokens.md
+
+   Naming: --zc-{namespace}-{group}-{name}
+   Usage:  color: var(--zc-body-text-primary);
+   Theme:  <html data-theme="light|dark"> or prefers-color-scheme
+   ============================================================================= */
+
+/* ─── LIGHT THEME (Default) ─── */
+:root {
+
+  /* ── BODY / Text ── */
+  --zc-body-text-primary: #101F3E;
+  --zc-body-text-secondary: #4D618A;
+  --zc-body-text-light: #7988A8;
+  --zc-body-text-disabled: #A6B1C9;
+  --zc-body-text-theme: #2A65F0;
+  --zc-body-text-white: #FFFFFF;
+  --zc-body-text-success: #29B260;
+  --zc-body-text-danger: #E22020;
+  --zc-body-text-warning: #C98E06;
+  --zc-body-text-info: #2092EF;
+  --zc-body-text-link: #2A65F0;
+
+  /* ── BODY / Background ── */
+  --zc-body-bg-body: #EFF2FA;
+  --zc-body-bg-container: #FFFFFF;
+  /* Figma: body/border-static/outerdivider — light verified */
+  --zc-body-border-outerdivider: #DDE4F6;
+  --zc-body-bg-hover: #F4F7FE;
+  --zc-body-bg-active: #E7EEFE;
+  --zc-body-bg-disabled: #F7F8FB;
+  --zc-body-bg-theme: #2A65F0;
+
+  /* ── BODY / Border ── */
+  --zc-body-border-default: #EBEEF6;
+  --zc-body-border-strong: #DDE4F6;
+  --zc-body-border-divider: #D6DDEF;
+  --zc-body-border-active: #101F3E;
+  --zc-body-border-theme: #2A65F0;
+  --zc-body-border-hover: #7DA2FB;
+  --zc-body-border-error: #E22020;
+  --zc-body-border-success: #29B260;
+  --zc-body-border-warning: #C98E06;
+  --zc-body-border-disabled: #EBEEF6;
+
+  /* ── BODY / Icons ── */
+  --zc-body-icon-primary: #101F3E;
+  --zc-body-icon-secondary: #4D618A;
+  --zc-body-icon-light: #7988A8;
+  --zc-body-icon-disabled: #A6B1C9;
+  --zc-body-icon-theme: #2A65F0;
+  --zc-body-icon-white: #FFFFFF;
+
+  /* ── CARDS ── */
+  --zc-cards-bg-primary: #FFFFFF;
+  --zc-cards-bg-secondary: #F4F7FE;
+  --zc-cards-bg-body: #EFF2FA;
+  --zc-cards-bg-hover: #FBFBFB;
+  --zc-cards-bg-selected: #E7EEFE;
+  --zc-cards-bg-disabled: #F7F8FB;
+  --zc-cards-border-default: #EBEEF6;
+  --zc-cards-border-strong: #DDE4F6;
+  --zc-cards-border-selected: #2A65F0;
+  --zc-cards-border-hover: #DDE4F6;
+  --zc-cards-border-disabled: #EFF2FA;
+
+  /* ── SHADOWS / Elevation ── */
+  --zc-shadow-default: #EFF2FA;
+  --zc-shadow-with-opacity: #EFF2FA3D;
+
+  /* ── BRANDING ICON ── */
+  --zc-brand-icon-primary: #2A65F0;
+  --zc-brand-icon-secondary: #FFFFFF;
+
+  /* ── OTHER SHADES / Blue ── */
+  --zc-shade-blue-1: #2092EF;
+  --zc-shade-blue-2: #257EC7;
+  --zc-shade-blue-3: #A6CBEA;
+  --zc-shade-blue-4: #E8F5FF;
+
+  /* ── OTHER SHADES / Green ── */
+  --zc-shade-green-1: #29B260;
+  --zc-shade-green-2: #218E4D;
+  --zc-shade-green-3: #7FD1A0;
+  --zc-shade-green-4: #EAF7EF;
+
+  /* ── OTHER SHADES / Orange ── */
+  --zc-shade-orange-1: #C98E06;
+  --zc-shade-orange-2: #A5760C;
+  --zc-shade-orange-3: #DAB45F;
+  --zc-shade-orange-4: #FFF3D7;
+
+  /* ── OTHER SHADES / Red ── */
+  --zc-shade-red-1: #E22020;
+  --zc-shade-red-2: #B51A1A;
+  --zc-shade-red-3: #EE7979;
+  --zc-shade-red-4: #FFEFEF;
+
+  /* ── OTHER SHADES / Pink ── */
+  --zc-shade-pink-1: #E417B1;
+  --zc-shade-pink-2: #C51D9B;
+  --zc-shade-pink-3: #F8B4E7;
+  --zc-shade-pink-4: #FFEFFB;
+
+  /* ── OTHER SHADES / Purple ── */
+  --zc-shade-purple-1: #6E3D9E;
+  --zc-shade-purple-2: #7449A4;
+  --zc-shade-purple-3: #BDA3DF;
+  --zc-shade-purple-4: #F1EAFF;
+
+  /* ── OTHER SHADES / Theme ── */
+  --zc-shade-theme-1: #2A65F0;
+  --zc-shade-theme-2: #0755F2;
+  --zc-shade-theme-3: #7DA2FB;
+  --zc-shade-theme-4: #E7EEFE;
+
+  /* ── BUTTONS ──
+     Mirrors Figma "Buttons" (node 728:4636) exactly.
+     Variant = Fill | Outline | Grey | Ghost | Ghost Grey
+     Color   = Primary | Success | Danger | Grey
+     State   = Default | Hover | Pressed(click) | Disabled
+  */
+  /* Fill — background per color/state, one shared text+icon colour */
+  --zc-btn-fill-bg-primary: #2A65F0;
+  --zc-btn-fill-bg-primary-hover: #0755F2;
+  --zc-btn-fill-bg-primary-pressed: #2A65F0;
+  --zc-btn-fill-bg-primary-disabled: #7DA2FB;
+  --zc-btn-fill-bg-success: #29B260;
+  --zc-btn-fill-bg-success-hover: #218E4D;
+  --zc-btn-fill-bg-success-pressed: #29B260;
+  --zc-btn-fill-bg-success-disabled: #7FD1A0;
+  --zc-btn-fill-bg-danger: #E22020;
+  --zc-btn-fill-bg-danger-hover: #B51A1A;
+  --zc-btn-fill-bg-danger-pressed: #E22020;
+  --zc-btn-fill-bg-danger-disabled: #EE7979;
+  --zc-btn-fill-text-default: #FFFFFF;
+  --zc-btn-fill-text-hover: #FFFFFF;
+  --zc-btn-fill-text-pressed: #FFFFFF;
+  --zc-btn-fill-text-disabled: #E7EEFE;
+  --zc-btn-fill-split-line: rgba(255, 255, 255, 0.2); /* Figma: #ffffff33 */
+
+  /* Outline — text + border per color/state; background only on hover */
+  --zc-btn-outline-text-primary: #2A65F0;
+  --zc-btn-outline-text-primary-hover: #0755F2;
+  --zc-btn-outline-text-primary-pressed: #2A65F0;
+  --zc-btn-outline-text-primary-disabled: #7DA2FB;
+  --zc-btn-outline-border-primary: #2A65F0;
+  --zc-btn-outline-border-primary-hover: #0755F2;
+  --zc-btn-outline-border-primary-pressed: #2A65F0;
+  --zc-btn-outline-border-primary-disabled: #7DA2FB;
+  --zc-btn-outline-bg-primary-hover: #E7EEFE;
+  --zc-btn-outline-text-success: #29B260;
+  --zc-btn-outline-text-success-hover: #218E4D;
+  --zc-btn-outline-text-success-pressed: #29B260;
+  --zc-btn-outline-text-success-disabled: #7FD1A0;
+  --zc-btn-outline-border-success: #29B260;
+  --zc-btn-outline-border-success-hover: #218E4D;
+  --zc-btn-outline-border-success-pressed: #29B260;
+  --zc-btn-outline-border-success-disabled: #7FD1A0;
+  --zc-btn-outline-bg-success-hover: #EAF7EF;
+  --zc-btn-outline-text-danger: #E22020;
+  --zc-btn-outline-text-danger-hover: #B51A1A;
+  --zc-btn-outline-text-danger-pressed: #E22020;
+  --zc-btn-outline-text-danger-disabled: #EE7979;
+  --zc-btn-outline-border-danger: #E22020;
+  --zc-btn-outline-border-danger-hover: #B51A1A;
+  --zc-btn-outline-border-danger-pressed: #E22020;
+  --zc-btn-outline-border-danger-disabled: #EE7979;
+  --zc-btn-outline-bg-danger-hover: #FFEFEF;
+
+  /* Ghost — text per color/state; background only on hover */
+  --zc-btn-ghost-text-primary: #2A65F0;
+  --zc-btn-ghost-text-primary-hover: #0755F2;
+  --zc-btn-ghost-text-primary-pressed: #2A65F0;
+  --zc-btn-ghost-text-primary-disabled: #7DA2FB;
+  --zc-btn-ghost-bg-primary: #E7EEFE;
+  --zc-btn-ghost-text-success: #29B260;
+  --zc-btn-ghost-text-success-hover: #218E4D;
+  --zc-btn-ghost-text-success-pressed: #29B260;
+  --zc-btn-ghost-text-success-disabled: #7FD1A0;
+  --zc-btn-ghost-bg-success: #EAF7EF;
+  --zc-btn-ghost-text-danger: #E22020;
+  --zc-btn-ghost-text-danger-hover: #B51A1A;
+  --zc-btn-ghost-text-danger-pressed: #E22020;
+  --zc-btn-ghost-text-danger-disabled: #EE7979;
+  --zc-btn-ghost-bg-danger: #FFEFEF;
+
+  /* Grey — its own variant in Figma (not a colour of Fill) */
+  --zc-btn-grey-bg-default: #EBEEF6;
+  --zc-btn-grey-bg-hover: #E7EEFE;
+  --zc-btn-grey-bg-pressed: #EBEEF6;
+  --zc-btn-grey-bg-disabled: #F7F8FB;
+  --zc-btn-grey-border-default: #D6DDEF;
+  --zc-btn-grey-border-hover: #D6DDEF;
+  --zc-btn-grey-border-pressed: #D6DDEF;
+  --zc-btn-grey-border-disabled: #EFF2FA;
+  --zc-btn-grey-text-default: #101F3E;
+  --zc-btn-grey-text-hover: #101F3E;
+  --zc-btn-grey-text-pressed: #101F3E;
+  --zc-btn-grey-text-disabled: #A6B1C9;
+
+  /* ── LINK (Figma node 738:64747) ── */
+  --zc-link-text-default: #2A65F0;
+  --zc-link-text-hover: #0755F2;
+  --zc-link-text-pressed: #2A65F0;
+  --zc-link-text-disabled: #7DA2FB;
+
+  /* ── TOOLTIP (Figma node 779:4711) ── */
+  --zc-tooltip-bg: #101F3E;
+  --zc-tooltip-border: #EBEEF6;
+  --zc-tooltip-text: #FFFFFF;
+
+  /* ── INPUT FIELDS ── */
+  --zc-input-bg-default: #FFFFFF;
+  --zc-input-bg-hover: #F7FAFF;
+  --zc-input-bg-active: #F7FAFF;
+  --zc-input-bg-disabled: #F7F8FB;
+  --zc-input-bg-filled: #FFFFFF;
+  --zc-input-bg-error: #FFEFEF;
+  --zc-input-bg-keyvalue-hover: #F4F7FE; /* Figma: input_fields-background-key-value-hover */
+  --zc-input-border-default: #D6DDEF;
+  --zc-input-border-hover: #7DA2FB;
+  --zc-input-border-active: #2A65F0;
+  --zc-input-border-error: #EE7979;
+  --zc-input-border-disabled: #EFF2FA;
+  --zc-input-border-success: #29B260;
+  --zc-input-text-default: #101F3E;
+  --zc-input-text-placeholder: #7988A8;
+  --zc-input-text-disabled: #A6B1C9;
+  --zc-input-text-label: #4D618A;
+  --zc-input-text-helper: #4D618A;
+  --zc-input-text-error: #E22020;
+  --zc-input-text-success: #29B260;
+  --zc-input-text-warning: #C98E06;
+  --zc-input-icon-default: #7988A8;
+  --zc-input-icon-active: #101F3E;
+  --zc-input-icon-disabled: #A6B1C9;
+  --zc-input-icon-error: #E22020;
+
+  /* ── CHECK / RADIO / TOGGLE ── */
+  --zc-check-bg-default: #FFFFFF;
+  --zc-check-bg-checked: #2A65F0;
+  --zc-check-bg-disabled: #F7F8FB;
+  --zc-check-bg-disabled-checked: #7DA2FB;
+  --zc-check-border-default: #D6DDEF;
+  --zc-check-border-hover: #7DA2FB;
+  --zc-check-border-disabled: #EFF2FA;
+  --zc-check-icon-check: #FFFFFF;
+  --zc-check-icon-check-disabled: #E7EEFE;
+  --zc-check-bg-hover: #E7EEFE;
+  --zc-check-bg-checked-hover: #0755F2;
+  --zc-check-text-default: #101F3E;
+  --zc-check-text-secondary: #4D618A;
+  --zc-check-text-disabled: #A6B1C9;
+  --zc-toggle-bg-off: #FFFFFF;
+  --zc-toggle-bg-on: #2A65F0;
+  --zc-toggle-bg-on-hover: #0755F2;
+  --zc-toggle-bg-disabled: #F7F8FB;
+  --zc-toggle-bg-on-disabled: #7DA2FB;
+  --zc-toggle-thumb-off: #D6DDEF;
+  --zc-toggle-thumb-off-hover: #7DA2FB;
+  --zc-toggle-thumb-off-disabled: #EBEEF6;
+  --zc-toggle-thumb-on: #FFFFFF;
+  --zc-toggle-thumb-on-disabled: #E7EEFE;
+
+  /* ── CHIPS / Tags ── */
+  --zc-chip-bg-default: #F4F7FE;
+  --zc-chip-bg-hover: #F7FAFF;
+  --zc-chip-bg-disabled: #F7F8FB;
+  --zc-chip-border-default: #EBEEF6;
+  --zc-chip-border-hover: #D6DDEF;
+  --zc-chip-border-disabled: #EFF2FA;
+  --zc-chip-text-default: #101F3E;
+  --zc-chip-text-disabled: #A6B1C9;
+  --zc-chip-icon-default: #4D618A;
+  --zc-chip-icon-close: #7988A8;
+  --zc-chip-icon-close-hover: #101F3E;
+
+  /* ── BADGE (Figma: Badges 461:767) ──
+     Type = Primary (solid) | Secondary (tinted)
+     Color = Primary | Grey | Purple | Danger | Disabled | Info | Success | Warning
+     Size = Default (20px) | Small (16px) | Dot (6px)
+     NOTE: Info is PINK in this design system, not blue.
+  */
+  --zc-badge-solid-primary-bg: #2A65F0;
+  --zc-badge-solid-success-bg: #29B260;
+  --zc-badge-solid-danger-bg: #E22020;
+  --zc-badge-solid-warning-bg: #C98E06;
+  --zc-badge-solid-info-bg: #E417B1;
+  --zc-badge-solid-purple-bg: #6E3D9E;
+  --zc-badge-solid-grey-bg: #F4F7FE;
+  --zc-badge-solid-disabled-bg: #F7F8FB;
+  --zc-badge-solid-text: #FFFFFF;
+  --zc-badge-solid-grey-text: #101F3E;
+  --zc-badge-solid-disabled-text: #A6B1C9;
+
+  --zc-badge-subtle-primary-bg: #E7EEFE;
+  --zc-badge-subtle-primary-text: #2A65F0;
+  --zc-badge-subtle-success-bg: #EAF7EF;
+  --zc-badge-subtle-success-text: #29B260;
+  --zc-badge-subtle-danger-bg: #FFEFEF;
+  --zc-badge-subtle-danger-text: #E22020;
+  --zc-badge-subtle-warning-bg: #FFF3D7;
+  --zc-badge-subtle-warning-text: #C98E06;
+  --zc-badge-subtle-info-bg: #FFEFFB;
+  --zc-badge-subtle-info-text: #E417B1;
+  --zc-badge-subtle-purple-bg: #F1EAFF;
+  --zc-badge-subtle-purple-text: #6E3D9E;
+  --zc-badge-subtle-grey-bg: #F4F7FE;
+  --zc-badge-subtle-grey-text: #101F3E;
+  --zc-badge-subtle-disabled-bg: #F7F8FB;
+  --zc-badge-subtle-disabled-text: #A6B1C9;
+
+  /* ── AVATAR (Figma: Avatar 1173:15428) ──
+     Type = Men | Women | Icon | Icon Filled | Initials
+     Size = Small (16) | Default (24) | Large (30);  State = Default | Disabled
+  */
+  --zc-avatar-bg: #F4F7FE;
+  --zc-avatar-bg-alt: #EBEEF6;
+  --zc-avatar-border: #EBEEF6;
+  --zc-avatar-border-white: #FFFFFF;
+  --zc-avatar-icon: #4D618A;
+  --zc-avatar-icon-disabled: #A6B1C9;
+  --zc-avatar-text: #4D618A;
+  --zc-avatar-text-disabled: #A6B1C9;
+  --zc-avatar-status-online: #29B260;
+  --zc-avatar-status-offline: #A6B1C9;
+
+  /* ── TOOLTIP ── */
+  --zc-tooltip-text-primary: #FFFFFF;
+  --zc-tooltip-text-secondary: #4D618A;
+
+  /* ── TABS ── */
+  --zc-tab-primary-bg-hover: #E7EEFE;
+  --zc-tab-primary-bg-disabled: #F7F8FB;
+  --zc-tab-primary-border-active: #2A65F0;
+  --zc-tab-primary-border-default: #DDE4F6;
+  --zc-tab-primary-border-hover: #7DA2FB;
+  --zc-tab-primary-text-active: #2A65F0;
+  --zc-tab-primary-text-default: #4D618A;
+  --zc-tab-primary-text-hover: #101F3E;
+  --zc-tab-primary-text-disabled: #A6B1C9;
+  --zc-tab-secondary-bg-active: #FFFFFF;
+  --zc-tab-secondary-bg-default: #EFF2FA;
+  --zc-tab-secondary-bg-hover: #FFFFFF;
+  --zc-tab-secondary-bg-disabled: #F7F8FB;
+  --zc-tab-secondary-border: #DDE4F6;
+  --zc-tab-secondary-text-active: #2A65F0;
+  --zc-tab-secondary-text-default: #4D618A;
+  --zc-tab-secondary-text-hover: #101F3E;
+  --zc-tab-secondary-text-disabled: #A6B1C9;
+
+  /* ── ACCORDION ── */
+  --zc-accordion-bg-default: #FFFFFF;
+  --zc-accordion-bg-hover: #FBFBFB;
+  --zc-accordion-bg-active: #F4F7FE;
+  --zc-accordion-border: #EBEEF6;
+  --zc-accordion-text-heading: #101F3E;
+  --zc-accordion-text-sub: #4D618A;
+  --zc-accordion-icon-default: #7988A8;
+  --zc-accordion-icon-active: #2A65F0;
+  --zc-accordion-icon-bg: #EBEEF6;
+  --zc-accordion-bordered-bg: #E7EEFE;
+
+  /* ── ATTENTION BOX ── */
+  --zc-attention-info-bg: #E8F5FF;
+  --zc-attention-info-border: #A6CBEA;
+  --zc-attention-info-icon: #2092EF;
+  --zc-attention-success-bg: #EAF7EF;
+  --zc-attention-success-border: #7FD1A0;
+  --zc-attention-success-icon: #29B260;
+  --zc-attention-warning-bg: #FFF3D7;
+  --zc-attention-warning-border: #DAB45F;
+  --zc-attention-warning-icon: #C98E06;
+  --zc-attention-danger-bg: #FFEFEF;
+  --zc-attention-danger-border: #EE7979;
+  --zc-attention-danger-icon: #E22020;
+  --zc-attention-default-bg: #F4F7FE;
+  --zc-attention-default-border: #EBEEF6;
+  --zc-attention-text-heading: #101F3E;
+  --zc-attention-text-body: #4D618A;
+
+  /* ── TABLE ── */
+  --zc-table-bg-header: #F7F8FB;
+  --zc-table-bg-row: #FFFFFF;
+  --zc-table-bg-row-hover: #F4F7FE;
+  --zc-table-bg-row-selected: #E7EEFE;
+  --zc-table-bg-row-disabled: #F7F8FB;
+  --zc-table-border: #EBEEF6;
+  --zc-table-text-primary: #101F3E;
+  --zc-table-text-secondary: #4D618A;
+  --zc-table-text-light: #7988A8;
+  --zc-table-text-disabled: #A6B1C9;
+  --zc-table-icon-primary: #101F3E;
+  --zc-table-icon-secondary: #4D618A;
+  --zc-table-icon-light: #7988A8;
+  --zc-table-icon-disabled: #A6B1C9;
+  --zc-table-threedot-icon: #101F3E;
+  --zc-table-threedot-bg: #F7F8FB;
+  --zc-table-threedot-bg-hover: #EBEEF6;
+  --zc-table-threedot-bg-active: #E7EEFE;
+
+  /* ── MENU LIST / Dropdown ── */
+  --zc-menu-bg-default: #FFFFFF;
+  --zc-menu-bg-hover: #F4F7FE;
+  --zc-menu-bg-selected: #E7EEFE;
+  --zc-menu-bg-disabled: #F7F8FB;
+  --zc-menu-border: #EBEEF6;
+  --zc-menu-text-default: #101F3E;
+  --zc-menu-text-heading: #4D618A;
+  --zc-menu-text-light: #7988A8;
+  --zc-menu-text-hover: #101F3E;
+  --zc-menu-text-disabled: #A6B1C9;
+  --zc-menu-icon-default: #101F3E;
+  --zc-menu-icon-check: #2A65F0;
+  --zc-menu-icon-disabled: #A6B1C9;
+
+  /* ── BREADCRUMBS ── */
+  --zc-breadcrumb-text-default: #4D618A;
+  --zc-breadcrumb-text-active: #101F3E;
+  --zc-breadcrumb-text-hover: #2A65F0;
+  --zc-breadcrumb-icon: #7988A8;
+  --zc-breadcrumb-bg-hover: #E7EEFE;
+  --zc-breadcrumb-text-disabled: #A6B1C9;
+
+  /* ── POPUP / Modal ── */
+  --zc-popup-bg: #FFFFFF;
+  --zc-popup-blur-bg: #101F3EB2;
+  --zc-popup-border: #EBEEF6;
+
+  /* ── SIDE MENU ── */
+  --zc-sidemenu-bg: #FFFFFF;
+  --zc-sidemenu-bg-hover: #F4F7FE;
+  --zc-sidemenu-bg-active: #E7EEFE;
+  --zc-sidemenu-border: #DDE4F6;
+  --zc-sidemenu-text-default: #101F3E;
+  --zc-sidemenu-text-active: #2A65F0;
+  --zc-sidemenu-text-hover: #2A65F0;
+  --zc-sidemenu-text-disabled: #A6B1C9;
+  --zc-sidemenu-text-heading: #7988A8;
+  --zc-sidemenu-icon-active: #2A65F0;
+
+  /* ── MAIN HEADER ── */
+  --zc-header-bg: #FFFFFF;
+  --zc-header-border: #DDE4F6;
+  --zc-header-text: #101F3E;
+  /* Figma: main-header/project-name-logo-* — light verified */
+  --zc-header-logo-bg: #EAF7EF;
+  --zc-header-logo-text: #29B260;
+
+  /* ── SUB HEADER ── */
+  --zc-subheader-bg: #FFFFFF;
+  --zc-subheader-border: #DDE4F6;
+  --zc-subheader-border-active: #101F3E;
+
+  /* ── SERVICE MENU ── */
+  --zc-servicemenu-bg-top: #0F2A64;
+  --zc-servicemenu-bg-bottom: #0A245D;
+  --zc-servicemenu-icon-bg-default: #2A65F033;
+  --zc-servicemenu-icon-bg-active: #E7EEFE;
+  --zc-servicemenu-icon: #FFFFFF;
+  --zc-servicemenu-text-default: #FFFFFF;
+  --zc-servicemenu-text-active: #101F3E;
+  --zc-servicemenu-border: #4D618A;
+  /* Figma: service_menu/text/sub-heading — light verified */
+  --zc-servicemenu-text-subheading: #4D618A;
+
+
+  /* ── LOADER ── */
+  --zc-loader-content-primary: #D6DDEF;
+  --zc-loader-content-secondary: #F7FAFF;
+  --zc-loader-progress-primary: #2A65F0;
+  --zc-loader-progress-track: #EBEEF6;
+  --zc-loader-round-primary: #2A65F0;
+  --zc-loader-round-secondary: #101F3E;
+  --zc-loader-round-tertiary: #FFFFFF;
+
+  /* ── STEPPER ── */
+  --zc-stepper-bg-active: #2A65F0;
+  --zc-stepper-bg-completed: #29B260;
+  --zc-stepper-bg-default: #F4F7FE;
+  --zc-stepper-bg-disabled: #F7F8FB;
+  --zc-stepper-border-active: #FFFFFF;
+  --zc-stepper-border-default: #D6DDEF;
+  --zc-stepper-border-disabled: #FFFFFF33;
+  --zc-stepper-divider-disabled: #EFF2FA;
+  --zc-stepper-divider-active: #2A65F0;
+  --zc-stepper-divider-completed: #3E9F64;
+  --zc-stepper-divider-default: #D6DDEF;
+  --zc-stepper-text-active: #101F3E;
+  --zc-stepper-text-completed: #101F3E;
+  --zc-stepper-text-default: #4D618A;
+  --zc-stepper-text-disabled: #A6B1C9;
+  --zc-stepper-text-number: #FFFFFF;
+
+  /* ── PAGINATION ── */
+  --zc-pagination-bg: #FFFFFF;
+  --zc-pagination-bg-active: #2A65F0;
+  --zc-pagination-border: #EBEEF6;
+  --zc-pagination-text-primary: #101F3E;
+  --zc-pagination-text-secondary: #4D618A;
+  --zc-pagination-text-light: #7988A8;
+  /* Figma: input_fields/text/link-field (rows-per-page value) — light verified */
+  --zc-pagination-text-link: #2A65F0;
+  /* Figma: shadows/background-with-opacity — light verified, no dark value yet */
+  --zc-pagination-shadow: #EFF2FA3D;
+
+  /* ── LINK BOX ── */
+  --zc-linkbox-bg-default: #F4F7FE;
+  --zc-linkbox-bg-hover: #EFF2FA;
+  --zc-linkbox-border-default: #EBEEF6;
+  --zc-linkbox-border-divider: #D6DDEF;
+  --zc-linkbox-border-hover: #7DA2FB;
+  --zc-linkbox-text-main: #101F3E;
+  --zc-linkbox-text-label: #4D618A;
+  --zc-linkbox-icon-default: #101F3E;
+  --zc-linkbox-icon-hover: #2A65F0;
+
+  /* ── TOAST ── */
+  --zc-toast-bg: #FFFFFF;
+  --zc-toast-border: #EBEEF6;
+  --zc-toast-text-primary: #101F3E;
+  --zc-toast-text-secondary: #4D618A;
+  --zc-toast-icon-info: #2092EF;
+  --zc-toast-icon-success: #29B260;
+  --zc-toast-icon-warning: #C98E06;
+  --zc-toast-icon-danger: #E22020;
+
+  /* ── TIMELINE ── */
+  --zc-timeline-bg-blue: #E8F5FF;
+  --zc-timeline-dot-blue: #2092EF;
+  --zc-timeline-bg-green: #EAF7EF;
+  --zc-timeline-dot-green: #29B260;
+  --zc-timeline-bg-grey: #EBEEF6;
+  --zc-timeline-dot-grey: #4D618A;
+  --zc-timeline-bg-orange: #FFF3D7;
+  --zc-timeline-dot-orange: #C98E06;
+  --zc-timeline-bg-red: #FFEFEF;
+  --zc-timeline-dot-red: #E22020;
+  --zc-timeline-line: #D6DDEF;
+
+  /* ── TOUR ── */
+  --zc-tour-bg: #FFFFFF;
+  --zc-tour-blink-bg: #2A65F0;
+  --zc-tour-border: #EBEEF6;
+  --zc-tour-blink-border: #2A65F0;
+
+  /* ── CODE BLOCK ── */
+  --zc-codeblock-bg: #F7F8FB;
+  --zc-codeblock-bg-writer: #FFFFFF;
+  --zc-code-syntax-keyword: #2A65F0;
+  --zc-code-syntax-ident: #E22020;
+  --zc-code-syntax-string: #C98E06;
+  --zc-code-syntax-string-alt: #AE821C;
+  --zc-code-syntax-comment: #29B260;
+  --zc-codeblock-border: #EBEEF6;
+  --zc-codeblock-text: #101F3E;
+
+  /* ── DATE PICKER ── */
+  --zc-datepicker-bg: #FFFFFF;
+  --zc-datepicker-bg-hover: #F4F7FE;
+  --zc-datepicker-bg-selected: #2A65F0;
+  --zc-datepicker-bg-range: #E7EEFE;
+  --zc-datepicker-bg-today: #EFF2FA;
+  --zc-datepicker-border: #EBEEF6;
+  --zc-datepicker-border-outer: #D6DDEF;
+  --zc-datepicker-text-days: #7988A8;
+  --zc-datepicker-text-default: #101F3E;
+  --zc-datepicker-text-secondary: #4D618A;
+  --zc-datepicker-text-disabled: #A6B1C9;
+  --zc-datepicker-text-selected: #FFFFFF;
+  --zc-datepicker-text-today: #2A65F0;
+
+  /* ── CAROUSEL ── */
+  --zc-carousel-dot-active: #101F3E;
+  --zc-carousel-dot-hover: #4D618A;
+  --zc-carousel-dot-default: #A6B1C9;
+
+  /* ── PROFILE NAV ── */
+  --zc-profilenav-bg: #F4F7FE;
+  --zc-profilenav-text-heading: #101F3E;
+  --zc-profilenav-text-sub: #4D618A;
+  --zc-profilenav-border: #EBEEF6;
+  --zc-profilenav-icon-primary: #101F3E;
+  --zc-profilenav-icon-light: #7988A8;
+  --zc-profilenav-border-outer: #D6DDEF;
+  --zc-profilenav-theme: #2A65F0;
+  --zc-profilenav-theme-2: #E417B1;
+  /* Appearance preview cards paint fixed light/dark swatches (Figma literals) */
+  --zc-profilenav-appearance-light: #F7F8FB;
+  --zc-profilenav-appearance-light-line: #D6DDEF;
+  --zc-profilenav-appearance-light-2: #EFF2FA;
+  --zc-profilenav-appearance-dark: #242424;
+  --zc-profilenav-appearance-dark-bg: #1A1B1D;
+  --zc-profilenav-appearance-dark-line: #484D58;
+  --zc-profilenav-appearance-dark-2: #292A2F;
+
+  /* ── GRAPH ── */
+  --zc-graph-primary: #2A65F0;
+  --zc-graph-secondary: #29B260;
+  --zc-graph-tertiary: #C98E06;
+  --zc-graph-grid: #EBEEF6;
+  --zc-graph-text: #7988A8;
+
+  /* ── BUTTONS / Gradient (Figma set 1305:10534) ── */
+  --zc-btn-gradient-top: #EC64A0;
+  --zc-btn-gradient-bottom: #6478E6;
+  --zc-btn-gradient-top-hover: #E15091;
+  --zc-btn-gradient-bottom-hover: #5064DC;
+  --zc-btn-gradient-top-pressed: #EC64A0;
+  --zc-btn-gradient-bottom-pressed: #6478E6;
+  --zc-btn-gradient-top-disabled: #EC96BE;
+  --zc-btn-gradient-bottom-disabled: #96A0DC;
+  --zc-btn-gradient-text: #FFFFFF;
+  --zc-btn-gradient-text-disabled: #E7EEFE;
+
+  /* ── GRAPH (Figma family: Text 1-3, X&Y Axis, Line 2) ── */
+  --zc-graph-text-1: #101F3E;
+  --zc-graph-text-2: #4D618A;
+  --zc-graph-text-3: #7988A8;
+  --zc-graph-axis: #DDE4F6;
+  --zc-graph-line-2: #EBEEF6;
+
+  /* ── FULL PAGE POPUP HEADER ── */
+  --zc-fullpopup-bg: #FFFFFF;
+  --zc-fullpopup-border: #DDE4F6;
+  --zc-fullpopup-text: #101F3E;
+  --zc-fullpopup-text-secondary: #4D618A;
+  /* Figma full-page-popup-header/bg/bg (node 548:9060, verified 2026-08-28).
+     LIGHT-ONLY — dark pending the dark audit (falls back to light). */
+  --zc-fullpopup-header-bg: #F4F7FE;
+}
+
+/* ─── DARK THEME ─── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  /* Generated 2026-08-27 from the Figma "Mode" variable collection (Dark mode),
+     file KvuuNJuZsONc1ohPM6Fpq2 (user-sanctioned copy of ugOZk4O0g6XpviEBSN24mF).
+     477/478 tokens Figma-verified; unresolved tokens are flagged inline. */
+  /* ── BODY / Text ── */
+  --zc-body-text-primary: #EEEEEE;
+  --zc-body-text-secondary: #AAAAAA;
+  --zc-body-text-light: #888888;
+  --zc-body-text-disabled: #666666;
+  --zc-body-text-theme: #458BFF;
+  --zc-body-text-white: #FFFFFF;
+  --zc-body-text-success: #3E9F64;
+  --zc-body-text-danger: #DE5E60;
+  --zc-body-text-warning: #AE821C;
+  --zc-body-text-info: #4A8EFF;
+  --zc-body-text-link: #458BFF;
+
+  /* ── BODY / Background ── */
+  --zc-body-bg-body: #151516;
+  --zc-body-bg-container: #1A1B1D;
+  --zc-body-border-outerdivider: #33373F;
+  --zc-body-bg-hover: #242527;
+  --zc-body-bg-active: #1A273D;
+  --zc-body-bg-disabled: #242424;
+  --zc-body-bg-theme: #458BFF;
+
+  /* ── BODY / Border ── */
+  --zc-body-border-default: #2F3136;
+  --zc-body-border-strong: #33373F;
+  --zc-body-border-divider: #484D58;
+  --zc-body-border-active: #EEEEEE;
+  --zc-body-border-theme: #458BFF;
+  --zc-body-border-hover: #355A8D;
+  --zc-body-border-error: #DE5E60;
+  --zc-body-border-success: #3E9F64;
+  --zc-body-border-warning: #AE821C;
+  --zc-body-border-disabled: #2F3136;
+
+  /* ── BODY / Icons ── */
+  --zc-body-icon-primary: #EEEEEE;
+  --zc-body-icon-secondary: #AAAAAA;
+  --zc-body-icon-light: #888888;
+  --zc-body-icon-disabled: #666666;
+  --zc-body-icon-theme: #458BFF;
+  --zc-body-icon-white: #1A1B1D;
+
+  /* ── CARDS ── */
+  --zc-cards-bg-primary: #1A1B1D;
+  --zc-cards-bg-secondary: #242527;
+  --zc-cards-bg-body: #292A2F;
+  --zc-cards-bg-hover: #1E1F21;
+  --zc-cards-bg-selected: #1A273D;
+  --zc-cards-bg-disabled: #242424;
+  --zc-cards-border-default: #2F3136;
+  --zc-cards-border-strong: #33373F;
+  --zc-cards-border-selected: #458BFF;
+  --zc-cards-border-hover: #33373F;
+  --zc-cards-border-disabled: #292A2F;
+
+  /* ── SHADOWS / Elevation ── */
+  --zc-shadow-default: #292A2F;
+  --zc-shadow-with-opacity: #292A2F3D;
+
+  /* ── BRANDING ICON ── */
+  --zc-brand-icon-primary: #458BFF;
+  --zc-brand-icon-secondary: #FFFFFF;
+
+  /* ── OTHER SHADES / Blue ── */
+  --zc-shade-blue-1: #4A8EFF;
+  --zc-shade-blue-2: #2E88D1;
+  --zc-shade-blue-3: #2B4254;
+  --zc-shade-blue-4: #1B2730;
+
+  /* ── OTHER SHADES / Green ── */
+  --zc-shade-green-1: #3E9F64;
+  --zc-shade-green-2: #3AA564;
+  --zc-shade-green-3: #2F4326;
+  --zc-shade-green-4: #1C2622;
+
+  /* ── OTHER SHADES / Orange ── */
+  --zc-shade-orange-1: #AE821C;
+  --zc-shade-orange-2: #A1874B;
+  --zc-shade-orange-3: #493F07;
+  --zc-shade-orange-4: #27231C;
+
+  /* ── OTHER SHADES / Red ── */
+  --zc-shade-red-1: #DE5E60;
+  --zc-shade-red-2: #E86E6B;
+  --zc-shade-red-3: #682B2D;
+  --zc-shade-red-4: #2C2123;
+
+  /* ── OTHER SHADES / Pink ── */
+  --zc-shade-pink-1: #DA57B9;
+  --zc-shade-pink-2: #CD75B8;
+  --zc-shade-pink-3: #542F4B;
+  --zc-shade-pink-4: #2D202A;
+
+  /* ── OTHER SHADES / Purple ── */
+  --zc-shade-purple-1: #AD7FE4;
+  --zc-shade-purple-2: #B985F8;
+  --zc-shade-purple-3: #563973;
+  --zc-shade-purple-4: #292130;
+
+  /* ── OTHER SHADES / Theme ── */
+  --zc-shade-theme-1: #458BFF;
+  --zc-shade-theme-2: #5A97FB;
+  --zc-shade-theme-3: #355A8D;
+  --zc-shade-theme-4: #1A273D;
+  --zc-btn-fill-bg-primary: #458BFF;
+  --zc-btn-fill-bg-primary-hover: #5A97FB;
+  --zc-btn-fill-bg-primary-pressed: #458BFF;
+  --zc-btn-fill-bg-primary-disabled: #355A8D;
+  --zc-btn-fill-bg-success: #3E9F64;
+  --zc-btn-fill-bg-success-hover: #3AA564;
+  --zc-btn-fill-bg-success-pressed: #3E9F64;
+  --zc-btn-fill-bg-success-disabled: #2F4326;
+  --zc-btn-fill-bg-danger: #DE5E60;
+  --zc-btn-fill-bg-danger-hover: #E86E6B;
+  --zc-btn-fill-bg-danger-pressed: #DE5E60;
+  --zc-btn-fill-bg-danger-disabled: #682B2D;
+  --zc-btn-fill-text-default: #FFFFFF;
+  --zc-btn-fill-text-hover: #FFFFFF;
+  --zc-btn-fill-text-pressed: #FFFFFF;
+  --zc-btn-fill-text-disabled: #FFFFFF33;
+  --zc-btn-fill-split-line: #FFFFFF33;
+  --zc-btn-outline-text-primary: #458BFF;
+  --zc-btn-outline-text-primary-hover: #5A97FB;
+  --zc-btn-outline-text-primary-pressed: #458BFF;
+  --zc-btn-outline-text-primary-disabled: #355A8D;
+  --zc-btn-outline-border-primary: #458BFF;
+  --zc-btn-outline-border-primary-hover: #5A97FB;
+  --zc-btn-outline-border-primary-pressed: #458BFF;
+  --zc-btn-outline-border-primary-disabled: #355A8D;
+  --zc-btn-outline-bg-primary-hover: #1A273D;
+  --zc-btn-outline-text-success: #3E9F64;
+  --zc-btn-outline-text-success-hover: #3AA564;
+  --zc-btn-outline-text-success-pressed: #3E9F64;
+  --zc-btn-outline-text-success-disabled: #2F4326;
+  --zc-btn-outline-border-success: #3E9F64;
+  --zc-btn-outline-border-success-hover: #3AA564;
+  --zc-btn-outline-border-success-pressed: #3E9F64;
+  --zc-btn-outline-border-success-disabled: #2F4326;
+  --zc-btn-outline-bg-success-hover: #1C2622;
+  --zc-btn-outline-text-danger: #DE5E60;
+  --zc-btn-outline-text-danger-hover: #E86E6B;
+  --zc-btn-outline-text-danger-pressed: #DE5E60;
+  --zc-btn-outline-text-danger-disabled: #682B2D;
+  --zc-btn-outline-border-danger: #DE5E60;
+  --zc-btn-outline-border-danger-hover: #E86E6B;
+  --zc-btn-outline-border-danger-pressed: #DE5E60;
+  --zc-btn-outline-border-danger-disabled: #682B2D;
+  --zc-btn-outline-bg-danger-hover: #2C2123;
+  --zc-btn-ghost-text-primary: #458BFF;
+  --zc-btn-ghost-text-primary-hover: #5A97FB;
+  --zc-btn-ghost-text-primary-pressed: #458BFF;
+  --zc-btn-ghost-text-primary-disabled: #355A8D;
+  --zc-btn-ghost-bg-primary: #1A273D;
+  --zc-btn-ghost-text-success: #3E9F64;
+  --zc-btn-ghost-text-success-hover: #3AA564;
+  --zc-btn-ghost-text-success-pressed: #3E9F64;
+  --zc-btn-ghost-text-success-disabled: #2F4326;
+  --zc-btn-ghost-bg-success: #1C2622;
+  --zc-btn-ghost-text-danger: #DE5E60;
+  --zc-btn-ghost-text-danger-hover: #E86E6B;
+  --zc-btn-ghost-text-danger-pressed: #DE5E60;
+  --zc-btn-ghost-text-danger-disabled: #682B2D;
+  --zc-btn-ghost-bg-danger: #2C2123;
+  --zc-btn-grey-bg-default: #2F3136;
+  --zc-btn-grey-bg-hover: #292A2F;
+  --zc-btn-grey-bg-pressed: #2F3136;
+  --zc-btn-grey-bg-disabled: #242424;
+  --zc-btn-grey-border-default: #484D58;
+  --zc-btn-grey-border-hover: #484D58;
+  --zc-btn-grey-border-pressed: #484D58;
+  --zc-btn-grey-border-disabled: #292A2F;
+  --zc-btn-grey-text-default: #EEEEEE;
+  --zc-btn-grey-text-hover: #EEEEEE;
+  --zc-btn-grey-text-pressed: #EEEEEE;
+  --zc-btn-grey-text-disabled: #666666;
+
+  /* ── LINK (Figma node 738:64747) ── */
+  --zc-link-text-default: #458BFF;
+  --zc-link-text-hover: #5A97FB;
+  --zc-link-text-pressed: #458BFF;
+  --zc-link-text-disabled: #355A8D;
+
+  /* ── TOOLTIP (Figma node 779:4711) ── */
+  --zc-tooltip-bg: #2F3136;
+  --zc-tooltip-border: #484D58;
+  --zc-tooltip-text: #FFFFFF;
+
+  /* ── INPUT FIELDS ── */
+  --zc-input-bg-default: #1A1B1D;
+  --zc-input-bg-hover: #1F2022;
+  --zc-input-bg-active: #1F2022;
+  --zc-input-bg-disabled: #242424;
+  --zc-input-bg-filled: #1A1B1D;
+  --zc-input-bg-error: #2C2123;
+  --zc-input-bg-keyvalue-hover: #242527;
+  --zc-input-border-default: #484D58;
+  --zc-input-border-hover: #355A8D;
+  --zc-input-border-active: #458BFF;
+  --zc-input-border-error: #682B2D;
+  --zc-input-border-disabled: #292A2F;
+  --zc-input-border-success: #3E9F64;
+  --zc-input-text-default: #EEEEEE;
+  --zc-input-text-placeholder: #888888;
+  --zc-input-text-disabled: #666666;
+  --zc-input-text-label: #AAAAAA;
+  --zc-input-text-helper: #AAAAAA;
+  --zc-input-text-error: #DE5E60;
+  --zc-input-text-success: #3E9F64;
+  --zc-input-text-warning: #AE821C;
+  --zc-input-icon-default: #888888;
+  --zc-input-icon-active: #EEEEEE;
+  --zc-input-icon-disabled: #666666;
+  --zc-input-icon-error: #DE5E60;
+
+  /* ── CHECK / RADIO / TOGGLE ── */
+  --zc-check-bg-default: #1A1B1D;
+  --zc-check-bg-checked: #458BFF;
+  --zc-check-bg-disabled: #242424;
+  --zc-check-bg-disabled-checked: #355A8D;
+  --zc-check-border-default: #484D58;
+  --zc-check-border-hover: #355A8D;
+  --zc-check-border-disabled: #292A2F;
+  --zc-check-icon-check: #EEEEEE;
+  --zc-check-icon-check-disabled: #FFFFFF33;
+  --zc-check-bg-hover: #292A2F;
+  --zc-check-bg-checked-hover: #5A97FB;
+  --zc-check-text-default: #EEEEEE;
+  --zc-check-text-secondary: #AAAAAA;
+  --zc-check-text-disabled: #666666;
+  --zc-toggle-bg-off: #1A1B1D;
+  --zc-toggle-bg-on: #458BFF;
+  --zc-toggle-bg-on-hover: #5A97FB;
+  --zc-toggle-bg-disabled: #242424;
+  --zc-toggle-bg-on-disabled: #355A8D;
+  --zc-toggle-thumb-off: #484D58;
+  --zc-toggle-thumb-off-hover: #355A8D;
+  --zc-toggle-thumb-off-disabled: #2F3136;
+  --zc-toggle-thumb-on: #EEEEEE;
+  --zc-toggle-thumb-on-disabled: #FFFFFF33;
+
+  /* ── CHIPS / Tags ── */
+  --zc-chip-bg-default: #242527;
+  --zc-chip-bg-hover: #2F3136;
+  --zc-chip-bg-disabled: #242424;
+  --zc-chip-border-default: #2F3136;
+  --zc-chip-border-hover: #484D58;
+  --zc-chip-border-disabled: #292A2F;
+  --zc-chip-text-default: #EEEEEE;
+  --zc-chip-text-disabled: #666666;
+  --zc-chip-icon-default: #AAAAAA;
+  --zc-chip-icon-close: #888888;
+  --zc-chip-icon-close-hover: #EEEEEE;
+  --zc-badge-solid-primary-bg: #458BFF;
+  --zc-badge-solid-success-bg: #3E9F64;
+  --zc-badge-solid-danger-bg: #DE5E60;
+  --zc-badge-solid-warning-bg: #AE821C;
+  --zc-badge-solid-info-bg: #DA57B9;
+  --zc-badge-solid-purple-bg: #AD7FE4;
+  --zc-badge-solid-grey-bg: #242527;
+  --zc-badge-solid-disabled-bg: #242424;
+  --zc-badge-solid-text: #FFFFFF;
+  --zc-badge-solid-grey-text: #EEEEEE;
+  --zc-badge-solid-disabled-text: #666666;
+  --zc-badge-subtle-primary-bg: #1A273D;
+  --zc-badge-subtle-primary-text: #458BFF;
+  --zc-badge-subtle-success-bg: #1C2622;
+  --zc-badge-subtle-success-text: #3E9F64;
+  --zc-badge-subtle-danger-bg: #2C2123;
+  --zc-badge-subtle-danger-text: #DE5E60;
+  --zc-badge-subtle-warning-bg: #27231C;
+  --zc-badge-subtle-warning-text: #AE821C;
+  --zc-badge-subtle-info-bg: #2D202A;
+  --zc-badge-subtle-info-text: #DA57B9;
+  --zc-badge-subtle-purple-bg: #292130;
+  --zc-badge-subtle-purple-text: #AD7FE4;
+  --zc-badge-subtle-grey-bg: #242527;
+  --zc-badge-subtle-grey-text: #EEEEEE;
+  --zc-badge-subtle-disabled-bg: #242424;
+  --zc-badge-subtle-disabled-text: #666666;
+  --zc-avatar-bg: #242527;
+  --zc-avatar-bg-alt: #2F3136;
+  --zc-avatar-border: #2F3136;
+  --zc-avatar-border-white: #1A1B1D;
+  --zc-avatar-icon: #AAAAAA;
+  --zc-avatar-icon-disabled: #666666;
+  --zc-avatar-text: #AAAAAA;
+  --zc-avatar-text-disabled: #666666;
+  --zc-avatar-status-online: #3E9F64;
+  --zc-avatar-status-offline: #666666;
+
+  /* ── TOOLTIP ── */
+  --zc-tooltip-text-primary: #FFFFFF;
+  --zc-tooltip-text-secondary: #AAAAAA;
+
+  /* ── TABS ── */
+  --zc-tab-primary-bg-hover: #1A273D;
+  --zc-tab-primary-bg-disabled: #242424;
+  --zc-tab-primary-border-active: #458BFF;
+  --zc-tab-primary-border-default: #33373F;
+  --zc-tab-primary-border-hover: #355A8D;
+  --zc-tab-primary-text-active: #458BFF;
+  --zc-tab-primary-text-default: #AAAAAA;
+  --zc-tab-primary-text-hover: #EEEEEE;
+  --zc-tab-primary-text-disabled: #666666;
+  --zc-tab-secondary-bg-active: #1F2022;
+  --zc-tab-secondary-bg-default: #33373F;
+  --zc-tab-secondary-bg-hover: #292A2F;
+  --zc-tab-secondary-bg-disabled: #242424;
+  --zc-tab-secondary-border: #33373F;
+  --zc-tab-secondary-text-active: #EEEEEE;
+  --zc-tab-secondary-text-default: #AAAAAA;
+  --zc-tab-secondary-text-hover: #EEEEEE;
+  --zc-tab-secondary-text-disabled: #666666;
+
+  /* ── ACCORDION ── */
+  --zc-accordion-bg-default: #1A1B1D;
+  --zc-accordion-bg-hover: #1E1F21;
+  --zc-accordion-bg-active: #242527;
+  --zc-accordion-border: #2F3136;
+  --zc-accordion-text-heading: #EEEEEE;
+  --zc-accordion-text-sub: #AAAAAA;
+  --zc-accordion-icon-default: #888888;
+  --zc-accordion-icon-active: #458BFF;
+  --zc-accordion-icon-bg: #2F3136;
+  --zc-accordion-bordered-bg: #1A273D;
+
+  /* ── ATTENTION BOX ── */
+  --zc-attention-info-bg: #1B2730;
+  --zc-attention-info-border: #2B4254;
+  --zc-attention-info-icon: #4A8EFF;
+  --zc-attention-success-bg: #1C2622;
+  --zc-attention-success-border: #2F4326;
+  --zc-attention-success-icon: #3E9F64;
+  --zc-attention-warning-bg: #27231C;
+  --zc-attention-warning-border: #493F07;
+  --zc-attention-warning-icon: #AE821C;
+  --zc-attention-danger-bg: #2C2123;
+  --zc-attention-danger-border: #682B2D;
+  --zc-attention-danger-icon: #DE5E60;
+  --zc-attention-default-bg: #242527;
+  --zc-attention-default-border: #2F3136;
+  --zc-attention-text-heading: #EEEEEE;
+  --zc-attention-text-body: #AAAAAA;
+
+  /* ── TABLE ── */
+  --zc-table-bg-header: #1E1F21;
+  --zc-table-bg-row: #1A1B1D;
+  --zc-table-bg-row-hover: #242527;
+  --zc-table-bg-row-selected: #1A273D;
+  --zc-table-bg-row-disabled: #242424;
+  --zc-table-border: #2F3136;
+  --zc-table-text-primary: #EEEEEE;
+  --zc-table-text-secondary: #AAAAAA;
+  --zc-table-text-light: #888888;
+  --zc-table-text-disabled: #666666;
+  --zc-table-icon-primary: #EEEEEE;
+  --zc-table-icon-secondary: #AAAAAA;
+  --zc-table-icon-light: #888888;
+  --zc-table-icon-disabled: #666666;
+  --zc-table-threedot-icon: #EEEEEE;
+  --zc-table-threedot-bg: #242424;
+  --zc-table-threedot-bg-hover: #2F3136;
+  --zc-table-threedot-bg-active: #1A273D;
+
+  /* ── MENU LIST / Dropdown ── */
+  --zc-menu-bg-default: #1A1B1D;
+  --zc-menu-bg-hover: #292A2F;
+  --zc-menu-bg-selected: #1A273D;
+  --zc-menu-bg-disabled: #242424;
+  --zc-menu-border: #2F3136;
+  --zc-menu-text-default: #EEEEEE;
+  --zc-menu-text-heading: #AAAAAA;
+  --zc-menu-text-light: #888888;
+  --zc-menu-text-hover: #EEEEEE;
+  --zc-menu-text-disabled: #666666;
+  --zc-menu-icon-default: #EEEEEE;
+  --zc-menu-icon-check: #458BFF;
+  --zc-menu-icon-disabled: #666666;
+
+  /* ── BREADCRUMBS ── */
+  --zc-breadcrumb-text-default: #AAAAAA;
+  --zc-breadcrumb-text-active: #EEEEEE;
+  --zc-breadcrumb-text-hover: #458BFF;
+  --zc-breadcrumb-icon: #888888;
+  --zc-breadcrumb-bg-hover: #1A273D;
+  --zc-breadcrumb-text-disabled: #666666;
+
+  /* ── POPUP / Modal ── */
+  --zc-popup-bg: #1A1B1D;
+  --zc-popup-blur-bg: #000000B2;
+  --zc-popup-border: #2F3136;
+
+  /* ── SIDE MENU ── */
+  --zc-sidemenu-bg: #1A1B1D;
+  --zc-sidemenu-bg-hover: #292A2F;
+  --zc-sidemenu-bg-active: #1A273D;
+  --zc-sidemenu-border: #33373F;
+  --zc-sidemenu-text-default: #AAAAAA;
+  --zc-sidemenu-text-active: #458BFF;
+  --zc-sidemenu-text-hover: #EEEEEE;
+  --zc-sidemenu-text-disabled: #666666;
+  --zc-sidemenu-text-heading: #666666;
+  --zc-sidemenu-icon-active: #458BFF;
+
+  /* ── MAIN HEADER ── */
+  --zc-header-bg: #1A1B1D;
+  --zc-header-border: #33373F;
+  --zc-header-text: #EEEEEE;
+  --zc-header-logo-bg: #1C2622;
+  --zc-header-logo-text: #3E9F64;
+
+  /* ── SUB HEADER ── */
+  --zc-subheader-bg: #1A1B1D;
+  --zc-subheader-border: #33373F;
+  --zc-subheader-border-active: #EEEEEE;
+
+  /* ── SERVICE MENU ── */
+  --zc-servicemenu-bg-top: #151516;
+  --zc-servicemenu-bg-bottom: #151516;
+  --zc-servicemenu-icon-bg-default: #242527;
+  --zc-servicemenu-icon-bg-active: #242527;
+  --zc-servicemenu-icon: #FFFFFF;
+  --zc-servicemenu-text-default: #FFFFFF;
+  --zc-servicemenu-text-active: #EEEEEE;
+  --zc-servicemenu-border: #33373F;
+  --zc-servicemenu-text-subheading: #AAAAAA;
+
+  /* ── LOADER ── */
+  --zc-loader-content-primary: #2F3136;
+  --zc-loader-content-secondary: #1F2022;
+  --zc-loader-progress-primary: #458BFF;
+  --zc-loader-progress-track: #2F3136;
+  --zc-loader-round-primary: #458BFF;
+  --zc-loader-round-secondary: #EEEEEE;
+  --zc-loader-round-tertiary: #1A1B1D;
+
+  /* ── STEPPER ── */
+  --zc-stepper-bg-active: #458BFF;
+  --zc-stepper-bg-completed: #3E9F64;
+  --zc-stepper-bg-default: #242527;
+  --zc-stepper-bg-disabled: #242424;
+  --zc-stepper-border-active: #FFFFFF;
+  --zc-stepper-border-default: #484D58;
+  --zc-stepper-border-disabled: #FFFFFF33;
+  --zc-stepper-divider-disabled: #292A2F;
+  --zc-stepper-divider-active: #458BFF;
+  --zc-stepper-divider-completed: #3E9F64;
+  --zc-stepper-divider-default: #484D58;
+  --zc-stepper-text-active: #EEEEEE;
+  --zc-stepper-text-completed: #EEEEEE;
+  --zc-stepper-text-default: #AAAAAA;
+  --zc-stepper-text-disabled: #666666;
+  --zc-stepper-text-number: #FFFFFF;
+
+  /* ── PAGINATION ── */
+  --zc-pagination-bg: #1A1B1D;
+  --zc-pagination-bg-active: #458BFF;
+  --zc-pagination-border: #2F3136;
+  --zc-pagination-text-primary: #EEEEEE;
+  --zc-pagination-text-secondary: #AAAAAA;
+  --zc-pagination-text-light: #888888;
+  --zc-pagination-text-link: #458BFF;
+  --zc-pagination-shadow: #292A2F3D;
+
+  /* ── LINK BOX ── */
+  --zc-linkbox-bg-default: #242527;
+  --zc-linkbox-bg-hover: #292A2F;
+  --zc-linkbox-border-default: #2F3136;
+  --zc-linkbox-border-divider: #484D58;
+  --zc-linkbox-border-hover: #355A8D;
+  --zc-linkbox-text-main: #EEEEEE;
+  --zc-linkbox-text-label: #AAAAAA;
+  --zc-linkbox-icon-default: #EEEEEE;
+  --zc-linkbox-icon-hover: #458BFF;
+
+  /* ── TOAST ── */
+  --zc-toast-bg: #1A1B1D;
+  --zc-toast-border: #2F3136;
+  --zc-toast-text-primary: #EEEEEE;
+  --zc-toast-text-secondary: #AAAAAA;
+  --zc-toast-icon-info: #4A8EFF;
+  --zc-toast-icon-success: #3E9F64;
+  --zc-toast-icon-warning: #AE821C;
+  --zc-toast-icon-danger: #DE5E60;
+
+  /* ── TIMELINE ── */
+  --zc-timeline-bg-blue: #1B2730;
+  --zc-timeline-dot-blue: #4A8EFF;
+  --zc-timeline-bg-green: #1C2622;
+  --zc-timeline-dot-green: #3E9F64;
+  --zc-timeline-bg-grey: #2F3136;
+  --zc-timeline-dot-grey: #AAAAAA;
+  --zc-timeline-bg-orange: #27231C;
+  --zc-timeline-dot-orange: #AE821C;
+  --zc-timeline-bg-red: #2C2123;
+  --zc-timeline-dot-red: #DE5E60;
+  --zc-timeline-line: #484D58;
+
+  /* ── TOUR ── */
+  --zc-tour-bg: #1A1B1D;
+  --zc-tour-blink-bg: #458BFF;
+  --zc-tour-border: #2F3136;
+  --zc-tour-blink-border: #458BFF;
+
+  /* ── CODE BLOCK ── */
+  --zc-codeblock-bg: #242527;
+  --zc-codeblock-bg-writer: #1A1B1D;
+  --zc-code-syntax-keyword: #458BFF;
+  --zc-code-syntax-ident: #DE5E60;
+  --zc-code-syntax-string: #AE821C;
+  --zc-code-syntax-string-alt: #AE821C; /* NO FIGMA SOURCE — invented syntax colour, no dark pair (flagged) */
+  --zc-code-syntax-comment: #3E9F64;
+  --zc-codeblock-border: #2F3136;
+  --zc-codeblock-text: #EEEEEE;
+
+  /* ── DATE PICKER ── */
+  --zc-datepicker-bg: #1A1B1D;
+  --zc-datepicker-bg-hover: #292A2F;
+  --zc-datepicker-bg-selected: #458BFF;
+  --zc-datepicker-bg-range: #1A273D;
+  --zc-datepicker-bg-today: #292A2F;
+  --zc-datepicker-border: #2F3136;
+  --zc-datepicker-border-outer: #484D58;
+  --zc-datepicker-text-days: #888888;
+  --zc-datepicker-text-default: #EEEEEE;
+  --zc-datepicker-text-secondary: #AAAAAA;
+  --zc-datepicker-text-disabled: #666666;
+  --zc-datepicker-text-selected: #FFFFFF;
+  --zc-datepicker-text-today: #458BFF;
+
+  /* ── CAROUSEL ── */
+  --zc-carousel-dot-active: #EEEEEE;
+  --zc-carousel-dot-hover: #AAAAAA;
+  --zc-carousel-dot-default: #666666;
+
+  /* ── PROFILE NAV ── */
+  --zc-profilenav-bg: #242527;
+  --zc-profilenav-text-heading: #EEEEEE;
+  --zc-profilenav-text-sub: #AAAAAA;
+  --zc-profilenav-border: #2F3136;
+  --zc-profilenav-icon-primary: #EEEEEE;
+  --zc-profilenav-icon-light: #888888;
+  --zc-profilenav-border-outer: #484D58;
+  --zc-profilenav-theme: #458BFF;
+  --zc-profilenav-theme-2: #DA57B9;
+  --zc-profilenav-appearance-light: #F7F8FB;
+  --zc-profilenav-appearance-light-line: #D6DDEF;
+  --zc-profilenav-appearance-light-2: #EFF2FA;
+  --zc-profilenav-appearance-dark: #242424;
+  --zc-profilenav-appearance-dark-bg: #1A1B1D;
+  --zc-profilenav-appearance-dark-line: #484D58;
+  --zc-profilenav-appearance-dark-2: #292A2F;
+
+  /* ── GRAPH ── */
+  --zc-graph-primary: #458BFF;
+  --zc-graph-secondary: #3E9F64;
+  --zc-graph-tertiary: #AE821C;
+  --zc-graph-grid: #2F3136;
+  --zc-graph-text: #888888;
+
+  /* ── BUTTONS / Gradient ── */
+  --zc-btn-gradient-top: #46224A;
+  --zc-btn-gradient-bottom: #08293E;
+  --zc-btn-gradient-top-hover: #520D49;
+  --zc-btn-gradient-bottom-hover: #2B4B5E;
+  --zc-btn-gradient-top-pressed: #46224A;
+  --zc-btn-gradient-bottom-pressed: #08293E;
+  --zc-btn-gradient-top-disabled: #493546;
+  --zc-btn-gradient-bottom-disabled: #29333A;
+  --zc-btn-gradient-text: #FFFFFF;
+  --zc-btn-gradient-text-disabled: #FFFFFF33;
+
+  /* ── GRAPH ── */
+  --zc-graph-text-1: #EEEEEE;
+  --zc-graph-text-2: #AAAAAA;
+  --zc-graph-text-3: #888888;
+  --zc-graph-axis: #33373F;
+  --zc-graph-line-2: #2F3136;
+
+  /* ── FULL PAGE POPUP HEADER ── */
+  --zc-fullpopup-bg: #1A1B1D;
+  --zc-fullpopup-border: #33373F;
+  --zc-fullpopup-text: #EEEEEE;
+  --zc-fullpopup-text-secondary: #AAAAAA;
+  }
+}
+
+:root[data-theme="dark"] {
+  /* Generated 2026-08-27 from the Figma "Mode" variable collection (Dark mode),
+     file KvuuNJuZsONc1ohPM6Fpq2 (user-sanctioned copy of ugOZk4O0g6XpviEBSN24mF).
+     477/478 tokens Figma-verified; unresolved tokens are flagged inline. */
+  /* ── BODY / Text ── */
+  --zc-body-text-primary: #EEEEEE;
+  --zc-body-text-secondary: #AAAAAA;
+  --zc-body-text-light: #888888;
+  --zc-body-text-disabled: #666666;
+  --zc-body-text-theme: #458BFF;
+  --zc-body-text-white: #FFFFFF;
+  --zc-body-text-success: #3E9F64;
+  --zc-body-text-danger: #DE5E60;
+  --zc-body-text-warning: #AE821C;
+  --zc-body-text-info: #4A8EFF;
+  --zc-body-text-link: #458BFF;
+
+  /* ── BODY / Background ── */
+  --zc-body-bg-body: #151516;
+  --zc-body-bg-container: #1A1B1D;
+  --zc-body-border-outerdivider: #33373F;
+  --zc-body-bg-hover: #242527;
+  --zc-body-bg-active: #1A273D;
+  --zc-body-bg-disabled: #242424;
+  --zc-body-bg-theme: #458BFF;
+
+  /* ── BODY / Border ── */
+  --zc-body-border-default: #2F3136;
+  --zc-body-border-strong: #33373F;
+  --zc-body-border-divider: #484D58;
+  --zc-body-border-active: #EEEEEE;
+  --zc-body-border-theme: #458BFF;
+  --zc-body-border-hover: #355A8D;
+  --zc-body-border-error: #DE5E60;
+  --zc-body-border-success: #3E9F64;
+  --zc-body-border-warning: #AE821C;
+  --zc-body-border-disabled: #2F3136;
+
+  /* ── BODY / Icons ── */
+  --zc-body-icon-primary: #EEEEEE;
+  --zc-body-icon-secondary: #AAAAAA;
+  --zc-body-icon-light: #888888;
+  --zc-body-icon-disabled: #666666;
+  --zc-body-icon-theme: #458BFF;
+  --zc-body-icon-white: #1A1B1D;
+
+  /* ── CARDS ── */
+  --zc-cards-bg-primary: #1A1B1D;
+  --zc-cards-bg-secondary: #242527;
+  --zc-cards-bg-body: #292A2F;
+  --zc-cards-bg-hover: #1E1F21;
+  --zc-cards-bg-selected: #1A273D;
+  --zc-cards-bg-disabled: #242424;
+  --zc-cards-border-default: #2F3136;
+  --zc-cards-border-strong: #33373F;
+  --zc-cards-border-selected: #458BFF;
+  --zc-cards-border-hover: #33373F;
+  --zc-cards-border-disabled: #292A2F;
+
+  /* ── SHADOWS / Elevation ── */
+  --zc-shadow-default: #292A2F;
+  --zc-shadow-with-opacity: #292A2F3D;
+
+  /* ── BRANDING ICON ── */
+  --zc-brand-icon-primary: #458BFF;
+  --zc-brand-icon-secondary: #FFFFFF;
+
+  /* ── OTHER SHADES / Blue ── */
+  --zc-shade-blue-1: #4A8EFF;
+  --zc-shade-blue-2: #2E88D1;
+  --zc-shade-blue-3: #2B4254;
+  --zc-shade-blue-4: #1B2730;
+
+  /* ── OTHER SHADES / Green ── */
+  --zc-shade-green-1: #3E9F64;
+  --zc-shade-green-2: #3AA564;
+  --zc-shade-green-3: #2F4326;
+  --zc-shade-green-4: #1C2622;
+
+  /* ── OTHER SHADES / Orange ── */
+  --zc-shade-orange-1: #AE821C;
+  --zc-shade-orange-2: #A1874B;
+  --zc-shade-orange-3: #493F07;
+  --zc-shade-orange-4: #27231C;
+
+  /* ── OTHER SHADES / Red ── */
+  --zc-shade-red-1: #DE5E60;
+  --zc-shade-red-2: #E86E6B;
+  --zc-shade-red-3: #682B2D;
+  --zc-shade-red-4: #2C2123;
+
+  /* ── OTHER SHADES / Pink ── */
+  --zc-shade-pink-1: #DA57B9;
+  --zc-shade-pink-2: #CD75B8;
+  --zc-shade-pink-3: #542F4B;
+  --zc-shade-pink-4: #2D202A;
+
+  /* ── OTHER SHADES / Purple ── */
+  --zc-shade-purple-1: #AD7FE4;
+  --zc-shade-purple-2: #B985F8;
+  --zc-shade-purple-3: #563973;
+  --zc-shade-purple-4: #292130;
+
+  /* ── OTHER SHADES / Theme ── */
+  --zc-shade-theme-1: #458BFF;
+  --zc-shade-theme-2: #5A97FB;
+  --zc-shade-theme-3: #355A8D;
+  --zc-shade-theme-4: #1A273D;
+  --zc-btn-fill-bg-primary: #458BFF;
+  --zc-btn-fill-bg-primary-hover: #5A97FB;
+  --zc-btn-fill-bg-primary-pressed: #458BFF;
+  --zc-btn-fill-bg-primary-disabled: #355A8D;
+  --zc-btn-fill-bg-success: #3E9F64;
+  --zc-btn-fill-bg-success-hover: #3AA564;
+  --zc-btn-fill-bg-success-pressed: #3E9F64;
+  --zc-btn-fill-bg-success-disabled: #2F4326;
+  --zc-btn-fill-bg-danger: #DE5E60;
+  --zc-btn-fill-bg-danger-hover: #E86E6B;
+  --zc-btn-fill-bg-danger-pressed: #DE5E60;
+  --zc-btn-fill-bg-danger-disabled: #682B2D;
+  --zc-btn-fill-text-default: #FFFFFF;
+  --zc-btn-fill-text-hover: #FFFFFF;
+  --zc-btn-fill-text-pressed: #FFFFFF;
+  --zc-btn-fill-text-disabled: #FFFFFF33;
+  --zc-btn-fill-split-line: #FFFFFF33;
+  --zc-btn-outline-text-primary: #458BFF;
+  --zc-btn-outline-text-primary-hover: #5A97FB;
+  --zc-btn-outline-text-primary-pressed: #458BFF;
+  --zc-btn-outline-text-primary-disabled: #355A8D;
+  --zc-btn-outline-border-primary: #458BFF;
+  --zc-btn-outline-border-primary-hover: #5A97FB;
+  --zc-btn-outline-border-primary-pressed: #458BFF;
+  --zc-btn-outline-border-primary-disabled: #355A8D;
+  --zc-btn-outline-bg-primary-hover: #1A273D;
+  --zc-btn-outline-text-success: #3E9F64;
+  --zc-btn-outline-text-success-hover: #3AA564;
+  --zc-btn-outline-text-success-pressed: #3E9F64;
+  --zc-btn-outline-text-success-disabled: #2F4326;
+  --zc-btn-outline-border-success: #3E9F64;
+  --zc-btn-outline-border-success-hover: #3AA564;
+  --zc-btn-outline-border-success-pressed: #3E9F64;
+  --zc-btn-outline-border-success-disabled: #2F4326;
+  --zc-btn-outline-bg-success-hover: #1C2622;
+  --zc-btn-outline-text-danger: #DE5E60;
+  --zc-btn-outline-text-danger-hover: #E86E6B;
+  --zc-btn-outline-text-danger-pressed: #DE5E60;
+  --zc-btn-outline-text-danger-disabled: #682B2D;
+  --zc-btn-outline-border-danger: #DE5E60;
+  --zc-btn-outline-border-danger-hover: #E86E6B;
+  --zc-btn-outline-border-danger-pressed: #DE5E60;
+  --zc-btn-outline-border-danger-disabled: #682B2D;
+  --zc-btn-outline-bg-danger-hover: #2C2123;
+  --zc-btn-ghost-text-primary: #458BFF;
+  --zc-btn-ghost-text-primary-hover: #5A97FB;
+  --zc-btn-ghost-text-primary-pressed: #458BFF;
+  --zc-btn-ghost-text-primary-disabled: #355A8D;
+  --zc-btn-ghost-bg-primary: #1A273D;
+  --zc-btn-ghost-text-success: #3E9F64;
+  --zc-btn-ghost-text-success-hover: #3AA564;
+  --zc-btn-ghost-text-success-pressed: #3E9F64;
+  --zc-btn-ghost-text-success-disabled: #2F4326;
+  --zc-btn-ghost-bg-success: #1C2622;
+  --zc-btn-ghost-text-danger: #DE5E60;
+  --zc-btn-ghost-text-danger-hover: #E86E6B;
+  --zc-btn-ghost-text-danger-pressed: #DE5E60;
+  --zc-btn-ghost-text-danger-disabled: #682B2D;
+  --zc-btn-ghost-bg-danger: #2C2123;
+  --zc-btn-grey-bg-default: #2F3136;
+  --zc-btn-grey-bg-hover: #292A2F;
+  --zc-btn-grey-bg-pressed: #2F3136;
+  --zc-btn-grey-bg-disabled: #242424;
+  --zc-btn-grey-border-default: #484D58;
+  --zc-btn-grey-border-hover: #484D58;
+  --zc-btn-grey-border-pressed: #484D58;
+  --zc-btn-grey-border-disabled: #292A2F;
+  --zc-btn-grey-text-default: #EEEEEE;
+  --zc-btn-grey-text-hover: #EEEEEE;
+  --zc-btn-grey-text-pressed: #EEEEEE;
+  --zc-btn-grey-text-disabled: #666666;
+
+  /* ── LINK (Figma node 738:64747) ── */
+  --zc-link-text-default: #458BFF;
+  --zc-link-text-hover: #5A97FB;
+  --zc-link-text-pressed: #458BFF;
+  --zc-link-text-disabled: #355A8D;
+
+  /* ── TOOLTIP (Figma node 779:4711) ── */
+  --zc-tooltip-bg: #2F3136;
+  --zc-tooltip-border: #484D58;
+  --zc-tooltip-text: #FFFFFF;
+
+  /* ── INPUT FIELDS ── */
+  --zc-input-bg-default: #1A1B1D;
+  --zc-input-bg-hover: #1F2022;
+  --zc-input-bg-active: #1F2022;
+  --zc-input-bg-disabled: #242424;
+  --zc-input-bg-filled: #1A1B1D;
+  --zc-input-bg-error: #2C2123;
+  --zc-input-bg-keyvalue-hover: #242527;
+  --zc-input-border-default: #484D58;
+  --zc-input-border-hover: #355A8D;
+  --zc-input-border-active: #458BFF;
+  --zc-input-border-error: #682B2D;
+  --zc-input-border-disabled: #292A2F;
+  --zc-input-border-success: #3E9F64;
+  --zc-input-text-default: #EEEEEE;
+  --zc-input-text-placeholder: #888888;
+  --zc-input-text-disabled: #666666;
+  --zc-input-text-label: #AAAAAA;
+  --zc-input-text-helper: #AAAAAA;
+  --zc-input-text-error: #DE5E60;
+  --zc-input-text-success: #3E9F64;
+  --zc-input-text-warning: #AE821C;
+  --zc-input-icon-default: #888888;
+  --zc-input-icon-active: #EEEEEE;
+  --zc-input-icon-disabled: #666666;
+  --zc-input-icon-error: #DE5E60;
+
+  /* ── CHECK / RADIO / TOGGLE ── */
+  --zc-check-bg-default: #1A1B1D;
+  --zc-check-bg-checked: #458BFF;
+  --zc-check-bg-disabled: #242424;
+  --zc-check-bg-disabled-checked: #355A8D;
+  --zc-check-border-default: #484D58;
+  --zc-check-border-hover: #355A8D;
+  --zc-check-border-disabled: #292A2F;
+  --zc-check-icon-check: #EEEEEE;
+  --zc-check-icon-check-disabled: #FFFFFF33;
+  --zc-check-bg-hover: #292A2F;
+  --zc-check-bg-checked-hover: #5A97FB;
+  --zc-check-text-default: #EEEEEE;
+  --zc-check-text-secondary: #AAAAAA;
+  --zc-check-text-disabled: #666666;
+  --zc-toggle-bg-off: #1A1B1D;
+  --zc-toggle-bg-on: #458BFF;
+  --zc-toggle-bg-on-hover: #5A97FB;
+  --zc-toggle-bg-disabled: #242424;
+  --zc-toggle-bg-on-disabled: #355A8D;
+  --zc-toggle-thumb-off: #484D58;
+  --zc-toggle-thumb-off-hover: #355A8D;
+  --zc-toggle-thumb-off-disabled: #2F3136;
+  --zc-toggle-thumb-on: #EEEEEE;
+  --zc-toggle-thumb-on-disabled: #FFFFFF33;
+
+  /* ── CHIPS / Tags ── */
+  --zc-chip-bg-default: #242527;
+  --zc-chip-bg-hover: #2F3136;
+  --zc-chip-bg-disabled: #242424;
+  --zc-chip-border-default: #2F3136;
+  --zc-chip-border-hover: #484D58;
+  --zc-chip-border-disabled: #292A2F;
+  --zc-chip-text-default: #EEEEEE;
+  --zc-chip-text-disabled: #666666;
+  --zc-chip-icon-default: #AAAAAA;
+  --zc-chip-icon-close: #888888;
+  --zc-chip-icon-close-hover: #EEEEEE;
+  --zc-badge-solid-primary-bg: #458BFF;
+  --zc-badge-solid-success-bg: #3E9F64;
+  --zc-badge-solid-danger-bg: #DE5E60;
+  --zc-badge-solid-warning-bg: #AE821C;
+  --zc-badge-solid-info-bg: #DA57B9;
+  --zc-badge-solid-purple-bg: #AD7FE4;
+  --zc-badge-solid-grey-bg: #242527;
+  --zc-badge-solid-disabled-bg: #242424;
+  --zc-badge-solid-text: #FFFFFF;
+  --zc-badge-solid-grey-text: #EEEEEE;
+  --zc-badge-solid-disabled-text: #666666;
+  --zc-badge-subtle-primary-bg: #1A273D;
+  --zc-badge-subtle-primary-text: #458BFF;
+  --zc-badge-subtle-success-bg: #1C2622;
+  --zc-badge-subtle-success-text: #3E9F64;
+  --zc-badge-subtle-danger-bg: #2C2123;
+  --zc-badge-subtle-danger-text: #DE5E60;
+  --zc-badge-subtle-warning-bg: #27231C;
+  --zc-badge-subtle-warning-text: #AE821C;
+  --zc-badge-subtle-info-bg: #2D202A;
+  --zc-badge-subtle-info-text: #DA57B9;
+  --zc-badge-subtle-purple-bg: #292130;
+  --zc-badge-subtle-purple-text: #AD7FE4;
+  --zc-badge-subtle-grey-bg: #242527;
+  --zc-badge-subtle-grey-text: #EEEEEE;
+  --zc-badge-subtle-disabled-bg: #242424;
+  --zc-badge-subtle-disabled-text: #666666;
+  --zc-avatar-bg: #242527;
+  --zc-avatar-bg-alt: #2F3136;
+  --zc-avatar-border: #2F3136;
+  --zc-avatar-border-white: #1A1B1D;
+  --zc-avatar-icon: #AAAAAA;
+  --zc-avatar-icon-disabled: #666666;
+  --zc-avatar-text: #AAAAAA;
+  --zc-avatar-text-disabled: #666666;
+  --zc-avatar-status-online: #3E9F64;
+  --zc-avatar-status-offline: #666666;
+
+  /* ── TOOLTIP ── */
+  --zc-tooltip-text-primary: #FFFFFF;
+  --zc-tooltip-text-secondary: #AAAAAA;
+
+  /* ── TABS ── */
+  --zc-tab-primary-bg-hover: #1A273D;
+  --zc-tab-primary-bg-disabled: #242424;
+  --zc-tab-primary-border-active: #458BFF;
+  --zc-tab-primary-border-default: #33373F;
+  --zc-tab-primary-border-hover: #355A8D;
+  --zc-tab-primary-text-active: #458BFF;
+  --zc-tab-primary-text-default: #AAAAAA;
+  --zc-tab-primary-text-hover: #EEEEEE;
+  --zc-tab-primary-text-disabled: #666666;
+  --zc-tab-secondary-bg-active: #1F2022;
+  --zc-tab-secondary-bg-default: #33373F;
+  --zc-tab-secondary-bg-hover: #292A2F;
+  --zc-tab-secondary-bg-disabled: #242424;
+  --zc-tab-secondary-border: #33373F;
+  --zc-tab-secondary-text-active: #EEEEEE;
+  --zc-tab-secondary-text-default: #AAAAAA;
+  --zc-tab-secondary-text-hover: #EEEEEE;
+  --zc-tab-secondary-text-disabled: #666666;
+
+  /* ── ACCORDION ── */
+  --zc-accordion-bg-default: #1A1B1D;
+  --zc-accordion-bg-hover: #1E1F21;
+  --zc-accordion-bg-active: #242527;
+  --zc-accordion-border: #2F3136;
+  --zc-accordion-text-heading: #EEEEEE;
+  --zc-accordion-text-sub: #AAAAAA;
+  --zc-accordion-icon-default: #888888;
+  --zc-accordion-icon-active: #458BFF;
+  --zc-accordion-icon-bg: #2F3136;
+  --zc-accordion-bordered-bg: #1A273D;
+
+  /* ── ATTENTION BOX ── */
+  --zc-attention-info-bg: #1B2730;
+  --zc-attention-info-border: #2B4254;
+  --zc-attention-info-icon: #4A8EFF;
+  --zc-attention-success-bg: #1C2622;
+  --zc-attention-success-border: #2F4326;
+  --zc-attention-success-icon: #3E9F64;
+  --zc-attention-warning-bg: #27231C;
+  --zc-attention-warning-border: #493F07;
+  --zc-attention-warning-icon: #AE821C;
+  --zc-attention-danger-bg: #2C2123;
+  --zc-attention-danger-border: #682B2D;
+  --zc-attention-danger-icon: #DE5E60;
+  --zc-attention-default-bg: #242527;
+  --zc-attention-default-border: #2F3136;
+  --zc-attention-text-heading: #EEEEEE;
+  --zc-attention-text-body: #AAAAAA;
+
+  /* ── TABLE ── */
+  --zc-table-bg-header: #1E1F21;
+  --zc-table-bg-row: #1A1B1D;
+  --zc-table-bg-row-hover: #242527;
+  --zc-table-bg-row-selected: #1A273D;
+  --zc-table-bg-row-disabled: #242424;
+  --zc-table-border: #2F3136;
+  --zc-table-text-primary: #EEEEEE;
+  --zc-table-text-secondary: #AAAAAA;
+  --zc-table-text-light: #888888;
+  --zc-table-text-disabled: #666666;
+  --zc-table-icon-primary: #EEEEEE;
+  --zc-table-icon-secondary: #AAAAAA;
+  --zc-table-icon-light: #888888;
+  --zc-table-icon-disabled: #666666;
+  --zc-table-threedot-icon: #EEEEEE;
+  --zc-table-threedot-bg: #242424;
+  --zc-table-threedot-bg-hover: #2F3136;
+  --zc-table-threedot-bg-active: #1A273D;
+
+  /* ── MENU LIST / Dropdown ── */
+  --zc-menu-bg-default: #1A1B1D;
+  --zc-menu-bg-hover: #292A2F;
+  --zc-menu-bg-selected: #1A273D;
+  --zc-menu-bg-disabled: #242424;
+  --zc-menu-border: #2F3136;
+  --zc-menu-text-default: #EEEEEE;
+  --zc-menu-text-heading: #AAAAAA;
+  --zc-menu-text-light: #888888;
+  --zc-menu-text-hover: #EEEEEE;
+  --zc-menu-text-disabled: #666666;
+  --zc-menu-icon-default: #EEEEEE;
+  --zc-menu-icon-check: #458BFF;
+  --zc-menu-icon-disabled: #666666;
+
+  /* ── BREADCRUMBS ── */
+  --zc-breadcrumb-text-default: #AAAAAA;
+  --zc-breadcrumb-text-active: #EEEEEE;
+  --zc-breadcrumb-text-hover: #458BFF;
+  --zc-breadcrumb-icon: #888888;
+  --zc-breadcrumb-bg-hover: #1A273D;
+  --zc-breadcrumb-text-disabled: #666666;
+
+  /* ── POPUP / Modal ── */
+  --zc-popup-bg: #1A1B1D;
+  --zc-popup-blur-bg: #000000B2;
+  --zc-popup-border: #2F3136;
+
+  /* ── SIDE MENU ── */
+  --zc-sidemenu-bg: #1A1B1D;
+  --zc-sidemenu-bg-hover: #292A2F;
+  --zc-sidemenu-bg-active: #1A273D;
+  --zc-sidemenu-border: #33373F;
+  --zc-sidemenu-text-default: #AAAAAA;
+  --zc-sidemenu-text-active: #458BFF;
+  --zc-sidemenu-text-hover: #EEEEEE;
+  --zc-sidemenu-text-disabled: #666666;
+  --zc-sidemenu-text-heading: #666666;
+  --zc-sidemenu-icon-active: #458BFF;
+
+  /* ── MAIN HEADER ── */
+  --zc-header-bg: #1A1B1D;
+  --zc-header-border: #33373F;
+  --zc-header-text: #EEEEEE;
+  --zc-header-logo-bg: #1C2622;
+  --zc-header-logo-text: #3E9F64;
+
+  /* ── SUB HEADER ── */
+  --zc-subheader-bg: #1A1B1D;
+  --zc-subheader-border: #33373F;
+  --zc-subheader-border-active: #EEEEEE;
+
+  /* ── SERVICE MENU ── */
+  --zc-servicemenu-bg-top: #151516;
+  --zc-servicemenu-bg-bottom: #151516;
+  --zc-servicemenu-icon-bg-default: #242527;
+  --zc-servicemenu-icon-bg-active: #242527;
+  --zc-servicemenu-icon: #FFFFFF;
+  --zc-servicemenu-text-default: #FFFFFF;
+  --zc-servicemenu-text-active: #EEEEEE;
+  --zc-servicemenu-border: #33373F;
+  --zc-servicemenu-text-subheading: #AAAAAA;
+
+  /* ── LOADER ── */
+  --zc-loader-content-primary: #2F3136;
+  --zc-loader-content-secondary: #1F2022;
+  --zc-loader-progress-primary: #458BFF;
+  --zc-loader-progress-track: #2F3136;
+  --zc-loader-round-primary: #458BFF;
+  --zc-loader-round-secondary: #EEEEEE;
+  --zc-loader-round-tertiary: #1A1B1D;
+
+  /* ── STEPPER ── */
+  --zc-stepper-bg-active: #458BFF;
+  --zc-stepper-bg-completed: #3E9F64;
+  --zc-stepper-bg-default: #242527;
+  --zc-stepper-bg-disabled: #242424;
+  --zc-stepper-border-active: #FFFFFF;
+  --zc-stepper-border-default: #484D58;
+  --zc-stepper-border-disabled: #FFFFFF33;
+  --zc-stepper-divider-disabled: #292A2F;
+  --zc-stepper-divider-active: #458BFF;
+  --zc-stepper-divider-completed: #3E9F64;
+  --zc-stepper-divider-default: #484D58;
+  --zc-stepper-text-active: #EEEEEE;
+  --zc-stepper-text-completed: #EEEEEE;
+  --zc-stepper-text-default: #AAAAAA;
+  --zc-stepper-text-disabled: #666666;
+  --zc-stepper-text-number: #FFFFFF;
+
+  /* ── PAGINATION ── */
+  --zc-pagination-bg: #1A1B1D;
+  --zc-pagination-bg-active: #458BFF;
+  --zc-pagination-border: #2F3136;
+  --zc-pagination-text-primary: #EEEEEE;
+  --zc-pagination-text-secondary: #AAAAAA;
+  --zc-pagination-text-light: #888888;
+  --zc-pagination-text-link: #458BFF;
+  --zc-pagination-shadow: #292A2F3D;
+
+  /* ── LINK BOX ── */
+  --zc-linkbox-bg-default: #242527;
+  --zc-linkbox-bg-hover: #292A2F;
+  --zc-linkbox-border-default: #2F3136;
+  --zc-linkbox-border-divider: #484D58;
+  --zc-linkbox-border-hover: #355A8D;
+  --zc-linkbox-text-main: #EEEEEE;
+  --zc-linkbox-text-label: #AAAAAA;
+  --zc-linkbox-icon-default: #EEEEEE;
+  --zc-linkbox-icon-hover: #458BFF;
+
+  /* ── TOAST ── */
+  --zc-toast-bg: #1A1B1D;
+  --zc-toast-border: #2F3136;
+  --zc-toast-text-primary: #EEEEEE;
+  --zc-toast-text-secondary: #AAAAAA;
+  --zc-toast-icon-info: #4A8EFF;
+  --zc-toast-icon-success: #3E9F64;
+  --zc-toast-icon-warning: #AE821C;
+  --zc-toast-icon-danger: #DE5E60;
+
+  /* ── TIMELINE ── */
+  --zc-timeline-bg-blue: #1B2730;
+  --zc-timeline-dot-blue: #4A8EFF;
+  --zc-timeline-bg-green: #1C2622;
+  --zc-timeline-dot-green: #3E9F64;
+  --zc-timeline-bg-grey: #2F3136;
+  --zc-timeline-dot-grey: #AAAAAA;
+  --zc-timeline-bg-orange: #27231C;
+  --zc-timeline-dot-orange: #AE821C;
+  --zc-timeline-bg-red: #2C2123;
+  --zc-timeline-dot-red: #DE5E60;
+  --zc-timeline-line: #484D58;
+
+  /* ── TOUR ── */
+  --zc-tour-bg: #1A1B1D;
+  --zc-tour-blink-bg: #458BFF;
+  --zc-tour-border: #2F3136;
+  --zc-tour-blink-border: #458BFF;
+
+  /* ── CODE BLOCK ── */
+  --zc-codeblock-bg: #242527;
+  --zc-codeblock-bg-writer: #1A1B1D;
+  --zc-code-syntax-keyword: #458BFF;
+  --zc-code-syntax-ident: #DE5E60;
+  --zc-code-syntax-string: #AE821C;
+  --zc-code-syntax-string-alt: #AE821C; /* NO FIGMA SOURCE — invented syntax colour, no dark pair (flagged) */
+  --zc-code-syntax-comment: #3E9F64;
+  --zc-codeblock-border: #2F3136;
+  --zc-codeblock-text: #EEEEEE;
+
+  /* ── DATE PICKER ── */
+  --zc-datepicker-bg: #1A1B1D;
+  --zc-datepicker-bg-hover: #292A2F;
+  --zc-datepicker-bg-selected: #458BFF;
+  --zc-datepicker-bg-range: #1A273D;
+  --zc-datepicker-bg-today: #292A2F;
+  --zc-datepicker-border: #2F3136;
+  --zc-datepicker-border-outer: #484D58;
+  --zc-datepicker-text-days: #888888;
+  --zc-datepicker-text-default: #EEEEEE;
+  --zc-datepicker-text-secondary: #AAAAAA;
+  --zc-datepicker-text-disabled: #666666;
+  --zc-datepicker-text-selected: #FFFFFF;
+  --zc-datepicker-text-today: #458BFF;
+
+  /* ── CAROUSEL ── */
+  --zc-carousel-dot-active: #EEEEEE;
+  --zc-carousel-dot-hover: #AAAAAA;
+  --zc-carousel-dot-default: #666666;
+
+  /* ── PROFILE NAV ── */
+  --zc-profilenav-bg: #242527;
+  --zc-profilenav-text-heading: #EEEEEE;
+  --zc-profilenav-text-sub: #AAAAAA;
+  --zc-profilenav-border: #2F3136;
+  --zc-profilenav-icon-primary: #EEEEEE;
+  --zc-profilenav-icon-light: #888888;
+  --zc-profilenav-border-outer: #484D58;
+  --zc-profilenav-theme: #458BFF;
+  --zc-profilenav-theme-2: #DA57B9;
+  --zc-profilenav-appearance-light: #F7F8FB;
+  --zc-profilenav-appearance-light-line: #D6DDEF;
+  --zc-profilenav-appearance-light-2: #EFF2FA;
+  --zc-profilenav-appearance-dark: #242424;
+  --zc-profilenav-appearance-dark-bg: #1A1B1D;
+  --zc-profilenav-appearance-dark-line: #484D58;
+  --zc-profilenav-appearance-dark-2: #292A2F;
+
+  /* ── GRAPH ── */
+  --zc-graph-primary: #458BFF;
+  --zc-graph-secondary: #3E9F64;
+  --zc-graph-tertiary: #AE821C;
+  --zc-graph-grid: #2F3136;
+  --zc-graph-text: #888888;
+
+  /* ── BUTTONS / Gradient ── */
+  --zc-btn-gradient-top: #46224A;
+  --zc-btn-gradient-bottom: #08293E;
+  --zc-btn-gradient-top-hover: #520D49;
+  --zc-btn-gradient-bottom-hover: #2B4B5E;
+  --zc-btn-gradient-top-pressed: #46224A;
+  --zc-btn-gradient-bottom-pressed: #08293E;
+  --zc-btn-gradient-top-disabled: #493546;
+  --zc-btn-gradient-bottom-disabled: #29333A;
+  --zc-btn-gradient-text: #FFFFFF;
+  --zc-btn-gradient-text-disabled: #FFFFFF33;
+
+  /* ── GRAPH ── */
+  --zc-graph-text-1: #EEEEEE;
+  --zc-graph-text-2: #AAAAAA;
+  --zc-graph-text-3: #888888;
+  --zc-graph-axis: #33373F;
+  --zc-graph-line-2: #2F3136;
+
+  /* ── FULL PAGE POPUP HEADER ── */
+  --zc-fullpopup-bg: #1A1B1D;
+  --zc-fullpopup-border: #33373F;
+  --zc-fullpopup-text: #EEEEEE;
+  --zc-fullpopup-text-secondary: #AAAAAA;
+}

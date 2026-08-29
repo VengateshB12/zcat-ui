@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "deny": [
+      "Write(AI Automation/**)",
+      "Edit(AI Automation/**)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/zcat-validate.py\"",
+            "timeout": 20,
+            "statusMessage": "Validating page against zcat design rules"
+          }
+        ]
+      }
+    ]
+  }
+}

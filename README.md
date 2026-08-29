@@ -1,0 +1,114 @@
+# zcat UI
+
+The ZCat (Zoho Catalyst) design system as code — dependency-free HTML, CSS and
+JS. Every colour, size and state comes from the Figma design system.
+
+No build step. No dependencies. Drop it in and use it.
+
+---
+
+## Quick start
+
+```bash
+git clone <this-repo> zcat-ui-workspace
+cd zcat-ui-workspace
+```
+
+Link the two files in your page, unmodified:
+
+```html
+<link rel="stylesheet" href="zcat-ui/zcat.css">
+<script src="zcat-ui/zcat.js" defer></script>
+```
+
+`zcat.js` initialises every component automatically, including markup you inject
+later. There is nothing else to wire up.
+
+To browse the components:
+
+```bash
+python3 -m http.server 8790
+```
+
+Then open **http://localhost:8790/zcat-ui/docs/playground.html**
+
+---
+
+## What's in here
+
+| Path | What it is |
+|---|---|
+| `zcat-ui/zcat.css` · `zcat.js` | the library — link these two |
+| `zcat-ui/src/tokens/` | every colour, spacing, radius and text style, in light **and** dark |
+| `zcat-ui/src/components/` | the component CSS; each file opens with the markup shapes it expects |
+| `zcat-ui/docs/icons/` | 485 design-system icons — **the only icons you may use** |
+| `zcat-ui/docs/playground.html` | the component explorer: live preview, properties, markup |
+| `zcat-ui/docs/template.html` | a complete, verified Catalyst page to copy from |
+| `zcat-ui/ONBOARDING.md` | **the component API contract — authoritative** |
+| `reference-screenshots/` | 24 production screens: the quality bar to design against |
+| `.claude/` | the AI build workflow and enforcement hooks |
+
+---
+
+## Building screens with an AI agent
+
+This repo is set up so an AI coding agent builds screens that actually follow
+the design system rather than approximating it.
+
+**1. Connect the zcat MCP** — the live source of the design rules:
+
+```
+https://zcat.catalystappsail.in/mcp
+```
+
+It serves the hard rules, the design decision rules by topic, realistic sample
+data, the design tokens, and component/icon search. It is updated centrally, so
+you always get the current rules without pulling this repo again.
+
+**2. The hooks enforce the rules.** A hook runs on every change to a page file.
+It auto-fixes raw hex colours, off-scale spacing and raw font rules, then blocks
+on anything needing judgement — hand-built controls, tabs in the wrong place,
+missing hierarchy, a screen that is assembled rather than composed.
+
+Don't work around it. What it blocks is what the designer would reject.
+
+**3. The rules that get broken most.** Full set in
+`zcat-ui/.claude/skills/zcat-code.md`:
+
+- Every screen starts from the Catalyst shell (`.zc-layout`) — never a floating card
+- A wireframe is a **feature list, not a design**. Every feature survives; the layout must not
+- Primary tabs live in the **Sub Header**, never floating in the container
+- At most **one** primary (fill) button per screen
+- Label:value is horizontal (`.zc-gdetails`) — never stacked
+- Create and edit are **popups**, not pages. Detail pages are read-only
+- Every colour is a `var(--zc-*)` token — **never** a raw hex
+- Typography is `.zc-h*` / `.zc-subtitle-*` / `.zc-body-*` classes — never raw font rules
+- Icons only from `zcat-ui/docs/icons/` — never emoji, never another icon set
+- Real data, never lorem ipsum
+
+---
+
+## Before you hand-build anything
+
+Check `zcat-ui/ONBOARDING.md` first. The library covers ~65 components including
+many people assume are missing — General Details, Container Side Menu, Empty
+State, Attention Box, Timeline, Stepper, Tour, Code Block, Key Value fields.
+
+If you catch yourself building a button, input, badge, tab, toggle or menu out of
+`<div>`s, stop and use the component.
+
+---
+
+## Status
+
+Components are verified against the Figma design system, but only a subset have
+been through designer sign-off. Each component's **Overview** tab in the
+playground states honestly what was verified and what is still pending — read it
+before relying on a component.
+
+A few components have **no Figma source** and were invented or are legacy —
+Slider, Progress Circle, Shimmer, and the Container/Stack/Divider primitives.
+They work and are safe to use, but their design is unreviewed. The Code Tab's
+slanted edge is a CSS approximation of the Figma vector.
+
+Dark mode ships for every token and is pending a designer audit.

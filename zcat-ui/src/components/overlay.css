@@ -1,0 +1,341 @@
+/* =============================================================================
+   zcat Design System — Overlay Components
+   Popup + Scrim, Tour card, Blink beacon
+
+   Figma sources:
+   - Popup set        node 13064:8260 (default 550px / small 414px, radius 10,
+                      header 24/24/16, body px-24 gap-24, footer 16/24/24,
+                      ROOT gap 8 between header/body/footer)
+                      Re-verified 2026-08-29 against the ORIGINAL file.
+                      Geometry from variant "With Scroll" 13064:8254 (the
+                      authoritative one — its children carry the x=1 border
+                      offset): outer 550 = 1 + 548 + 1, so 550px INCLUDES the
+                      1px border and, with border-box, yields the 500px content
+                      width Figma draws its fields at. Section stack measured
+                      1/62 header · gap 8 · 444 body · gap 8 · 76 footer / 1.
+                      7 variants exist: Default · With Scroll · With Description
+                      · Only Word (414) · With Note · With View More ·
+                      With View More Expanded. Only the first four need CSS;
+                      the rest are COMPOSITIONS of Attention Box + Link
+                      Accordion + a bordered stack inside the same body.
+   - Popup scrim      node 6633:15273 (blur overlay, popup centered)
+   - Tour             node 6655:1345  (375px card, padding 16, arrow left)
+   - Blink            node 2350:26489 (18px ring + 10px dot)
+
+   Buttons and carousel dots inside popup/tour footers are the EXISTING
+   .zc-btn / .zc-carousel components supplied by markup — not restyled here.
+   ============================================================================= */
+
+/* ── Popup (node 13064:8260) ── */
+.zc-popup {
+  display: flex;
+  flex-direction: column;
+  /* Figma-verified 2026-08-29: the root frame carries an 8px gap, so the space
+     between the header text and the body is 16 (header pb) + 8 = 24, and the
+     body-to-footer space is 8 + 16 (footer pt) = 24. This gap was missing
+     before, which made both seams 8px too tight. */
+  gap: var(--zc-space-8);
+  width: 550px;
+  background: var(--zc-popup-bg);
+  border: var(--zc-border-default) solid var(--zc-popup-border);
+  border-radius: var(--zc-radius-10);
+  box-shadow: 0 0 2px var(--zc-shadow-default);
+  font-family: var(--zc-font-primary);
+}
+
+.zc-popup[data-size="small"] {
+  width: 414px;
+}
+
+/* Header — NOTE: Figma popup (13064:8260) has NO close "X" in the header;
+   dismissal happens via footer buttons only, so none is styled here. */
+.zc-popup__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-24) var(--zc-space-24) var(--zc-space-16);
+}
+
+.zc-popup__title {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+  color: var(--zc-body-text-primary);
+}
+
+.zc-popup__desc {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-body-text-secondary);
+}
+
+.zc-popup__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-24);
+  padding: 0 var(--zc-space-24);
+  /* Default popups don't scroll (Figma "With Scroll" is a separate variant), and
+     overflow:auto here clips the absolutely-positioned dropdown menu. Opt into
+     scrolling with data-scroll on .zc-popup. */
+  overflow-y: visible;
+}
+/* Figma's "With Scroll" variant (13064:8254) draws a 444px body — six 54px
+   fields at 24px gaps. Capping there makes the variant actually scroll instead
+   of leaving overflow-y as a dead rule. */
+.zc-popup[data-scroll] .zc-popup__body {
+  overflow-y: auto;
+  max-height: 444px;
+}
+
+/* Body sub-parts used by the composed variants (all Figma-verified 2026-08-29).
+   They only lay text/components out inside the body — no component is restyled.
+
+   .zc-popup__group — Figma "Modal Content" 6777:14033 / 4439:1257: a 10px
+                      column, e.g. a Label above a control stack, or the Link
+                      Accordion above its panel.
+   .zc-popup__stack — Figma "Stack" 6777:14075: the 16px column that holds a
+                      run of Checkboxes / Radios inside a group.
+   .zc-popup__note  — Figma "Modal Content" 4439:1138: the 10px column of the
+                      With Note variant (confirm sentence + Text Box).
+   .zc-popup__panel — Figma "Stack" 4439:1256: the bordered panel revealed by
+                      the expanded Link Accordion. */
+.zc-popup__group,
+.zc-popup__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-10);
+  width: 100%;
+}
+
+/* Figma authors this column items-start, so the Link Accordion hugs its text
+   instead of stretching into a full-width blue bar. Children that must span
+   the body (the panel) carry width:100% themselves. */
+.zc-popup__group {
+  align-items: flex-start;
+}
+
+.zc-popup__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+}
+
+.zc-popup__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-24);
+  width: 100%;
+  padding: var(--zc-space-16);
+  background: var(--zc-body-bg-container);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-radius: var(--zc-radius-6);
+  box-shadow: 0 4px 4px var(--zc-shadow-with-opacity);
+}
+
+/* Footer — children are real .zc-btn components */
+.zc-popup__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--zc-space-16);
+  padding: var(--zc-space-16) var(--zc-space-24) var(--zc-space-24);
+}
+/* Wizard footer: the Back affordance sits at the LEFT edge while Cancel and the
+   forward action stay right-aligned. Mark it with .zc-popup__footer-back — no
+   button styling is changed, only its position in the row. */
+.zc-popup__footer-back { margin-right: auto; }
+
+/* Scrolling-body variant: header/footer pick up separating shadows.
+   Figma detail: "With Scroll" carries BOTH seams; "With View More Expanded"
+   carries only the footer one — hence .zc-popup__footer--shadow standing alone
+   below, with no matching header modifier. */
+.zc-popup[data-scroll] .zc-popup__header {
+  box-shadow: 0 2px 2px var(--zc-shadow-default);
+}
+
+.zc-popup[data-scroll] .zc-popup__footer,
+.zc-popup__footer--shadow {
+  box-shadow: 0 -2px 2px var(--zc-shadow-default);
+}
+
+/* ── Popup scrim (node 6633:15273) — popup centers inside it ── */
+.zc-popup-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--zc-popup-blur-bg);
+  backdrop-filter: blur(2px);
+}
+
+/* ── Tour (node 6655:1345) ──
+   Figma frame is 375px wide — odd; rounded up 1px to 376px. */
+.zc-tour {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+  width: 376px;
+  padding: var(--zc-space-16);
+  background: var(--zc-tour-bg);
+  border: var(--zc-border-default) solid var(--zc-tour-border);
+  border-radius: var(--zc-radius-6);
+  box-shadow: 2px 2px 5px var(--zc-shadow-default);
+  font-family: var(--zc-font-primary);
+}
+
+.zc-tour__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-10);
+}
+
+/* --zc-tour-text is NOT defined in colors.css (only tour bg/border/blink
+   tokens exist) — reported as missing; using --zc-body-text-primary,
+   whose light value matches the Figma tour text (#101F3E). */
+.zc-tour__heading {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-body-text-primary);
+}
+
+.zc-tour__body {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--zc-body-text-primary);
+}
+
+/* Footer row — carousel dots (existing .zc-carousel) left, small .zc-btn right */
+.zc-tour__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-14);
+}
+
+.zc-tour__footer .zc-carousel {
+  flex: 1;
+}
+
+/* Arrow — diamond poking out the LEFT edge.
+   Only the left-pointing arrow exists in Figma (6655:1345); [data-side]
+   hooks can be added later if the design gains other placements. */
+.zc-tour__arrow {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  margin-top: -6px;
+  width: 10px;
+  height: 10px;
+  background: var(--zc-tour-bg);
+  border-left: var(--zc-border-default) solid var(--zc-tour-border);
+  border-top: var(--zc-border-default) solid var(--zc-tour-border);
+  transform: rotate(-45deg);
+}
+
+/* ── Blink beacon (node 2350:26489) ──
+   Static by design — Figma defines no animation for this component. */
+.zc-blink {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+
+/* Outer ring */
+.zc-blink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--zc-border-default) solid var(--zc-tour-blink-border);
+  border-radius: var(--zc-radius-full);
+}
+
+/* Inner 10x10 dot, centered (inset 4px) */
+.zc-blink::after {
+  content: "";
+  position: absolute;
+  inset: var(--zc-space-4);
+  background: var(--zc-tour-blink-bg);
+  border-radius: var(--zc-radius-full);
+}
+
+/* ── Full Page Popup ────────────────────────────────────────────────────────
+   Figma 548:9060 "Full page popup header" (verified 2026-08-28, light mode):
+   header bar bg  full-page-popup-header/bg/bg    #F4F7FE (--zc-fullpopup-header-bg)
+   sheet bg       full-page-popup-header/bg/bg-2  #FFFFFF (--zc-fullpopup-bg)
+   title text     full-page-popup-header/text     #101F3E · H6 16/20 Semi Bold
+   border         main-header/border/border-1     #DDE4F6 (--zc-fullpopup-border)
+   bar min-height 42 · padding 0 20 · gap 10 · service icon 24
+   close = EXISTING round ghost-grey icon Button (28px, 14px glyph)
+   The white sheet's top corners curve at 26px — a raw Figma literal (no
+   radius token exists for 26; flagged). The header bar itself carries no
+   visible divider: the sheet's own top border draws the single curved line.
+   Dark: unaudited (light values inherit), pending the dark audit.
+
+   Usage:
+   <div class="zc-fullpopup">
+     <div class="zc-fullpopup__header">
+       <span class="zc-fullpopup__service">
+         <img src="…24px service icon…" alt="">
+         <span class="zc-fullpopup__title">DevOps</span>
+       </span>
+       <button class="zc-btn" data-variant="ghost-grey" data-size="small"
+               data-content="icon" data-radius="rounded" data-fullpopup-close
+               aria-label="Close">…14px X…</button>
+     </div>
+     <div class="zc-fullpopup__sheet"> …content (e.g. .zc-empty)… </div>
+   </div>                                                                    */
+.zc-fullpopup {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  background: var(--zc-fullpopup-header-bg);
+  font-family: var(--zc-font-primary);
+}
+.zc-fullpopup__header {
+  min-height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-10);
+  padding: 0 var(--zc-space-20);
+}
+.zc-fullpopup__service {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  flex: 1;
+  min-width: 0;
+}
+.zc-fullpopup__service img,
+.zc-fullpopup__service svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.zc-fullpopup__title {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--zc-fullpopup-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zc-fullpopup__sheet {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--zc-fullpopup-bg);
+  border: var(--zc-border-default) solid var(--zc-fullpopup-border);
+  border-bottom: none;
+  /* 26px: raw Figma literal (548:9055), no matching radius token — flagged */
+  border-radius: 26px 26px 0 0;
+}

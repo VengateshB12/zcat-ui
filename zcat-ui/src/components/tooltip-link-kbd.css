@@ -1,0 +1,37 @@
+/* =============================================================================
+   zcat — Tooltip, Link, Kbd
+   ============================================================================= */
+
+/* Tooltip and Link now live in button.css, built from Figma
+   (Tooltip 779:4711, Link 738:64747). The earlier definitions here were
+   superseded — this file kept only Kbd to avoid duplicate, conflicting rules. */
+
+/* ── Kbd (Keyboard shortcut) ──
+   Sizes: Default, Small
+   Usage: <kbd class="zc-kbd">⌘</kbd><kbd class="zc-kbd">K</kbd>
+*/
+.zc-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 var(--zc-space-6);
+  font-family: var(--zc-font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-body-text-secondary);
+  background: var(--zc-cards-bg-primary);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-bottom-width: var(--zc-border-heavy);
+  border-radius: var(--zc-radius-4);
+  box-shadow: 0 1px 0 var(--zc-shadow-default);
+  white-space: nowrap;
+}
+.zc-kbd[data-size="small"] {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--zc-space-4);
+  font-size: 10px;
+}

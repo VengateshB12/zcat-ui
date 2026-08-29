@@ -1,0 +1,504 @@
+/* =============================================================================
+   zcat — Tabs, Accordion, Breadcrumbs
+   All colours via tokens in src/tokens/colors.css (Figma-verified).
+   ============================================================================= */
+
+/* ── Tabs: shared container ── */
+.zc-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  font-family: var(--zc-font-primary);
+}
+
+/* ── Tabs / Primary (underline) ──
+   Figma: component set 456:743, source frame 452:814.
+   Metrics: list = flex row, gap 10, min-height 28, container border-bottom
+   1px tab-primary-border-default. Item = h28, padding-inline 8, gap 6,
+   centered, nowrap, margin-bottom -1px (item border overlays container line).
+   Default 14/20 Regular + 1px bottom border; hover 2px border + top radius 4
+   + bg; active 2px border, 14/20 Medium, no bg/radius.
+   Optional 16x16 icon (stroke currentColor 1.3); optional badge = real
+   .zc-badge (small), supplied by the consumer — gap handles spacing.
+   Usage: <div class="zc-tabs" data-type="primary" role="tablist">
+            <button class="zc-tab" data-state="active">Tab</button>
+            <button class="zc-tab"><svg class="zc-tab__icon">…</svg>Tab</button>
+            <button class="zc-tab" disabled>Tab</button>
+          </div>
+*/
+.zc-tabs[data-type="primary"] {
+  gap: var(--zc-space-10);
+  min-height: var(--zc-space-28);
+  border-bottom: var(--zc-border-default) solid var(--zc-tab-primary-border-default);
+  /* Figma 455:897 authors this row `flex-wrap items-start` (re-verified
+     2026-08-29). It matters in the Sub Header, where a long primary tab row
+     must wrap onto a second line instead of overflowing. */
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.zc-tabs[data-type="primary"] .zc-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--zc-space-28);
+  padding-inline: var(--zc-space-8);
+  gap: var(--zc-space-6);
+  white-space: nowrap;
+  margin-bottom: -1px; /* item border sits on top of the container line */
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-tab-primary-text-default);
+  background: transparent;
+  border: none;
+  border-bottom: var(--zc-border-default) solid var(--zc-tab-primary-border-default);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.zc-tabs[data-type="primary"] .zc-tab:hover:not(:disabled) {
+  color: var(--zc-tab-primary-text-hover);
+  background: var(--zc-tab-primary-bg-hover);
+  border-bottom: var(--zc-border-heavy) solid var(--zc-tab-primary-border-hover);
+  border-top-left-radius: var(--zc-radius-4);
+  border-top-right-radius: var(--zc-radius-4);
+}
+.zc-tabs[data-type="primary"] .zc-tab[data-state="active"] {
+  color: var(--zc-tab-primary-text-active);
+  font-weight: 500;
+  background: transparent;
+  border-bottom: var(--zc-border-heavy) solid var(--zc-tab-primary-border-active);
+  border-radius: 0;
+}
+.zc-tabs[data-type="primary"] .zc-tab:disabled {
+  color: var(--zc-tab-primary-text-disabled);
+  /* Figma disabled border is #EFF2FA; no --zc-tab-primary-border-disabled
+     token exists, so we mirror it via --zc-input-border-disabled (#EFF2FA). */
+  border-bottom: var(--zc-border-default) solid var(--zc-input-border-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Tabs / Secondary (segmented pill) ──
+   Figma: default 456:770 (h36), small 2819:1826 (h28), xs 458:1051 (h24).
+   Default (verified via Container Header 13125:8791): container p4 gap4 r6,
+   no border; idle tab 12/16 Regular; active 14/20 Medium on white r4 pill.
+   Sizes via data-size="small" / data-size="xs" — items stretch to fill the
+   container height. Same state tokens across all sizes.
+   Usage: <div class="zc-tabs" data-type="secondary" data-size="small">…</div>
+*/
+.zc-tabs[data-type="secondary"] {
+  background: var(--zc-tab-secondary-bg-default);
+  border-radius: var(--zc-radius-6);
+  padding: var(--zc-space-4);
+  gap: var(--zc-space-4);
+  /* Segmented control hugs its tabs; it must not stretch to the container. */
+  width: fit-content;
+}
+.zc-tabs[data-type="secondary"] .zc-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--zc-space-2);
+  padding: var(--zc-space-4) var(--zc-space-6);
+  white-space: nowrap;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-tab-secondary-text-default);
+  background: transparent;
+  border: none;
+  border-radius: var(--zc-radius-4);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.zc-tabs[data-type="secondary"] .zc-tab:hover:not(:disabled) {
+  color: var(--zc-tab-secondary-text-hover);
+  background: var(--zc-tab-secondary-bg-hover);
+}
+.zc-tabs[data-type="secondary"] .zc-tab[data-state="active"] {
+  color: var(--zc-tab-secondary-text-active);
+  background: var(--zc-tab-secondary-bg-active);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+.zc-tabs[data-type="secondary"] .zc-tab:disabled {
+  color: var(--zc-tab-secondary-text-disabled);
+  background: var(--zc-tab-secondary-bg-disabled);
+  cursor: not-allowed;
+}
+
+/* Secondary / small — 2819:1826: container h28 p4 gap4 r6, items fill (h20) */
+.zc-tabs[data-type="secondary"][data-size="small"] {
+  height: var(--zc-space-28);
+}
+.zc-tabs[data-type="secondary"][data-size="small"] .zc-tab {
+  padding-block: 0;
+}
+
+/* Secondary / xs — 458:1051: container h24 p2 gap2 r4; item px6 r4;
+   idle 10/12 Regular, active 12/16 Medium */
+.zc-tabs[data-type="secondary"][data-size="xs"] {
+  height: var(--zc-space-24);
+  padding: var(--zc-space-2);
+  gap: var(--zc-space-2);
+  border-radius: var(--zc-radius-4);
+}
+.zc-tabs[data-type="secondary"][data-size="xs"] .zc-tab {
+  padding: 0 var(--zc-space-6);
+  border-radius: var(--zc-radius-4);
+  font-size: 10px;
+  line-height: 12px;
+}
+.zc-tabs[data-type="secondary"][data-size="xs"] .zc-tab[data-state="active"] {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Tab icon. Figma sizes it per tab type: the PRIMARY item's Icon Left is
+   16px (452:816), while every SECONDARY item — default, small, extra small
+   and code — uses 14px (457:2682 / 458:1006 / 2950:10563). */
+.zc-tab__icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: var(--zc-border-medium); /* 1.3 */
+  flex-shrink: 0;
+}
+
+.zc-tabs[data-type="secondary"] .zc-tab__icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Breadcrumbs ──
+   Figma: component set 541:1001, source frame 540:105.
+   Metrics: container inline-flex gap 2; item p2 r2 gap 2, 12/16 Regular,
+   nowrap; icon 14x14 stroke currentColor 1.3; separator = "/" glyph 12/16
+   with padding-inline 2. The icon+label / label+chevron (dropdown) /
+   icon-only types are markup-driven — no extra CSS variants needed.
+   Usage: <nav class="zc-breadcrumbs">
+            <button class="zc-breadcrumb">
+              <svg class="zc-breadcrumb__icon">…</svg>Home
+            </button>
+            <span class="zc-breadcrumbs__sep">/</span>
+            <button class="zc-breadcrumb" data-state="active">Current</button>
+          </nav>
+*/
+.zc-breadcrumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  font-family: var(--zc-font-primary);
+}
+.zc-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  padding: var(--zc-space-2);
+  border-radius: var(--zc-radius-2);
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-breadcrumb-text-default);
+  white-space: nowrap;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.zc-breadcrumb:hover:not([data-state="active"]):not([data-state="disabled"]) {
+  background: var(--zc-breadcrumb-bg-hover);
+  color: var(--zc-breadcrumb-text-hover);
+}
+.zc-breadcrumb[data-state="active"] {
+  /* current page: no bg, no hover styling */
+  color: var(--zc-breadcrumb-text-active);
+  background: transparent;
+  cursor: default;
+}
+.zc-breadcrumb[data-state="disabled"] {
+  color: var(--zc-breadcrumb-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+.zc-breadcrumb__icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: var(--zc-border-medium); /* 1.3 */
+  flex-shrink: 0;
+}
+.zc-breadcrumbs__sep {
+  /* the "/" glyph */
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-breadcrumb-text-default);
+  padding-inline: var(--zc-space-2);
+  user-select: none;
+}
+
+/* ── Accordion ──
+   Figma: component set 544:4715.
+   Metrics: root = border 1px accordion-border, r6, bg default, overflow
+   hidden. Header = flex row, p10, gap 4, centered. Avatar 36x36 circle on
+   accordion-icon-bg (consumer places a 16x16 img/svg inside). Text column
+   gap 2: heading 14/20 SemiBold, sub 12/16 Regular. Chevron button 28x28
+   circle, svg 14x14 stroke 1.3 pointing down, rotates 180deg when open.
+   Hover (collapsed): root bg accordion-bg-hover, chevron bg
+   --zc-btn-ghost-bg-primary (#E7EEFE, verified in colors.css).
+   Open: root shadow 0 0 7px shadow-default; header bg accordion-bg-active
+   with its own 1px bottom border; body shown.
+   Usage: <div class="zc-accordion" data-state="open">
+            <button class="zc-accordion__header">
+              <span class="zc-accordion__avatar"><svg>…</svg></span>
+              <span class="zc-accordion__text">
+                <span class="zc-accordion__heading">Heading</span>
+                <span class="zc-accordion__sub">Supporting text</span>
+              </span>
+              <span class="zc-accordion__chevron"><svg>…</svg></span>
+            </button>
+            <div class="zc-accordion__body">…</div>
+          </div>
+*/
+.zc-accordion {
+  border: var(--zc-border-default) solid var(--zc-accordion-border);
+  border-radius: var(--zc-radius-6);
+  background: var(--zc-accordion-bg-default);
+  overflow: hidden;
+  font-family: var(--zc-font-primary);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.zc-accordion__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--zc-space-4);
+  width: 100%;
+  padding: var(--zc-space-10);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.zc-accordion__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--zc-space-36);
+  height: var(--zc-space-36);
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-accordion-icon-bg);
+  flex-shrink: 0;
+  /* consumer places a 16x16 img/svg inside */
+}
+.zc-accordion__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-2);
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.zc-accordion__heading {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-accordion-text-heading);
+}
+.zc-accordion__sub {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-accordion-text-sub);
+}
+.zc-accordion__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--zc-space-28);
+  height: var(--zc-space-28);
+  border-radius: var(--zc-radius-full);
+  background: transparent;
+  flex-shrink: 0;
+  color: var(--zc-accordion-text-heading);
+  transition: background 0.15s, transform 0.2s;
+}
+.zc-accordion__chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: var(--zc-border-medium); /* 1.3 */
+  /* chevron glyph points down in its default orientation */
+}
+
+/* Hover (collapsed only) */
+.zc-accordion:not([data-state="open"]):hover {
+  background: var(--zc-accordion-bg-hover);
+}
+.zc-accordion:not([data-state="open"]):hover .zc-accordion__chevron {
+  background: var(--zc-btn-ghost-bg-primary); /* #E7EEFE */
+}
+
+/* Open */
+.zc-accordion[data-state="open"] {
+  background: var(--zc-accordion-bg-default);
+  box-shadow: 0 0 7px 0 var(--zc-shadow-default);
+}
+.zc-accordion[data-state="open"] .zc-accordion__header {
+  background: var(--zc-accordion-bg-active);
+  border-bottom: var(--zc-border-default) solid var(--zc-accordion-border);
+}
+.zc-accordion[data-state="open"] .zc-accordion__chevron {
+  background: var(--zc-btn-ghost-bg-primary); /* #E7EEFE */
+  transform: rotate(180deg);
+}
+
+/* Body — Figma defines no content layout for the panel; it is a plain
+   padded region (p10) whose content is consumer-supplied. */
+.zc-accordion__body {
+  display: none;
+  padding: var(--zc-space-10);
+}
+.zc-accordion[data-state="open"] .zc-accordion__body {
+  display: block;
+}
+
+/* ── Accordion Bordered / link accordion ──
+   Figma: component set 3265:20605.
+   Metrics: trigger inline-flex, gap 2, h28, padding 2px 6px, r4, 14/20
+   Regular in --zc-body-text-link (#2A65F0, verified in colors.css); chevron
+   14x14 stroke currentColor pointing RIGHT, rotates 90deg (down) when open;
+   hover/open bg --zc-accordion-bordered-bg.
+   Usage: <button class="zc-accordion-link" data-state="open">
+            Show details<svg class="zc-accordion-link__chevron">…</svg>
+          </button>
+*/
+.zc-accordion-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  height: var(--zc-space-28);
+  padding: var(--zc-space-2) var(--zc-space-6);
+  border-radius: var(--zc-radius-4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-link);
+  transition: background 0.15s;
+}
+.zc-accordion-link__chevron {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: var(--zc-border-medium); /* 1.3 */
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  /* chevron glyph points right in its default orientation */
+}
+.zc-accordion-link:hover {
+  background: var(--zc-accordion-bordered-bg);
+}
+.zc-accordion-link[data-state="open"] {
+  background: var(--zc-accordion-bordered-bg);
+}
+.zc-accordion-link[data-state="open"] .zc-accordion-link__chevron {
+  transform: rotate(90deg); /* points down when open */
+}
+
+/* ── Tabs / Code Tab (Figma set 2951:10610) ──
+   Browser-tab shape, 36h. Measured from the component set: content pad
+   left 4 / right 22 (the slant zone), items gap 2, text 12/16 Regular,
+   icon 14, badge = real small Badge. The set binds the TABS/Secondary/*
+   tokens (NOT the TABS/Code Tab/* family, which differs slightly in dark —
+   flagged for the designer); built with the bound tokens verbatim.
+   APPROXIMATIONS (flagged): the slanted right edge is rebuilt from the
+   measured geometry (22px run / 36px rise ≈ 31°) as a skewed pseudo-element
+   pending the exact Figma vector export; Figma shows single variants only,
+   so tab-to-tab spacing (2px, no overlap) is ours. */
+.zc-tabs[data-type="code"] {
+  align-items: flex-end;
+  gap: var(--zc-space-2);
+  border-bottom: var(--zc-border-default) solid var(--zc-tab-secondary-border);
+  background: transparent;
+}
+.zc-tab-code {
+  position: relative;
+  z-index: 1; /* stacking context so the -1 pseudos stay inside the tab */
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  /* Figma 2951:10610 authors pl-4 / pr-22 — the 22px right pad IS the slant
+     zone, matching the ::before's `right: 22px`. This was 12/32, which
+     contradicted the block comment above and pushed the label off-centre. */
+  padding: 0 var(--zc-space-22) 0 var(--zc-space-4);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-tab-secondary-text-default);
+}
+/* body (rect part) */
+.zc-tab-code::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 22px;
+  z-index: -1;
+  background: var(--zc-tab-secondary-bg-default);
+  border: var(--zc-border-default) solid var(--zc-tab-secondary-border);
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: var(--zc-radius-6);
+}
+/* slanted right edge — 31° from the measured 22/36 run */
+.zc-tab-code::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 44px;
+  z-index: -1;
+  background: var(--zc-tab-secondary-bg-default);
+  border: var(--zc-border-default) solid var(--zc-tab-secondary-border);
+  border-left: none;
+  border-bottom: none;
+  border-top-right-radius: var(--zc-radius-10);
+  transform: skewX(-31deg);
+  transform-origin: bottom left;
+}
+.zc-tab-code:hover:not(:disabled) { color: var(--zc-tab-secondary-text-hover); }
+.zc-tab-code:hover:not(:disabled)::before,
+.zc-tab-code:hover:not(:disabled)::after { background: var(--zc-tab-secondary-bg-hover); }
+/* Unlike the secondary pill, a Code Tab does NOT change type when active:
+   Figma keeps Body 3 (12/16 Regular) in both states and switches only the
+   colour, so the tab does not resize as you move between files. */
+.zc-tab-code[data-state="active"] {
+  z-index: 2;
+  color: var(--zc-tab-secondary-text-active);
+}
+.zc-tab-code[data-state="active"]::before,
+.zc-tab-code[data-state="active"]::after { background: var(--zc-tab-secondary-bg-active); }
+.zc-tab-code:disabled {
+  color: var(--zc-tab-secondary-text-disabled);
+  cursor: not-allowed;
+}
+.zc-tab-code:disabled::before,
+.zc-tab-code:disabled::after { background: var(--zc-tab-secondary-bg-disabled); }
+.zc-tab-code .zc-tab__icon { width: 14px; height: 14px; }

@@ -1,0 +1,308 @@
+/* =============================================================================
+   zcat — Button, Link, Tooltip
+   Built from Figma:
+     Buttons  728:4636   Type=Default/Split/Navigation, Variant=Fill/Outline/Grey/Ghost/Ghost Grey,
+                         Color=Primary/Success/Danger/Grey, Size=Large/Default/Small/Extra Small,
+                         State=Default/Hover/Pressed/Disabled, Content=Default/Icon Button,
+                         Radius=Default/Rounded, booleans Icon Left / Icon Right
+     Link     738:64747  State=Default/Hover/Pressed/Disabled, Size=Large/Default/Small/Extra Small
+     Tooltip  779:4711   Side=Top/Bottom/Left/Right, Show Icon, Show Link Button
+
+   Sizes (verified against Figma, all four):
+     Large       h50  px14  gap6  icon22  text 16/22
+     Default     h36  px10  gap6  icon16  text 14/20
+     Small       h28  px6   gap4  icon14  text 14/20
+     Extra Small h24  px6   gap2  icon12  text 12/16
+   ============================================================================= */
+
+/* ── Button ── */
+.zc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 var(--zc-space-10);
+  gap: var(--zc-space-6);
+  border: var(--zc-border-default) solid transparent;
+  border-radius: var(--zc-radius-6);
+  font-family: var(--zc-font-primary);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  /* A Button is often an <a> (nav actions, "Learn more", empty-state CTAs).
+     Without this the UA underlines it — the docs page was hiding that with an
+     inline override instead of the library owning it. */
+  text-decoration: none;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.zc-btn__icon { width: 16px; height: 16px; flex-shrink: 0; display: block; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Sizes */
+.zc-btn[data-size="large"] { height: 50px; padding: 0 var(--zc-space-14); gap: var(--zc-space-6); font-size: 16px; line-height: 22px; }
+.zc-btn[data-size="large"] .zc-btn__icon { width: 22px; height: 22px; }
+.zc-btn[data-size="small"] { height: 28px; padding: 0 var(--zc-space-6); gap: var(--zc-space-4); font-size: 14px; line-height: 20px; }
+.zc-btn[data-size="small"] .zc-btn__icon { width: 14px; height: 14px; }
+.zc-btn[data-size="xs"] { height: 24px; padding: 0 var(--zc-space-6); gap: var(--zc-space-2); font-size: 12px; line-height: 16px; }
+.zc-btn[data-size="xs"] .zc-btn__icon { width: 12px; height: 12px; }
+
+/* Radius=Rounded */
+.zc-btn[data-radius="rounded"] { border-radius: var(--zc-radius-full); }
+
+/* Content=Icon Button — square, no horizontal padding */
+.zc-btn[data-content="icon"] { padding: 0; width: 36px; }
+.zc-btn[data-content="icon"][data-size="large"] { width: 50px; }
+.zc-btn[data-content="icon"][data-size="small"] { width: 28px; }
+.zc-btn[data-content="icon"][data-size="xs"] { width: 24px; }
+
+/* ── Variant: Fill ── */
+.zc-btn[data-variant="fill"] { color: var(--zc-btn-fill-text-default); }
+.zc-btn[data-variant="fill"][data-color="primary"] { background: var(--zc-btn-fill-bg-primary); }
+.zc-btn[data-variant="fill"][data-color="primary"]:hover,
+.zc-btn[data-variant="fill"][data-color="primary"][data-state="hover"] { background: var(--zc-btn-fill-bg-primary-hover); color: var(--zc-btn-fill-text-hover); }
+.zc-btn[data-variant="fill"][data-color="primary"]:active,
+.zc-btn[data-variant="fill"][data-color="primary"][data-state="pressed"] { background: var(--zc-btn-fill-bg-primary-pressed); color: var(--zc-btn-fill-text-pressed); }
+.zc-btn[data-variant="fill"][data-color="success"] { background: var(--zc-btn-fill-bg-success); }
+.zc-btn[data-variant="fill"][data-color="success"]:hover,
+.zc-btn[data-variant="fill"][data-color="success"][data-state="hover"] { background: var(--zc-btn-fill-bg-success-hover); }
+.zc-btn[data-variant="fill"][data-color="success"]:active,
+.zc-btn[data-variant="fill"][data-color="success"][data-state="pressed"] { background: var(--zc-btn-fill-bg-success-pressed); }
+.zc-btn[data-variant="fill"][data-color="danger"] { background: var(--zc-btn-fill-bg-danger); }
+.zc-btn[data-variant="fill"][data-color="danger"]:hover,
+.zc-btn[data-variant="fill"][data-color="danger"][data-state="hover"] { background: var(--zc-btn-fill-bg-danger-hover); }
+.zc-btn[data-variant="fill"][data-color="danger"]:active,
+.zc-btn[data-variant="fill"][data-color="danger"][data-state="pressed"] { background: var(--zc-btn-fill-bg-danger-pressed); }
+
+.zc-btn[data-variant="fill"]:disabled,
+.zc-btn[data-variant="fill"][data-state="disabled"] { color: var(--zc-btn-fill-text-disabled); cursor: not-allowed; }
+.zc-btn[data-variant="fill"][data-color="primary"]:disabled,
+.zc-btn[data-variant="fill"][data-color="primary"][data-state="disabled"] { background: var(--zc-btn-fill-bg-primary-disabled); }
+.zc-btn[data-variant="fill"][data-color="success"]:disabled,
+.zc-btn[data-variant="fill"][data-color="success"][data-state="disabled"] { background: var(--zc-btn-fill-bg-success-disabled); }
+.zc-btn[data-variant="fill"][data-color="danger"]:disabled,
+.zc-btn[data-variant="fill"][data-color="danger"][data-state="disabled"] { background: var(--zc-btn-fill-bg-danger-disabled); }
+
+/* ── Variant: Gradient (Figma set 1305:10534) ──
+   Figma shows the default 36px size only (pad-inline 10, gap 6, radius 6,
+   text 14/20 Medium) — other sizes inherit base metrics, UNVERIFIED.
+   Two-stop linear gradient bound to BUTTONS/Gradient/Bg tokens. The Figma
+   gradientTransform [[1,0,0],[-0.5,0.5,0.5]] runs left→right rising ≈80°;
+   direction flagged for visual confirmation against the Figma render. */
+.zc-btn[data-variant="gradient"] {
+  color: var(--zc-btn-gradient-text);
+  background: linear-gradient(80deg, var(--zc-btn-gradient-top), var(--zc-btn-gradient-bottom));
+}
+.zc-btn[data-variant="gradient"]:hover,
+.zc-btn[data-variant="gradient"][data-state="hover"] {
+  background: linear-gradient(80deg, var(--zc-btn-gradient-top-hover), var(--zc-btn-gradient-bottom-hover));
+}
+.zc-btn[data-variant="gradient"]:active,
+.zc-btn[data-variant="gradient"][data-state="pressed"] {
+  background: linear-gradient(80deg, var(--zc-btn-gradient-top-pressed), var(--zc-btn-gradient-bottom-pressed));
+}
+.zc-btn[data-variant="gradient"]:disabled,
+.zc-btn[data-variant="gradient"][data-state="disabled"] {
+  color: var(--zc-btn-gradient-text-disabled);
+  background: linear-gradient(80deg, var(--zc-btn-gradient-top-disabled), var(--zc-btn-gradient-bottom-disabled));
+  cursor: not-allowed;
+}
+
+/* ── Variant: Outline ── */
+.zc-btn[data-variant="outline"] { background: transparent; }
+.zc-btn[data-variant="outline"][data-color="primary"] { color: var(--zc-btn-outline-text-primary); border-color: var(--zc-btn-outline-border-primary); }
+.zc-btn[data-variant="outline"][data-color="primary"]:hover,
+.zc-btn[data-variant="outline"][data-color="primary"][data-state="hover"] { color: var(--zc-btn-outline-text-primary-hover); border-color: var(--zc-btn-outline-border-primary-hover); background: var(--zc-btn-outline-bg-primary-hover); }
+.zc-btn[data-variant="outline"][data-color="primary"]:active,
+.zc-btn[data-variant="outline"][data-color="primary"][data-state="pressed"] { color: var(--zc-btn-outline-text-primary-pressed); border-color: var(--zc-btn-outline-border-primary-pressed); background: transparent; }
+.zc-btn[data-variant="outline"][data-color="primary"]:disabled,
+.zc-btn[data-variant="outline"][data-color="primary"][data-state="disabled"] { color: var(--zc-btn-outline-text-primary-disabled); border-color: var(--zc-btn-outline-border-primary-disabled); background: transparent; cursor: not-allowed; }
+
+.zc-btn[data-variant="outline"][data-color="success"] { color: var(--zc-btn-outline-text-success); border-color: var(--zc-btn-outline-border-success); }
+.zc-btn[data-variant="outline"][data-color="success"]:hover,
+.zc-btn[data-variant="outline"][data-color="success"][data-state="hover"] { color: var(--zc-btn-outline-text-success-hover); border-color: var(--zc-btn-outline-border-success-hover); background: var(--zc-btn-outline-bg-success-hover); }
+.zc-btn[data-variant="outline"][data-color="success"]:active,
+.zc-btn[data-variant="outline"][data-color="success"][data-state="pressed"] { color: var(--zc-btn-outline-text-success-pressed); border-color: var(--zc-btn-outline-border-success-pressed); background: transparent; }
+.zc-btn[data-variant="outline"][data-color="success"]:disabled,
+.zc-btn[data-variant="outline"][data-color="success"][data-state="disabled"] { color: var(--zc-btn-outline-text-success-disabled); border-color: var(--zc-btn-outline-border-success-disabled); cursor: not-allowed; }
+
+.zc-btn[data-variant="outline"][data-color="danger"] { color: var(--zc-btn-outline-text-danger); border-color: var(--zc-btn-outline-border-danger); }
+.zc-btn[data-variant="outline"][data-color="danger"]:hover,
+.zc-btn[data-variant="outline"][data-color="danger"][data-state="hover"] { color: var(--zc-btn-outline-text-danger-hover); border-color: var(--zc-btn-outline-border-danger-hover); background: var(--zc-btn-outline-bg-danger-hover); }
+.zc-btn[data-variant="outline"][data-color="danger"]:active,
+.zc-btn[data-variant="outline"][data-color="danger"][data-state="pressed"] { color: var(--zc-btn-outline-text-danger-pressed); border-color: var(--zc-btn-outline-border-danger-pressed); background: transparent; }
+.zc-btn[data-variant="outline"][data-color="danger"]:disabled,
+.zc-btn[data-variant="outline"][data-color="danger"][data-state="disabled"] { color: var(--zc-btn-outline-text-danger-disabled); border-color: var(--zc-btn-outline-border-danger-disabled); cursor: not-allowed; }
+
+/* ── Variant: Ghost ── */
+.zc-btn[data-variant="ghost"] { background: transparent; border-color: transparent; }
+.zc-btn[data-variant="ghost"][data-color="primary"] { color: var(--zc-btn-ghost-text-primary); }
+.zc-btn[data-variant="ghost"][data-color="primary"]:hover,
+.zc-btn[data-variant="ghost"][data-color="primary"][data-state="hover"] { color: var(--zc-btn-ghost-text-primary-hover); background: var(--zc-btn-ghost-bg-primary); }
+.zc-btn[data-variant="ghost"][data-color="primary"]:active,
+.zc-btn[data-variant="ghost"][data-color="primary"][data-state="pressed"] { color: var(--zc-btn-ghost-text-primary-pressed); background: transparent; }
+.zc-btn[data-variant="ghost"][data-color="primary"]:disabled,
+.zc-btn[data-variant="ghost"][data-color="primary"][data-state="disabled"] { color: var(--zc-btn-ghost-text-primary-disabled); background: transparent; cursor: not-allowed; }
+
+.zc-btn[data-variant="ghost"][data-color="success"] { color: var(--zc-btn-ghost-text-success); }
+.zc-btn[data-variant="ghost"][data-color="success"]:hover,
+.zc-btn[data-variant="ghost"][data-color="success"][data-state="hover"] { color: var(--zc-btn-ghost-text-success-hover); background: var(--zc-btn-ghost-bg-success); }
+.zc-btn[data-variant="ghost"][data-color="success"]:active,
+.zc-btn[data-variant="ghost"][data-color="success"][data-state="pressed"] { color: var(--zc-btn-ghost-text-success-pressed); background: transparent; }
+.zc-btn[data-variant="ghost"][data-color="success"]:disabled,
+.zc-btn[data-variant="ghost"][data-color="success"][data-state="disabled"] { color: var(--zc-btn-ghost-text-success-disabled); cursor: not-allowed; }
+
+.zc-btn[data-variant="ghost"][data-color="danger"] { color: var(--zc-btn-ghost-text-danger); }
+.zc-btn[data-variant="ghost"][data-color="danger"]:hover,
+.zc-btn[data-variant="ghost"][data-color="danger"][data-state="hover"] { color: var(--zc-btn-ghost-text-danger-hover); background: var(--zc-btn-ghost-bg-danger); }
+.zc-btn[data-variant="ghost"][data-color="danger"]:active,
+.zc-btn[data-variant="ghost"][data-color="danger"][data-state="pressed"] { color: var(--zc-btn-ghost-text-danger-pressed); background: transparent; }
+.zc-btn[data-variant="ghost"][data-color="danger"]:disabled,
+.zc-btn[data-variant="ghost"][data-color="danger"][data-state="disabled"] { color: var(--zc-btn-ghost-text-danger-disabled); cursor: not-allowed; }
+
+/* ── Variant: Grey (its own variant in Figma) ── */
+.zc-btn[data-variant="grey"] {
+  background: var(--zc-btn-grey-bg-default);
+  border-color: var(--zc-btn-grey-border-default);
+  color: var(--zc-btn-grey-text-default);
+}
+.zc-btn[data-variant="grey"]:hover,
+.zc-btn[data-variant="grey"][data-state="hover"] { background: var(--zc-btn-grey-bg-hover); border-color: var(--zc-btn-grey-border-hover); color: var(--zc-btn-grey-text-hover); }
+.zc-btn[data-variant="grey"]:active,
+.zc-btn[data-variant="grey"][data-state="pressed"] { background: var(--zc-btn-grey-bg-pressed); border-color: var(--zc-btn-grey-border-pressed); color: var(--zc-btn-grey-text-pressed); }
+.zc-btn[data-variant="grey"]:disabled,
+.zc-btn[data-variant="grey"][data-state="disabled"] { background: var(--zc-btn-grey-bg-disabled); border-color: var(--zc-btn-grey-border-disabled); color: var(--zc-btn-grey-text-disabled); cursor: not-allowed; }
+
+/* ── Variant: Ghost Grey ── */
+.zc-btn[data-variant="ghost-grey"] { background: transparent; border-color: transparent; color: var(--zc-btn-grey-text-default); }
+/* DESIGNER OVERRIDE 2026-08-27 — Ghost Grey is our variant (no Figma family).
+   Its hover previously borrowed
+   --zc-btn-grey-bg-hover, which Figma binds to the BLUE Primary-4 tint (and,
+   inconsistently, to Grey-3 in dark) — visually wrong for a grey ghost.
+   Hover/pressed now use the Grey button's own surface (#EBEEF6 light /
+   #2F3136 dark), the same verified value as the table three-dot hover. */
+.zc-btn[data-variant="ghost-grey"]:hover,
+.zc-btn[data-variant="ghost-grey"][data-state="hover"] { background: var(--zc-btn-grey-bg-default); }
+.zc-btn[data-variant="ghost-grey"]:active,
+.zc-btn[data-variant="ghost-grey"][data-state="pressed"] { background: var(--zc-btn-grey-bg-pressed); }
+.zc-btn[data-variant="ghost-grey"]:disabled,
+.zc-btn[data-variant="ghost-grey"][data-state="disabled"] { color: var(--zc-btn-grey-text-disabled); background: transparent; cursor: not-allowed; }
+
+/* ── Type: Split Button ── */
+.zc-btn-split { display: inline-flex; align-items: stretch; }
+/* Split button doubles as a dropdown shell (zc-select-shell forces width:100%) */
+.zc-btn-split.zc-select-shell { width: auto; }
+/* The split segment is targeted as ".zc-btn + .zc-btn" (not :last-child) —
+   when the split doubles as a dropdown shell, the menu is the last child. */
+.zc-btn-split .zc-btn:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.zc-btn-split .zc-btn + .zc-btn {
+  border-top-left-radius: 0; border-bottom-left-radius: 0;
+  border-left: var(--zc-border-default) solid var(--zc-btn-fill-split-line);
+  padding-left: var(--zc-space-6); padding-right: var(--zc-space-6);
+}
+.zc-btn-split[data-radius="rounded"] .zc-btn:first-child { border-top-left-radius: var(--zc-radius-full); border-bottom-left-radius: var(--zc-radius-full); }
+.zc-btn-split[data-radius="rounded"] .zc-btn + .zc-btn { border-top-right-radius: var(--zc-radius-full); border-bottom-right-radius: var(--zc-radius-full); }
+
+/* ── Type: Navigation Buttons ── */
+.zc-btn-nav { display: inline-flex; align-items: center; gap: var(--zc-space-2); }
+
+/* =============================================================================
+   Link (Figma 738:64747)
+   ============================================================================= */
+.zc-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--zc-space-6);
+  border-radius: var(--zc-radius-6);
+  border-bottom: var(--zc-border-default) solid transparent;
+  font-family: var(--zc-font-primary);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-link-text-default);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+.zc-link:hover, .zc-link:focus, .zc-link:active { text-decoration: none; }
+.zc-link__icon { width: 16px; height: 16px; flex-shrink: 0; display: block; stroke: currentColor; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+
+.zc-link[data-size="large"] { gap: var(--zc-space-6); font-size: 16px; line-height: 22px; }
+.zc-link[data-size="large"] .zc-link__icon { width: 22px; height: 22px; }
+.zc-link[data-size="small"] { gap: var(--zc-space-4); font-size: 14px; line-height: 20px; }
+.zc-link[data-size="small"] .zc-link__icon { width: 14px; height: 14px; }
+.zc-link[data-size="xs"] { gap: var(--zc-space-2); font-size: 12px; line-height: 16px; }
+.zc-link[data-size="xs"] .zc-link__icon { width: 12px; height: 12px; }
+
+/* Hover is the only state with the underline, per Figma */
+.zc-link:hover, .zc-link[data-state="hover"] {
+  color: var(--zc-link-text-hover);
+  border-bottom-color: var(--zc-link-text-hover);
+  border-radius: 0;
+}
+.zc-link:active, .zc-link[data-state="pressed"] {
+  color: var(--zc-link-text-pressed);
+  border-bottom-color: transparent;
+  border-radius: var(--zc-radius-6);
+}
+.zc-link[data-state="disabled"], .zc-link:disabled {
+  color: var(--zc-link-text-disabled);
+  border-bottom-color: transparent;
+  cursor: not-allowed; pointer-events: none;
+}
+
+/* =============================================================================
+   Tooltip (Figma 779:4711)
+   ============================================================================= */
+.zc-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-8);
+  background: var(--zc-tooltip-bg);
+  border: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-radius: var(--zc-radius-6);
+  filter: drop-shadow(2px 2px 5px var(--zc-body-bg-body));
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-tooltip-text);
+  max-width: 320px;
+}
+.zc-tooltip__content { display: flex; align-items: flex-start; gap: var(--zc-space-4); }
+.zc-tooltip__icon { width: 16px; height: 16px; flex-shrink: 0; display: block; stroke: var(--zc-tooltip-text); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+/* The tooltip's action is a Link instance (Figma I780:4427 → Link 738:64679).
+   Use .zc-link and only pin it so it doesn't stretch. */
+.zc-tooltip .zc-link { flex-shrink: 0; }
+
+/* Arrow — 10px square, rotated, inheriting the tooltip's fill + two borders */
+.zc-tooltip::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--zc-tooltip-bg);
+  border-left: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-top: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-top-left-radius: 1px;
+}
+.zc-tooltip[data-side="left"]::after   { left: -6px;  top: 50%; transform: translateY(-50%) rotate(-45deg); }
+.zc-tooltip[data-side="right"]::after  { right: -6px; top: 50%; transform: translateY(-50%) rotate(135deg); }
+.zc-tooltip[data-side="top"]::after    { top: -6px;   left: 50%; transform: translateX(-50%) rotate(45deg); }
+.zc-tooltip[data-side="bottom"]::after { bottom: -6px; left: 50%; transform: translateX(-50%) rotate(-135deg); }
+
+/* ── Floating tooltip (built by zcat.js from [data-tooltip]) ──
+   Appended to <body> with position:fixed so no ancestor's overflow can clip it.
+*/
+.zc-tooltip--floating {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 260px;
+}
+.zc-tooltip--floating .zc-tooltip__content { align-items: center; }
+[data-tooltip] { cursor: inherit; }

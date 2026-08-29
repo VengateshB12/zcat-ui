@@ -1,0 +1,281 @@
+/* =============================================================================
+   zcat — Table
+   Built from Figma "Table AI" component set 13239:10950
+     Style = Stretch | Boxy · Size = Default · Columns = 3–8
+     Booleans: Show Checkbox, Show Threedot, Show Pagination
+   Verified against Figma (get_design_context on 13239:9325 + get_variable_defs):
+     Header cell  h44 · px12 · bg  --table-background-header_bg #F7F8FB
+                  text 12/16 semibold --table-text-secondary #4D618A
+     Data cell    h48 · px12 · bg  --table-background-row_bg #FFFFFF
+                  text 14/20 --table-text-primary #101F3E
+                  border-b --table-borders-default #EBEEF6 (every row, incl. last)
+     Boxy         outer border 1px #EBEEF6 + radius 6, clips corners
+     Stretch      edge-to-edge, no outer border, square corners (pixel-verified)
+     Checkbox col w44, 14px box (r4, border #D6DDEF) centered — reuses .zc-checkbox
+     Threedot col w44, bare 16px icon, --body-icons-static-primary #101F3E
+     Pagination   h30 · px16 · gap20 · bg #FFFFFF · border-t #EBEEF6
+                  shadow 0 -6px 8px --shadows-background-with-opacity #EFF2FA3D
+                  "Showing Results :" 12/16 #7988A8 · range #101F3E · "of N" #4D618A
+                  rows-per-page value #2A65F0 + 16px chevron · divider 0.5px×20 #EBEEF6
+                  prev/next = real .zc-btn ghost-grey small icon rounded (28px, icon 14)
+   NOT in Figma (inherited from the earlier build, unverified): row hover /
+   selected / disabled states. Dark values: unverified (§7.1 dark audit pending).
+
+   Usage:
+     <div class="zc-table-wrap" data-style="stretch|boxy">
+       <table class="zc-table">
+         <thead class="zc-table__head">
+           <tr>
+             <th class="zc-table__th zc-table__th--checkbox"><label class="zc-checkbox">…</label></th>
+             <th class="zc-table__th">Name</th>
+             <th class="zc-table__th zc-table__th--actions"></th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr class="zc-table__row">
+             <td class="zc-table__td zc-table__td--checkbox"><label class="zc-checkbox">…</label></td>
+             <td class="zc-table__td">
+               <div class="zc-table__user">
+                 <span class="zc-avatar" data-size="default">…</span>
+                 <span>
+                   <span class="zc-table__text-primary">orders-prod</span>
+                   <span class="zc-table__text-secondary">Aurora MySQL 3.0</span>
+                 </span>
+               </div>
+             </td>
+             <td class="zc-table__td zc-table__td--actions">
+               <button class="zc-table__threedot" type="button">…</button>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+       <div class="zc-pagination">…</div>
+     </div>
+   ============================================================================= */
+
+.zc-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  font-family: var(--zc-font-primary);
+}
+/* Style=Boxy — outer border + radius (Stretch has neither) */
+.zc-table-wrap[data-style="boxy"] {
+  border: var(--zc-border-default) solid var(--zc-table-border);
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+}
+
+.zc-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.zc-table__head { background: var(--zc-table-bg-header); }
+.zc-table__th {
+  height: 44px;
+  padding: 0 var(--zc-space-12);
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-table-text-secondary);
+  background: var(--zc-table-bg-header);
+  border-bottom: var(--zc-border-default) solid var(--zc-table-border);
+  white-space: nowrap;
+}
+
+.zc-table__row { background: var(--zc-table-bg-row); transition: background 0.1s; }
+/* States below are NOT in the Figma Table AI set — carried over, unverified */
+.zc-table__row:hover { background: var(--zc-table-bg-row-hover); }
+.zc-table__row[data-state="selected"] { background: var(--zc-table-bg-row-selected); }
+.zc-table__row[data-state="disabled"] {
+  background: var(--zc-table-bg-row-disabled);
+  color: var(--zc-table-text-disabled);
+}
+
+.zc-table__td {
+  height: 48px;
+  padding: 0 var(--zc-space-12);
+  border-bottom: var(--zc-border-default) solid var(--zc-table-border);
+  color: var(--zc-table-text-primary);
+  vertical-align: middle;
+}
+
+/* Avatar + two-line text (Col type: AvatarName) */
+.zc-table__user {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  min-width: 0;
+}
+.zc-table__user > span:last-child { display: flex; flex-direction: column; gap: var(--zc-space-2); min-width: 0; }
+.zc-table__text-primary {
+  display: block;
+  color: var(--zc-table-text-primary);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+.zc-table__text-secondary {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-table-text-secondary);
+}
+
+/* Fixed-width utility columns (44px in Figma) */
+.zc-table__th--checkbox,
+.zc-table__td--checkbox { width: 44px; padding: 0; text-align: center; }
+.zc-table__th--actions,
+.zc-table__td--actions  { width: 44px; padding: 0; text-align: center; }
+
+/* Table checkbox is 14px in Figma (vs 16px standalone) */
+.zc-table .zc-checkbox { vertical-align: middle; }
+.zc-table .zc-checkbox__box { width: 14px; height: 14px; margin-top: 0; }
+
+/* Three-dot trigger — bare 16px icon in Figma, no button chrome */
+.zc-table__threedot {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--zc-radius-full);
+  cursor: pointer;
+  color: var(--zc-table-threedot-icon);
+  padding: 0;
+}
+.zc-table__threedot svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Hover / open states — Figma TABLE/Three_Dot/Icon_Bg_Hover + Icon_Bg_Active.
+   zcat.js sets data-open on the trigger while its action menu is open. */
+.zc-table__threedot:hover { background: var(--zc-table-threedot-bg-hover); }
+.zc-table__threedot[data-open] { background: var(--zc-table-threedot-bg-active); }
+
+/* Three-dot action menu — reuses the Dropdown Menu component, right-aligned
+   under the trigger. Shell carries data-menu="action" (no persisted selection). */
+.zc-table__menushell {
+  position: relative;
+  width: auto;
+  display: inline-flex;
+  vertical-align: middle;
+}
+.zc-table__menushell .zc-menu {
+  left: auto;
+  right: 0;
+  width: auto;
+  /* the actions cell centres its trigger; menu content stays left-aligned */
+  text-align: left;
+  min-width: 120px;
+}
+
+/* ── Pagination ── (Figma 13239:10624, verified via Table AI instance)
+   Usage:
+     <div class="zc-pagination">
+       <div class="zc-pagination__info">Showing Results :
+         <span class="zc-pagination__range">1 - 50</span>
+         <span class="zc-pagination__total">of 500</span>
+       </div>
+       <div class="zc-pagination__controls">
+         <div class="zc-pagination__rows">Rows per page :
+           <div class="zc-select-shell zc-pagination__pershell">
+             <div class="zc-select-wrap zc-pagination__pager">
+               <span class="zc-select__value">100</span>
+               <svg class="zc-select__chevron">…</svg>
+             </div>
+             <div class="zc-menu" data-size="small">…</div>
+           </div>
+         </div>
+         <span class="zc-pagination__divider"></span>
+         <button class="zc-btn" data-variant="ghost-grey" data-size="small"
+                 data-content="icon" data-radius="rounded">…</button>
+         <span class="zc-pagination__page">1 - 20</span>
+         <button class="zc-btn" …>…</button>
+       </div>
+     </div>                                                                    */
+.zc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zc-space-20);
+  height: 30px;
+  padding: 0 var(--zc-space-16);
+  background: var(--zc-pagination-bg);
+  border-top: var(--zc-border-default) solid var(--zc-pagination-border);
+  box-shadow: 0 -6px 8px var(--zc-pagination-shadow);
+  font-size: 12px;
+  line-height: 16px;
+}
+.zc-pagination__info {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  color: var(--zc-pagination-text-light);
+  white-space: nowrap;
+}
+.zc-pagination__range { color: var(--zc-pagination-text-primary); }
+.zc-pagination__total { color: var(--zc-pagination-text-secondary); }
+
+.zc-pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+}
+.zc-pagination__rows {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  color: var(--zc-pagination-text-light);
+  white-space: nowrap;
+}
+.zc-pagination__pershell { width: auto; }
+.zc-pagination__pager {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-2);
+  height: 24px;
+  padding: 0 var(--zc-space-6);
+  border-radius: var(--zc-radius-6);
+  color: var(--zc-pagination-text-link);
+  font-size: 12px;
+  line-height: 16px;
+}
+.zc-pagination__pager .zc-select__value { flex: none; color: var(--zc-pagination-text-link); }
+.zc-pagination__pager .zc-select__chevron { stroke: var(--zc-pagination-text-link); }
+.zc-pagination__pershell .zc-menu {
+  min-width: 72px;
+  left: auto;
+  right: 0;
+  /* pagination sits at container bottoms — the menu drops UP */
+  top: auto;
+  bottom: calc(100% + var(--zc-space-4));
+}
+
+.zc-pagination__divider {
+  width: 0;
+  height: 20px;
+  border-left: var(--zc-border-hairline) solid var(--zc-pagination-border);
+}
+.zc-pagination__page {
+  color: var(--zc-pagination-text-secondary);
+  white-space: nowrap;
+}
+/* Prev/next group sits tighter than the outer 16px gap (Figma gap 6) */
+.zc-pagination__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+}

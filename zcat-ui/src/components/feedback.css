@@ -1,0 +1,452 @@
+/* =============================================================================
+   zcat — Feedback: Attention Box, Toast, Progress Bar/Circle,
+          Skeleton (Content Loader), Carousel Dots, Shimmer, Empty State
+   ============================================================================= */
+
+/* ── Attention Box ──────────────────────────────────────────────────────────
+   Figma: component set 776:4315
+   Metrics: border 1px solid <color border>, radius 6, padding 10,
+            container gap 10, overflow hidden.
+   Colors (data-color): info | success | warning | danger | default
+     bg/border pairs — info #E8F5FF/#A6CBEA, success #EAF7EF/#7FD1A0,
+     warning #FFF3D7/#DAB45F, danger #FFEFEF/#EE7979, default #F4F7FE/#EBEEF6.
+   Text is identical across colors: heading 14/20 600 #101F3E,
+     body/subtext 12/16 400 #4D618A. Icon 16×16 stroke #101F3E
+     (uniform across colors → --zc-body-icon-primary).
+   Types (data-type):
+     "alert"   — header row (icon + heading, gap 4), subtext full width
+                 below (column gap 6), trailing action vertically centered.
+     "message" — single row gap 4: 16px icon + message (14/20 400 #101F3E,
+                 flex-1) + trailing action.
+   The action itself is a consumer-supplied .zc-btn (ghost, small).
+   Usage (alert):
+     <div class="zc-attention" data-color="info" data-type="alert">
+       <div class="zc-attention__content">
+         <div class="zc-attention__header">
+           <svg class="zc-attention__icon">…</svg>
+           <span class="zc-attention__heading">Heading</span>
+         </div>
+         <p class="zc-attention__body">Subtext…</p>
+       </div>
+       <span class="zc-attention__action"><button class="zc-btn" …>View More</button></span>
+     </div>
+   Usage (message):
+     <div class="zc-attention" data-color="success" data-type="message">
+       <svg class="zc-attention__icon">…</svg>
+       <p class="zc-attention__message">Message…</p>
+       <span class="zc-attention__action">…</span>
+     </div>
+*/
+.zc-attention {
+  display: flex;
+  align-items: flex-start;
+  /* DESIGNER OVERRIDE 2026-08-27: gap 6 (Figma authors 10). */
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-10);
+  border: var(--zc-border-default) solid;
+  border-radius: var(--zc-radius-6);
+  overflow: hidden;
+  font-family: var(--zc-font-primary);
+}
+.zc-attention[data-color="info"]    { background: var(--zc-attention-info-bg);    border-color: var(--zc-attention-info-border); }
+.zc-attention[data-color="success"] { background: var(--zc-attention-success-bg); border-color: var(--zc-attention-success-border); }
+.zc-attention[data-color="warning"] { background: var(--zc-attention-warning-bg); border-color: var(--zc-attention-warning-border); }
+.zc-attention[data-color="danger"]  { background: var(--zc-attention-danger-bg);  border-color: var(--zc-attention-danger-border); }
+.zc-attention[data-color="default"] { background: var(--zc-attention-default-bg); border-color: var(--zc-attention-default-border); }
+
+/* Icon: 16×16, stroke #101F3E in Figma across all colors.
+   Round caps are required — the status-dot in the circle glyphs is a
+   hairline segment that only renders with round linecaps. */
+.zc-attention__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--zc-body-icon-primary);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Message type: centre the 16px icon on the 14/20 first line */
+.zc-attention[data-type="message"] .zc-attention__icon { margin-top: var(--zc-space-2); }
+
+/* Alert type without sub text: centre the single header row with the action */
+.zc-attention[data-type="alert"]:not(:has(.zc-attention__body)) { align-items: center; }
+.zc-attention[data-type="alert"]:not(:has(.zc-attention__body)) .zc-attention__content { justify-content: center; }
+
+/* Type: alert — icon + heading row, subtext below */
+.zc-attention[data-type="alert"] { align-items: stretch; }
+.zc-attention__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-6);
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.zc-attention__header {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+}
+.zc-attention__heading {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-attention-text-heading);
+}
+.zc-attention__body {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-attention-text-body);
+}
+
+/* Type: message — single row, gap 4 */
+.zc-attention[data-type="message"] {
+  align-items: center;
+  gap: var(--zc-space-4);
+}
+.zc-attention__message {
+  flex: 1 1 0%;
+  min-width: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-attention-text-heading); /* Figma: message text #101F3E */
+}
+
+/* Trailing action slot (consumer places a .zc-btn ghost small inside) */
+.zc-attention__action {
+  margin-left: auto;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ── Toast ──────────────────────────────────────────────────────────────────
+   Figma: component "Alerts" 762:19318
+   Metrics: bg --zc-toast-bg, border 1px --zc-toast-border, radius 6,
+            padding 14, shadow 0 0 6px 0 --zc-shadow-default, overflow hidden.
+   Left accent bar: absolute, left -1px, top/bottom 9px (Figma-literal
+     offsets), width 4px, right corners only rounded at radius 10;
+     fill per data-color (info/success/warning/danger → --zc-toast-icon-*).
+   Types (data-type):
+     "heading" — row gap 16 items-center: 24×24 icon + text column (gap 4:
+                 heading 14/20 600 --zc-toast-text-primary; subtext 12/16 400
+                 --zc-toast-text-secondary) + trailing actions.
+     "message" — row gap 16 items-start: 16×16 icon + message 14/20 400
+                 --zc-toast-text-primary (flex-1) + trailing actions.
+   Actions are consumer-supplied: a .zc-btn ghost small ("Learn More") and
+   a 28×28 round ghost-grey close .zc-btn inside .zc-toast__actions.
+   Usage (heading):
+     <div class="zc-toast" data-color="success" data-type="heading">
+       <span class="zc-toast__bar"></span>
+       <svg class="zc-toast__icon">…</svg>
+       <div class="zc-toast__content">
+         <span class="zc-toast__heading">Success!</span>
+         <span class="zc-toast__subtext">Record saved.</span>
+       </div>
+       <div class="zc-toast__actions">…buttons…</div>
+     </div>
+*/
+.zc-toast {
+  position: relative;
+  display: flex;
+  /* DESIGNER OVERRIDE 2026-08-27: gap 6 (Figma authors 16). */
+  gap: var(--zc-space-6);
+  padding: var(--zc-space-14);
+  background: var(--zc-toast-bg);
+  border: var(--zc-border-default) solid var(--zc-toast-border);
+  border-radius: var(--zc-radius-6);
+  box-shadow: 0 0 6px 0 var(--zc-shadow-default);
+  overflow: hidden;
+  font-family: var(--zc-font-primary);
+}
+
+/* Left accent bar — Figma-literal offsets: left -1, top 9, bottom 9;
+   only the right-side corners are rounded (radius 10). */
+.zc-toast__bar {
+  position: absolute;
+  left: -1px;
+  top: 9px;
+  bottom: 9px;
+  width: 4px;
+  border-radius: 0 var(--zc-radius-10) var(--zc-radius-10) 0;
+}
+.zc-toast[data-color="info"]    .zc-toast__bar { background: var(--zc-toast-icon-info); }
+.zc-toast[data-color="success"] .zc-toast__bar { background: var(--zc-toast-icon-success); }
+.zc-toast[data-color="warning"] .zc-toast__bar { background: var(--zc-toast-icon-warning); }
+.zc-toast[data-color="danger"]  .zc-toast__bar { background: var(--zc-toast-icon-danger); }
+
+.zc-toast__icon {
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.zc-toast[data-color="info"]    .zc-toast__icon { color: var(--zc-toast-icon-info); }
+.zc-toast[data-color="success"] .zc-toast__icon { color: var(--zc-toast-icon-success); }
+.zc-toast[data-color="warning"] .zc-toast__icon { color: var(--zc-toast-icon-warning); }
+.zc-toast[data-color="danger"]  .zc-toast__icon { color: var(--zc-toast-icon-danger); }
+
+/* Type: heading — 24×24 icon, centered row, text column gap 4 */
+.zc-toast[data-type="heading"] { align-items: center; }
+.zc-toast[data-type="heading"] .zc-toast__icon { width: 24px; height: 24px; }
+.zc-toast__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-4);
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.zc-toast__heading {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-toast-text-primary);
+}
+.zc-toast__subtext {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-toast-text-secondary);
+}
+
+/* Type: message — 16×16 icon, top-aligned row */
+.zc-toast[data-type="message"] { align-items: flex-start; }
+/* Figma aligns message-type items to the top so a wrapped message keeps its
+   icon beside the FIRST line. Optically centre both against that 20px line:
+   icon (20-16)/2 = 2px down, close button (28-20)/2 = 4px up. */
+.zc-toast[data-type="message"] .zc-toast__icon { width: 16px; height: 16px; margin-top: var(--zc-space-2); }
+.zc-toast[data-type="message"] .zc-toast__actions { margin-top: calc(-1 * var(--zc-space-4)); }
+.zc-toast__message {
+  flex: 1 1 0%;
+  min-width: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-toast-text-primary);
+}
+
+/* Trailing actions slot (consumer-supplied .zc-btn elements) */
+.zc-toast__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── Progress Bar ───────────────────────────────────────────────────────────
+   Figma: Loader page, node 1554:19978
+   Metrics: track height 4, width 100%, fill height 4, left-aligned.
+   Radius: Figma literal 40 on a 4px-tall bar clamps to a pill →
+           mapped to var(--zc-radius-full).
+   Single size/color only — no size or color variants exist in Figma.
+   Fill width is set inline by the consumer.
+   Usage: <div class="zc-progress"><div class="zc-progress__fill" style="width:60%"></div></div>
+   Loading: <div class="zc-progress" data-state="loading"><div class="zc-progress__fill"></div></div>
+*/
+.zc-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--zc-loader-progress-track);
+  border-radius: var(--zc-radius-full);
+  overflow: hidden;
+}
+/* Indeterminate loading sweep — our addition (Figma defines fixed fills only) */
+.zc-progress[data-state="loading"] .zc-progress__fill {
+  width: 40%;
+  animation: zc-progress-slide 1.2s ease-in-out infinite;
+}
+@keyframes zc-progress-slide {
+  0%   { margin-left: -40%; }
+  100% { margin-left: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .zc-progress[data-state="loading"] .zc-progress__fill { animation-duration: 2.4s; } }
+
+.zc-progress__fill {
+  height: 4px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-loader-progress-primary);
+}
+
+/* ── Progress Circle ──
+   NOTE: no Figma source — kept as-is pending design verification.
+   Usage: <div class="zc-progress-circle" data-size="default">
+            <svg viewBox="0 0 36 36">
+              <circle class="zc-progress-circle__track" cx="18" cy="18" r="16"></circle>
+              <circle class="zc-progress-circle__fill" cx="18" cy="18" r="16"
+                      style="stroke-dasharray: 60, 100"></circle>
+            </svg>
+            <span class="zc-progress-circle__label">60%</span>
+          </div>
+*/
+.zc-progress-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.zc-progress-circle, .zc-progress-circle[data-size="default"] { width: 48px; height: 48px; }
+.zc-progress-circle[data-size="small"] { width: 32px; height: 32px; }
+.zc-progress-circle[data-size="large"] { width: 64px; height: 64px; }
+
+.zc-progress-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.zc-progress-circle__track {
+  fill: none;
+  stroke: var(--zc-loader-progress-track);
+  stroke-width: 3;
+}
+.zc-progress-circle__fill {
+  fill: none;
+  stroke: var(--zc-loader-progress-primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s;
+}
+.zc-progress-circle__label {
+  position: absolute;
+  font-family: var(--zc-font-primary);
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--zc-body-text-primary);
+}
+
+/* ── Skeleton / Content Loader ──────────────────────────────────────────────
+   Figma: nodes 1554:19979 / 1554:19976
+   Metrics: column of bars, gap 10, bar height 20, width 100%.
+   Corners are square in Figma (border-radius 0 — intentional).
+   Static fills only — no shimmer animation exists in Figma.
+   Variants (data-variant on root): default (--zc-loader-content-primary)
+     | "secondary" (--zc-loader-content-secondary).
+   Usage: <div class="zc-skeleton" data-variant="secondary">
+            <div class="zc-skeleton__bar"></div>
+            <div class="zc-skeleton__bar" style="width:60%"></div>
+          </div>
+*/
+.zc-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-10);
+  width: 100%;
+}
+.zc-skeleton__bar {
+  height: 20px;
+  border-radius: 0; /* Figma: square corners */
+  /* Loading sweep — our addition (Figma is a static frame); colours stay the
+     two Figma Content Loader tokens. Static fallback via data-static. */
+  background: linear-gradient(90deg,
+    var(--zc-loader-content-primary) 25%,
+    var(--zc-loader-content-secondary) 50%,
+    var(--zc-loader-content-primary) 75%);
+  background-size: 200% 100%;
+  animation: zc-shimmer 1.6s linear infinite;
+}
+.zc-skeleton[data-variant="secondary"] .zc-skeleton__bar {
+  background: linear-gradient(90deg,
+    var(--zc-loader-content-secondary) 25%,
+    var(--zc-loader-content-primary) 50%,
+    var(--zc-loader-content-secondary) 75%);
+  background-size: 200% 100%;
+}
+.zc-skeleton[data-static] .zc-skeleton__bar {
+  animation: none;
+  background: var(--zc-loader-content-primary);
+}
+.zc-skeleton[data-static][data-variant="secondary"] .zc-skeleton__bar {
+  background: var(--zc-loader-content-secondary);
+}
+@media (prefers-reduced-motion: reduce) { .zc-skeleton__bar { animation: none; } }
+
+/* ── Carousel Dots ──────────────────────────────────────────────────────────
+   Figma: node 2350:26441
+   Metrics: inline row, gap 6; dot 6×6, radius full.
+   States: default --zc-carousel-dot-default, hover --zc-carousel-dot-hover,
+           active (data-state="active") --zc-carousel-dot-active.
+   Active changes colour only — no size change in Figma.
+   Usage: <div class="zc-carousel">
+            <button class="zc-carousel__dot" data-state="active"></button>
+            <button class="zc-carousel__dot"></button>
+          </div>
+*/
+.zc-carousel {
+  display: inline-flex;
+  gap: var(--zc-space-6);
+}
+.zc-carousel__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-carousel-dot-default);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.zc-carousel__dot:hover { background: var(--zc-carousel-dot-hover); }
+.zc-carousel__dot[data-state="active"] { background: var(--zc-carousel-dot-active); }
+
+/* ── Shimmer ──
+   NOTE: no Figma source — kept as-is pending design verification.
+   Usage: <div class="zc-shimmer" data-type="text"></div>
+          <div class="zc-shimmer" data-type="rect" style="width:200px;height:120px"></div>
+          <div class="zc-shimmer" data-type="circle" data-size="default"></div>
+*/
+.zc-shimmer {
+  background: linear-gradient(90deg, var(--zc-loader-content-primary) 25%, var(--zc-loader-content-secondary) 50%, var(--zc-loader-content-primary) 75%);
+  background-size: 200% 100%;
+  animation: zc-shimmer 1.5s infinite;
+  border-radius: var(--zc-radius-4);
+}
+.zc-shimmer[data-type="text"]   { height: 14px; width: 100%; border-radius: var(--zc-radius-4); }
+.zc-shimmer[data-type="rect"]   { border-radius: var(--zc-radius-6); }
+.zc-shimmer[data-type="circle"] { border-radius: var(--zc-radius-full); }
+.zc-shimmer[data-type="circle"], .zc-shimmer[data-type="circle"][data-size="default"] { width: 36px; height: 36px; }
+.zc-shimmer[data-type="circle"][data-size="small"] { width: 28px; height: 28px; }
+.zc-shimmer[data-type="circle"][data-size="large"] { width: 44px; height: 44px; }
+
+@keyframes zc-shimmer { to { background-position: -200% 0; } }
+
+/* ── Empty State ──
+   NOTE: no Figma source — kept as-is pending design verification.
+   Usage: <div class="zc-empty-state">
+            <img class="zc-empty-state__illustration" src="..." alt="">
+            <h3 class="zc-empty-state__heading">No data yet</h3>
+            <p class="zc-empty-state__desc">Get started by creating a new item.</p>
+            <button class="zc-btn" data-variant="fill" data-color="primary">Create</button>
+          </div>
+*/
+.zc-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--zc-space-40) var(--zc-space-24);
+  gap: var(--zc-space-16);
+}
+.zc-empty-state__illustration {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+.zc-empty-state__heading {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--zc-body-text-primary);
+}
+.zc-empty-state__desc {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-secondary);
+  max-width: 400px;
+}
+
+/* Spinner and Rating live in badge-tag-avatar.css — single owner. */

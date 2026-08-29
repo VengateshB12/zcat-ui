@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "zcat-docs",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8787", "-d", "zcat-ui"],
+      "port": 8787
+    },
+    {
+      "name": "directdb-pages",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8790"],
+      "port": 8790
+    }
+  ]
+}

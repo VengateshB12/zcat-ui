@@ -1,0 +1,220 @@
+/* =============================================================================
+   zcat — Badge, Avatar, Avatar Group, Rating, Spinner, Kbd
+
+   Badge   Figma 461:767      Type × Color × Size
+   Avatar  Figma 1173:15428   Type × Size × State
+   Rating / Spinner / Kbd — no Figma source exists in this file; built from the
+   design system's own sizes, colours and type scale.
+   ============================================================================= */
+
+/* ── Badge ──
+   Default 20px / min-w 20 / px 6 / Body 3 (12/16)
+   Small   16px / min-w 16 / px 4 / Body 4 (10/12)
+   Dot     6x6, no text
+*/
+.zc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  min-width: 20px;
+  padding: 0 var(--zc-space-6);
+  border-radius: var(--zc-radius-full);
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  background: var(--zc-badge-solid-primary-bg);
+  color: var(--zc-badge-solid-text);
+}
+.zc-badge[data-size="small"] {
+  height: 16px; min-width: 16px;
+  padding: 0 var(--zc-space-4);
+  font-size: 10px; line-height: 12px;
+}
+.zc-badge[data-size="dot"] {
+  width: 6px; height: 6px; min-width: 0; padding: 0;
+}
+.zc-badge[data-size="dot"] > * { display: none; }
+
+/* Type = Primary (solid) */
+.zc-badge[data-color="success"]  { background: var(--zc-badge-solid-success-bg); }
+.zc-badge[data-color="danger"]   { background: var(--zc-badge-solid-danger-bg); }
+.zc-badge[data-color="warning"]  { background: var(--zc-badge-solid-warning-bg); }
+.zc-badge[data-color="info"]     { background: var(--zc-badge-solid-info-bg); }
+.zc-badge[data-color="purple"]   { background: var(--zc-badge-solid-purple-bg); }
+.zc-badge[data-color="grey"]     { background: var(--zc-badge-solid-grey-bg); color: var(--zc-badge-solid-grey-text); }
+.zc-badge[data-color="disabled"] { background: var(--zc-badge-solid-disabled-bg); color: var(--zc-badge-solid-disabled-text); }
+
+/* Type = Secondary (tinted) */
+.zc-badge[data-type="secondary"] { background: var(--zc-badge-subtle-primary-bg); color: var(--zc-badge-subtle-primary-text); }
+.zc-badge[data-type="secondary"][data-color="success"]  { background: var(--zc-badge-subtle-success-bg);  color: var(--zc-badge-subtle-success-text); }
+.zc-badge[data-type="secondary"][data-color="danger"]   { background: var(--zc-badge-subtle-danger-bg);   color: var(--zc-badge-subtle-danger-text); }
+.zc-badge[data-type="secondary"][data-color="warning"]  { background: var(--zc-badge-subtle-warning-bg);  color: var(--zc-badge-subtle-warning-text); }
+.zc-badge[data-type="secondary"][data-color="info"]     { background: var(--zc-badge-subtle-info-bg);     color: var(--zc-badge-subtle-info-text); }
+.zc-badge[data-type="secondary"][data-color="purple"]   { background: var(--zc-badge-subtle-purple-bg);   color: var(--zc-badge-subtle-purple-text); }
+.zc-badge[data-type="secondary"][data-color="grey"]     { background: var(--zc-badge-subtle-grey-bg);     color: var(--zc-badge-subtle-grey-text); }
+.zc-badge[data-type="secondary"][data-color="disabled"] { background: var(--zc-badge-subtle-disabled-bg); color: var(--zc-badge-subtle-disabled-text); }
+
+/* ── Avatar ── Small 16 / Default 24 / Large 30 */
+.zc-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-avatar-bg);
+  border: var(--zc-border-default) solid var(--zc-avatar-border);
+  overflow: hidden;
+  font-family: var(--zc-font-primary);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-avatar-text);
+  user-select: none;
+}
+.zc-avatar[data-size="small"] { width: 16px; height: 16px; font-size: 10px; line-height: 12px; }
+.zc-avatar[data-size="large"] { font-size: 14px; line-height: 20px; }
+.zc-avatar[data-size="large"] { width: 30px; height: 30px; }
+
+.zc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.zc-avatar__icon {
+  width: 66%; height: 66%; display: block;
+  stroke: var(--zc-avatar-icon); fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+/* No filled user icon exists in our set, so Icon Filled fills the stroke path. */
+.zc-avatar[data-type="icon-filled"] .zc-avatar__icon {
+  fill: var(--zc-avatar-icon); stroke: none; width: 72%; height: 72%;
+}
+.zc-avatar[data-type="icon-filled"] { background: var(--zc-avatar-bg-alt); }
+
+.zc-avatar[data-state="disabled"] { color: var(--zc-avatar-text-disabled); }
+.zc-avatar[data-state="disabled"] .zc-avatar__icon { stroke: var(--zc-avatar-icon-disabled); }
+.zc-avatar[data-state="disabled"][data-type="icon-filled"] .zc-avatar__icon { fill: var(--zc-avatar-icon-disabled); }
+.zc-avatar[data-state="disabled"] img { opacity: .5; }
+
+/* Status dot */
+/* Reference shows the status dot at TOP-RIGHT, overlapping the edge,
+   at roughly a third of the avatar's diameter. */
+.zc-avatar__status {
+  position: absolute; top: -1px; right: -1px;
+  width: 8px; height: 8px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-avatar-status-online);
+}
+.zc-avatar__status[data-status="offline"] { background: var(--zc-avatar-status-offline); }
+.zc-avatar[data-size="small"] .zc-avatar__status { width: 6px; height: 6px; }
+.zc-avatar[data-size="large"] .zc-avatar__status { width: 10px; height: 10px; }
+/* The dot sits outside the clipped circle, so it needs its own stacking box */
+.zc-avatar { overflow: visible; }
+.zc-avatar__media {
+  position: absolute; inset: 0;
+  border-radius: var(--zc-radius-full);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.zc-avatar__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Avatar Group ── overlapping, with a "+N" counter
+   The counter carries [data-tooltip] so hovering lists the remaining people.
+   (Not in Figma — an addition for overflow.)
+*/
+.zc-avatar-group { display: inline-flex; align-items: center; }
+.zc-avatar-group .zc-avatar { border-color: var(--zc-avatar-border-white); border-width: var(--zc-border-default); }
+.zc-avatar-group .zc-avatar + .zc-avatar,
+.zc-avatar-group .zc-avatar + .zc-avatar-group__more { margin-left: -6px; }
+.zc-avatar-group[data-size="small"] .zc-avatar + .zc-avatar,
+.zc-avatar-group[data-size="small"] .zc-avatar + .zc-avatar-group__more { margin-left: -4px; }
+.zc-avatar-group__more {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0; width: 24px; height: 24px;
+  border-radius: var(--zc-radius-full);
+  background: var(--zc-avatar-bg-alt);
+  border: var(--zc-border-default) solid var(--zc-avatar-border-white);
+  font-family: var(--zc-font-primary); font-weight: 600;
+  font-size: 10px; line-height: 12px;
+  color: var(--zc-avatar-text);
+  cursor: default;
+}
+.zc-avatar-group[data-size="small"] .zc-avatar-group__more { width: 16px; height: 16px; font-size: 9px; }
+.zc-avatar-group[data-size="large"] .zc-avatar-group__more { width: 30px; height: 30px; font-size: 12px; }
+
+/* ── Rating ── stars use the warning tone, matching the design system */
+.zc-rating { display: inline-flex; align-items: center; gap: var(--zc-space-2); }
+.zc-rating__star { width: 20px; height: 20px; display: block; flex-shrink: 0; }
+.zc-rating__star path {
+  fill: var(--zc-body-bg-active);
+  stroke: var(--zc-body-icon-light);
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.zc-rating__star[data-filled="true"] path {
+  fill: var(--zc-body-text-warning);
+  stroke: var(--zc-body-text-warning);
+}
+.zc-rating[data-size="small"] .zc-rating__star { width: 16px; height: 16px; }
+.zc-rating[data-size="large"] .zc-rating__star { width: 24px; height: 24px; }
+.zc-rating[data-interactive="true"] .zc-rating__star { cursor: pointer; }
+.zc-rating__value {
+  margin-left: var(--zc-space-4);
+  font-family: var(--zc-font-primary); font-weight: 400;
+  font-size: 12px; line-height: 16px;
+  color: var(--zc-body-text-secondary);
+}
+
+/* ── Spinner ── */
+/* ── Spinner / Round Loader ── Figma Loader set 1554:19981 (VERIFIED — the
+   earlier "no Figma source" note is obsolete; the component is named Loader).
+   8-spoke tick glyph (same path as docs/icons/Loading 1.svg), stroke 1.3,
+   rotating. Canvas verifies 16px only; 24/32/48 come from the component
+   description and are unverified at those sizes.
+   Variants: Brand #2A65F0 · Dark #101F3E · White #FFFFFF                     */
+.zc-spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--zc-loader-round-primary);
+  animation: zc-spinner-rotate 1s steps(8) infinite;
+}
+.zc-spinner svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes zc-spinner-rotate { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .zc-spinner { animation-duration: 2.5s; } }
+/* Sizes beyond 16px: in the Figma description only — flagged unverified */
+.zc-spinner[data-size="small"]  { width: 24px; height: 24px; }
+.zc-spinner[data-size="default"] { width: 32px; height: 32px; }
+.zc-spinner[data-size="large"]  { width: 48px; height: 48px; }
+.zc-spinner[data-color="dark"]  { color: var(--zc-loader-round-secondary); }
+.zc-spinner[data-color="white"] { color: var(--zc-loader-round-tertiary); }
+
+/* Kbd lives in tooltip-link-kbd.css — single owner, do not redefine here. */
+
+/* ── Badge Dot with an outside label ──
+   Dot is a Primary-only size. When used, the text sits OUTSIDE the dot in the
+   primary text colour, e.g.  • active
+*/
+.zc-badge-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+}
+.zc-badge-dot__label {
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-body-text-primary);
+}

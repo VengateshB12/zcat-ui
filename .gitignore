@@ -1,0 +1,36 @@
+# ── Never publish ────────────────────────────────────────────────────────────
+
+# The AI Automation project is SEPARATE and lives in its own repo
+# (vengateshb12/zcat-design-system). What sits here is a link to a folder on
+# one specific Mac — committing it would give every user a broken pointer.
+# Its rules reach consumers through the zcat MCP instead:
+#   https://zcat.catalystappsail.in/mcp
+/AI Automation
+/AI Automation alias
+
+# Internal session notes: Figma file keys, account details, library debt,
+# designer-review status. Not for consumers of the library.
+HANDOFF.md
+
+# Pages built with the library — the author's own work, not part of it.
+/pages
+
+# STALE DOCS — kept locally, never published. Both describe markup that no
+# longer exists, and COMPONENTS.md is the file a new developer opens first by
+# convention, so shipping it would start every consumer from wrong information.
+# The live contract is zcat-ui/ONBOARDING.md.
+zcat-ui/COMPONENTS.md
+zcat-ui/docs/index.html
+
+# ── Machine / build noise ────────────────────────────────────────────────────
+node_modules/
+.DS_Store
+**/.DS_Store
+*.log
+
+# Hook working state: screenshots, audit receipts and review records are
+# regenerated locally on every run and are specific to one machine.
+.claude/hooks/.zcat-state/
+.claude/hooks/__pycache__/
+**/__pycache__/
+.claude/settings.local.json

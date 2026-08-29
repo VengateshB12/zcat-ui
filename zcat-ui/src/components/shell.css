@@ -1,0 +1,753 @@
+/* =============================================================================
+   zcat — Shell / Container components
+   Built from Figma (all values verified via get_design_context + get_variable_defs
+   unless marked UNVERIFIED):
+
+     Side Menu            1398:5837  Type=Expanded (230w) / Collapsed (64w)
+     Container Side Menu  13081:8967 (300w)
+     Empty State          13124:8506
+     Container Header     13125:8791 Type=Feature Name / Search / Tab
+     General Details      13121:503
+
+   Composes existing components: .zc-btn, .zc-search-wrap, .zc-linkbox,
+   .zc-tabs[data-type=secondary], .zc-badge, .zc-select-shell menus.
+   ============================================================================= */
+
+/* ── Side Menu ─────────────────────────────────────────────────────────────
+   Expanded: 230w · bg sidemenu-bg · border-right 1px #DDE4F6 · bottom-left r20
+   sections gap 24 · pad-y 16 · items h36 px18 py8 r6 · icon 14 · text 14/20
+   (item gap: Figma 14 → 4 by designer direction 2026-08-27)
+   HEADING 10/12 600 ls1.6 #7988A8 · service name 16/20 600 ls0.96
+   Active: bg #E7EEFE text #2A65F0 · Hover: bg #F4F7FE text #2A65F0          */
+.zc-sidemenu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-24);
+  width: 230px;
+  height: 100%;
+  padding: var(--zc-space-16) 0;
+  background: var(--zc-sidemenu-bg);
+  border-right: var(--zc-border-default) solid var(--zc-sidemenu-border);
+  border-bottom-left-radius: var(--zc-radius-20);
+  font-family: var(--zc-font-primary);
+  flex-shrink: 0;
+}
+.zc-sidemenu[data-type="collapsed"] {
+  width: 64px;
+  align-items: center;
+}
+
+.zc-sidemenu__service {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+  padding-left: var(--zc-space-24);
+  width: 100%;
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__service {
+  padding: 0 var(--zc-space-20);
+  width: auto;
+}
+.zc-sidemenu__service img { width: 24px; height: 24px; display: block; }
+.zc-sidemenu__service-name {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.96px; /* Figma "Service Name" style, 6% tracking */
+  color: var(--zc-sidemenu-text-default);
+  white-space: nowrap;
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__service-name { display: none; }
+
+/* Scrollable middle: the sections scroll while the service header and the
+   expand toggle stay put */
+.zc-sidemenu__body {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-24);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__body { align-items: center; }
+
+.zc-sidemenu__section {
+  display: flex;
+  flex-direction: column;
+  /* DESIGNER OVERRIDE 2026-08-27: item gap 4 (Figma authors 14 — too airy
+     between 36px rows). Section-to-section gap stays 24 per Figma. */
+  gap: var(--zc-space-4);
+  padding: 0 var(--zc-space-10);
+  width: 100%;
+  flex-shrink: 0;
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__section {
+  align-items: center;
+  width: auto;
+}
+.zc-sidemenu__heading {
+  height: 12px;
+  padding: 0 var(--zc-space-14);
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: 1.6px; /* Figma "Features Heading" style, 16% tracking */
+  color: var(--zc-sidemenu-text-heading);
+  white-space: nowrap;
+}
+/* Collapsed replaces the heading text with a 40px rule
+   (divider colour not variable-bound in Figma — mapped to sidemenu border) */
+.zc-sidemenu__divider { display: none; }
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__heading { display: none; }
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__divider {
+  display: block;
+  width: 40px;
+  border-top: var(--zc-border-default) solid var(--zc-sidemenu-border);
+}
+
+.zc-sidemenu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-10);
+  height: 36px;
+  width: 100%;
+  padding: var(--zc-space-8) var(--zc-space-18);
+  border: none;
+  border-radius: var(--zc-radius-6);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-sidemenu-text-default);
+  text-align: left;
+  white-space: nowrap;
+}
+.zc-sidemenu__item svg { width: 14px; height: 14px; flex-shrink: 0; fill: currentColor; }
+/* Stroke-based design-system icons (default icon style, §2.4); the base rule
+   above stays fill-bound for logo-style glyphs like Slate. stroke-width 1.3 is
+   the documented fractional exception (16px viewBox). */
+.zc-sidemenu__item svg.zc-icon-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.zc-sidemenu__item:hover {
+  background: var(--zc-sidemenu-bg-hover);
+  color: var(--zc-sidemenu-text-hover);
+}
+.zc-sidemenu__item[data-state="active"] {
+  background: var(--zc-sidemenu-bg-active);
+  color: var(--zc-sidemenu-text-active);
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__item {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+}
+.zc-sidemenu[data-type="collapsed"] .zc-sidemenu__label { display: none; }
+
+/* Collapse/expand toggle — the real grey rounded icon Button, straddling the
+   right border (Figma: bottom 14, overhanging; -14px keeps it even-valued) */
+.zc-sidemenu__expand {
+  position: absolute;
+  bottom: 14px;
+  right: -14px;
+  z-index: 2;
+}
+.zc-sidemenu:not([data-type="collapsed"]) .zc-sidemenu__expand .zc-btn__icon {
+  transform: rotate(180deg);
+}
+
+/* ── Container Side Menu ───────────────────────────────────────────────────
+   300w · pad 16 · gap 16 · bg container-bg · border-right 1px #EBEEF6
+   header: H6 16/20 600 + small fill button · Search (real component)
+   items h36 px12 gap8 r6, list gap 4 · icon 16 · selected #E7EEFE / #2A65F0  */
+.zc-csm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+  width: 300px;
+  height: 100%;
+  padding: var(--zc-space-16);
+  background: var(--zc-cards-bg-primary);
+  border-right: var(--zc-border-default) solid var(--zc-body-border-default);
+  font-family: var(--zc-font-primary);
+  flex-shrink: 0;
+}
+.zc-csm__header {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  width: 100%;
+}
+.zc-csm__title {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zc-csm__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-4);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.zc-csm__item {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-8);
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0 var(--zc-space-12);
+  border: none;
+  border-radius: var(--zc-radius-6);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+  text-align: left;
+  white-space: nowrap;
+}
+.zc-csm__item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.zc-csm__item[data-state="selected"] {
+  background: var(--zc-cards-bg-selected);
+  color: var(--zc-body-text-theme);
+}
+
+/* ── Empty State ───────────────────────────────────────────────────────────
+   centered column · pad 20 · gap 16 · illustration 200w
+   heading 16/20 600 primary · description 14/20 secondary · buttons gap 12  */
+.zc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-16);
+  padding: var(--zc-space-20);
+  text-align: center;
+  font-family: var(--zc-font-primary);
+}
+.zc-empty__art { width: 200px; }
+.zc-empty__art img { width: 100%; display: block; }
+.zc-empty__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-6);
+  align-items: center;
+  width: 100%;
+}
+.zc-empty__heading {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+}
+.zc-empty__desc {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-secondary);
+  max-width: 760px;
+}
+.zc-empty__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-12);
+}
+
+/* ── Container Header ──────────────────────────────────────────────────────
+   row gap 16 · right cluster gap 10, all controls h36
+   Feature Name: title 16px 600 (line-height not token-bound in Figma; H6 20
+   used) + optional info icon / badge / description 12/16 secondary          */
+.zc-cheader {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+  width: 100%;
+  font-family: var(--zc-font-primary);
+}
+.zc-cheader__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--zc-space-4);
+}
+/* Search / row form of the left section. The column layout above centres on its
+   cross axis, so flipping to row without resetting justify-content centres the
+   search horizontally and leaves dead space at the left edge. */
+.zc-cheader__left--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.zc-cheader__titlerow {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+}
+.zc-cheader__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+  white-space: nowrap;
+}
+.zc-cheader__desc {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-body-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zc-cheader__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--zc-space-10);
+  margin-left: auto;
+  /* Figma 13125:8791: right section is flex-1; buttons keep their width and
+     the filter selects absorb the flexing */
+  flex: 1;
+  min-width: 0;
+}
+.zc-cheader__right .zc-btn { flex-shrink: 0; }
+.zc-cheader .zc-search-wrap { width: 300px; }
+.zc-cheader__filter { max-width: 250px; min-width: 160px; }
+.zc-cheader .zc-linkbox { width: 240px; }
+
+/* ── General Details ───────────────────────────────────────────────────────
+   card: pad 16 · gap 20 · bg cards primary · border 1px #EBEEF6
+   radius 12px — raw value in Figma, no radius variable (flagged)
+   rows: gap 40 · label 140w 14/20 secondary · value 14/20 primary           */
+.zc-gdetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-20);
+  padding: var(--zc-space-16);
+  background: var(--zc-cards-bg-primary);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-radius: 12px; /* Figma raw value — no --radius variable exists */
+  font-family: var(--zc-font-primary);
+}
+.zc-gdetails__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+}
+.zc-gdetails__row {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-40);
+  width: 100%;
+}
+.zc-gdetails__label {
+  width: 140px;
+  flex-shrink: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-secondary);
+}
+.zc-gdetails__colon {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-secondary);
+}
+.zc-gdetails__value {
+  flex: 1;
+  min-width: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Catalyst Layout ───────────────────────────────────────────────────────
+   Figma "Layout" 13063:1759 · type=Default / No Left Menu
+   Rail 64w on a #0F2A64→#0A245D vertical gradient · white shell panel with
+   r20 left corners overlapping the rail by 6px (the Figma "Union" pill).
+   Active service tab: 52h white tab, left radius 14, flowing into the shell
+   through two 10px inverted-radius flares (the "curve").                     */
+.zc-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom,
+    var(--zc-servicemenu-bg-top), var(--zc-servicemenu-bg-bottom));
+  font-family: var(--zc-font-primary);
+  overflow: hidden;
+}
+
+/* Mask-recolored icon: keeps the design-system SVG file as the shape source
+   while binding its colour to the parent text colour */
+.zc-mask-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+/* ── Icon rail ── */
+.zc-layout__rail {
+  width: 64px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-14);
+  padding: var(--zc-space-10);
+  position: relative;
+  z-index: 2;
+}
+.zc-layout__logo { width: 24px; height: 24px; display: block; }
+.zc-layout__rail-divider {
+  width: 31px; /* Figma: 31px hairline (odd width comes from Figma itself) */
+  border-top: var(--zc-border-default) solid var(--zc-servicemenu-border);
+}
+.zc-layout__rail-label {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--zc-servicemenu-text-subheading);
+}
+.zc-layout__services {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-20);
+  align-items: center;
+}
+.zc-layout__service {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-4);
+  width: 52px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--zc-font-primary);
+}
+.zc-layout__service-chip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--zc-space-6);
+  border-radius: var(--zc-radius-6);
+  background: var(--zc-servicemenu-icon-bg-default);
+  color: var(--zc-servicemenu-icon);
+}
+.zc-layout__service-name {
+  position: relative;
+  z-index: 1;
+  max-width: 52px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: var(--zc-servicemenu-text-default);
+}
+.zc-layout__service[data-state="active"] .zc-layout__service-chip {
+  background: var(--zc-servicemenu-icon-bg-active);
+  color: var(--zc-body-icon-theme);
+}
+.zc-layout__service[data-state="active"] .zc-layout__service-chip .zc-mask-icon {
+  width: 18px;
+  height: 18px;
+}
+/* Active service shows the BRAND-COLOURED artwork: drop the mask so the SVG's
+   own fills render. Consumers supply --icon-active with the "-color" asset;
+   without it the masked monochrome glyph is kept. */
+.zc-layout__service[data-state="active"] .zc-layout__service-chip .zc-mask-icon[style*="--icon-active"] {
+  background-color: transparent;
+  -webkit-mask: none;
+  mask: none;
+  background-image: var(--icon-active);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.zc-layout__service[data-state="active"] .zc-layout__service-name {
+  color: var(--zc-servicemenu-text-active);
+}
+
+/* The curved white tab behind the active service (Figma "Union" geometry:
+   tab x6–64 h52 left-radius 14; concave 10px flares above and below) */
+.zc-layout__tab {
+  display: none;
+}
+.zc-layout__service[data-state="active"] .zc-layout__tab {
+  display: block;
+  position: absolute;
+  left: 0;      /* the 52px service column already starts at rail x6 */
+  right: -6px;  /* extends to rail edge x64, meeting the shell seam */
+  top: 50%;
+  height: 52px;
+  margin-top: -26px;
+  background: var(--zc-sidemenu-bg);
+  border: var(--zc-border-default) solid var(--zc-body-border-outerdivider);
+  border-right: none;
+  border-radius: var(--zc-radius-14) 0 0 var(--zc-radius-14);
+}
+.zc-layout__tab::before,
+.zc-layout__tab::after {
+  content: '';
+  position: absolute;
+  right: 6px; /* flare column sits at rail x48–58 */
+  width: 10px;
+  height: 10px;
+}
+.zc-layout__tab::before {
+  top: -10px;
+  background: radial-gradient(circle 10px at 0 0,
+    transparent 9px, var(--zc-body-border-outerdivider) 9.5px, var(--zc-sidemenu-bg) 10.5px);
+}
+.zc-layout__tab::after {
+  bottom: -10px;
+  background: radial-gradient(circle 10px at 0 100%,
+    transparent 9px, var(--zc-body-border-outerdivider) 9.5px, var(--zc-sidemenu-bg) 10.5px);
+}
+
+.zc-layout__rail-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-26);
+  padding: var(--zc-space-20) 0;
+  width: 100%;
+  color: var(--zc-servicemenu-icon);
+}
+.zc-layout__rail-bottom .zc-layout__rail-divider { width: 44px; }
+
+/* ── White shell panel (header + everything right of the rail) ── */
+.zc-layout__shell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin-left: -6px; /* the Figma pill overlaps the rail: seam at x58 */
+  background: var(--zc-body-bg-container);
+  border-left: var(--zc-border-default) solid var(--zc-body-border-outerdivider);
+  border-radius: var(--zc-radius-20) 0 0 var(--zc-radius-20);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* ── Top bar ── */
+.zc-layout__topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-36);
+  height: 48px;
+  flex-shrink: 0;
+  padding: var(--zc-space-6) var(--zc-space-14);
+  background: var(--zc-header-bg);
+}
+.zc-layout__topbar-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-64);
+}
+/* Project switcher is the real Dropdown Ghost component (input.css); in the
+   header its chip binds the MAIN HEADER Project Name Logo tokens (same values
+   as the shade pair the standalone component uses). */
+.zc-layout__topbar .zc-ghostdd__avatar-box {
+  background: var(--zc-header-logo-bg);
+  color: var(--zc-header-logo-text);
+}
+.zc-layout__topbar .zc-ghostdd__label { max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
+.zc-layout__topbar .zc-search-wrap { width: 390px; }
+.zc-layout__avatar {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: var(--zc-border-default) solid var(--zc-header-border);
+  border-radius: var(--zc-radius-18);
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.zc-layout__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Main region: sidemenu + page ── */
+.zc-layout__main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  border-top: var(--zc-border-default) solid var(--zc-body-border-outerdivider);
+}
+.zc-layout__page {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.zc-layout__subheader {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-16);
+  min-height: 48px;
+  flex-shrink: 0;
+  padding: var(--zc-space-10) var(--zc-space-14) 0;
+  background: var(--zc-subheader-bg);
+  border-bottom: var(--zc-border-default) solid var(--zc-subheader-border);
+}
+.zc-layout__subheader-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--zc-body-text-primary);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Figma marks the title shrink-0: it ellipsises at its 400px cap, it does not
+     get squeezed to nothing when the middle/right slots are busy. */
+  flex-shrink: 0;
+}
+
+/* Figma marks every right-group action shrink-0 too. Without this the buttons
+   collapse to slivers on a narrow sub header instead of the row wrapping. */
+.zc-layout__subheader-right > * {
+  flex-shrink: 0;
+}
+.zc-layout__subheader > .zc-btn { margin-left: auto; }
+/* Sub Header variants — Figma component set 1223:5865 via 548:8789 (verified
+   2026-08-28, light): column rows gap 10 · content row gap 16 · left group
+   gap 6 flex-1 · Back Nav / Refresh are round ghost 28px icon Buttons (14px
+   glyph) · Status is the solid Badge · right group: small grey buttons +
+   three-dot + ghost Help · optional PRIMARY TABS second row (28px tabs,
+   .zc-tabs data-type="primary" spanning full width, flush to the bottom). */
+.zc-layout__subheader { flex-wrap: wrap; row-gap: var(--zc-space-10); }
+.zc-layout__subheader-left {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-6);
+  flex: 1;
+  min-width: 0;
+  /* The title is shrink-0 (per Figma) so it ellipsises at its own 400px cap
+     rather than being squeezed away. This keeps that overflow inside the group
+     instead of letting it run over the middle slots. */
+  overflow: hidden;
+}
+/* Figma authors RightContent as flex-[1_0_0] justify-end (not margin-left:auto),
+   which matters once the middle slots — Secondary Tabs / Service Name — are
+   present: left and right both take a share and the middle sits between them. */
+.zc-layout__subheader-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--zc-space-16);
+  flex: 1;
+  /* No min-width:0 here on purpose. Its actions are shrink-0 (per Figma), so
+     letting the group shrink below them would make the buttons spill over the
+     middle slots. Keeping the default min-width:auto means a crowded sub header
+     WRAPS the action group onto the container's second row (row-gap 10)
+     instead of overlapping — the graceful degradation Figma's fixed 1287px
+     frame never has to express. */
+}
+
+/* Sub Header "Service Name with Logo" variant (Figma 13063:2484): a 230px slot
+   holding the 24px service logo beside the Service Name type — the same
+   16/20 SemiBold at 0.96px tracking the side-menu header uses, bound to the
+   same side-menu/text-&-icon/service-name token. */
+.zc-layout__subheader-service {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+  width: 230px;
+  flex-shrink: 0;
+}
+
+.zc-layout__subheader-service img,
+.zc-layout__subheader-service svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.zc-layout__subheader-service-name {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.96px;
+  color: var(--zc-sidemenu-text-default);
+  white-space: nowrap;
+}
+
+/* Secondary Tabs slot (Figma 1223:5759) — the real secondary .zc-tabs, kept
+   from shrinking between the two flexible groups. */
+.zc-layout__subheader .zc-tabs[data-type="secondary"] {
+  flex-shrink: 0;
+}
+.zc-layout__subheader-tabs { width: 100%; }
+.zc-layout__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: var(--zc-space-14);
+  background: var(--zc-body-bg-body);
+}
+.zc-layout__container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  background: var(--zc-body-bg-container);
+  border: var(--zc-border-default) solid var(--zc-body-border-outerdivider);
+  border-radius: var(--zc-radius-10);
+  overflow: hidden;
+}
+.zc-layout__container .zc-csm { height: auto; }
+.zc-layout__container-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

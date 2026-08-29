@@ -1,0 +1,253 @@
+/* =============================================================================
+   zcat Design System — Date Picker & Time Picker
+
+   Figma sources:
+   - Date Picker set  node 1508:28577 (panel padding 14, radius 6, months
+                      gap 80, 24px day circles, footer h48)
+   - Time Picker      node 1510:31757 (min-width 160, cols gap 24,
+                      column height 194px, reuses day-cell circles)
+
+   Nav prev/next buttons, Reset/Close/Apply are the EXISTING .zc-btn
+   component supplied by markup — not restyled here; only layout containers
+   are provided.
+   ============================================================================= */
+
+/* ── Panel (node 1508:28577) ── */
+.zc-datepicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+  min-width: 360px;
+  width: fit-content; /* range mode must hug the two month grids */
+  padding: var(--zc-space-14);
+  background: var(--zc-datepicker-bg);
+  border: var(--zc-border-default) solid var(--zc-datepicker-border-outer);
+  border-radius: var(--zc-radius-6);
+  font-family: var(--zc-font-primary);
+}
+
+.zc-datepicker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zc-space-16);
+}
+
+/* Time-zone chip — single line, link colour, 14px globe icon */
+.zc-datepicker__tz {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-body-text-link);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.zc-datepicker__tz .zc-mask-icon { width: 14px; height: 14px; }
+
+/* Select Time block */
+.zc-datepicker__time {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+}
+
+/* Maps Figma date-picker/text/headings (#101F3E) — same value as
+   --zc-datepicker-text-default, so that token is used. */
+.zc-datepicker__heading {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--zc-datepicker-text-default);
+}
+
+/* Two-month layout */
+.zc-datepicker__months {
+  display: flex;
+  gap: var(--zc-space-80);
+}
+
+.zc-datepicker__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+}
+
+/* Nav row — consumer puts 28x28 round ghost-grey .zc-btn prev/next
+   plus two small select boxes (.zc-datepicker__nav-select) */
+.zc-datepicker__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-14);
+}
+
+.zc-datepicker__nav-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zc-space-4);
+  flex: 1;
+  height: 24px;
+  padding: 0 var(--zc-space-4);
+  background: var(--zc-input-bg-default);
+  border: var(--zc-border-default) solid var(--zc-input-border-default);
+  border-radius: var(--zc-radius-4);
+  font-family: var(--zc-font-primary);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-datepicker-text-default);
+}
+
+/* ── Grid ── */
+.zc-datepicker__weekdays {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--zc-space-24);
+}
+
+.zc-datepicker__weekdays > * {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 400;
+  color: var(--zc-datepicker-text-days);
+}
+
+.zc-datepicker__week {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--zc-space-20);
+}
+
+/* ── Day cell ── */
+.zc-datepicker__day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--zc-radius-full);
+  font-family: var(--zc-font-primary);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--zc-datepicker-text-default);
+  cursor: pointer;
+}
+
+.zc-datepicker__day:hover {
+  background: var(--zc-datepicker-bg-hover);
+}
+
+.zc-datepicker__day[data-state="selected"] {
+  background: var(--zc-datepicker-bg-selected);
+  color: var(--zc-datepicker-text-selected);
+}
+
+/* In-range days — text uses Figma date-picker text-active (#2A65F0),
+   which is the --zc-datepicker-text-today token value. */
+.zc-datepicker__day[data-state="range"] {
+  background: var(--zc-datepicker-bg-range);
+  color: var(--zc-datepicker-text-today);
+}
+
+.zc-datepicker__day[data-state="today"] {
+  color: var(--zc-datepicker-text-today);
+}
+
+/* 4x4 dot centred below the number */
+.zc-datepicker__day[data-state="today"]::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: var(--zc-radius-full);
+}
+
+.zc-datepicker__day[data-state="disabled"] {
+  color: var(--zc-datepicker-text-disabled);
+  cursor: default;
+}
+
+.zc-datepicker__day[data-state="disabled"]:hover {
+  background: transparent;
+}
+
+/* Helper for contiguous range runs — wrap the run's day cells inside it */
+.zc-datepicker__range-strip {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  height: 24px;
+  background: var(--zc-datepicker-bg-range);
+  border-radius: var(--zc-radius-full);
+}
+
+/* ── Footer — Reset (ghost .zc-btn) left; Close (grey) + Apply (fill) right ── */
+.zc-datepicker__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--zc-space-16);
+  height: 48px;
+  padding-top: var(--zc-space-16);
+  padding-bottom: var(--zc-space-10);
+  border-top: var(--zc-border-default) solid var(--zc-datepicker-border);
+}
+
+.zc-datepicker__footer-right {
+  display: flex;
+  gap: var(--zc-space-16);
+  margin-left: auto;
+}
+
+/* ── Time Picker (node 1510:31757) ──
+   Hour/minute/meridiem items reuse the .zc-datepicker__day class
+   (24px circles, same selected tokens). */
+.zc-timepicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-10);
+  min-width: 160px;
+  padding: var(--zc-space-14);
+  background: var(--zc-datepicker-bg);
+  border: var(--zc-border-default) solid var(--zc-datepicker-border);
+  border-radius: var(--zc-radius-6);
+  box-shadow: 0 4px 6px 0 var(--zc-shadow-default);
+  font-family: var(--zc-font-primary);
+}
+
+.zc-timepicker__cols {
+  display: flex;
+  gap: var(--zc-space-24);
+}
+
+/* Column height 194px is the Figma literal for this frame */
+.zc-timepicker__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--zc-space-10);
+  height: 194px;
+  overflow-y: auto;
+}
+
+/* Footer — same recipe as the datepicker footer, only Apply right-aligned */
+.zc-timepicker__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--zc-space-16);
+  height: 48px;
+  padding-top: var(--zc-space-16);
+  padding-bottom: var(--zc-space-10);
+  border-top: var(--zc-border-default) solid var(--zc-datepicker-border);
+}

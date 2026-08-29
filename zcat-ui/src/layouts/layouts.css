@@ -1,0 +1,263 @@
+/* =============================================================================
+   zcat Design System — Layout Components
+   Container, Stack, Grid, Row, Column, Spacer, Divider, Aspect Ratio, Overlay
+   ============================================================================= */
+
+/* ── Container ──
+   Usage: <div class="zc-container" data-size="default">
+   Sizes: xs(480) sm(640) md(768) lg(1024) xl(1280)
+*/
+.zc-container {
+  width: 100%;
+  padding: var(--zc-space-16);
+  background: var(--zc-cards-bg-primary);
+  border-radius: var(--zc-radius-6);
+}
+.zc-container[data-size="xs"] { max-width: 480px; }
+.zc-container[data-size="sm"] { max-width: 640px; }
+.zc-container[data-size="md"] { max-width: 768px; }
+.zc-container[data-size="lg"] { max-width: 1024px; }
+.zc-container[data-size="xl"] { max-width: 1280px; }
+
+/* ── Stack (Vertical) ──
+   Usage: <div class="zc-stack" data-gap="16">
+*/
+.zc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-16);
+}
+.zc-stack[data-gap="0"]  { gap: 0; }
+.zc-stack[data-gap="2"]  { gap: var(--zc-space-2); }
+.zc-stack[data-gap="4"]  { gap: var(--zc-space-4); }
+.zc-stack[data-gap="6"]  { gap: var(--zc-space-6); }
+.zc-stack[data-gap="8"]  { gap: var(--zc-space-8); }
+.zc-stack[data-gap="10"] { gap: var(--zc-space-10); }
+.zc-stack[data-gap="12"] { gap: var(--zc-space-12); }
+.zc-stack[data-gap="16"] { gap: var(--zc-space-16); }
+.zc-stack[data-gap="20"] { gap: var(--zc-space-20); }
+.zc-stack[data-gap="24"] { gap: var(--zc-space-24); }
+.zc-stack[data-gap="32"] { gap: var(--zc-space-32); }
+.zc-stack[data-gap="40"] { gap: var(--zc-space-40); }
+.zc-stack[data-align="start"]   { align-items: flex-start; }
+.zc-stack[data-align="center"]  { align-items: center; }
+.zc-stack[data-align="end"]     { align-items: flex-end; }
+.zc-stack[data-align="stretch"] { align-items: stretch; }
+
+/* ── Row (Horizontal) ──
+   Usage: <div class="zc-row" data-align="center" data-gap="12">
+*/
+.zc-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--zc-space-12);
+}
+.zc-row[data-gap="0"]  { gap: 0; }
+.zc-row[data-gap="2"]  { gap: var(--zc-space-2); }
+.zc-row[data-gap="4"]  { gap: var(--zc-space-4); }
+.zc-row[data-gap="6"]  { gap: var(--zc-space-6); }
+.zc-row[data-gap="8"]  { gap: var(--zc-space-8); }
+.zc-row[data-gap="10"] { gap: var(--zc-space-10); }
+.zc-row[data-gap="12"] { gap: var(--zc-space-12); }
+.zc-row[data-gap="16"] { gap: var(--zc-space-16); }
+.zc-row[data-gap="20"] { gap: var(--zc-space-20); }
+.zc-row[data-gap="24"] { gap: var(--zc-space-24); }
+.zc-row[data-gap="32"] { gap: var(--zc-space-32); }
+.zc-row[data-align="start"]   { align-items: flex-start; }
+.zc-row[data-align="center"]  { align-items: center; }
+.zc-row[data-align="end"]     { align-items: flex-end; }
+.zc-row[data-align="stretch"] { align-items: stretch; }
+.zc-row[data-justify="start"]   { justify-content: flex-start; }
+.zc-row[data-justify="center"]  { justify-content: center; }
+.zc-row[data-justify="end"]     { justify-content: flex-end; }
+.zc-row[data-justify="between"] { justify-content: space-between; }
+.zc-row[data-justify="around"]  { justify-content: space-around; }
+.zc-row[data-wrap="true"] { flex-wrap: wrap; }
+
+/* ── Column ──
+   Usage: <div class="zc-col" data-align="stretch">
+*/
+.zc-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-8);
+}
+.zc-col[data-align="start"]   { align-items: flex-start; }
+.zc-col[data-align="center"]  { align-items: center; }
+.zc-col[data-align="end"]     { align-items: flex-end; }
+.zc-col[data-align="stretch"] { align-items: stretch; }
+.zc-col[data-grow="true"] { flex: 1 1 0%; }
+
+/* ── Grid ──
+   Usage: <div class="zc-grid" data-cols="3" data-gap="16">
+*/
+.zc-grid {
+  display: grid;
+  gap: var(--zc-space-16);
+}
+.zc-grid[data-cols="2"] { grid-template-columns: repeat(2, 1fr); }
+.zc-grid[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
+.zc-grid[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+.zc-grid[data-cols="5"] { grid-template-columns: repeat(5, 1fr); }
+.zc-grid[data-cols="6"] { grid-template-columns: repeat(6, 1fr); }
+.zc-grid[data-gap="8"]  { gap: var(--zc-space-8); }
+.zc-grid[data-gap="12"] { gap: var(--zc-space-12); }
+.zc-grid[data-gap="16"] { gap: var(--zc-space-16); }
+.zc-grid[data-gap="20"] { gap: var(--zc-space-20); }
+.zc-grid[data-gap="24"] { gap: var(--zc-space-24); }
+.zc-grid[data-gap="32"] { gap: var(--zc-space-32); }
+
+/* ── Spacer ──
+   Usage: <div class="zc-spacer" data-size="16"></div>
+*/
+.zc-spacer { flex-shrink: 0; }
+.zc-spacer[data-size="4"]  { height: var(--zc-space-4); width: var(--zc-space-4); }
+.zc-spacer[data-size="8"]  { height: var(--zc-space-8); width: var(--zc-space-8); }
+.zc-spacer[data-size="12"] { height: var(--zc-space-12); width: var(--zc-space-12); }
+.zc-spacer[data-size="16"] { height: var(--zc-space-16); width: var(--zc-space-16); }
+.zc-spacer[data-size="20"] { height: var(--zc-space-20); width: var(--zc-space-20); }
+.zc-spacer[data-size="24"] { height: var(--zc-space-24); width: var(--zc-space-24); }
+.zc-spacer[data-size="32"] { height: var(--zc-space-32); width: var(--zc-space-32); }
+.zc-spacer[data-size="40"] { height: var(--zc-space-40); width: var(--zc-space-40); }
+.zc-spacer[data-size="48"] { height: var(--zc-space-48); width: var(--zc-space-48); }
+.zc-spacer[data-size="64"] { height: var(--zc-space-64); width: var(--zc-space-64); }
+
+/* ── Divider ──
+   Usage: <hr class="zc-divider"> or <hr class="zc-divider" data-type="dashed">
+          <div class="zc-divider" data-direction="vertical"></div>
+*/
+.zc-divider {
+  border: none;
+  border-top: var(--zc-border-default) solid var(--zc-body-border-default);
+  width: 100%;
+}
+.zc-divider[data-type="dashed"] {
+  border-top-style: dashed;
+}
+.zc-divider[data-direction="vertical"] {
+  border-top: none;
+  border-left: var(--zc-border-default) solid var(--zc-body-border-default);
+  width: auto;
+  height: 100%;
+  align-self: stretch;
+}
+.zc-divider[data-direction="vertical"][data-type="dashed"] {
+  border-left-style: dashed;
+}
+
+/* ── Aspect Ratio ──
+   Usage: <div class="zc-aspect" data-ratio="16:9"><img src="..."></div>
+*/
+.zc-aspect {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--zc-radius-6);
+}
+.zc-aspect > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.zc-aspect[data-ratio="1:1"]  { aspect-ratio: 1 / 1; }
+.zc-aspect[data-ratio="4:3"]  { aspect-ratio: 4 / 3; }
+.zc-aspect[data-ratio="16:9"] { aspect-ratio: 16 / 9; }
+.zc-aspect[data-ratio="21:9"] { aspect-ratio: 21 / 9; }
+
+/* ── Overlay / Scrim ──
+   Usage: <div class="zc-overlay" data-opacity="60"></div>
+*/
+.zc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--zc-popup-blur-bg);
+}
+.zc-overlay[data-opacity="40"] { opacity: 0.4; }
+.zc-overlay[data-opacity="60"] { opacity: 0.6; }
+.zc-overlay[data-opacity="80"] { opacity: 0.8; }
+
+/* ── Flex Utilities ── */
+.zc-grow   { flex: 1 1 0%; }
+.zc-shrink { flex-shrink: 1; }
+.zc-noshrink { flex-shrink: 0; }
+.zc-w-full { width: 100%; }
+.zc-h-full { height: 100%; }
+
+
+/* ═══ Layout primitives: Container · Stack · Divider · Overlay ═══
+   NO FIGMA SOURCE — no zcat pages exist for these (searched); built on user
+   direction from the existing token scales only. Flagged in their Overviews. */
+
+/* Container — content surface */
+.zc-container-el {
+  width: 100%;
+  background: var(--zc-body-bg-container);
+  border: var(--zc-border-default) solid var(--zc-body-border-default);
+  border-radius: var(--zc-radius-10);
+  padding: var(--zc-space-16);
+}
+.zc-container-el[data-pad="none"]  { padding: 0; }
+.zc-container-el[data-pad="small"] { padding: var(--zc-space-8); }
+.zc-container-el[data-pad="large"] { padding: var(--zc-space-24); }
+.zc-container-el[data-plain] { border: none; border-radius: 0; }
+/* States bound to the Figma CARDS family (Bg Hovers / Bg Selected / Borders).
+   Selectable cards set data-state — pages must never override the border. */
+.zc-container-el[data-interactive] { cursor: pointer; }
+.zc-container-el[data-interactive]:hover {
+  background: var(--zc-cards-bg-hover);
+  border-color: var(--zc-cards-border-hover);
+}
+.zc-container-el[data-state="selected"] {
+  background: var(--zc-cards-bg-selected);
+  border-color: var(--zc-cards-border-selected);
+}
+.zc-container-el[data-state="disabled"] {
+  background: var(--zc-cards-bg-disabled);
+  border-color: var(--zc-cards-border-disabled);
+}
+
+/* Stack — one-dimensional flex group, gaps from the spacing scale */
+.zc-stack { display: flex; flex-direction: column; gap: var(--zc-space-16); }
+.zc-stack[data-direction="row"] { flex-direction: row; align-items: center; }
+.zc-stack[data-gap="2"]  { gap: var(--zc-space-2); }
+.zc-stack[data-gap="4"]  { gap: var(--zc-space-4); }
+.zc-stack[data-gap="8"]  { gap: var(--zc-space-8); }
+.zc-stack[data-gap="12"] { gap: var(--zc-space-12); }
+.zc-stack[data-gap="16"] { gap: var(--zc-space-16); }
+.zc-stack[data-gap="24"] { gap: var(--zc-space-24); }
+.zc-stack[data-align="start"]   { align-items: flex-start; }
+.zc-stack[data-align="center"]  { align-items: center; }
+.zc-stack[data-align="stretch"] { align-items: stretch; }
+
+/* Divider — 1px rule from the border tokens */
+.zc-divider {
+  border: none;
+  border-top: var(--zc-border-default) solid var(--zc-body-border-default);
+  margin: 0;
+  align-self: stretch;
+}
+.zc-divider[data-strong] { border-top-color: var(--zc-body-border-strong); }
+.zc-divider[data-vertical] {
+  border-top: none;
+  border-left: var(--zc-border-default) solid var(--zc-body-border-default);
+  width: 0;
+  min-height: 16px;
+}
+.zc-divider[data-vertical][data-strong] { border-left-color: var(--zc-body-border-strong); }
+
+/* Overlay — generic scrim primitive (same recipe as the Popup scrim) */
+.zc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--zc-popup-blur-bg);
+  backdrop-filter: blur(2px);
+}
+.zc-overlay[data-position="top"] { align-items: flex-start; padding-top: var(--zc-space-64); }
