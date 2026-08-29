@@ -328,6 +328,28 @@ function __zcatAudit() {
         sel: "(subheader)" });
   }
 
+  /* ── 19a. Sub Header primary tabs carry no icons ────────────────────
+     Designer rule: the page's tab row reads as a clean line of words. A
+     wireframe drawing an icon on every tab is not an instruction. */
+  for (const t of [...document.querySelectorAll('.zc-layout__subheader .zc-tabs[data-type="primary"]')].filter(vis))
+    if (t.querySelector("svg, img, .zc-mask-icon"))
+      fail("ICONS IN PRIMARY TABS",
+        "the Sub Header's primary tabs contain icons — this row is text only, even when the wireframe draws icons on it", t);
+
+  /* ── 19c. The service rail must never render a blank chip ───────────
+     A chip with no resolvable artwork means the shell was altered — the rail
+     is copied from the template verbatim and its logos never change. */
+  for (const chip of [...document.querySelectorAll(".zc-layout__service-chip")].filter(vis)) {
+    const art = chip.querySelector(".zc-mask-icon, img, svg");
+    const cs = art ? getComputedStyle(art) : null;
+    const masked = cs && (cs.maskImage || cs.webkitMaskImage || "").replace(/none/, "").trim();
+    const bg = cs && (cs.backgroundImage || "").replace(/none/, "").trim();
+    const isImg = art && (art.tagName === "IMG" || art.tagName === "svg");
+    if (!art || (!masked && !bg && !isImg))
+      fail("BLANK SERVICE LOGO",
+        "a service chip in the rail renders no artwork — the rail is copied from the template verbatim and its logos never change. If a service has no *-color.svg, use an existing one and say which", chip);
+  }
+
   /* ── 19b. An action bar must not be one lonely button ───────────────
      A primary action floating on the right with an empty left half is the
      "assembled, not designed" tell. The Container Header has two sides on
