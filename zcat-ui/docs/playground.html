@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=98">
+  <link rel="stylesheet" href="../zcat.css?v=100">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -407,6 +407,11 @@ SET UP FIRST (do this yourself — do not ask me to)
 A. Get the repo and WORK INSIDE THE CLONE:
      git clone https://github.com/VengateshB12/zcat-ui.git
      cd zcat-ui
+   MIND THE NESTING: the repo is called zcat-ui and the library folder inside
+   it is ALSO called zcat-ui, so the clone gives you zcat-ui/zcat-ui/. The
+   OUTER folder is your working root — it holds .claude/ (the gates),
+   reference-screenshots/ and the library. Do NOT copy the inner zcat-ui/ out
+   and treat that as the project: that is exactly how the gates get lost.
    Build my pages in a pages/ folder inside it. If you must work somewhere
    else, you MUST copy BOTH `zcat-ui/` AND `.claude/` — the hooks and their
    settings.json live in `.claude/`, and copying only `zcat-ui/` silently

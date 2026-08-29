@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Basic Template</title>
-  <link rel="stylesheet" href="../zcat.css?v=98">
+  <link rel="stylesheet" href="../zcat.css?v=100">
   <script src="../zcat.js?v=16"></script>
   <style>
     /* Flow glue: view switching, toast host, wizard engine cards — layout
@@ -207,10 +207,32 @@
       <div class="zc-layout__page">
 
         <div class="zc-layout__subheader">
-          <span class="zc-layout__subheader-title">Databases</span>
-          <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
-            <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
-          </button>
+          <span class="zc-layout__subheader-left">
+            <!-- Back Nav shows only on the detail view; the title names whatever
+                 you opened, per the navigation rule. -->
+            <button class="zc-btn zc-subheader-back" data-variant="ghost-grey" data-size="small"
+                    data-content="icon" data-radius="rounded" type="button"
+                    id="detail-back" aria-label="Back to Databases" hidden>
+              <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-left"/></svg>
+            </button>
+            <span class="zc-layout__subheader-title" id="sh-title">Databases</span>
+            <span class="zc-badge" data-type="secondary" data-color="success" id="sh-badge" hidden>Available</span>
+          </span>
+          <span class="zc-layout__subheader-right">
+            <button class="zc-btn" data-variant="grey" data-size="small" type="button"
+                    id="btn-export-detail" hidden>Export</button>
+            <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
+              <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
+            </button>
+          </span>
+          <!-- PRIMARY TABS LIVE HERE, never in the container. Detail view only. -->
+          <div class="zc-tabs zc-layout__subheader-tabs" data-type="primary" role="tablist"
+               id="sh-tabs" hidden>
+            <button class="zc-tab" type="button">Overview</button>
+            <button class="zc-tab" type="button" data-state="active">Monitoring</button>
+            <button class="zc-tab" type="button">Backups</button>
+            <button class="zc-tab" type="button">Settings</button>
+          </div>
         </div>
 
         <div class="zc-layout__body">
@@ -310,36 +332,10 @@
           <div class="zc-layout__container" id="view-detail">
             <div class="tpl-detail-pad">
 
-              <nav class="zc-breadcrumbs">
-                <button class="zc-breadcrumb" type="button" id="bc-databases">
-                  <svg class="zc-breadcrumb__icon" viewBox="0 0 16 16" fill="none"><use href="#i-database"/></svg>Databases
-                </button>
-                <span class="zc-breadcrumbs__sep">/</span>
-                <button class="zc-breadcrumb" data-state="active" type="button" id="bc-current">orders-prod</button>
-              </nav>
-
-              <div class="zc-cheader">
-                <div class="zc-cheader__left">
-                  <div class="zc-cheader__titlerow">
-                    <span class="zc-cheader__title" id="detail-title">orders-prod</span>
-                    <span class="zc-badge" data-type="secondary" data-color="success" id="detail-badge">Available</span>
-                  </div>
-                  <span class="zc-cheader__desc" id="detail-desc">Aurora MySQL &middot; us-east-1 &middot; 100 GB provisioned</span>
-                </div>
-                <div class="zc-cheader__right">
-                  <button class="zc-btn" data-variant="grey" type="button" id="btn-export-detail">Export</button>
-                  <button class="zc-btn" data-variant="ghost" data-color="primary" type="button">
-                    <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
-                  </button>
-                </div>
-              </div>
-
-              <div class="zc-tabs" data-type="primary" role="tablist">
-                <button class="zc-tab" type="button">Overview</button>
-                <button class="zc-tab" type="button" data-state="active">Monitoring</button>
-                <button class="zc-tab" type="button">Backups</button>
-                <button class="zc-tab" type="button">Settings</button>
-              </div>
+              <!-- No breadcrumb, no hand-built entity header, no tabs here: the
+                   name, the status badge, the Back Nav and the primary tabs all
+                   live in the Sub Header. The supporting facts sit in the
+                   content below as stat cards. -->
 
               <div class="tpl-stat-row">
                 <div class="zc-container-el tpl-stat-tile">
@@ -871,21 +867,29 @@
   $('btn-export-detail').addEventListener('click', exportToast);
 
   /* ── Detail view (Monitoring) ── */
+  /* Opening a row retitles the SUB HEADER to the row you clicked and reveals
+     its Back Nav, status badge and primary tabs. Nothing about the entity is
+     rendered inside the container — that is the navigation rule. */
+  var SH = ['detail-back', 'sh-badge', 'sh-tabs', 'btn-export-detail'];
+
   function openDetail(name) {
     var row = null;
     for (var i = 0; i < rows.length; i++) if (rows[i][0] === name) { row = rows[i]; break; }
     if (!row) return;
-    $('detail-title').textContent = row[0];
-    $('bc-current').textContent = row[0];
-    var badge = $('detail-badge');
+    $('sh-title').textContent = row[0];
+    var badge = $('sh-badge');
     badge.textContent = row[1];
     badge.setAttribute('data-color', row[2]);
-    $('detail-desc').innerHTML = row[4] + ' · ' + row[3] + ' · ' + row[5] + ' provisioned';
+    SH.forEach(function (id) { $(id).hidden = false; });
     document.body.setAttribute('data-view', 'detail');
   }
-  $('bc-databases').addEventListener('click', function () {
+
+  function closeDetail() {
+    $('sh-title').textContent = 'Databases';
+    SH.forEach(function (id) { $(id).hidden = true; });
     document.body.removeAttribute('data-view');
-  });
+  }
+  $('detail-back').addEventListener('click', closeDetail);
 })();
 </script>
 </body>
