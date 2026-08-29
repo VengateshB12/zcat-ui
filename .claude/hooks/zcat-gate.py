@@ -91,6 +91,39 @@ def main():
                 f"     then record the review:\n"
                 f"       python3 .claude/hooks/zcat-review.py \"{rel}\"")
 
+        # ── Does the build contain everything the requirement asked for? ──
+        feat_f = os.path.join(STATE, slug(rel) + ".features.json")
+        if (not os.path.exists(feat_f) or
+                os.path.getmtime(feat_f) < os.path.getmtime(abs_p)):
+            problems.append(
+                f"{rel}: no FEATURE COVERAGE receipt for the current version.\n"
+                f"     Declare what the requirement contained; every item is checked\n"
+                f"     against the built page, so nothing can be dropped silently:\n"
+                f"       python3 .claude/hooks/zcat-features.py \"{rel}\" --json '{{...}}'\n"
+                f"     (run it with no --json to see the shape)")
+
+        # ── Is it designed, or just assembled? ───────────────────────────
+        score_f = os.path.join(STATE, slug(rel) + ".score.json")
+        if (not os.path.exists(score_f) or
+                os.path.getmtime(score_f) < os.path.getmtime(abs_p)):
+            problems.append(
+                f"{rel}: no DESIGN SCORE for the current version.\n"
+                f"       python3 .claude/hooks/zcat-design-score.py \"{rel}\"")
+        else:
+            try:
+                sc = json.load(open(score_f))
+            except Exception:
+                sc = None
+            if sc and not sc.get("pass"):
+                zero = [r["dim"] for r in sc.get("rows", []) if r.get("got") == 0]
+                problems.append(
+                    f"{rel}: DESIGN SCORE {sc.get('score')}/100 — FAILED"
+                    + (f" (scored 0 on {', '.join(zero)})" if zero else "") + ":")
+                for r in sc.get("rows", []):
+                    if r.get("got") != r.get("max"):
+                        problems.append(f"     - {r['dim']} {r['got']}/{r['max']}: {r['note']}")
+                problems.append("     Redesign the composition — do not game the number.")
+
     if problems:
         print(json.dumps({"decision": "block", "reason":
             "You cannot finish yet — these screens are not proven.\n\n"

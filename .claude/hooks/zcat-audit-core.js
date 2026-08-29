@@ -410,10 +410,52 @@ function __zcatAudit() {
         `all ${cards.length} cards are identical in size and padding — if everything has equal weight, nothing is emphasised. Vary the recipe by importance`, cards[0]);
   }
 
+  /* ── Design metrics — measurable proxies for "designed vs assembled".
+     These do NOT judge beauty; they measure the things that reliably separate
+     a composed screen from a stack of components: does anything sit side by
+     side, is emphasis varied, and does the container run as one long column. */
+  const dScope = container || document.body;
+
+  /* widest side-by-side group anywhere in the container */
+  let gridCols = 1;
+  for (const el of dScope.querySelectorAll("*")) {
+    const cs = getComputedStyle(el);
+    if (cs.display === "grid") {
+      const n = (cs.gridTemplateColumns || "").split(" ").filter(x => x && x !== "none").length;
+      if (n > gridCols) gridCols = n;
+    } else if (cs.display === "flex" && cs.flexDirection === "row") {
+      const kids = [...el.children].filter(vis);
+      if (kids.length > 1) {
+        const tops = new Set(kids.map(k => Math.round(k.getBoundingClientRect().top / 8)));
+        if (tops.size === 1 && kids.length > gridCols) gridCols = kids.length;
+      }
+    }
+  }
+
+  /* how many distinct emphasis levels the page actually uses */
+  const typeClasses = new Set();
+  for (const el of dScope.querySelectorAll("[class]"))
+    for (const c of el.classList)
+      if (/^zc-(h[1-6]|subtitle-[1-3])$/.test(c)) typeClasses.add(c);
+
+  /* longest unbroken vertical run of siblings — the wireframe shape */
+  let stackRun = 0;
+  for (const el of [dScope, ...dScope.querySelectorAll("*")]) {
+    const kids = [...el.children].filter(vis);
+    if (kids.length < 2) continue;
+    const lefts = new Set(kids.map(k => Math.round(k.getBoundingClientRect().left / 8)));
+    if (lefts.size === 1 && kids.length > stackRun) stackRun = kids.length;
+  }
+
   return {
     fails: F, warns: W,
     stats: { components: zcSet.size, elements: all.length, cards: cards.length,
-             fills: fills.length, headings: heads.length }
+             fills: fills.length, headings: heads.length,
+             gridCols, typeLevels: typeClasses.size, stackRun,
+             uniformCards: cards.length > 2 && new Set(cards.map(c => {
+               const r = c.getBoundingClientRect();
+               return Math.round(r.width) + "x" + Math.round(r.height);
+             })).size === 1 }
   };
 }
 if (typeof module !== "undefined") module.exports = { __zcatAudit };

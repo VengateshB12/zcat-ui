@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=95">
+  <link rel="stylesheet" href="../zcat.css?v=96">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -612,6 +612,34 @@ HARD RULES (violating these is the failure mode)
   tables, lists, or titles.
 - Page-level glue CSS (grid placement, demo heights) is allowed; component
   styling changes are not. Follow docs/template.html as the worked example.
+
+BEFORE YOU SHOW ME ANYTHING — FOUR GATES, ALL BLOCKING
+The repo ships hooks that must all pass. Do not skip them, do not work around
+them, and do not tell me a screen is ready until every one is green.
+
+  node    .claude/hooks/zcat-render-audit.js <page.html>
+  python3 .claude/hooks/zcat-features.py    <page.html> --json '{...}'
+  python3 .claude/hooks/zcat-design-score.py <page.html>
+  python3 .claude/hooks/zcat-review.py      <page.html> --json '{...}'
+
+1. RENDERED AUDIT — renders in Chromium and measures real geometry: overflow,
+   overlap, collapsed boxes, contrast in both themes, tabs in the container,
+   hand-built controls, lone action buttons. Must be 0 fails.
+2. FEATURE COVERAGE — you declare every tab, column, action and field the
+   requirement contained, plus the states you built. Each one is checked
+   against the page, so nothing can be dropped quietly. "dropped" must be empty
+   unless I approved it first.
+3. DESIGN SCORE — scores composition, emphasis, component use, CTA restraint
+   and card variety out of 100. Pass mark is 75 AND no single dimension may
+   score 0, so a screen cannot be average-good while one aspect is missing.
+   It measures whether a screen was COMPOSED or ASSEMBLED. If it fails,
+   redesign the layout — do not add a heading class to game the number.
+4. DESIGN REVIEW — a reference screenshot, 3 specific things the production
+   screen does that yours does not, and 2 structural ways your layout diverges
+   from the wireframe. Generic answers are rejected.
+
+Run each with no arguments to see the shape it expects. If a gate fails twice
+in a row on the same point, stop and ask me rather than guessing again.
 
 WHEN DONE
 Show me the page, list which zcat components you used where, and flag anything
