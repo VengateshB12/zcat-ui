@@ -37,7 +37,59 @@ An agent cannot end its turn while a page it touched is unproven. For each
 touched page (tracked in `.zcat-state/touched.json`) it requires:
 
 1. a **passing** rendered audit, re-run automatically if the page changed since;
-2. a **design review recorded after the page's last edit**.
+2. a **feature-coverage receipt** — proof the build contains what the
+   requirement asked for;
+3. a **design score of 75+ with no zero dimension** — proof the screen was
+   composed rather than assembled;
+4. a **design review recorded after the page's last edit**.
+
+All four are blocking, and all four go stale the moment the page is edited
+again. There is no flag to skip one.
+
+## Feature coverage — `zcat-features.py`
+
+The rendered audit has never seen the wireframe, so it cannot know a feature was
+dropped. This closes that: the agent declares what the requirement contained and
+every item is matched against the built page (visible text *and* attribute text,
+because a Search field's placeholder is the feature).
+
+```bash
+python3 .claude/hooks/zcat-features.py pages/x/page.html --json '{
+  "source":  "the wireframe / PRD the features came from",
+  "tabs":    ["Overview", "Settings"],
+  "columns": ["Name", "Status"],
+  "actions": ["Create Database", "Refresh"],
+  "fields":  ["Database name"],
+  "other":   ["copy icon on host", "three-dot row menu"],
+  "states":  ["populated", "empty", "create popup"],
+  "dropped": [] }'
+```
+
+Rejects when: anything declared is absent from the page; `dropped` has an entry
+that does not record the user's prior approval; `states` is empty (a wireframe
+only ever draws the happy path).
+
+## Design score — `zcat-design-score.py`
+
+**What it is, honestly:** a script cannot judge beauty. It measures the signals
+that separate a composed screen from a stack of components. A high score does
+not certify taste; a low score is strong evidence the screen was assembled.
+
+| Dimension | Max | What it measures |
+|---|---|---|
+| Composition | 30 | the widest side-by-side group; penalised for one long stacked run |
+| Emphasis | 25 | distinct `.zc-h*` / `.zc-subtitle-*` levels actually used |
+| Component use | 20 | distinct `zc-*` components on the page |
+| CTA restraint | 15 | exactly one filled button |
+| Card variety | 10 | cards differ in size by importance rather than all matching |
+
+Pass is **75 AND no dimension may be 0** — a screen cannot be average-good while
+one whole aspect of it is missing. Reads the metrics the rendered audit already
+collected, so run the audit first.
+
+Known result worth keeping: `template.html` and `databases.html` currently score
+75 but FAIL on Emphasis 0/25 — they use no heading or subtitle classes at all.
+That flatness is real, and now measurable.
 
 ## Recording a design review
 

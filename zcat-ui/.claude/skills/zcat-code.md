@@ -147,7 +147,7 @@ List every UI element → its `zc-*` component (use the TRANSLATION TABLE below)
 
 **If ANY check fails, fix it BEFORE proceeding — never show a broken screen.**
 
-**Live enforcement (3 layers — see `.claude/hooks/README.md`):**
+**Live enforcement (5 layers — see `.claude/hooks/README.md`):**
 1. **Static hook** runs on EVERY Write, Edit **and Bash** file change and blocks
    with the exact violations. It also AUTO-FIXES raw hex → tokens, off-scale
    spacing/radius, raw font rules, missing includes, and the glue `?v=` bump —
@@ -156,8 +156,21 @@ List every UI element → its `zc-*` component (use the TRANSLATION TABLE below)
    the page in Chromium and measures real geometry: alignment, overflow, overlap,
    collapsed boxes, uneven rows, contrast (light + dark), CTA count, tab state,
    tabs-in-container, hand-built controls, and "assembled not composed".
-3. **Stop gate** — you CANNOT finish while a page you touched lacks a passing
-   rendered audit AND a design review recorded after its last edit.
+3. **Feature coverage** — `python3 .claude/hooks/zcat-features.py <page> --json
+   '{...}'` — declare every tab, column, action and field the requirement
+   contained plus the states you built; each is matched against the page, so a
+   feature cannot be dropped quietly. `dropped` must be empty unless it records
+   the user's prior approval; `states` cannot be empty, because a wireframe only
+   ever draws the happy path.
+4. **Design score** — `python3 .claude/hooks/zcat-design-score.py <page>` —
+   scores composition, emphasis, component use, CTA restraint and card variety.
+   Pass is **75 AND no dimension may be 0**. It measures whether the screen was
+   COMPOSED or ASSEMBLED, not whether it is beautiful — a pass does not make a
+   screen good, but a fail means it is not. If it fails, redesign the layout;
+   adding a heading class to lift the number is gaming it.
+5. **Stop gate** — you CANNOT finish while a page you touched lacks ALL FOUR:
+   a passing rendered audit, a feature-coverage receipt, a passing design score,
+   and a design review — each recorded after the page's last edit.
 
 Do not argue with these or work around them. When zcat-ui is imported into
 another project, copy `.claude/hooks/` and the `.claude/settings.json` hook

@@ -70,7 +70,19 @@ It auto-fixes raw hex colours, off-scale spacing and raw font rules, then blocks
 on anything needing judgement — hand-built controls, tabs in the wrong place,
 missing hierarchy, a screen that is assembled rather than composed.
 
-Don't work around it. What it blocks is what the designer would reject.
+Before a screen can be called done, **four gates must pass**, and all four go
+stale the moment the page is edited again:
+
+| Gate | Proves |
+|---|---|
+| `zcat-render-audit.js` | it renders correctly — real geometry, contrast, no hand-built controls |
+| `zcat-features.py` | it contains everything the requirement asked for; nothing dropped quietly |
+| `zcat-design-score.py` | it was **composed**, not assembled — 75+ with no zero dimension |
+| `zcat-review.py` | a real design review against a production reference |
+
+Don't work around them. What they block is what the designer would reject.
+The design score is honest about its limits: it measures composition, not
+taste. Passing it does not make a screen good; failing it means it is not.
 
 **3. The rules that get broken most.** Full set in
 `zcat-ui/.claude/skills/zcat-code.md`:
