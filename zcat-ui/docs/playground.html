@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=88">
+  <link rel="stylesheet" href="../zcat.css?v=89">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -396,7 +396,9 @@
   </div>
   <nav id="nav"></nav>
   <script type="text/plain" id="first-prompt-src">
-Build my requirement with the zcat UI component library.
+You are going to build product screens with the zcat UI component library.
+This message is the SETUP and the RULES. My requirement comes in my NEXT
+message — it is deliberately not here yet, so do not treat it as missing.
   Library:  https://github.com/VengateshB12/zcat-ui
   Rules:    the zcat MCP at https://zcat.catalystappsail.in/mcp
   Docs:     https://zcatdocs.onslate.in
@@ -415,8 +417,14 @@ B. If the zcat MCP is not already connected, connect it. It is public — no key
 C. Link the library in every page you create, unmodified:
      <link rel="stylesheet" href="zcat-ui/zcat.css">
      <script src="zcat-ui/zcat.js" defer><\/script>
+D. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
+   library in place, MCP connected or not, contract read — and then invite it,
+   e.g. "Setup is complete and I'm ready to build. Send me your requirement:
+   a wireframe, a screenshot, a PRD, or a one-line description." Do not
+   apologise, do not say anything is missing, and do not guess a screen and
+   start building. Wait for my reply.
 
-BEFORE WRITING ANY CODE
+ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
 1. Read zcat-ui/ONBOARDING.md fully — it is the contract. The component API
    tables there are authoritative; docs/playground.html render functions and the
    usage comments at the top of each src/components/*.css file are the reference
@@ -427,9 +435,10 @@ BEFORE WRITING ANY CODE
    zcat_get_sample_data and zcat_search_components / zcat_search_icons. Apply
    the DESIGN decision from those rules and skip their Figma mechanics
    (component keys, setProperties, auto-layout) — none of that exists in code.
-3. List back every screen and state you found in my requirement (a page usually
-   implies an empty state and a create/edit flow) and confirm before building.
-   If anything is ambiguous, ASK — do not guess.
+3. List back every screen and state my requirement implies (a list page usually
+   also means an empty state, a create/edit popup and a detail page), count the
+   tabs, columns, buttons and fields you found, and confirm with me before
+   building. If anything is ambiguous, ASK — do not guess.
 4. Never assume a component is missing. The library has ~65 including many that
    get overlooked — General Details, Container Side Menu, Empty State, Attention
    Box, Timeline, Stepper, Tour, Code Block, Key Value fields. Check
