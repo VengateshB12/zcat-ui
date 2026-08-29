@@ -121,6 +121,29 @@
   gap: var(--zc-space-16);
 }
 
+/* DESIGNER-CONFIRMED POPUP OVERRIDE (2026-08-29).
+   Inside a popup body these are OPTIONS in a list, not titled controls, so
+   their labels are Regular — verified against the Figma popup, where the
+   Yes/No radios and the One/two/All-the-above checkboxes all render 14/20
+   Regular. The Check Box COMPONENT itself (429:7790) is SemiBold in all nine
+   of its variants, so this is a deliberate composition override, not a
+   component change: every checkbox outside a popup keeps its SemiBold title.
+   Scoped to the popup body only. */
+.zc-popup__body .zc-checkbox__label,
+.zc-popup__body .zc-radio__label,
+.zc-popup__body .zc-toggle__label {
+  font-weight: 400;
+}
+
+/* zcat.js toggles the Link Accordion's own data-state and emits the event, but
+   leaves the reveal to the consumer. Inside a popup group the panel it controls
+   is its next sibling, so it simply follows the link's state — clicking
+   "Additional information" genuinely opens and closes the panel instead of just
+   rotating a chevron. */
+.zc-popup__group .zc-accordion-link:not([data-state="open"]) + .zc-popup__panel {
+  display: none;
+}
+
 .zc-popup__panel {
   display: flex;
   flex-direction: column;

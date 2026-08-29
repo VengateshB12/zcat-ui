@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=86">
+  <link rel="stylesheet" href="../zcat.css?v=87">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2835,16 +2835,18 @@ const COMPONENTS = {
         h += '<div class="zc-input-group"><label class="zc-label"><span>Description</span></label>' +
           '<div class="zc-input-wrap zc-input-wrap--textarea"><textarea class="zc-input zc-textarea" placeholder="Enter Description"></textarea></div></div>';
         // The real Link Accordion — collapsed for View More, open for Expanded
+        /* The panel is ALWAYS rendered — the Link Accordion reveals it on click
+           (overlay.css hides it while the link is closed). "With View More
+           Expanded" is simply the same composition starting open, so both
+           variants are genuinely interactive rather than two static pictures. */
         h += '<div class="zc-popup__group">' +
           '<button class="zc-accordion-link" type="button"' + (vmx ? ' data-state="open"' : '') + '>' +
-          svg(I.right, 'zc-accordion-link__chevron') + 'Additional information</button>';
-        if (vmx) {
-          h += '<div class="zc-popup__panel">' +
+          svg(I.right, 'zc-accordion-link__chevron') + 'Additional information</button>' +
+          '<div class="zc-popup__panel">' +
             ['Retention policy', 'Partition key', 'Notes'].map(function (t) {
               return '<div class="zc-input-group"><label class="zc-label"><span>' + t + '</span></label>' +
                 '<div class="zc-input-wrap zc-input-wrap--textarea"><textarea class="zc-input zc-textarea" placeholder="Enter ' + t + '"></textarea></div></div>';
             }).join('') + '</div>';
-        }
         h += '</div></div>';
         h += '<div class="zc-popup__footer' + (vmx ? ' zc-popup__footer--shadow' : '') + '">' +
           '<button class="zc-btn" data-variant="grey" type="button">Cancel</button>' +
