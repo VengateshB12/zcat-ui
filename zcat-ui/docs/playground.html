@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=92">
+  <link rel="stylesheet" href="../zcat.css?v=93">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -487,12 +487,24 @@ HARD RULES (violating these is the failure mode)
   and your page look like the same layout side by side, you have failed even
   though every feature is present. Wireframes are drawn quickly and put things
   wherever there was room; our components already say where things go.
+- THE SHELL IS SACRED. Copy it from docs/template.html VERBATIM. The service
+  RAIL — its five services, their logos and the active state — and the TOPBAR
+  — the project switcher, the search field and the avatar — NEVER change. Do
+  not swap the Catalyst logo, do not restyle or re-order the rail, do not
+  invent service icons. The ONLY parts a page may change are: the SIDE MENU's
+  content (service name, section headings, items and their line icons), the
+  SUB HEADER, and the container's content. A wireframe showing a different rail
+  or a different topbar is describing its own product, not ours — keep ours.
 - DETAIL PAGES: the entity name, its status badge and the back affordance live
   in the SUB HEADER — the Back Nav round-button variant in the left group, with
   the plain title and a Status Badge beside it. Do not hand-build an entity
   header block inside the container, and do not put a breadcrumb frame there
   instead. Supporting facts (engine, region, size) belong in the content as
   General Details or stat cards, not stacked under a hand-made title.
+  NAVIGATION RULE: whenever a table row or a card opens a detail page, the Sub
+  Header TITLE becomes that item's name — the row you clicked, the card you
+  opened — shown with the Back Nav beside it. The title always names what you
+  are looking at, never the section you came from.
 - POPUP ANATOMY IS FIXED. There is NO close (X) in any popup variant — a
   wireframe that draws one is wrong; dismissal is the footer's Cancel. Footer
   buttons are real .zc-btn components, never text links: a simple form is
