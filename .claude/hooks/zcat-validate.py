@@ -32,7 +32,10 @@ import zcat_fix                                 # noqa: E402
 # recorded in touched.json and the Stop gate demanded they be "fixed", which
 # would have destroyed the tests.
 SKIP = ("/zcat-ui/", "/ai automation/", "/.claude/hooks/",
-        "/node_modules/", "/scratchpad/", "/.git/")
+        "/node_modules/", "/scratchpad/", "/.git/",
+        # generated deploy artefact — rebuilt by build-docs-site.sh from
+        # zcat-ui/, so there is nothing here for a human to fix
+        "/slate-docs/")
 WRITE_CMD = re.compile(
     r"(>|>>|\bsed\b\s+-i|\btee\b|\bcp\b|\bmv\b|\brm\b|\btruncate\b|"
     r"\bdd\b|\bpython3?\b[^|]*\bopen\(|\bcat\b[^|]*>)", re.I)

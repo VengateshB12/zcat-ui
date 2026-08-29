@@ -397,15 +397,27 @@
   <nav id="nav"></nav>
   <script type="text/plain" id="first-prompt-src">
 Build my requirement with the zcat UI component library in the zcat-ui/ folder.
+  Library:  https://github.com/VengateshB12/zcat-ui
+  Rules:    the zcat MCP at https://zcat.catalystappsail.in/mcp
 
 BEFORE WRITING ANY CODE
 1. Read zcat-ui/ONBOARDING.md fully — it is the contract. The component API
    tables there are authoritative; docs/playground.html render functions and the
    usage comments at the top of each src/components/*.css file are the reference
    markup. Do not invent markup shapes.
-2. List back every screen and state you found in my requirement (a page usually
+2. If the zcat MCP is connected, it is the CURRENT source of the design rules —
+   prefer it over any rules file on disk, which may be a stale copy. Use
+   zcat_get_hard_rules, zcat_get_decision_rules (read only the topic you need),
+   zcat_get_sample_data and zcat_search_components / zcat_search_icons. Apply
+   the DESIGN decision from those rules and skip their Figma mechanics
+   (component keys, setProperties, auto-layout) — none of that exists in code.
+3. List back every screen and state you found in my requirement (a page usually
    implies an empty state and a create/edit flow) and confirm before building.
    If anything is ambiguous, ASK — do not guess.
+4. Never assume a component is missing. The library has ~65 including many that
+   get overlooked — General Details, Container Side Menu, Empty State, Attention
+   Box, Timeline, Stepper, Tour, Code Block, Key Value fields. Check
+   ONBOARDING.md before hand-building anything.
 
 HARD RULES (violating these is the failure mode)
 - Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css">
@@ -3336,14 +3348,19 @@ const COMPONENTS = {
            '</div>';
 
       h += '<div><h3>How to use it in a project</h3><ol class="doc-steps">' +
-        stepEl(1, 'Copy the library in',
-          '<p>Drop the whole <code>zcat-ui/</code> folder into your project. There is no build step and no dependencies.</p>') +
+        stepEl(1, 'Clone the library',
+          '<p>Pull the repo, then copy <code>zcat-ui/</code> into your project — or work in the clone directly. There is no build step and no dependencies.</p>' +
+          '<pre class="doc-code">' + esc('git clone https://github.com/VengateshB12/zcat-ui.git') + '</pre>' +
+          '<p>Run <code>git pull</code> whenever you want the latest components.</p>') +
         stepEl(2, 'Link the two files',
           '<p>Add them once, unmodified. <code>zcat.js</code> auto-initialises every component, including markup you inject later.</p>' +
           '<pre class="doc-code">' + esc('<link rel="stylesheet" href="zcat-ui/zcat.css">\n<script src="zcat-ui/zcat.js" defer></scr' + 'ipt>') + '</pre>') +
-        stepEl(3, 'Open a build chat with the first prompt',
+        stepEl(3, 'Connect the zcat MCP',
+          '<p>The design rules live on a server, not in the repo, so they stay current without pulling again. It serves the hard rules, the decision rules by topic, realistic sample data, the tokens, and component and icon search.</p>' +
+          '<pre class="doc-code">' + esc('https://zcat.catalystappsail.in/mcp') + '</pre>') +
+        stepEl(4, 'Open a build chat with the first prompt',
           '<p>Paste the prompt below into Claude, Cursor or any coding agent. It points the agent at the contract in <code>ONBOARDING.md</code> and sets the rules before any code is written.</p>') +
-        stepEl(4, 'Give your requirement',
+        stepEl(5, 'Give your requirement',
           '<p>Text, a screenshot, or a PRD. The agent lists back every screen and state it found — including the empty and create/edit states — and confirms with you before building.</p>') +
         '</ol></div>';
 
