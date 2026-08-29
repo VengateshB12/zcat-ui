@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=93">
+  <link rel="stylesheet" href="../zcat.css?v=94">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -491,10 +491,15 @@ HARD RULES (violating these is the failure mode)
   RAIL — its five services, their logos and the active state — and the TOPBAR
   — the project switcher, the search field and the avatar — NEVER change. Do
   not swap the Catalyst logo, do not restyle or re-order the rail, do not
-  invent service icons. The ONLY parts a page may change are: the SIDE MENU's
-  content (service name, section headings, items and their line icons), the
-  SUB HEADER, and the container's content. A wireframe showing a different rail
-  or a different topbar is describing its own product, not ours — keep ours.
+  invent service icons. The SIDE MENU keeps the template's structure too — the
+  only things you change in it are its CONTENT (service name, section headings
+  and items) and the per-item LINE ICONS. NOT the logo: the service logo at the
+  top of the side menu is an existing *-color.svg from docs/icons/ — if the
+  service has no logo in that set, use the closest one and tell me. Never
+  invent a logo and never substitute a stroke icon for it.
+  So the only parts a page may change are: the side menu's content and item
+  icons, the SUB HEADER, and the container's content. A wireframe showing a
+  different rail or topbar is describing its own product, not ours — keep ours.
 - DETAIL PAGES: the entity name, its status badge and the back affordance live
   in the SUB HEADER — the Back Nav round-button variant in the left group, with
   the plain title and a Status Badge beside it. Do not hand-build an entity
