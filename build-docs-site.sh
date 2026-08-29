@@ -31,15 +31,19 @@ cp zcat-ui/docs/playground.html zcat-ui/docs/template.html "$OUT/docs/"
 cp -R zcat-ui/docs/icons "$OUT/docs/icons"
 cp zcat-ui/ONBOARDING.md "$OUT/docs/" 2>/dev/null || true
 
-# Root entry -> the playground.
-cat > "$OUT/index.html" <<'HTML'
-<!doctype html>
-<meta charset="utf-8">
-<title>zcat UI — Design System</title>
-<meta http-equiv="refresh" content="0; url=docs/playground.html">
-<link rel="canonical" href="docs/playground.html">
-<p>Redirecting to the <a href="docs/playground.html">zcat UI component explorer</a>…</p>
-HTML
+# Root entry IS the playground — no redirect, so the site lives at the bare
+# domain rather than sending everyone to /docs/playground.html.
+#
+# Only four path classes need rewriting when the file moves up one level. The
+# mask-icon URLs are deliberately NOT touched: `url('../../docs/icons/…')`
+# resolves against the stylesheet that consumes it (src/components/shell.css),
+# not against this document, so it already points at /docs/icons/. Rewriting it
+# here would break every icon — see the trap in HANDOFF §5.
+sed -e 's|href="\.\./zcat\.css|href="zcat.css|g' \
+    -e 's|src="\.\./zcat\.js|src="zcat.js|g' \
+    -e 's|src="icons/|src="docs/icons/|g' \
+    -e 's|href="template\.html"|href="docs/template.html"|g' \
+    zcat-ui/docs/playground.html > "$OUT/index.html"
 
 # Slate needs this inside the deployed directory (CLI < 1.27 pattern).
 mkdir -p "$OUT/.catalyst"

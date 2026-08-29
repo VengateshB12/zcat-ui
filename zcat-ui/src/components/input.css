@@ -5,7 +5,7 @@
 
    Usage:
      <div class="zc-input-group">
-       <label class="zc-label">Label <span class="zc-label__required">*</span></label>
+       <label class="zc-label">Label</label>
        <div class="zc-input-wrap" data-size="default" data-state="default">
          <svg class="zc-input__icon zc-input__icon--left">...</svg>
          <input class="zc-input" type="text" placeholder="Placeholder">
@@ -27,9 +27,6 @@
   color: var(--zc-input-text-label);
   margin-bottom: var(--zc-space-2);
 }
-.zc-label__required {
-  color: var(--zc-body-text-danger);
-}
 .zc-label__optional {
   font-weight: 400;
   color: var(--zc-body-text-light);
@@ -44,7 +41,6 @@
   fill: none;
 }
 .zc-label[data-state="disabled"] { color: var(--zc-input-text-disabled); }
-.zc-label[data-state="disabled"] .zc-label__required { color: var(--zc-input-text-disabled); }
 .zc-label[data-state="disabled"] .zc-label__optional { color: var(--zc-input-text-disabled); }
 
 /* ── Helper Text ── */

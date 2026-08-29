@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Basic Template</title>
-  <link rel="stylesheet" href="../zcat.css?v=85">
+  <link rel="stylesheet" href="../zcat.css?v=86">
   <script src="../zcat.js?v=16"></script>
   <style>
     /* Flow glue: view switching, toast host, wizard engine cards — layout
@@ -35,22 +35,11 @@
     .tpl-chip svg { width: 16px; height: 16px; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
     .tpl-stat-tile { display: flex; align-items: center; gap: var(--zc-space-12); }
     .tpl-stat-text { display: flex; flex-direction: column; gap: var(--zc-space-2); min-width: 0; }
-    .tpl-stat-label { font-size: 12px; line-height: 16px; color: var(--zc-body-text-secondary); }
-    .tpl-stat-value { font-size: 20px; line-height: 24px; font-weight: 700; color: var(--zc-body-text-primary); }
-    .tpl-stat-sub { font-size: 12px; line-height: 16px; color: var(--zc-body-text-light); }
-
+            
     .tpl-engine-text { display: flex; flex-direction: column; gap: var(--zc-space-2); min-width: 0; }
-    .tpl-engine-title { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--zc-body-text-primary); }
-    .tpl-engine-desc { font-size: 12px; line-height: 16px; color: var(--zc-body-text-secondary); }
-    .tpl-switch-row { display: flex; align-items: center; gap: var(--zc-space-16); }
+            .tpl-switch-row { display: flex; align-items: center; gap: var(--zc-space-16); }
     .tpl-switch-text { display: flex; flex-direction: column; gap: var(--zc-space-2); min-width: 0; flex: 1; }
-    .tpl-switch-title { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--zc-body-text-primary); }
-    .tpl-switch-sub { font-size: 12px; line-height: 16px; color: var(--zc-body-text-secondary); }
-    .tpl-review { display: flex; flex-direction: column; gap: var(--zc-space-12); }
-    .tpl-review-row { display: flex; align-items: baseline; gap: var(--zc-space-16); }
-    .tpl-review-label { width: 160px; flex-shrink: 0; font-size: 12px; line-height: 16px; color: var(--zc-body-text-secondary); }
-    .tpl-review-value { font-size: 14px; line-height: 20px; color: var(--zc-body-text-primary); }
-    .tpl-sq-header { padding: var(--zc-space-12) var(--zc-space-14); }
+            .tpl-sq-header { padding: var(--zc-space-12) var(--zc-space-14); }
     /* Row-name cell is clickable. Cursor only — the Table component's own
        text colour is never overridden (design-system rule: compose, never
        restyle). Drill-in also lives in the three-dot menu's View Details. */
@@ -356,33 +345,33 @@
                 <div class="zc-container-el tpl-stat-tile">
                   <span class="tpl-chip" style="background:var(--zc-shade-blue-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-blue-1)"><use href="#i-activity"/></svg></span>
                   <div class="tpl-stat-text">
-                    <span class="tpl-stat-label">CPU Usage</span>
-                    <span class="tpl-stat-value">23%</span>
-                    <span class="tpl-stat-sub">avg last 24h</span>
+                    <span class="tpl-stat-label zc-body-3 zc-text-secondary">CPU Usage</span>
+                    <span class="tpl-stat-value zc-h4">23%</span>
+                    <span class="tpl-stat-sub zc-body-3 zc-text-light">avg last 24h</span>
                   </div>
                 </div>
                 <div class="zc-container-el tpl-stat-tile">
                   <span class="tpl-chip" style="background:var(--zc-shade-green-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-green-1)"><use href="#i-database"/></svg></span>
                   <div class="tpl-stat-text">
-                    <span class="tpl-stat-label">Memory</span>
-                    <span class="tpl-stat-value">4.2 / 8 GB</span>
-                    <span class="tpl-stat-sub">52% used</span>
+                    <span class="tpl-stat-label zc-body-3 zc-text-secondary">Memory</span>
+                    <span class="tpl-stat-value zc-h4">4.2 / 8 GB</span>
+                    <span class="tpl-stat-sub zc-body-3 zc-text-light">52% used</span>
                   </div>
                 </div>
                 <div class="zc-container-el tpl-stat-tile">
                   <span class="tpl-chip" style="background:var(--zc-shade-orange-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-orange-1)"><use href="#i-zap"/></svg></span>
                   <div class="tpl-stat-text">
-                    <span class="tpl-stat-label">IOPS</span>
-                    <span class="tpl-stat-value">1,245</span>
-                    <span class="tpl-stat-sub">read + write</span>
+                    <span class="tpl-stat-label zc-body-3 zc-text-secondary">IOPS</span>
+                    <span class="tpl-stat-value zc-h4">1,245</span>
+                    <span class="tpl-stat-sub zc-body-3 zc-text-light">read + write</span>
                   </div>
                 </div>
                 <div class="zc-container-el tpl-stat-tile">
                   <span class="tpl-chip" style="background:var(--zc-shade-purple-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-purple-1)"><use href="#i-route"/></svg></span>
                   <div class="tpl-stat-text">
-                    <span class="tpl-stat-label">Connections</span>
-                    <span class="tpl-stat-value">45</span>
-                    <span class="tpl-stat-sub">of 200 max</span>
+                    <span class="tpl-stat-label zc-body-3 zc-text-secondary">Connections</span>
+                    <span class="tpl-stat-value zc-h4">45</span>
+                    <span class="tpl-stat-sub zc-body-3 zc-text-light">of 200 max</span>
                   </div>
                 </div>
               </div>
@@ -542,28 +531,28 @@
       </div>
 
       <div class="tpl-wizard-step act" data-step="1">
-        <div class="tpl-engine-title">Choose a database engine</div>
+        <div class="tpl-engine-title zc-subtitle-1">Choose a database engine</div>
         <div data-interactive class="zc-container-el tpl-engine-card" data-state="selected" data-engine="Aurora MySQL (Managed)">
           <span class="tpl-chip" style="background:var(--zc-shade-theme-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-theme-1)"><use href="#i-database"/></svg></span>
           <div class="tpl-engine-text">
-            <span class="tpl-engine-title">Aurora MySQL (Managed)</span>
-            <span class="tpl-engine-desc">MySQL-compatible with up to 5x throughput, automated failover and patching.</span>
+            <span class="tpl-engine-title zc-subtitle-1">Aurora MySQL (Managed)</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">MySQL-compatible with up to 5x throughput, automated failover and patching.</span>
           </div>
           <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input" checked><span class="zc-radio__circle"></span></label>
         </div>
         <div data-interactive class="zc-container-el tpl-engine-card" data-engine="MySQL">
           <span class="tpl-chip" style="background:var(--zc-shade-orange-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-orange-1)"><use href="#i-database"/></svg></span>
           <div class="tpl-engine-text">
-            <span class="tpl-engine-title">MySQL</span>
-            <span class="tpl-engine-desc">Community MySQL 8.0 on dedicated instances you manage yourself.</span>
+            <span class="tpl-engine-title zc-subtitle-1">MySQL</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">Community MySQL 8.0 on dedicated instances you manage yourself.</span>
           </div>
           <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input"><span class="zc-radio__circle"></span></label>
         </div>
         <div data-interactive class="zc-container-el tpl-engine-card" data-engine="PostgreSQL">
           <span class="tpl-chip" style="background:var(--zc-shade-blue-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-blue-1)"><use href="#i-database"/></svg></span>
           <div class="tpl-engine-text">
-            <span class="tpl-engine-title">PostgreSQL</span>
-            <span class="tpl-engine-desc">PostgreSQL 16 with full extension support and logical replication.</span>
+            <span class="tpl-engine-title zc-subtitle-1">PostgreSQL</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">PostgreSQL 16 with full extension support and logical replication.</span>
           </div>
           <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input"><span class="zc-radio__circle"></span></label>
         </div>
@@ -571,7 +560,7 @@
 
       <div class="tpl-wizard-step" data-step="2">
         <div class="zc-input-group">
-          <label class="zc-label">Database Name <span class="zc-label__required">*</span></label>
+          <label class="zc-label">Database Name</label>
           <div class="zc-input-wrap" data-size="default" id="wiz-name-wrap">
             <input class="zc-input" type="text" id="wiz-name" placeholder="e.g. orders-prod">
           </div>
@@ -606,8 +595,8 @@
       <div class="tpl-wizard-step" data-step="3">
         <div class="zc-container-el tpl-switch-row">
           <span class="tpl-switch-text">
-            <span class="tpl-switch-title">Daily automated backups</span>
-            <span class="tpl-switch-sub">Snapshot taken every 24 hours, retained for 7 days.</span>
+            <span class="tpl-switch-title zc-subtitle-1">Daily automated backups</span>
+            <span class="tpl-switch-sub zc-body-3 zc-text-secondary">Snapshot taken every 24 hours, retained for 7 days.</span>
           </span>
           <label class="zc-toggle">
             <span class="zc-toggle__row">
@@ -618,8 +607,8 @@
         </div>
         <div class="zc-container-el tpl-switch-row">
           <span class="tpl-switch-text">
-            <span class="tpl-switch-title">Auto-scaling</span>
-            <span class="tpl-switch-sub">Scale instances with incoming traffic.</span>
+            <span class="tpl-switch-title zc-subtitle-1">Auto-scaling</span>
+            <span class="tpl-switch-sub zc-body-3 zc-text-secondary">Scale instances with incoming traffic.</span>
           </span>
           <label class="zc-toggle">
             <span class="zc-toggle__row">
@@ -641,7 +630,7 @@
       </div>
 
       <div class="tpl-wizard-step" data-step="4">
-        <div class="tpl-review" id="wiz-review"></div>
+        <div class="zc-gdetails" id="wiz-review"></div>
       </div>
     </div>
     <div class="zc-popup__footer">
@@ -789,8 +778,9 @@
       ['Read replicas', v.replicas]
     ];
     $('wiz-review').innerHTML = pairs.map(function (p) {
-      return '<div class="tpl-review-row"><span class="tpl-review-label">' + p[0] +
-        '</span><span class="tpl-review-value">' + p[1] + '</span></div>';
+      return '<div class="zc-gdetails__row"><span class="zc-gdetails__label">' + p[0] +
+        '</span><span class="zc-gdetails__colon">:</span>' +
+        '<span class="zc-gdetails__value">' + p[1] + '</span></div>';
     }).join('');
   }
 
