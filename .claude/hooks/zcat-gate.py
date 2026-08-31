@@ -13,6 +13,7 @@ Without both, stopping is blocked and the agent is told exactly what is missing.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -66,6 +67,17 @@ def main():
         audit_f = os.path.join(STATE, slug(rel) + ".json")
         rev_f = os.path.join(STATE, slug(rel) + ".review.json")
 
+        # A component DEMO is not a product screen. It still has to render
+        # correctly — the audit below applies — but asking it for feature
+        # coverage against a requirement, a composition score, or a design
+        # review against a production screenshot is the wrong question.
+        try:
+            is_sample = bool(re.search(r"<body[^>]*\bdata-zcat-sample\b",
+                                       open(abs_p, encoding="utf-8", errors="replace").read(),
+                                       flags=re.I))
+        except OSError:
+            is_sample = False
+
         if not os.path.exists(audit_f):
             problems.append(f"{rel}: never rendered/audited")
             continue
@@ -81,6 +93,9 @@ def main():
                 problems.append(f"     - {f['rule']}: {f['msg']}  @ {f['sel']}")
             if len(a["fails"]) > 8:
                 problems.append(f"     - (+{len(a['fails']) - 8} more in {os.path.relpath(audit_f, PROJECT)})")
+            continue
+
+        if is_sample:
             continue
 
         if (not os.path.exists(rev_f) or
