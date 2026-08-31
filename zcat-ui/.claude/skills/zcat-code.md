@@ -362,6 +362,23 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   headings/items, and item icons. The sidemenu service header logo must be an
   existing `*-color.svg` from `docs/icons/` (if the service has no logo in the
   set, use the closest one and tell the user — never a plain stroke icon file).
+- **Triage every wireframe into three buckets before building.** The same
+  method for every wireframe, including ones neither of us has seen:
+  **1. FUNCTION** — what the screen lets a person do and know. 100% survives.
+  **2. DRAWING ARTEFACTS** — never survive: which side a control is on, column
+  counts, what is in a card, drawn type/colour, nesting depth, how many times a
+  control repeats, whether something reads as button/link/chip, block order,
+  widths. A grey rectangle is a FUNCTION awaiting a component, not a rectangle.
+  **3. MISSING FURNITURE** — always added back, drawn or not: the shell; the
+  container; the Sub Header (Back Nav + entity name on detail pages); empty,
+  loading and error states; a confirm step before anything destructive; success
+  feedback after anything that mutates; long-list handling (pagination, search)
+  and long-value handling (truncation, tooltip); the reduced-permission view.
+  `zcat-features.py` demands bucket 3 by name via its `furniture` object and
+  refuses a bare `"n/a"` — the reason is required, because deciding an item does
+  not apply is itself a design decision.
+  The rules below are worked EXAMPLES of buckets 2 and 3, not the whole of
+  either. For anything not named: artefacts never survive, furniture is added.
 - **What the wireframe LEAVES OUT is not permission to leave it out.** Most
   wireframes are drawn as a bare content area — no service rail, no topbar, no
   container, a freehand header, the body on the page background. That is the

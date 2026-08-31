@@ -14,7 +14,16 @@ this script checks each declared item actually appears in the built page.
       "fields":  ["Database name", "Region"],
       "other":   ["copy icon on host", "three-dot row menu"],
       "states":  ["populated", "empty", "create popup"],
-      "dropped": []
+      "dropped": [],
+      "furniture": {
+        "empty":    "Empty State component when no databases exist",
+        "loading":  "shimmer rows while the list loads",
+        "error":    "Attention Box, type=message, on fetch failure",
+        "confirm":  "Delete opens a confirm popup naming the database",
+        "feedback": "Toast on create and on delete success",
+        "overflow": "pagination at 25/page plus search over the list",
+        "access":   "n/a: this console has no per-row permission model"
+      }
     }'
 
 Rules enforced here:
@@ -35,6 +44,28 @@ PROJECT = os.path.abspath(os.path.join(HOOKS, "..", ".."))
 STATE = os.path.join(HOOKS, ".zcat-state")
 
 LISTS = ("tabs", "columns", "actions", "fields", "other")
+
+# Every wireframe omits the same category of things: the unglamorous parts of a
+# real product. A drawing shows one happy path with data already in it, because
+# that is what communicates the idea. It does not draw the screen before the
+# data arrives, when it fails to arrive, when there is none, when the list grows
+# past one page, or when the user is one click from destroying something.
+#
+# So this checklist is the SAME for every page, and asking it of every page is
+# the whole point — it is not derived from any one wireframe, and it does not
+# grow each time a new wireframe exposes a gap. Each item is answered with how
+# it was handled, or "n/a: <reason>". A bare "n/a" is refused: deciding that an
+# item does not apply is itself a design decision and has to carry its reason.
+FURNITURE = {
+    "empty":    "what the screen shows when there is no data yet",
+    "loading":  "what it shows while data is arriving",
+    "error":    "what it shows when data fails to arrive",
+    "confirm":  "what happens before a destructive action completes",
+    "feedback": "how the user knows an action succeeded",
+    "overflow": "what happens when a list or a value grows long "
+                "(pagination, search, truncation)",
+    "access":   "what a user without permission sees",
+}
 
 
 def slug(rel):
@@ -90,7 +121,8 @@ def main():
             n = norm(it)
             # short labels ("ID") would match anything; require 3+ chars
             if len(n) >= 3 and n not in hay:
-                missing.append(f"{kind[:-1]}: {it}")
+                label = {"other": "other"}.get(kind, kind[:-1])
+                missing.append(f"{label}: {it}")
 
     if missing:
         errs.append("DECLARED BUT NOT FOUND IN THE PAGE — you dropped these, or "
@@ -113,6 +145,27 @@ def main():
                     'states you built (empty, loading, error, selection) or say '
                     'explicitly which do not apply and why')
 
+    # ── the furniture checklist — identical for every page ──────────────
+    f = d.get("furniture")
+    if not isinstance(f, dict):
+        errs.append('"furniture" is missing. It is the same checklist for every '
+                    "page, because every wireframe leaves out the same things — "
+                    "answer each of: " + ", ".join(FURNITURE) +
+                    '. Give how you handled it, or "n/a: <reason>".')
+    else:
+        for k, what in FURNITURE.items():
+            v = str(f.get(k) or "").strip()
+            if not v:
+                errs.append('furniture."%s" is unanswered — %s. Say how you '
+                            'handled it, or "n/a: <reason>".' % (k, what))
+            elif re.fullmatch(r"(n/?a|none|no|-{1,2})\.?", v, re.I):
+                errs.append('furniture."%s" says "%s" with no reason. Deciding '
+                            "that %s does not apply is a design decision — "
+                            'write "n/a: <why>".' % (k, v, what))
+            elif len(v) < 12:
+                errs.append('furniture."%s" is too short to be an answer ("%s"). '
+                            "Say what you actually built for: %s." % (k, v, what))
+
     if errs:
         print(f"FEATURE COVERAGE REJECTED for {rel}:")
         for e in errs:
@@ -125,7 +178,8 @@ def main():
     d["_page_mtime"] = os.path.getmtime(abs_p)
     json.dump(d, open(out, "w"), indent=1)
     print(f"FEATURE COVERAGE RECORDED for {rel} — {total} feature(s) verified "
-          f"present, {len(states)} state(s) built")
+          f"present, {len(states)} state(s) built, {len(FURNITURE)} furniture "
+          f"item(s) accounted for")
 
 
 if __name__ == "__main__":

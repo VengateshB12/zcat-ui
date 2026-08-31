@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=106">
+  <link rel="stylesheet" href="../zcat.css?v=107">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -546,6 +546,51 @@ HARD RULES (violating these is the failure mode)
   and your page look like the same layout side by side, you have failed even
   though every feature is present. Wireframes are drawn quickly and put things
   wherever there was room; our components already say where things go.
+- TRIAGE EVERY WIREFRAME INTO THREE BUCKETS BEFORE YOU BUILD. This is the same
+  method for every wireframe I will ever give you — it is not a list of fixes
+  for one drawing, and you should be able to apply it to a wireframe neither of
+  us has seen yet.
+
+  BUCKET 1 — FUNCTION. What the screen must let a person DO and KNOW: tabs,
+  columns, fields, actions, rules, states named in the requirement. ALL of it
+  survives, exactly. Nothing here is ever dropped, merged or renamed without
+  asking me first.
+
+  BUCKET 2 — DRAWING ARTEFACTS. How it happened to be drawn. NONE of it
+  survives. Everything below is an artefact, always, in every wireframe:
+  which side a control sits on; how many columns; what is in a card and what is
+  bare; the type sizes, weights and colours drawn; how deep the navigation is
+  nested; how many times a control is repeated; whether something is a button,
+  a link or a chip; the order of blocks down the page; the width of anything.
+  A grey rectangle in a wireframe is not a grey rectangle in our product — it is
+  a FUNCTION waiting for you to pick the component that provides it. If you
+  cannot name the component you used for something, you drew it yourself, and
+  that is the failure.
+
+  BUCKET 3 — MISSING FURNITURE. What every real product has and almost no
+  wireframe draws, because it is boring to draw and does not communicate the
+  idea. You ADD ALL OF IT BACK, every time, whether or not the drawing hints at
+  it. Absence from the wireframe is never permission to leave it out. This list
+  does not change from wireframe to wireframe:
+    · the full shell — service rail, topbar, side menu
+    · the container holding the content
+    · the Sub Header, with Back Nav and the entity name on a detail page
+    · the EMPTY state of every list, table and panel
+    · the LOADING state of anything that fetches
+    · the ERROR state of anything that can fail
+    · a CONFIRM step before anything destructive
+    · SUCCESS feedback after anything that changes data
+    · what happens when a list gets long — pagination, search, filters
+    · what happens when a value gets long — truncation, tooltip, wrapping
+    · what a user without permission sees
+  The features gate asks you for this list by name and refuses a bare "n/a".
+  Answering it is a design task, not paperwork: decide what each state SAYS and
+  offers, do not just drop a component in.
+
+  The rules that follow are worked EXAMPLES of buckets 2 and 3 — the artefacts
+  and omissions I have seen most often. They are not the whole of either bucket.
+  When you meet an artefact or an omission that is not named below, the buckets
+  still decide it: artefacts never survive, furniture is always added.
 - THE SHELL IS SACRED. Copy it from docs/template.html VERBATIM. The service
   RAIL — its five services, their logos and the active state — and the TOPBAR
   — the project switcher, the search field and the avatar — NEVER change. Do
