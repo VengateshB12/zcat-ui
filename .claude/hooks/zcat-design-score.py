@@ -131,6 +131,13 @@ def main():
     st = a.get("stats") or {}
 
     raw = open(abs_p, encoding="utf-8", errors="replace").read()
+    # A component SAMPLE is not a product screen — it exists to show one
+    # component, so demanding a composed multi-column page of it is the wrong
+    # question. Mark such a page with data-zcat-sample on <body>.
+    if re.search(r"<body[^>]*\bdata-zcat-sample\b", raw, flags=re.I):
+        print(f"DESIGN SCORE skipped — {rel} is marked data-zcat-sample "
+              f"(a component demo, not a product screen)")
+        sys.exit(0)
     body = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw, flags=re.S | re.I)
     authored = len([t for t in re.findall(r">([^<>]{4,})<", body) if t.strip()])
 

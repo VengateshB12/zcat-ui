@@ -135,6 +135,15 @@
   font-weight: 400;
 }
 
+/* …but the popup default is only a default. A titled setting inside a popup —
+   one with sub-text under it — still asks for SemiBold, so an explicit
+   data-weight on the control always wins. */
+.zc-popup__body .zc-checkbox[data-weight="semibold"] .zc-checkbox__label,
+.zc-popup__body .zc-radio[data-weight="semibold"] .zc-radio__label,
+.zc-popup__body .zc-toggle[data-weight="semibold"] .zc-toggle__label {
+  font-weight: 600;
+}
+
 /* zcat.js toggles the Link Accordion's own data-state and emits the event, but
    leaves the reveal to the consumer. Inside a popup group the panel it controls
    is its next sibling, so it simply follows the link's state — clicking

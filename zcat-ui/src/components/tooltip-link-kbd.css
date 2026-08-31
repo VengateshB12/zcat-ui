@@ -35,3 +35,21 @@
   padding: 0 var(--zc-space-4);
   font-size: 10px;
 }
+
+/* ── Kbd group ──
+   Several keys read as one shortcut: Cmd + K. The separator is plain text
+   between the keys, so it needs the same vertical rhythm as the keys do.
+   This existed in markup with no rule at all, which left the separator
+   unstyled and the keys unspaced. */
+.zc-kbd-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zc-space-4);
+}
+
+.zc-kbd-group__sep {
+  font-family: var(--zc-font-primary);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--zc-body-text-light);
+}

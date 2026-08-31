@@ -359,6 +359,21 @@
   border-radius: 12px; /* Figma raw value — no --radius variable exists */
   font-family: var(--zc-font-primary);
 }
+/* A General Details ALREADY IS a card — its own padding, background, border
+   and radius. Nested inside another card that reads as two cards around one
+   thing, which is the double-frame the designer flagged. Inside a card it
+   drops its own chrome and becomes plain content: the surrounding card
+   supplies the frame, and its heading supplies the title (use one heading or
+   the other, never both). data-embedded does the same anywhere else. */
+.zc-card .zc-gdetails,
+.zc-container-el .zc-gdetails,
+.zc-gdetails[data-embedded] {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
 .zc-gdetails__title {
   font-weight: 600;
   font-size: 16px;

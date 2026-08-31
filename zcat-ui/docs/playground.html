@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=100">
+  <link rel="stylesheet" href="../zcat.css?v=103">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -593,6 +593,23 @@ HARD RULES (violating these is the failure mode)
   exception is a SERVICE LOGO in the shell, which must be an existing
   *-color.svg from docs/icons/ — never a stroke icon file, and never anywhere
   else.
+- TABLE STATUS IS THE BADGE COMPONENT — never your own. A status cell is
+  <span class="zc-badge" data-type="secondary" data-color="…">, always
+  data-type="secondary" in a table, with SEMANTIC colours: success for
+  active/available, danger for failed/stopped, warning for pending/modifying,
+  info for processing/provisioning, grey for inactive. Never hand-build a
+  coloured pill out of a span, never restyle .zc-badge, and never give every
+  row the same colour. Badge text is 12px — the component's size. If a
+  wireframe shows a bigger table badge, it is still the 12px component.
+  Use a badge ONLY for varying categorical status (fewer than ~10 distinct
+  values whose meanings differ); if every row says the same thing, it is plain
+  text. The badge palette has no blue — processing maps to info.
+- CHECKBOX / RADIO / TOGGLE LABEL WEIGHT IS A CHOICE. SemiBold when the label
+  is a TITLE — a setting with sub-text under it, or a standalone choice.
+  Regular when it is one OPTION among several in a list. Say which you mean
+  with data-weight="semibold" or data-weight="regular" on the control. Inside
+  a popup body Regular is the default (that is what Figma's popup shows), and
+  data-weight overrides it either way.
 - SELECTION CARDS ARE A COMPONENT. A list of choosable options — engines,
   instance sizes, plans — is .zc-card with data-state="selected" and a
   <span class="zc-card__check"></span> inside; the blue corner check is built
@@ -733,7 +750,7 @@ lookalike component.
 const ICONS = {
   infoCircleRaw: '<svg class="zc-label__icon" viewBox="0 0 16 16" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8.00001 10.6667V8M8.00001 5.33333H8.00668M14.6667 8C14.6667 11.6819 11.6819 14.6667 8.00001 14.6667C4.31811 14.6667 1.33334 11.6819 1.33334 8C1.33334 4.3181 4.31811 1.33333 8.00001 1.33333C11.6819 1.33333 14.6667 4.3181 14.6667 8Z"/></svg>',
   dollarRound: '<svg class="zc-input__icon zc-input__icon--left" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5.66671 9.77779C5.66671 10.6369 6.36315 11.3333 7.22226 11.3333H8.66671C9.58718 11.3333 10.3334 10.5872 10.3334 9.66668C10.3334 8.7462 9.58718 8.00001 8.66671 8.00001H7.33337C6.4129 8.00001 5.66671 7.25382 5.66671 6.33334C5.66671 5.41287 6.4129 4.66668 7.33337 4.66668H8.77782C9.63693 4.66668 10.3334 5.36312 10.3334 6.22223M8.00004 3.66668V4.66668M8.00004 11.3333V12.3333M14.6667 8.00001C14.6667 11.6819 11.6819 14.6667 8.00004 14.6667C4.31814 14.6667 1.33337 11.6819 1.33337 8.00001C1.33337 4.31811 4.31814 1.33334 8.00004 1.33334C11.6819 1.33334 14.6667 4.31811 14.6667 8.00001Z"/></svg>',
-  percentage: '<svg class="zc-input__icon zc-input__icon--right" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.6667 3.33331L3.33337 12.6666M5.00004 4.33331C5.00004 4.7015 4.70156 4.99998 4.33337 4.99998C3.96518 4.99998 3.66671 4.7015 3.66671 4.33331C3.66671 3.96512 3.96518 3.66665 4.33337 3.66665C4.70156 3.66665 5.00004 3.96512 5.00004 4.33331ZM12.3334 11.6666C12.3334 12.0348 12.0349 12.3333 11.6667 12.3333C11.2985 12.3333 11 12.0348 11 11.6666C11 11.2985 11.2985 11 11.6667 11C12.0349 11 12.3334 11.2985 12.3334 11.6666Z"/></svg>',
+  percentage: '<svg class="zc-input__icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.6667 3.33331L3.33337 12.6666M5.00004 4.33331C5.00004 4.7015 4.70156 4.99998 4.33337 4.99998C3.96518 4.99998 3.66671 4.7015 3.66671 4.33331C3.66671 3.96512 3.96518 3.66665 4.33337 3.66665C4.70156 3.66665 5.00004 3.96512 5.00004 4.33331ZM12.3334 11.6666C12.3334 12.0348 12.0349 12.3333 11.6667 12.3333C11.2985 12.3333 11 12.0348 11 11.6666C11 11.2985 11.2985 11 11.6667 11C12.0349 11 12.3334 11.2985 12.3334 11.6666Z"/></svg>',
   alertRound: '<svg class="zc-helper__icon" viewBox="0 0 16 16" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7.99998 5.33331V7.99998M7.99998 10.6666H8.00665M14.6666 7.99998C14.6666 11.6819 11.6819 14.6666 7.99998 14.6666C4.31808 14.6666 1.33331 11.6819 1.33331 7.99998C1.33331 4.31808 4.31808 1.33331 7.99998 1.33331C11.6819 1.33331 14.6666 4.31808 14.6666 7.99998Z"/></svg>',
   checkCircle: '<svg class="zc-helper__icon" viewBox="0 0 16 16" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4.99998 8.00001L6.99998 10L11 6.00001M14.6666 8.00001C14.6666 11.6819 11.6819 14.6667 7.99998 14.6667C4.31808 14.6667 1.33331 11.6819 1.33331 8.00001C1.33331 4.31811 4.31808 1.33334 7.99998 1.33334C11.6819 1.33334 14.6666 4.31811 14.6666 8.00001Z"/></svg>',
   alertTriangle: '<svg class="zc-helper__icon" viewBox="0 0 16 16" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7.99982 5.99997V8.66664M7.99982 11.3333H8.00648M7.0767 2.59445L1.59344 12.0655C1.2893 12.5909 1.13723 12.8535 1.15971 13.0691C1.17931 13.2571 1.27783 13.428 1.43073 13.5392C1.60604 13.6666 1.90954 13.6666 2.51656 13.6666H13.4831C14.0901 13.6666 14.3936 13.6666 14.5689 13.5392C14.7218 13.428 14.8203 13.2571 14.8399 13.0691C14.8624 12.8535 14.7103 12.5909 14.4062 12.0655L8.92294 2.59445C8.61989 2.07101 8.46837 1.80929 8.27068 1.72139C8.09824 1.64471 7.90139 1.64471 7.72895 1.72139C7.53126 1.80929 7.37974 2.07101 7.0767 2.59445Z"/></svg>'
@@ -1346,7 +1363,6 @@ const COMPONENTS = {
         <tr style="border-bottom:1px solid var(--zc-body-border-default)"><td style="padding:8px 10px;font-family:var(--zc-font-mono);font-size:11px;color:var(--zc-body-text-theme)">data-size</td><td style="padding:8px 10px">default, small, xs</td><td style="padding:8px 10px">default</td></tr>
         <tr style="border-bottom:1px solid var(--zc-body-border-default)"><td style="padding:8px 10px;font-family:var(--zc-font-mono);font-size:11px;color:var(--zc-body-text-theme)">data-state</td><td style="padding:8px 10px">hover, active, disabled, error</td><td style="padding:8px 10px">—</td></tr>
         <tr style="border-bottom:1px solid var(--zc-body-border-default)"><td style="padding:8px 10px;font-family:var(--zc-font-mono);font-size:11px;color:var(--zc-body-text-theme)">.zc-input__icon--left</td><td style="padding:8px 10px">Left icon (16px)</td><td style="padding:8px 10px">hidden</td></tr>
-        <tr style="border-bottom:1px solid var(--zc-body-border-default)"><td style="padding:8px 10px;font-family:var(--zc-font-mono);font-size:11px;color:var(--zc-body-text-theme)">.zc-input__icon--right</td><td style="padding:8px 10px">Right icon (16px)</td><td style="padding:8px 10px">hidden</td></tr>
       </tbody></table>`
   },
 
@@ -2083,7 +2099,7 @@ const COMPONENTS = {
              '<div class="zc-select-shell zc-table__menushell" data-menu="action">' +
              '<div class="zc-table__threedot zc-select-wrap" role="button" aria-label="More actions">' +
              svg(I.threedot) + '</div>' +
-             '<div class="zc-menu zc-menu--action" data-size="small" role="menu"><div class="zc-menu__body">' +
+             '<div class="zc-menu" data-size="small" role="menu"><div class="zc-menu__body">' +
              [['Edit', I.edit], ['Delete', I.trash], ['Disable', I.disable]].map(function (a) {
                return '<div class="zc-menu__item" role="menuitem" data-value="' + a[0] + '">' +
                       svg(a[1], 'zc-menu__icon') + '<span class="zc-menu__label">' + a[0] + '</span></div>';
@@ -2751,7 +2767,7 @@ const COMPONENTS = {
     ],
     render(s) {
       if (s.style === 'Link') {
-        return '<div class="zc-accordion-wrap" style="max-width:600px">' +
+        return '<div class="pg-accordion-wrap" style="max-width:600px">' +
           '<button class="zc-accordion-link" type="button"' + (s.open ? ' data-state="open"' : '') + '>' +
           svg(I.right, 'zc-accordion-link__chevron') + 'Additional information</button></div>';
       }

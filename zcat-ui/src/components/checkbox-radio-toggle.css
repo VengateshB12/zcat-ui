@@ -38,6 +38,14 @@
   align-items: center;
   gap: var(--zc-space-8);
 }
+/* DESIGNER RULING 2026-08-29: the label is SemiBold sometimes and Regular
+   others — it depends on what the control is. SemiBold (the component default,
+   and what Figma's Check Box set shows in all nine variants) is right when the
+   label is a TITLE: a setting with sub-text under it, a standalone choice.
+   Regular is right when it is one OPTION among several in a list, which is why
+   the Figma popup renders its Yes/No and One/two/All-the-above at 400.
+   Choose explicitly with data-weight="regular" or data-weight="semibold" on the
+   control; inside a popup body Regular is the default, matching Figma. */
 .zc-checkbox__label,
 .zc-radio__label,
 .zc-toggle__label {
@@ -230,3 +238,12 @@
 .zc-toggle__input:disabled:checked + .zc-toggle__track::after {
   background: var(--zc-toggle-thumb-on-disabled);
 }
+
+/* Explicit label weight — works anywhere, and overrides the popup default. */
+.zc-checkbox[data-weight="regular"] .zc-checkbox__label,
+.zc-radio[data-weight="regular"] .zc-radio__label,
+.zc-toggle[data-weight="regular"] .zc-toggle__label { font-weight: 400; }
+
+.zc-checkbox[data-weight="semibold"] .zc-checkbox__label,
+.zc-radio[data-weight="semibold"] .zc-radio__label,
+.zc-toggle[data-weight="semibold"] .zc-toggle__label { font-weight: 600; }

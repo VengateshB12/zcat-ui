@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Basic Template</title>
-  <link rel="stylesheet" href="../zcat.css?v=100">
+  <link rel="stylesheet" href="../zcat.css?v=103">
   <script src="../zcat.js?v=16"></script>
   <style>
     /* Flow glue: view switching, toast host, wizard engine cards — layout
@@ -672,7 +672,7 @@
   var menu = '<div class="zc-select-shell zc-table__menushell" data-menu="action">' +
     '<div class="zc-table__threedot zc-select-wrap" role="button" aria-label="More actions">' +
     '<svg viewBox="0 0 16 16" fill="none"><use href="#i-threedot"/></svg></div>' +
-    '<div class="zc-menu zc-menu--action" data-size="small" role="menu"><div class="zc-menu__body">' +
+    '<div class="zc-menu" data-size="small" role="menu"><div class="zc-menu__body">' +
     actions.map(function (a) {
       return '<div class="zc-menu__item" role="menuitem" data-value="' + a[0] + '">' +
         '<svg class="zc-menu__icon" viewBox="0 0 16 16" fill="none"><use href="#' + a[1] + '"/></svg>' +

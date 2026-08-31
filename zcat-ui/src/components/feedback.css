@@ -196,9 +196,18 @@
 .zc-toast[data-color="warning"] .zc-toast__icon { color: var(--zc-toast-icon-warning); }
 .zc-toast[data-color="danger"]  .zc-toast__icon { color: var(--zc-toast-icon-danger); }
 
-/* Type: heading — 24×24 icon, centered row, text column gap 4 */
-.zc-toast[data-type="heading"] { align-items: center; }
-.zc-toast[data-type="heading"] .zc-toast__icon { width: 24px; height: 24px; }
+/* Type: heading — 24×24 icon, text column gap 4.
+   align-items must be flex-start, not center: centring is only correct while
+   the text is a single line, and as soon as the subtext wraps the icon drifts
+   to the middle of the block instead of staying with the heading it labels —
+   the same fault the Attention Box had. The 24px icon is TALLER than the 20px
+   heading line, so it is pulled up 2px to sit optically on it. */
+.zc-toast[data-type="heading"] { align-items: flex-start; }
+.zc-toast[data-type="heading"] .zc-toast__icon {
+  width: 24px;
+  height: 24px;
+  margin-top: calc(-1 * var(--zc-space-2));
+}
 .zc-toast__content {
   display: flex;
   flex-direction: column;

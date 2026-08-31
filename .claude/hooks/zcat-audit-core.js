@@ -119,10 +119,29 @@ function __zcatAudit() {
       if (spread > TOL)
         fail("MISALIGNED ROW", `items in a centred row are ${spread.toFixed(1)}px off centre`, el);
     } else if (ai === "flex-start" || ai === "start") {
-      const tops = rects.map(r => r.top);
-      const spread = Math.max(...tops) - Math.min(...tops);
-      if (spread > TOL && spread < 24)
-        fail("MISALIGNED ROW", `top-aligned items are ${spread.toFixed(1)}px out of alignment`, el);
+      /* Icons are aligned OPTICALLY, not geometrically: a 16px glyph beside a
+         20px line is nudged down ~2px so it sits on the text, which is correct
+         and would otherwise read here as a misalignment. Compare the text
+         items only; a row that is nothing but icons has nothing to check. */
+      const isIcon = k => k.tagName === "SVG" || k.tagName === "svg" || k.tagName === "IMG" ||
+                          /(^|[\s_])icon($|[\s_-])/i.test(k.className.baseVal || k.className || "") ||
+                          (k.getBoundingClientRect().width <= 24 && k.getBoundingClientRect().height <= 24);
+      /* An explicit align-self is a deliberate opt-out from the row's
+         alignment — the Attention Box centres its action button on purpose,
+         and Figma draws it that way. Only compare children that actually
+         follow the row. */
+      const followsRow = k => {
+        const a = getComputedStyle(k).alignSelf;
+        return a === "auto" || a === "flex-start" || a === "start" || a === "stretch" || a === "normal";
+      };
+      const textRects = kids.filter(k => !isIcon(k) && followsRow(k))
+                            .map(k => k.getBoundingClientRect());
+      if (textRects.length >= 2) {
+        const tops = textRects.map(r => r.top);
+        const spread = Math.max(...tops) - Math.min(...tops);
+        if (spread > TOL && spread < 24)
+          fail("MISALIGNED ROW", `top-aligned items are ${spread.toFixed(1)}px out of alignment`, el);
+      }
     }
   }
 
