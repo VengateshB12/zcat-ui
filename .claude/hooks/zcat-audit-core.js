@@ -347,6 +347,34 @@ function __zcatAudit() {
         sel: "(subheader)" });
   }
 
+  /* ── 18b. The shell must be COMPLETE, not merely present ────────────
+     .zc-layout on its own proves nothing: the rail with its services and the
+     topbar with its project switcher are copied verbatim and never change.
+     A page that has the wrapper but not the furniture rebuilt the shell. */
+  if (layout && !optedOut) {
+    const services = [...document.querySelectorAll(".zc-layout__service")].filter(vis).length;
+    if (!document.querySelector(".zc-layout__rail"))
+      fail("SHELL INCOMPLETE", "no service rail — copy the shell from docs/template.html verbatim", layout);
+    else if (services < 2)
+      fail("SHELL INCOMPLETE",
+        `the service rail has ${services} service(s) — the template's rail and its logos are copied as-is and never trimmed`, layout);
+    if (!document.querySelector(".zc-layout__topbar"))
+      fail("SHELL INCOMPLETE", "no topbar — copy the shell from docs/template.html verbatim", layout);
+    else if (!document.querySelector(".zc-layout__topbar .zc-ghostdd"))
+      fail("SHELL INCOMPLETE",
+        "the topbar has no project switcher (.zc-ghostdd) — it is part of the shell and is never replaced with plain text", layout);
+  }
+
+  /* ── 18c. A mask asset is not an illustration ───────────────────────
+     docs/icons/*mask.svg files are solid shapes meant to be used as CSS
+     masks. Dropped into an <img> they render as a black rectangle. */
+  for (const img of [...document.querySelectorAll("img")].filter(vis)) {
+    const src = img.getAttribute("src") || "";
+    if (/mask\.svg$/i.test(src.trim()))
+      fail("MASK USED AS IMAGE",
+        "this <img> points at a *mask.svg — masks are solid shapes and render as a black box. Use the illustration itself, or apply the mask via .zc-mask-icon", img);
+  }
+
   /* ── 19a. Sub Header primary tabs carry no icons ────────────────────
      Designer rule: the page's tab row reads as a clean line of words. A
      wireframe drawing an icon on every tab is not an instruction. */
@@ -507,7 +535,17 @@ function __zcatAudit() {
              scopes: dScopes.length,
              /* An empty state is deliberately one simple centred block; it must
                 not be scored as though it were a dashboard. */
-             emptyState: !!document.querySelector(".zc-layout__container .zc-empty"),
+             /* Only when the empty state IS the page — its own container holding
+                little else. A console screen with an empty panel inside it is
+                not an empty state, and must not inherit its exemptions. */
+             emptyState: (() => {
+               const e = document.querySelector(".zc-layout__container .zc-empty");
+               if (!e) return false;
+               const c = e.closest(".zc-layout__container");
+               const others = [...c.querySelectorAll(".zc-table, .zc-cheader, .zc-card, .zc-gdetails")]
+                                .filter(vis).length;
+               return others === 0;
+             })(),
              uniformCards: cards.length > 2 && new Set(cards.map(c => {
                const r = c.getBoundingClientRect();
                return Math.round(r.width) + "x" + Math.round(r.height);
