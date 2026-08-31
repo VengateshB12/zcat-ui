@@ -7,7 +7,8 @@
     "setup": "npm install && npx playwright install chromium",
     "audit": "node .claude/hooks/zcat-render-audit.js",
     "audit:library": "node .claude/hooks/zcat-library-audit.js",
-    "docs": "python3 -m http.server 8790"
+    "docs": "python3 -m http.server 8790",
+    "gate": "python3 .claude/hooks/zcat-gate-all.py"
   },
   "keywords": [],
   "author": "",

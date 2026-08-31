@@ -86,6 +86,15 @@ stale the moment the page is edited again:
 | `zcat-design-score.py` | it was **composed**, not assembled — 75+ with no zero dimension |
 | `zcat-review.py` | a real design review against a production reference |
 
+Run all four with one command — never one on its own:
+
+```bash
+npm run gate -- pages/my-page.html
+```
+
+It re-runs the two live gates every time and rejects a receipt written before
+your last edit, so you cannot fix a failure and re-check only the cheap gate.
+
 Don't work around them. What they block is what the designer would reject.
 The design score is honest about its limits: it measures composition, not
 taste. Passing it does not make a screen good; failing it means it is not.

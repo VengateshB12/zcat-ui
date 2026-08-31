@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=104">
+  <link rel="stylesheet" href="../zcat.css?v=105">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -674,10 +674,20 @@ BEFORE YOU SHOW ME ANYTHING — FOUR GATES, ALL BLOCKING
 The repo ships hooks that must all pass. Do not skip them, do not work around
 them, and do not tell me a screen is ready until every one is green.
 
-  node    .claude/hooks/zcat-render-audit.js <page.html>
-  python3 .claude/hooks/zcat-features.py    <page.html> --json '{...}'
-  python3 .claude/hooks/zcat-design-score.py <page.html>
-  python3 .claude/hooks/zcat-review.py      <page.html> --json '{...}'
+RUN THEM WITH ONE COMMAND. Never run a single gate on its own and call the
+page done — that is how a broken screen shipped: the score failed on two
+primary buttons, the CTA was quietly demoted, only the cheap gate was re-run,
+and the score was never asked again.
+
+  npm run gate -- pages/my-page.html
+
+That runs all four, re-runs the two live ones every time, and refuses to pass
+if either receipt predates your last edit. EDITING THE PAGE INVALIDATES ALL
+FOUR — they have to come back green together. The two receipts are recorded
+first, once you have something to declare:
+
+  python3 .claude/hooks/zcat-features.py <page.html> --json '{...}'
+  python3 .claude/hooks/zcat-review.py   <page.html> --json '{...}'
 
 1. RENDERED AUDIT — renders in Chromium and measures real geometry: overflow,
    overlap, collapsed boxes, contrast in both themes, tabs in the container,
@@ -697,6 +707,12 @@ them, and do not tell me a screen is ready until every one is green.
 
 Run each with no arguments to see the shape it expects. If a gate fails twice
 in a row on the same point, stop and ask me rather than guessing again.
+
+DO NOT REPORT A PAGE AS DONE UNTIL `npm run gate` PRINTS "GATES PASSED". If a
+command is malformed, fix it and run it again — a gate you could not execute is
+a gate that did not pass, and saying the page is complete anyway is the single
+worst thing you can do here. If you cannot get a gate to run at all, STOP and
+tell me which one and what the error was.
 
 WHEN DONE
 Show me the page, list which zcat components you used where, and flag anything
