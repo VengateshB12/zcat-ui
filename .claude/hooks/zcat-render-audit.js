@@ -5,7 +5,21 @@
  * Exit 0 = clean, 1 = FAILs found, 2 = could not run.
  */
 const fs = require("fs"), path = require("path"), http = require("http");
-const { chromium } = require("playwright");
+let chromium;
+try {
+  ({ chromium } = require("playwright"));
+} catch (e) {
+  // A fresh clone has the gate scripts but not node_modules — say exactly how
+  // to fix it rather than failing with "Cannot find module 'playwright'".
+  console.error("The rendered audit needs a browser and none is installed.");
+  console.error("");
+  console.error("  npm run setup      # npm install && npx playwright install chromium");
+  console.error("");
+  console.error("Run that from the repo root, then re-run this audit. Do NOT build");
+  console.error("pages until it prints PASS — an unguarded build is the failure mode");
+  console.error("this whole toolchain exists to prevent.");
+  process.exit(2);
+}
 const { __zcatAudit } = require("./zcat-audit-core.js");
 
 const HOOKS = __dirname;

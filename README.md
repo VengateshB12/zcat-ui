@@ -10,9 +10,15 @@ No build step. No dependencies. Drop it in and use it.
 ## Quick start
 
 ```bash
-git clone <this-repo> zcat-ui-workspace
-cd zcat-ui-workspace
+git clone https://github.com/VengateshB12/zcat-ui.git
+cd zcat-ui
+npm run setup     # installs playwright + chromium, which the gates need
 ```
+
+The clone gives you `zcat-ui/zcat-ui/` — the repo and the library folder share a
+name. The **outer** folder is your working root: it holds `.claude/` (the
+gates), `reference-screenshots/` and the library. Never copy the inner folder
+out on its own; that discards the gates.
 
 Link the two files in your page, unmodified:
 

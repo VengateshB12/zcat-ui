@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=103">
+  <link rel="stylesheet" href="../zcat.css?v=104">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -417,11 +417,15 @@ A. Get the repo and WORK INSIDE THE CLONE:
    settings.json live in `.claude/`, and copying only `zcat-ui/` silently
    leaves every gate behind, so nothing is ever checked. That has already
    happened once and every screen shipped broken.
-   THEN VERIFY THE GATES ARE ACTUALLY INSTALLED before you build anything:
+   INSTALL THE DEPENDENCIES — the gates render pages in a real browser and
+   node_modules is not in the repo, so a fresh clone cannot run them yet:
+     npm run setup            (npm install && npx playwright install chromium)
+   THEN VERIFY THE GATES ACTUALLY RUN before you build anything:
      ls .claude/hooks/zcat-render-audit.js .claude/settings.json
      node .claude/hooks/zcat-render-audit.js zcat-ui/docs/template.html
-   The second command must print PASS. If either fails, STOP and tell me —
-   do not build unguarded.
+   That last command must print PASS. If the install needs my approval, ASK me
+   for it and wait — do not skip the gates and do not build unguarded. Halting
+   here is the correct behaviour.
 B. If the zcat MCP is not already connected, connect it. It is public — no key,
    no login, just a URL. In Claude Code:
      claude mcp add --transport http zcat https://zcat.catalystappsail.in/mcp

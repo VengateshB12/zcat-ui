@@ -1,10 +1,13 @@
 {
-  "name": "component-development",
+  "name": "zcat-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "The ZCat design system as code, with the gates that keep pages on-system.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "npm install && npx playwright install chromium",
+    "audit": "node .claude/hooks/zcat-render-audit.js",
+    "audit:library": "node .claude/hooks/zcat-library-audit.js",
+    "docs": "python3 -m http.server 8790"
   },
   "keywords": [],
   "author": "",

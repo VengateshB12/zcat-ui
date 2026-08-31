@@ -147,7 +147,13 @@ List every UI element → its `zc-*` component (use the TRANSLATION TABLE below)
 
 **If ANY check fails, fix it BEFORE proceeding — never show a broken screen.**
 
-**Live enforcement (5 layers — see `.claude/hooks/README.md`):**
+**Live enforcement (5 layers — see `.claude/hooks/README.md`).**
+FIRST: the gates render in a real browser, and `node_modules` is not in the
+repo. On a fresh clone run `npm run setup` (npm install + playwright chromium)
+and confirm `node .claude/hooks/zcat-render-audit.js zcat-ui/docs/template.html`
+prints PASS before building anything. If it cannot run, STOP and say so —
+building unguarded is the failure this toolchain exists to prevent.
+
 1. **Static hook** runs on EVERY Write, Edit **and Bash** file change and blocks
    with the exact violations. It also AUTO-FIXES raw hex → tokens, off-scale
    spacing/radius, raw font rules, missing includes, and the glue `?v=` bump —
