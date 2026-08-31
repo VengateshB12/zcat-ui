@@ -362,6 +362,28 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   headings/items, and item icons. The sidemenu service header logo must be an
   existing `*-color.svg` from `docs/icons/` (if the service has no logo in the
   set, use the closest one and tell the user — never a plain stroke icon file).
+- **What the wireframe LEAVES OUT is not permission to leave it out.** Most
+  wireframes are drawn as a bare content area — no service rail, no topbar, no
+  container, a freehand header, the body on the page background. That is the
+  drawing being economical, not the product being designed. ALWAYS build the
+  full shell and ALWAYS put content inside a container, even when the wireframe
+  shows neither. Never delete a piece of the shell because the picture omitted
+  it; never rebuild one because the picture drew a different one.
+- **The wireframe's controls are not our controls.** A button, header row,
+  empty state or chip in the wireframe sketches a FUNCTION. Find the component
+  that provides it — Empty State, Container Header, Button with a real
+  `data-variant`, Badge — instead of reproducing the sketch's shape, alignment
+  or styling. A control drawn on the left may belong on the right once it is a
+  real Container Header. If you cannot name the component you used for
+  something, you drew it yourself — that is the failure.
+- **One Container Side Menu per page.** Wireframes often draw a second vertical
+  list beside the first (a section list AND a record list). Two `.zc-csm`
+  give two competing "where am I" signals. The inner list is RECORDS — use a
+  table, a card list or a master panel. Audit: `TWO SIDE MENUS`.
+- **A repeated fill button is not one CTA, it is N.** A `data-variant="fill"`
+  button once per row or card leaves the eye nowhere to land. Per-row actions
+  are links or ghost buttons; the single fill is the page's one real next step.
+  Audit: `REPEATED PRIMARY BUTTON`.
 - **Side Menu item icons (v66+): stroke icons WITH `class="zc-icon-stroke"`.**
   `.zc-sidemenu__item svg` defaults to `fill: currentColor` (for logo glyphs
   like `#i-slate`); a stroke icon without the `zc-icon-stroke` class renders as

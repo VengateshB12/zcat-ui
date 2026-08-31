@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=105">
+  <link rel="stylesheet" href="../zcat.css?v=106">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -562,6 +562,24 @@ HARD RULES (violating these is the failure mode)
   that set and tell me which — an empty or invented logo is never acceptable,
   and a blank service chip means you changed something you should not have. A wireframe showing a
   different rail or topbar is describing its own product, not ours — keep ours.
+  AND WHAT THE WIREFRAME LEAVES OUT IS NOT PERMISSION TO LEAVE IT OUT. Most
+  wireframes are drawn as a bare content area: no service rail, no topbar, no
+  container, a header sketched freehand, the body sitting on the page
+  background. That is the drawing being economical, not the product being
+  designed. You ALWAYS build the full shell — rail, topbar, side menu, Sub
+  Header — and the content ALWAYS sits inside a container, even when the
+  wireframe shows none of it. Never delete a piece of the shell because the
+  picture did not draw it, and never rebuild a piece of it because the picture
+  drew a different one.
+- THE WIREFRAME'S CONTROLS ARE NOT OUR CONTROLS. A button, a header row, an
+  empty state or a chip in the wireframe is a sketch of a FUNCTION. Find the
+  component that provides that function and use it — Empty State, Container
+  Header, Button with a real data-variant, Badge — rather than reproducing the
+  sketch's shape, alignment or styling. Two things follow: a control drawn on
+  the left may well belong on the right once it is our Container Header, and a
+  control the wireframe drew flat and grey is still a real Button with a real
+  variant. If you cannot name the component you used for something, you drew it
+  yourself, and that is the failure.
 - DETAIL PAGES: the entity name, its status badge and the back affordance live
   in the SUB HEADER — the Back Nav round-button variant in the left group, with
   the plain title and a Status Badge beside it. Do not hand-build an entity
@@ -572,6 +590,15 @@ HARD RULES (violating these is the failure mode)
   Header TITLE becomes that item's name — the row you clicked, the card you
   opened — shown with the Back Nav beside it. The title always names what you
   are looking at, never the section you came from.
+- ONE CONTAINER SIDE MENU PER PAGE. Wireframes often draw a second vertical
+  list beside the first — a section list AND a record list. Two side menus give
+  the reader two competing answers to "where am I". The inner list is RECORDS,
+  not navigation: make it a table, a card list or a master panel beside the
+  detail. The audit fails this as TWO SIDE MENUS.
+- A REPEATED FILL BUTTON IS NOT ONE CTA, IT IS N. A filled button once per row
+  or per card leaves the eye nowhere to land, however sensible each one looks
+  alone. Per-row actions are links or ghost buttons; the one fill on the page is
+  its single real next step. The audit fails this as REPEATED PRIMARY BUTTON.
 - A LONE FIELD IN A POPUP LOOKS BROKEN. Popup form controls stretch to the
   body's full width — never leave one narrow field floating in a wide popup.
   If a step has a single short input, either let it span the full width or pair

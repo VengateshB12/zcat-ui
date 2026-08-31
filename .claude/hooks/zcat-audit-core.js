@@ -365,6 +365,83 @@ function __zcatAudit() {
         "the topbar has no project switcher (.zc-ghostdd) — it is part of the shell and is never replaced with plain text", layout);
   }
 
+  /* ── 18d. Page content sits ON a surface, not on the background ─────
+     A wireframe often draws the title and the body straight onto the page
+     because that is quick to draw. Our layout puts working content inside a
+     container (or, for a landing grid, inside cards). Bare text and bare
+     controls floating on .zc-layout__body means the wireframe's arrangement
+     was copied instead of the design system's. */
+  if (layout && !optedOut) {
+    const body = document.querySelector(".zc-layout__body");
+    if (body) {
+      const loose = [...body.querySelectorAll(
+          "h1,h2,h3,h4,p,.zc-btn,.zc-table,.zc-gdetails,.zc-empty,.zc-tabs")]
+        .filter(vis)
+        .filter(el => !el.closest(".zc-layout__container, .zc-card, .zc-container, " +
+                                  ".zc-popup, .zc-fullpopup, .zc-csm, .zc-cheader"));
+      if (loose.length) {
+        const what = loose.slice(0, 3).map(el =>
+          (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 34) ||
+          el.className.split(" ")[0]).join(" · ");
+        fail("CONTENT NOT IN A CONTAINER",
+          `${loose.length} element(s) sit directly on the page background (${what}) — ` +
+          "working content goes inside a container; only a landing card-grid may sit on the body",
+          ".zc-layout__body");
+      }
+    }
+  }
+
+  /* ── 18e. An empty state is a component, not a hand-made block ───────
+     Wireframes draw "nothing here yet" freehand. We have Empty State: the
+     illustration, the centred heading and description, and the action row.
+     Rebuilding it out of divs loses the centring and the spacing. */
+  {
+    const emptyish = /^\s*(no |there (are|is) no |you (don'|do not|haven'|have not))/i;
+    for (const el of [...document.querySelectorAll("h1,h2,h3,h4,h5,.zc-h1,.zc-h2,.zc-h3,.zc-h4,.zc-h5")]
+                       .filter(vis)) {
+      const t = (el.textContent || "").trim();
+      if (!emptyish.test(t) || el.closest(".zc-empty, .zc-table, .zc-popup, .zc-fullpopup")) continue;
+      fail("HAND-BUILT EMPTY STATE",
+        `"${t.slice(0, 46)}" reads as an empty state but is not the Empty State component — ` +
+        "use .zc-empty so it gets the illustration, the centring and the action row",
+        el.className || el.tagName.toLowerCase());
+    }
+  }
+
+  /* ── 18f. One side menu per page, not two nested ────────────────────
+     Wireframes routinely draw a second vertical list beside the first — a
+     section list AND a record list. Two Container Side Menus side by side
+     give the reader two competing "where am I" signals. The inner one is a
+     LIST OF RECORDS: it belongs in a table, a card list or a master panel. */
+  {
+    const menus = [...document.querySelectorAll(".zc-csm")].filter(vis);
+    if (menus.length > 1)
+      fail("TWO SIDE MENUS",
+        `${menus.length} Container Side Menus on one page — only the outer one navigates. ` +
+        "The inner list is records, not navigation: use a table, a card list or a master panel",
+        ".zc-csm");
+  }
+
+  /* ── 18g. One primary button, including repeats ─────────────────────
+     A fill button repeated once per row or card is not one CTA, it is N.
+     The eye has nowhere to land. Repeat the action as a link or a ghost
+     button and keep the single fill for the page's one real next step. */
+  {
+    const fills = [...document.querySelectorAll('.zc-btn[data-variant="fill"]')].filter(vis);
+    const byLabel = {};
+    for (const b of fills) {
+      const k = (b.textContent || "").trim().replace(/\s+/g, " ").toLowerCase();
+      (byLabel[k] = byLabel[k] || []).push(b);
+    }
+    for (const k in byLabel) {
+      if (byLabel[k].length > 1)
+        fail("REPEATED PRIMARY BUTTON",
+          `"${byLabel[k][0].textContent.trim()}" is a filled button ${byLabel[k].length} times — ` +
+          "a per-row action is a link or a ghost button; the fill is reserved for the page's one CTA",
+          ".zc-btn[data-variant=\"fill\"]");
+    }
+  }
+
   /* ── 18c. A mask asset is not an illustration ───────────────────────
      docs/icons/*mask.svg files are solid shapes meant to be used as CSS
      masks. Dropped into an <img> they render as a black rectangle. */
