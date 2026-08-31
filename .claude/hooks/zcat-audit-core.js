@@ -436,11 +436,16 @@ function __zcatAudit() {
      These do NOT judge beauty; they measure the things that reliably separate
      a composed screen from a stack of components: does anything sit side by
      side, is emphasis varied, and does the container run as one long column. */
-  const dScope = container || document.body;
+  /* Every container on the page, not just the first — a page with a list view
+     and a detail view has two, and scoring only the first misreads the page. */
+  const dScopes = [...document.querySelectorAll(".zc-layout__container, .zc-popup, .zc-fullpopup")];
+  if (!dScopes.length) dScopes.push(document.body);
+  const dScope = dScopes[0];
+  const dAll = sel => dScopes.flatMap(sc => [...sc.querySelectorAll(sel)]);
 
   /* widest side-by-side group anywhere in the container */
   let gridCols = 1;
-  for (const el of dScope.querySelectorAll("*")) {
+  for (const el of dAll("*")) {
     const cs = getComputedStyle(el);
     if (cs.display === "grid") {
       const n = (cs.gridTemplateColumns || "").split(" ").filter(x => x && x !== "none").length;
@@ -455,14 +460,20 @@ function __zcatAudit() {
   }
 
   /* how many distinct emphasis levels the page actually uses */
+  /* Emphasis counts the typography classes AND the headings components supply
+     themselves — a Container Header title or a Popup title is real emphasis,
+     and counting only the heading and subtitle utility classes scored honest
+     pages at zero. */
   const typeClasses = new Set();
-  for (const el of dScope.querySelectorAll("[class]"))
+  for (const el of dAll("[class]"))
     for (const c of el.classList)
-      if (/^zc-(h[1-6]|subtitle-[1-3])$/.test(c)) typeClasses.add(c);
+      if (/^zc-(h[1-6]|subtitle-[1-3])$/.test(c) ||
+          /^zc-(cheader__title|gdetails__title|popup__title|fullpopup__title|empty__heading|attention__heading|card__title|layout__subheader-title)$/.test(c))
+        typeClasses.add(c);
 
   /* longest unbroken vertical run of siblings — the wireframe shape */
   let stackRun = 0;
-  for (const el of [dScope, ...dScope.querySelectorAll("*")]) {
+  for (const el of [...dScopes, ...dAll("*")]) {
     const kids = [...el.children].filter(vis);
     if (kids.length < 2) continue;
     const lefts = new Set(kids.map(k => Math.round(k.getBoundingClientRect().left / 8)));
@@ -474,6 +485,10 @@ function __zcatAudit() {
     stats: { components: zcSet.size, elements: all.length, cards: cards.length,
              fills: fills.length, headings: heads.length,
              gridCols, typeLevels: typeClasses.size, stackRun,
+             scopes: dScopes.length,
+             /* An empty state is deliberately one simple centred block; it must
+                not be scored as though it were a dashboard. */
+             emptyState: !!document.querySelector(".zc-layout__container .zc-empty"),
              uniformCards: cards.length > 2 && new Set(cards.map(c => {
                const r = c.getBoundingClientRect();
                return Math.round(r.width) + "x" + Math.round(r.height);

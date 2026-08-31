@@ -37,20 +37,29 @@ def slug(rel):
 def score(st, authored_text):
     """Returns (total, [(dimension, got, max, note)])."""
     rows = []
+    # An EMPTY STATE is meant to be one simple centred block — illustration,
+    # heading, one line, the action that fixes it. Demanding multi-column
+    # composition and 10+ components from it would be marking it down for
+    # following the rule. Those two dimensions are scored as met.
+    empty = bool(st.get("emptyState"))
 
     # ── Composition: does anything sit BESIDE anything? ──────────────────
     cols, run = st.get("gridCols", 1), st.get("stackRun", 0)
-    if cols >= 3:
+    if empty:
+        rows.append(("Composition", 30, 30,
+                     "empty state — a single centred block is the correct shape"))
+    elif cols >= 3:
         c, note = 30, f"{cols} columns side by side"
     elif cols == 2:
         c, note = 22, "two columns — some relationship expressed"
     else:
         c, note = 0, ("everything is one column stacked down the page — this is the "
                       "wireframe shape, not a composition")
-    if run >= 8 and c:
-        c -= 8
-        note += f"; but one run of {run} stacked siblings is doing too much"
-    rows.append(("Composition", max(c, 0), 30, note))
+    if not empty:
+        if run >= 8 and c:
+            c -= 8
+            note += f"; but one run of {run} stacked siblings is doing too much"
+        rows.append(("Composition", max(c, 0), 30, note))
 
     # ── Emphasis: is anything promoted above anything else? ──────────────
     lv = st.get("typeLevels", 0)
@@ -69,17 +78,29 @@ def score(st, authored_text):
 
     # ── Richness: is the library actually being used? ────────────────────
     n = st.get("components", 0)
-    r = 20 if n >= 12 else 15 if n >= 10 else 8 if n >= 6 else 0
-    rows.append(("Component use", r, 20,
-                 f"{n} distinct components" +
-                 ("" if n >= 10 else " — a real screen uses 10+; this looks hand-built")))
+    if empty:
+        rows.append(("Component use", 20, 20,
+                     f"{n} components — an empty state needs few by design"))
+    else:
+        r = 20 if n >= 12 else 15 if n >= 10 else 8 if n >= 6 else 0
+        rows.append(("Component use", r, 20,
+                     f"{n} distinct components" +
+                     ("" if n >= 10 else " — a real screen uses 10+; this looks hand-built")))
 
     # ── Restraint: exactly one call to action ────────────────────────────
+    # Two filled buttons IS a violation and scores 0. Zero filled buttons is
+    # not: a read-only detail or settings screen legitimately has no primary
+    # CTA — the rules put its Edit behind a three-dot menu. Scoring that as an
+    # automatic fail punished pages for following the rules.
     f = st.get("fills", 0)
-    rows.append(("CTA restraint", 15 if f == 1 else 0, 15,
-                 "one primary button" if f == 1 else
-                 ("no primary button — nothing is the page's main action" if f == 0
-                  else f"{f} filled buttons compete to be the primary")))
+    if f == 1:
+        cta, note = 15, "one primary button"
+    elif f == 0:
+        cta, note = 10, ("no primary button — correct for a read-only detail or "
+                         "settings screen; check that is what this is")
+    else:
+        cta, note = 0, f"{f} filled buttons compete to be the primary"
+    rows.append(("CTA restraint", cta, 15, note))
 
     # ── Variety: do the cards earn their differences? ────────────────────
     cards = st.get("cards", 0)
