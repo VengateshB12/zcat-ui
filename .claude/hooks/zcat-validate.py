@@ -84,7 +84,10 @@ def main():
     # --- guard the read-only source of truth against Bash writes -----------
     if tool == "Bash":
         cmd = ti.get("command") or ""
-        if re.search(r"AI[ _]Automation", cmd) and WRITE_CMD.search(cmd):
+        # "2>/dev/null" is a redirect, not a write — testing the raw command
+        # made this fire on plain reads like find/grep.
+        probe = re.sub(r"\d?>>?\s*/dev/null", " ", cmd)
+        if re.search(r"AI[ _]Automation", probe) and WRITE_CMD.search(probe):
             block("BLOCKED: that Bash command writes into 'AI Automation/', which is "
                   "READ-ONLY (CLAUDE.md hard rule). The Write/Edit deny rules do not "
                   "cover Bash, so this hook enforces it. Put temporary files in the "

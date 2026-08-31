@@ -95,6 +95,19 @@ npm run gate -- pages/my-page.html
 It re-runs the two live gates every time and rejects a receipt written before
 your last edit, so you cannot fix a failure and re-check only the cheap gate.
 
+**The library and the gates are read-only to an AI agent.** A screen build
+writes pages and nothing else. The component library, the prompt, the skill and
+the gates themselves are shared by everyone building screens, so a change to any
+of them changes what every future build is allowed to do — and an agent halfway
+through one screen is the worst position from which to make that call. Writes
+are refused before they happen, by Write/Edit and by Bash alike.
+
+The designer unlocks for a maintenance session, and locks again after:
+
+```bash
+touch .zcat-unlock
+```
+
 Don't work around them. What they block is what the designer would reject.
 The design score is honest about its limits: it measures composition, not
 taste. Passing it does not make a screen good; failing it means it is not.

@@ -41,3 +41,4 @@ node_modules/
 # Deploy config: carries the Catalyst project id and an absolute path from one
 # machine, so it is useless (and leaky) in a public clone.
 catalyst.json
+.zcat-unlock

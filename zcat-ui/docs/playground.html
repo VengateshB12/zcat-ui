@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=107">
+  <link rel="stylesheet" href="../zcat.css?v=108">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -540,6 +540,13 @@ HARD RULES (violating these is the failure mode)
   footer action is a separate surface and does not count against the page.
   Destructive actions are never the page's primary CTA — they belong in a
   Danger Zone or a three-dot menu.
+- YOU MAY WRITE PAGES. NOTHING ELSE. The component library, this prompt, the
+  skill and the gates are read-only to you, and the block happens before the
+  write lands — through Bash too, not just Edit. Do not try to route around it.
+  If a component is genuinely missing something, or a gate is genuinely wrong,
+  STOP and tell me, with the evidence: what you needed, what you tried, what the
+  gate said. I will decide, and I will make the change myself. A library edited
+  mid-screen-build is how a fix for one page quietly becomes everyone's problem.
 - A WIREFRAME IS A FEATURE LIST, NOT A LAYOUT. Take from it WHAT must exist —
   every tab, field, column, button, action. Do not take HOW it is arranged.
   100% of the features must survive; the arrangement must not. If my wireframe

@@ -362,6 +362,13 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   headings/items, and item icons. The sidemenu service header logo must be an
   existing `*-color.svg` from `docs/icons/` (if the service has no logo in the
   set, use the closest one and tell the user — never a plain stroke icon file).
+- **A build writes pages and nothing else.** `zcat-ui/`, `.claude/hooks/`,
+  `CLAUDE.md`, `HANDOFF.md`, `README.md` and `package.json` are read-only to an
+  agent, enforced at PreToolUse for Write/Edit **and** for Bash writes (`>`,
+  `sed -i`, `cp`, `mv`, `rm`). Reads are unaffected. If a component is missing
+  something or a gate is wrong, STOP and report it with evidence — do not patch
+  the library from inside a screen build. The designer unlocks maintenance
+  sessions with `touch .zcat-unlock` and re-locks with `rm .zcat-unlock`.
 - **Triage every wireframe into three buckets before building.** The same
   method for every wireframe, including ones neither of us has seen:
   **1. FUNCTION** — what the screen lets a person do and know. 100% survives.

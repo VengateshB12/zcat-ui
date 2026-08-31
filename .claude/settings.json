@@ -2,7 +2,11 @@
   "permissions": {
     "deny": [
       "Write(AI Automation/**)",
-      "Edit(AI Automation/**)"
+      "Edit(AI Automation/**)",
+      "Write(zcat-ui/**)",
+      "Edit(zcat-ui/**)",
+      "Write(.claude/hooks/**)",
+      "Edit(.claude/hooks/**)"
     ]
   },
   "hooks": {
@@ -27,6 +31,19 @@
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/zcat-gate.py\"",
             "timeout": 240,
             "statusMessage": "Rendering screens and checking design proof"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/zcat-readonly.py\"",
+            "timeout": 15,
+            "statusMessage": "Checking the library and gates are not being edited"
           }
         ]
       }
