@@ -31,6 +31,143 @@ workflow, not this file.
 
 ---
 
+## HOW TO ARRIVE AT A LAYOUT — CLASSIFY, THEN TWO GATES
+
+Asking for thought does not produce thought. The old instruction ("decide the layout,
+record it") got three labels describing one layout — the wireframe's. These gates
+constrain the SHAPE of your output so skipping the thinking is impossible rather than
+discouraged. Run G0 → G1 → G2 → G3 in order.
+
+### G0 — Classify the page type FIRST. This is binding.
+
+- **Standard page type** (list · empty state · detail with tabs · master-detail ·
+  wizard popup) → **the layout is SETTLED.** Copy the shell and that page type's
+  plumbing from `docs/template.html` and move on. Creativity in the shell of a
+  standard page is a DEFECT — every list page should look alike. Spend the thinking
+  on what goes INSIDE `.zc-layout__container`: which columns, which filters, what
+  each status means, what the empty state says, what deserves promoting.
+- **No standard type matches** (dashboard · overview · configuration ·
+  mixed-content detail) → a genuine composition problem. Run G1 and G2 properly.
+
+State your classification in one line before continuing.
+
+### G1 — Feature list: NO POSITION WORDS
+
+Read the requirement once, write down what EXISTS, then close it and do not look
+again while you design. The list may NOT contain: *top, bottom, left, right, above,
+below, beside, next to, header, sidebar, first column, second row, upper, lower.*
+
+"4 tabs · 6 table columns · 1 create action · 2 filters · a storage total · a
+per-row overflow menu" — not "tabs at the top, table below, button top-right".
+
+**A banned word means you copied the layout. Rewrite it.** With no positions
+recorded you CANNOT reproduce the arrangement; you have to decide one.
+
+Tag each feature PRIMARY / SUPPORTING / INCIDENTAL. A wireframe never tells you this
+and you need it in G2.
+
+### G2 — Layout: NO COMPONENT OR CLASS NAMES
+
+Decide the layout as regions and relationships ONLY: how many regions · what each is
+for · which is primary · what sits beside what · what is promoted · what is demoted
+behind an affordance · where the eye lands first.
+
+The G2 output may NOT contain a component or class name. Banned: *`.zc-table`,
+`.zc-card`, `.zc-cheader`, `.zc-gdetails`, `.zc-stepper`, `.zc-accordion`,
+`.zc-badge`, `.zc-empty`, `.zc-popup`* — or any other `zc-*` name.
+
+**If a class name appears in G2, the library chose your layout instead of the
+screen's needs.** Reject and redo.
+
+Produce TWO OR THREE layouts, differing in a **stated structural dimension** —
+region count, column split, or what gets promoted. Say which dimension differs. Two
+layouts with the same region count and order are ONE layout described twice. Name
+what each optimises and trades away, recommend one, get approval.
+
+### G3 — Build: NOW components, NOW rules
+
+Only here do you map regions to `zc-*` components, and only here do the styling
+rules apply. If no component fits a region, that is real information — say so and
+ask. Do NOT reshape the layout to suit what happens to exist.
+
+**Why these two bans:** they are the exact mechanisms by which thinking gets skipped.
+Position words let you copy the arrangement; class names let the library pick it. Ban
+both and the only valid output is one where you actually decided something.
+
+---
+
+## BUILD DISCIPLINE — REFERENCES AND THE SHELL
+
+### A reference supplies FEATURES AND CONTENT ONLY. Never styling.
+
+You know its LAYOUT is throwaway. Its **STYLING is equally throwaway** — and that is
+the half that gets missed. From a wireframe, screenshot, HTML prototype or live page
+you take which tabs exist, which columns, which fields, which actions, what the copy
+says. You take NOTHING else. Never carry across:
+
+- **any colour** — background, border, text, tint. If the reference shows a grey
+  content area, that is an ARTEFACT of the reference, NOT a spec. Every colour comes
+  from the `--zc-*` token that the DESIGN SYSTEM rule names for that surface, never
+  from matching the reference.
+- **any surface treatment** (sunken vs raised, bordered, radius, shadow), **any
+  spacing**, **any shell styling**.
+
+**Test:** if a colour or surface traces to the reference rather than to a rule, it is
+wrong — even when it looks fine. This is a real observed failure: an HTML prototype
+had a grey content area, and the build bound a grey token to the container.
+
+### Five surfaces you never restyle
+
+**Service rail · topbar · side menu · sub header · container.**
+
+Change their CONTENT freely — service name, item labels and icons, page title, tabs,
+what sits inside the container. NEVER change how they LOOK: no fill, no border, no
+radius, no shadow, no height, no internal spacing. `docs/template.html` ships them
+correct; touching them is always a regression.
+
+### Container surface: the exact rule
+
+| | Background | Padding |
+|---|---|---|
+| Default (stretch table, master-detail, single section) | the container's own surface, as shipped | stretch 16/0/0/0 · master-detail 0 |
+| Card-grid page ONLY (container holds a grid of `.zc-card` sections) | the sunken card surface | 16 all sides |
+| Empty state | as shipped | 0 all sides |
+
+- The container BORDER is never overridden. Page-level border tokens on a container
+  are ALWAYS WRONG — page tokens are the backdrop layer; the container is a CARD.
+- **Sunken requires cards on it.** A sunken container with no cards reads as a
+  rendering failure. Empty container = default surface.
+- **ONE container surface per page type, product-wide.** Four sunken pages beside
+  four default ones is a fail even when each is individually defensible.
+
+### Exactly ONE tab level in the sub header
+
+The sub header carries the PRIMARY tab level and nothing else. A second level goes in
+the container header as `.zc-tabs` `data-type="secondary"`. Primary tabs PLUS a
+segmented control beside the title is TWO groups in the sub header — a FAIL. Count
+them.
+
+### Success, provisioning and confirmation states are POPUPS, not pages
+
+After a create/delete/apply action the result is a popup over the originating screen.
+A page titled "Instance Created Successfully" is a FAIL; so is a full-page
+"Creating your instance…" progress screen. Keep the user where they started.
+
+### One Size per action group
+
+Every button in the sub header's right-hand group uses the SAME `data-size`, and the
+primary CTA is NOT exempt. Same for the container header action bar and any filter
+row.
+
+### Never a table header above an empty body
+
+A column header row with zero data rows is dead furniture — an empty table shows an
+EMPTY STATE instead of headers. If the same empty state would repeat once per item
+(four cards each saying "No policies yet"), that is wireframe-copying: collapse it
+into ONE list, or an accordion per item revealing its table only when expanded.
+
+---
+
 ## SOURCES OF TRUTH (read in this order — and what NEVER to read)
 
 1. `zcat-ui/ONBOARDING.md` — the component API contract. AUTHORITATIVE. Read fully, every build.

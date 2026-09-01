@@ -23,9 +23,15 @@ out on its own; that discards the gates.
 Link the two files in your page, unmodified:
 
 ```html
-<link rel="stylesheet" href="zcat-ui/zcat.css">
-<script src="zcat-ui/zcat.js" defer></script>
+<link rel="stylesheet" href="zcat-ui/zcat.css?v=109">
+<script src="zcat-ui/zcat.js?v=16" defer></script>
 ```
+
+Keep the `?v=` on both. `zcat.css` is a list of `@import`s: the imports carry
+their own version, but if the page asks for `zcat.css` itself without one, the
+browser serves a cached copy of that file — old import list and all — so a
+library fix never reaches your page. Copy the two lines from
+`zcat-ui/docs/template.html`, which always carries the current version.
 
 `zcat.js` initialises every component automatically, including markup you inject
 later. There is nothing else to wire up.

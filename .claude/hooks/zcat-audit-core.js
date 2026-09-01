@@ -229,7 +229,20 @@ function __zcatAudit() {
     if (!v && PLACEHOLDER.test(ph)) warn("PLACEHOLDER", `input still shows demo placeholder "${ph}"`, el);
   }
 
-  const isEmptyState = !![...document.querySelectorAll(".zc-empty")].filter(vis).length;
+  /* An empty state is deliberately one simple centred block, so it is exempt
+     from "use 10+ components" and "show hierarchy". But the exemption applies
+     only when the empty state IS the page. A console screen that merely holds
+     an empty panel somewhere is a full screen, and inheriting the exemption let
+     a 4-component page pass as though it were a blank slate. Same rule as the
+     design metrics use — defined once here so the two cannot drift again. */
+  const isEmptyState = (() => {
+    const e = [...document.querySelectorAll(".zc-empty")].filter(vis)[0];
+    if (!e) return false;
+    const scope = e.closest(".zc-layout__container, .zc-layout__body") || document.body;
+    const others = [...scope.querySelectorAll(".zc-table, .zc-cheader, .zc-card, .zc-gdetails, .zc-tabs")]
+                     .filter(vis).length;
+    return others === 0;
+  })();
 
   /* ── 13. Built from components, not divs ──────────────────────────── */
   const zcSet = new Set();
@@ -405,6 +418,26 @@ function __zcatAudit() {
         `"${t.slice(0, 46)}" reads as an empty state but is not the Empty State component — ` +
         "use .zc-empty so it gets the illustration, the centring and the action row",
         el.className || el.tagName.toLowerCase());
+    }
+  }
+
+  /* ── 18h. The stylesheet link must carry a version ──────────────────
+     zcat.css is a list of @imports. The imports are versioned, but if the page
+     asks for zcat.css itself with no ?v=, the browser serves a CACHED copy of
+     that file — including its old list of imports — so a library fix never
+     reaches the page and it renders against rules that no longer exist. The
+     symptom is always the same and always baffling: the markup is right and the
+     screen is wrong. */
+  {
+    for (const l of document.querySelectorAll('link[rel="stylesheet"]')) {
+      const href = l.getAttribute("href") || "";
+      if (!/zcat\.css/.test(href)) continue;
+      if (!/\?v=\d+/.test(href))
+        fail("UNVERSIONED STYLESHEET",
+          `<link href="${href}"> has no ?v= — the browser will serve a cached ` +
+          "zcat.css and the page will render against an old library. Copy the " +
+          "link from docs/template.html, which carries the current version",
+          'link[rel="stylesheet"]');
     }
   }
 
