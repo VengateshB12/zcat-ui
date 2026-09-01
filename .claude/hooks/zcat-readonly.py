@@ -48,11 +48,15 @@ PROTECTED = [
     ("catalyst.json",  "the deploy config"),
 ]
 
-# Bash forms that write. Redirects to /dev/null are stripped first — "2>/dev/null"
-# is not a write, and treating it as one made the old guard fire on plain reads.
-WRITE_CMD = re.compile(
-    r"(>>?|\bsed\b\s+-i|\btee\b|\bcp\b|\bmv\b|\brm\b|\btruncate\b|\bdd\b|"
-    r"\bmkdir\b|\btouch\b|\bchmod\b|\bgit\s+(checkout|restore|apply|reset)\b)", re.I)
+# Bash writes. Matching "a write verb somewhere AND the path somewhere" was too
+# blunt: it blocked `find "AI Automation" 2>/dev/null` (the "2>" read as a
+# redirect) and `./build-docs-site.sh 2>&1` (RUNNING a protected script is not
+# writing to it). So the path must be the actual TARGET of a write — either
+# just after a redirect, or an argument to a command that writes.
+NOISE = re.compile(r"\d?>>?\s*(/dev/null|&\d)")      # 2>/dev/null, 2>&1, >&2
+REDIRECT_TO = r">>?\s*['\"]?{p}"
+WRITE_ARG = (r"\b(sed\s+-i|tee|cp|mv|rm|install|truncate|dd|mkdir|touch|chmod|chown|"
+             r"ln|git\s+(?:checkout|restore|apply|reset|clean))\b[^|;&]*?['\"]?{p}")
 
 
 def deny(reason):
@@ -111,16 +115,12 @@ def main():
             refuse(hit[0], hit[1], f"Refused: {tool} on {fp}")
 
     elif tool == "Bash":
-        cmd = ti.get("command") or ""
-        # strip the redirects that are not writes before testing
-        probe = re.sub(r"\d?>>?\s*/dev/null", " ", cmd)
-        if not WRITE_CMD.search(probe):
-            return
+        probe = NOISE.sub(" ", ti.get("command") or "")
         for prefix, what in PROTECTED:
-            token = prefix.rstrip("/")
-            # match the path as it would appear in a command, quoted or not
-            pat = re.escape(token).replace(r"\ ", r"[ _]")
-            if re.search(pat, probe):
+            token = re.escape(prefix.rstrip("/")).replace(r"\ ", r"[ _]")
+            # the path must be WRITTEN TO, not merely mentioned or executed
+            if (re.search(REDIRECT_TO.format(p=token), probe) or
+                    re.search(WRITE_ARG.format(p=token), probe)):
                 refuse(prefix, what, "Refused: a Bash command that writes into it.")
 
 
