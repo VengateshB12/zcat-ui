@@ -48,15 +48,52 @@ PROTECTED = [
     ("catalyst.json",  "the deploy config"),
 ]
 
-# Bash writes. Matching "a write verb somewhere AND the path somewhere" was too
-# blunt: it blocked `find "AI Automation" 2>/dev/null` (the "2>" read as a
-# redirect) and `./build-docs-site.sh 2>&1` (RUNNING a protected script is not
-# writing to it). So the path must be the actual TARGET of a write — either
-# just after a redirect, or an argument to a command that writes.
+# Deciding whether a Bash command WRITES to a protected path is the whole job,
+# and looking for "a write verb somewhere and the path somewhere" is not it.
+# That blunt test refused three legitimate things in a row: a `find` whose
+# "2>/dev/null" read as a redirect, `./build-docs-site.sh` (running a protected
+# script is not writing to it), and a `grep` whose quoted PATTERN happened to
+# contain "rm -rf".
+#
+# So we look at the command word. A shell line is split into segments on | ; &&
+# ||, and only a segment whose FIRST word is a write command counts — words
+# inside a quoted argument never do. Redirects are checked separately, since
+# `> file` writes whatever the command word is.
 NOISE = re.compile(r"\d?>>?\s*(/dev/null|&\d)")      # 2>/dev/null, 2>&1, >&2
-REDIRECT_TO = r">>?\s*['\"]?{p}"
-WRITE_ARG = (r"\b(sed\s+-i|tee|cp|mv|rm|install|truncate|dd|mkdir|touch|chmod|chown|"
-             r"ln|git\s+(?:checkout|restore|apply|reset|clean))\b[^|;&]*?['\"]?{p}")
+WRITE_VERBS = {"tee", "cp", "mv", "rm", "install", "truncate", "dd", "mkdir",
+               "touch", "chmod", "chown", "ln", "rsync", "unlink", "rmdir"}
+
+
+def segments(cmd):
+    """Split a shell line into command segments on | ; && || and newlines."""
+    return [x for x in re.split(r"\|\||&&|[|;\n]", cmd) if x.strip()]
+
+
+def command_word(seg):
+    """First real word of a segment: skip env assignments, sudo, and `then`
+    style keywords. Returns '' if the segment starts with a quote."""
+    for tok in seg.strip().split():
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", tok):     # FOO=bar prefix
+            continue
+        if tok in ("sudo", "command", "exec", "then", "do", "else", "!"):
+            continue
+        return tok.strip("\\").split("/")[-1]
+    return ""
+
+
+def writes_to(seg, token):
+    """Does this ONE segment write to the path matching `token`?"""
+    if re.search(r">>?\s*['\"]?" + token, seg):           # > path / >> path
+        return True
+    verb = command_word(seg)
+    if verb == "sed" and not re.search(r"\s-i\b|\s-\w*i\w*\b", seg):
+        return False                                        # sed without -i reads
+    if verb == "git":
+        if not re.search(r"\bgit\s+(checkout|restore|apply|reset|clean)\b", seg):
+            return False
+    elif verb != "sed" and verb not in WRITE_VERBS:
+        return False
+    return bool(re.search(token, seg))
 
 
 def deny(reason):
@@ -116,12 +153,12 @@ def main():
 
     elif tool == "Bash":
         probe = NOISE.sub(" ", ti.get("command") or "")
-        for prefix, what in PROTECTED:
-            token = re.escape(prefix.rstrip("/")).replace(r"\ ", r"[ _]")
-            # the path must be WRITTEN TO, not merely mentioned or executed
-            if (re.search(REDIRECT_TO.format(p=token), probe) or
-                    re.search(WRITE_ARG.format(p=token), probe)):
-                refuse(prefix, what, "Refused: a Bash command that writes into it.")
+        for seg in segments(probe):
+            for prefix, what in PROTECTED:
+                token = re.escape(prefix.rstrip("/")).replace(r"\ ", r"[ _]")
+                if writes_to(seg, token):
+                    refuse(prefix, what,
+                           "Refused: a Bash command that writes into it.")
 
 
 if __name__ == "__main__":
