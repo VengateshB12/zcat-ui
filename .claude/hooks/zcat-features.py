@@ -34,6 +34,7 @@ Rules enforced here:
 Written next to the page's audit as <slug>.features.json; the Stop gate refuses
 to finish without a current one.
 """
+import html
 import json
 import os
 import re
@@ -113,7 +114,11 @@ def main():
     attrs = " ".join(re.findall(
         r'(?:placeholder|aria-label|title|alt|value|data-tooltip)\s*=\s*"([^"]*)"',
         text, flags=re.I))
-    hay = norm(re.sub(r"<[^>]+>", " ", text) + " " + attrs)
+    # Entities must be decoded first. Without this, "Access & Roles" is written
+    # in the page as "Access &amp; Roles", normalises to "accessamproles", and
+    # the gate reports a feature that is plainly on screen as missing — which
+    # teaches the agent that the gate is unreliable, the worst thing it can do.
+    hay = norm(html.unescape(re.sub(r"<[^>]+>", " ", text) + " " + attrs))
 
     missing = []
     for kind, items in declared.items():
