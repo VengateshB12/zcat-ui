@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Basic Template</title>
-  <link rel="stylesheet" href="../zcat.css?v=113">
+  <link rel="stylesheet" href="../zcat.css?v=114">
   <script src="../zcat.js?v=16"></script>
   <style>
     /* Flow glue: view switching, toast host, wizard engine cards — layout
@@ -24,11 +24,6 @@
     .tpl-engine-card .zc-radio { margin-left: auto; }
     .tpl-wizard-step { display: none; }
     .tpl-wizard-step.act { display: flex; flex-direction: column; gap: 16px; }
-    /* Overlays open/close via the hidden attribute; the component classes set
-       display:flex, so hidden needs an explicit layout override. */
-    .zc-popup-scrim[hidden] { display: none; }
-    .zc-btn[hidden] { display: none; }
-    .zc-helper[hidden] { display: none; }
     /* 36px icon chip used by stat tiles + wizard engine cards (background and
        stroke colours are supplied inline from the --zc-shade-* token scale). */
     .tpl-chip { width: 36px; height: 36px; border-radius: var(--zc-radius-6); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }

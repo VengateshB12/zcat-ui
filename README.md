@@ -23,7 +23,7 @@ out on its own; that discards the gates.
 Link the two files in your page, unmodified:
 
 ```html
-<link rel="stylesheet" href="zcat-ui/zcat.css?v=109">
+<link rel="stylesheet" href="zcat-ui/zcat.css?v=114">
 <script src="zcat-ui/zcat.js?v=16" defer></script>
 ```
 

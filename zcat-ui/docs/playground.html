@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=113">
+  <link rel="stylesheet" href="../zcat.css?v=114">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -427,7 +427,7 @@ A. Get the repo and WORK INSIDE THE CLONE:
    for it and wait — do not skip the gates and do not build unguarded. Halting
    here is the correct behaviour.
 B. Link the library in every page you create, keeping the ?v= on both:
-     <link rel="stylesheet" href="zcat-ui/zcat.css?v=113">
+     <link rel="stylesheet" href="zcat-ui/zcat.css?v=114">
      <script src="zcat-ui/zcat.js?v=16" defer><\/script>
    Do not connect an MCP server for this work. Everything you need is in this
    prompt and in the clone. The zcat MCP serves the FIGMA workflow — Figma file
@@ -439,6 +439,38 @@ C. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
    a wireframe, a screenshot, a PRD, or a one-line description." Do not
    apologise, do not say anything is missing, and do not guess a screen and
    start building. Wait for my reply.
+
+HOW TO PRODUCE A PAGE — COPY, NEVER AUTHOR FROM SCRATCH
+Half of any screen is the shell, the side menu and the page scaffolding, and
+it is IDENTICAL on every page. Typing it out again is not design work: on a
+recent build 542 of 1062 elements were boilerplate, and one empty-state page
+spent 208 elements to express 39 elements of content. Copy it instead — you
+get more budget for the part that matters, and the shell cannot drift.
+
+  FIRST PAGE — copy the worked template, then fix its paths:
+    cp zcat-ui/docs/template.html pages/my-page.html
+    # the template lives in docs/, your page lives in pages/ — repoint both:
+    #   ../zcat.css        ->  ../zcat-ui/zcat.css
+    #   ../zcat.js         ->  ../zcat-ui/zcat.js
+    #   icons.svg#i-x      ->  ../zcat-ui/docs/icons.svg#i-x
+    #   src="icons/...     ->  src="../zcat-ui/docs/icons/...   (logos, photos)
+    # then RUN THE AUDIT on the copy before you change anything. It takes
+    # seconds and it catches a missed path as a 404 rather than as a blank
+    # logo you notice three screens later.
+
+  EVERY PAGE AFTER THAT — copy the sibling you just built:
+    cp pages/my-page.html pages/my-page-detail.html
+  then change ONLY the Sub Header and the container content. The rail, the
+  topbar, the side menu and the sprite reference are already right and already
+  agreed; re-typing them can only introduce differences.
+
+  WHEN YOU EDIT A COPY, do not read the whole file back. Find the block you
+  are changing (grep for its id or class) and edit that region. Reading a
+  50 KB page to change one table is the single most wasteful thing you can do.
+
+  This is a rule about TYPING, not about thinking. Every layout decision, every
+  composition direction, every piece of copy is still yours to make — you just
+  make them in the content, not by re-emitting a shell you were given.
 
 ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
 1. Read zcat-ui/ONBOARDING.md fully — it is the contract. The component API
@@ -3765,7 +3797,8 @@ const COMPONENTS = {
         '</ol>' +
         '<p class="doc-lead" style="margin-top:16px">Prefer to set up by hand? Clone <code>' +
         esc('github.com/VengateshB12/zcat-ui') + '</code> and link ' +
-        '<code>zcat.css</code> + <code>zcat.js</code>. Run <code>git pull</code> for the latest components.</p></div>';
+        '<code>zcat.css?v=</code> + <code>zcat.js?v=</code> — keep the <code>?v=</code> on both, or your browser will serve a cached library and your page will render against rules that no longer exist. ' +
+        'The design rules ship with the clone in <code>zcat-ui/rules/</code>: read <code>_index.md</code>, then the one topic you need. Run <code>git pull</code> for the latest components.</p></div>';
 
       h += '<div><div class="doc-actions"><h3 style="margin:0">The first prompt</h3>' +
            '<span style="display:inline-flex;gap:10px">' +

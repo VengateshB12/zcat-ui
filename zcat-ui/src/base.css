@@ -28,6 +28,15 @@ img, svg {
   max-width: 100%;
 }
 
+/* HIDDEN MUST ACTUALLY HIDE.
+   The browser's default is display:none, but it is a plain element rule, so
+   any component class setting display:flex silently beats it — a popup scrim,
+   a button, a helper. Every page was working around this with its own
+   .zc-thing[hidden] { display: none } lines copied out of the template, which
+   is both duplication and a hard-rule violation (pages must not redefine zc-*
+   classes). It belongs here, once, for everything. */
+[hidden] { display: none !important; }
+
 /* AN ICON THAT SAYS NOTHING IS A STROKE ICON.
    SVG's own default is fill:black, so a bare <svg><use href="#i-database"/>
    </svg> renders as a SOLID BLACK SHAPE — at 16px that reads as a heavy glyph
