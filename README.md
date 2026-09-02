@@ -58,6 +58,7 @@ Then open **http://localhost:8790/zcat-ui/docs/playground.html**
 | `zcat-ui/docs/template.html` | a complete, verified Catalyst page to copy from |
 | `zcat-ui/ONBOARDING.md` | **the component API contract — authoritative** |
 | `reference-screenshots/` | 24 production screens: the quality bar to design against |
+| `zcat-ui/rules/` | the design decision rules — read `_index.md`, then the one topic you need |
 | `.claude/` | the AI build workflow and enforcement hooks |
 
 ---

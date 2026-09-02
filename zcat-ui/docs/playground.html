@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=112">
+  <link rel="stylesheet" href="../zcat.css?v=113">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -400,7 +400,7 @@ You are going to build product screens with the zcat UI component library.
 This message is the SETUP and the RULES. My requirement comes in my NEXT
 message — it is deliberately not here yet, so do not treat it as missing.
   Library:  https://github.com/VengateshB12/zcat-ui
-  Rules:    the zcat MCP at https://zcat.catalystappsail.in/mcp
+  Rules:    this prompt, plus zcat-ui/.claude/skills/zcat-code.md in the clone
   Docs:     https://zcatdocs.onslate.in
 
 SET UP FIRST (do this yourself — do not ask me to)
@@ -426,18 +426,15 @@ A. Get the repo and WORK INSIDE THE CLONE:
    That last command must print PASS. If the install needs my approval, ASK me
    for it and wait — do not skip the gates and do not build unguarded. Halting
    here is the correct behaviour.
-B. If the zcat MCP is not already connected, connect it. It is public — no key,
-   no login, just a URL. In Claude Code:
-     claude mcp add --transport http zcat https://zcat.catalystappsail.in/mcp
-   In Cursor or another editor, add the same URL to its MCP settings file. Tell
-   me if it needs a restart to take effect. If you cannot connect it, say so and
-   carry on using the rules files inside the repo — but tell me they may be
-   older than the server's.
-C. Link the library in every page you create, unmodified:
-     <link rel="stylesheet" href="zcat-ui/zcat.css">
-     <script src="zcat-ui/zcat.js" defer><\/script>
-D. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
-   library in place, MCP connected or not, contract read — and then invite it,
+B. Link the library in every page you create, keeping the ?v= on both:
+     <link rel="stylesheet" href="zcat-ui/zcat.css?v=113">
+     <script src="zcat-ui/zcat.js?v=16" defer><\/script>
+   Do not connect an MCP server for this work. Everything you need is in this
+   prompt and in the clone. The zcat MCP serves the FIGMA workflow — Figma file
+   keys, library subscriptions, auto-layout mechanics — none of which exists in
+   code, and fetching it costs thousands of tokens that buy you nothing here.
+C. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
+   library in place, contract read — and then invite it,
    e.g. "Setup is complete and I'm ready to build. Send me your requirement:
    a wireframe, a screenshot, a PRD, or a one-line description." Do not
    apologise, do not say anything is missing, and do not guess a screen and
@@ -448,12 +445,21 @@ ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
    tables there are authoritative; docs/playground.html render functions and the
    usage comments at the top of each src/components/*.css file are the reference
    markup. Do not invent markup shapes.
-2. The zcat MCP is the CURRENT source of the design rules —
-   prefer it over any rules file on disk, which may be a stale copy. Use
-   zcat_get_hard_rules, zcat_get_decision_rules (read only the topic you need),
-   zcat_get_sample_data and zcat_search_components / zcat_search_icons. Apply
-   the DESIGN decision from those rules and skip their Figma mechanics
-   (component keys, setProperties, auto-layout) — none of that exists in code.
+2. THE DESIGN RULES ARE IN THE CLONE. Nothing to fetch, no server to connect.
+   Three places, in order of how often you need them:
+     - this prompt and zcat-ui/.claude/skills/zcat-code.md — always in force
+     - zcat-ui/rules/_index.md — a 2 KB topic index. Read the INDEX, then read
+       the ONE file that matches your question, never all of them. Composition,
+       spacing, which component, data display, table columns, detail pages,
+       popups, navigation — one file each.
+     - zcat-ui/rules/sample-data.md — realistic rows by domain. Use these
+       instead of inventing data, and never lorem ipsum.
+   Those rule files come from the Figma project, so a few mention Figma
+   mechanics (component keys, auto-layout, setProperties). Take the DESIGN
+   decision and ignore the mechanism — none of it exists in code.
+   You do not need to look up the mechanical rules (even spacing, no raw hex,
+   minimum 10px type, stroke icons, radius 6): a hook auto-fixes those on every
+   save and the four gates block whatever it cannot fix.
 3. List back every screen and state my requirement implies (a list page usually
    also means an empty state, a create/edit popup and a detail page), count the
    tabs, columns, buttons and fields you found, and confirm with me before
@@ -476,8 +482,8 @@ Following the rules below only makes a screen CORRECT. Correct and boring is
 still a failure. Components are building material, not the design.
 
 Q1. NAME THE QUALITY BAR AND LOOK AT IT. Pick the production screen this page
-    should feel like from reference-screenshots/ in the repo (with the MCP
-    connected, zcat_get_screenshot_patterns maps page type -> screenshot).
+    should feel like from reference-screenshots/ in the repo — the filenames
+    say what each one is (list view, detail view, card grid, settings popup).
     OPEN THE PNG and look at it — do not just cite the filename. Tell me which
     one you picked and which patterns you are taking from it: how it groups
     things, where it puts weight, how dense it is.
@@ -3752,14 +3758,13 @@ const COMPONENTS = {
 
       h += '<div><h3>How to use it in a project</h3><ol class="doc-steps">' +
         stepEl(1, 'Paste the prompt into your coding agent',
-          '<p>Claude, Cursor, or anything else with a terminal. The prompt does the setup itself — it clones the library, connects the zcat MCP for the live design rules, links the two files, and reads the contract in <code>ONBOARDING.md</code> before writing a line of code.</p>' +
-          '<p>Nothing to install and nothing to configure first. The MCP is public — no key, no login.</p>') +
+          '<p>Claude, Cursor, or anything else with a terminal. The prompt does the setup itself — it clones the library, links the two files, and reads the contract in <code>ONBOARDING.md</code> before writing a line of code.</p>' +
+          '<p>Nothing to install and nothing to configure first. No MCP server either: the rules travel with the clone.</p>') +
         stepEl(2, 'Describe what you want built',
           '<p>Text, a wireframe, a screenshot, or a PRD. The agent lists back every screen and state it found — including the empty and create/edit states — and confirms with you before building.</p>') +
         '</ol>' +
         '<p class="doc-lead" style="margin-top:16px">Prefer to set up by hand? Clone <code>' +
-        esc('github.com/VengateshB12/zcat-ui') + '</code>, add the MCP URL <code>' +
-        esc('https://zcat.catalystappsail.in/mcp') + '</code> to your editor, and link ' +
+        esc('github.com/VengateshB12/zcat-ui') + '</code> and link ' +
         '<code>zcat.css</code> + <code>zcat.js</code>. Run <code>git pull</code> for the latest components.</p></div>';
 
       h += '<div><div class="doc-actions"><h3 style="margin:0">The first prompt</h3>' +
