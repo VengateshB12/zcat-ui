@@ -547,6 +547,16 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
 - **A sub-section list is N screens, not one.** Tables / Schema Visualiser /
   Queries / Functions / Triggers / Indexes / Extensions is seven screens.
   Collapsing them into one list is the quietest way to lose a requirement.
+- **Sprite icons take no `fill`.** 26 of 27 symbols are stroke-drawn and SVG
+  defaults to `fill:black`, so a bare `<svg><use href="#i-x"/></svg>` used to
+  render as a solid shape — invisible at 16px, a black rectangle at 350px.
+  `base.css` now defaults `svg:not([fill])` to `fill:none; stroke:currentColor`;
+  `.zc-icon-stroke` is the explicit form and now works anywhere, not just in
+  `.zc-sidemenu__item`. Colour logos declare their own fill on the path and are
+  unaffected. Audit: `ICON RENDERED SOLID`.
+- **An icon is never an illustration.** A 16px glyph at 200px reads as exactly
+  that. Empty and loading states use the Empty State artwork; `*mask.svg` files
+  are for CSS masking and render black in an `<img>` (`MASK USED AS IMAGE`).
 - **Overlays are judged open.** A three-dot menu goes in a shell with
   `data-menu="action"`, which right-aligns it to its trigger. Without it the
   menu drops leftward from a right-edge trigger and lands outside the shell.

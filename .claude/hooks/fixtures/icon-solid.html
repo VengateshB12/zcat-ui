@@ -1,0 +1,38 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fixture — a stroke icon rendered as a solid blob</title>
+<!--
+  Regression fixture for ICON RENDERED SOLID.
+
+  SVG's own default is fill:black, so a bare <svg><use href="#i-database"/></svg>
+  draws the icon as a SOLID SHAPE. At 16px that passes for a heavy glyph and
+  nobody notices; at 350px it is a black rectangle in the middle of the screen.
+  That is what shipped, and every gate passed it.
+
+  base.css now defaults sprite icons to stroke, so this fixture forces the fill
+  back on to keep failing. If this file ever PASSES, the rule has regressed.
+
+  The second icon is the one-in-27 case: a colour logo glyph carries its own
+  fill on the path, so it must NOT be flagged.
+-->
+<link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=111">
+<style>
+  body { margin: 0; padding: 24px; }
+  /* the bug: put the fill back */
+  .blob { fill: currentColor !important; stroke: none !important; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-database" viewBox="0 0 16 16">
+    <path d="M13 4a5 2 0 1 0-10 0 5 2 0 1 0 10 0zM3 4v8a5 2 0 0 0 10 0V4"/>
+  </symbol>
+  <symbol id="i-brandlogo" viewBox="0 0 16 16">
+    <path fill="#2C64E3" d="M2 2h12v12H2z"/>
+  </symbol>
+</svg>
+
+<!-- MUST FAIL: a stroke symbol forced to render filled, at illustration size -->
+<svg class="blob" width="240" height="240" viewBox="0 0 16 16"><use href="#i-database"/></svg>
+
+<!-- MUST NOT FAIL: a colour logo declares its own fill and is not a stroke icon -->
+<svg width="48" height="48" viewBox="0 0 16 16"><use href="#i-brandlogo"/></svg>

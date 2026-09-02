@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=110">
+  <link rel="stylesheet" href="../zcat.css?v=111">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -656,6 +656,22 @@ HARD RULES (violating these is the failure mode)
   screen with a menu drawn beside it. Build each one, or tell me which you are
   deferring and why, BEFORE you build. Collapsing them into a single list is
   the largest and quietest way to lose a requirement, and it looks finished.
+- NEVER PUT fill ON A SPRITE ICON. 26 of the 27 sprite symbols are drawn with
+  strokes, and SVG's own default is fill:black — so an <svg> that says nothing
+  used to render the icon as a SOLID BLACK SHAPE. At 16px that passes for a
+  heavy glyph and nobody notices; at illustration size it is a black rectangle
+  in the middle of the screen. The library now defaults sprite icons to stroke,
+  so the correct markup is simply:
+      <svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-database"/></svg>
+  Add class="zc-icon-stroke" if you want it stated. The one exception is a
+  COLOUR LOGO, which carries its own fill on the path and keeps it. If you ever
+  find yourself writing fill="currentColor" on a sprite icon, you are about to
+  make a blob. The audit fails this as ICON RENDERED SOLID.
+- AN ICON IS NEVER AN ILLUSTRATION. A 16px glyph blown up to 200px is not an
+  empty-state or loading graphic — it is a 16px glyph blown up to 200px, and it
+  reads as one. Use the Empty State component's own artwork. Never point an
+  <img> at a *mask.svg either: those are solid shapes meant for CSS masking and
+  render as a black rectangle (audit: MASK USED AS IMAGE).
 - AN OVERLAY THAT OPENS OFF SCREEN IS BROKEN. Menus, dropdowns and tooltips are
   judged OPEN, not closed. A three-dot menu belongs in a shell carrying
   data-menu="action", which right-aligns it to its trigger; without that it

@@ -28,6 +28,37 @@ img, svg {
   max-width: 100%;
 }
 
+/* AN ICON THAT SAYS NOTHING IS A STROKE ICON.
+   SVG's own default is fill:black, so a bare <svg><use href="#i-database"/>
+   </svg> renders as a SOLID BLACK SHAPE — at 16px that reads as a heavy glyph
+   and nobody notices; at 350px it is a black rectangle in the middle of the
+   screen. That is what shipped. 26 of the 27 sprite symbols are stroke-drawn,
+   so stroke is the right default and forgetting it should not be possible.
+
+   This is safe for the one-in-27 case too: a colour logo carries its own
+   fill="..." on the path, and an explicit presentation attribute beats an
+   inherited value, so #i-slate and the *-color.svg glyphs keep their colour.
+   Components are unaffected — they already carry fill="none" on the element,
+   which this rule deliberately does not match. */
+svg:not([fill]) {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The explicit form, for markup that wants to say it rather than rely on the
+   default. Previously this existed only inside .zc-sidemenu__item, so there
+   was no general way to place a sprite icon safely. */
+.zc-icon-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 button, input, select, textarea {
   font-family: inherit;
   font-size: inherit;

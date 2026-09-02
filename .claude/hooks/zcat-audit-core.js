@@ -469,6 +469,35 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 18g3. A stroke icon rendered filled is a black blob ────────────
+     26 of 27 sprite symbols are drawn with strokes and carry no fill of their
+     own, so anything that gives them a fill turns them into a solid shape. At
+     16px that passes for a heavy glyph; at 350px it is a black rectangle in
+     the middle of the page. The library now defaults these to stroke, but a
+     page can still override it, so check the rendered result. */
+  {
+    for (const use of document.querySelectorAll("svg use")) {
+      const href = use.getAttribute("href") || use.getAttribute("xlink:href") || "";
+      const sym = href.startsWith("#") && document.querySelector(href);
+      if (!sym) continue;
+      // a symbol whose own paths declare a fill is a colour glyph, not a stroke icon
+      if ([...sym.querySelectorAll("[fill]")].some(
+            n => (n.getAttribute("fill") || "").toLowerCase() !== "none")) continue;
+      const svg = use.closest("svg");
+      if (!svg || !vis(svg)) continue;
+      const f = getComputedStyle(use).fill;
+      if (f && f !== "none" && !/rgba\(0, 0, 0, 0\)/.test(f)) {
+        const r = svg.getBoundingClientRect();
+        fail("ICON RENDERED SOLID",
+          `${href} is a stroke icon but renders filled (${f}) at ` +
+          `${Math.round(r.width)}x${Math.round(r.height)} — it will draw as a solid ` +
+          'shape, not an outline. Leave fill off the <svg> (the library defaults to ' +
+          'stroke) or add class="zc-icon-stroke"',
+          svg.getAttribute("class") || "svg");
+      }
+    }
+  }
+
   /* ── 18h. The stylesheet link must carry a version ──────────────────
      zcat.css is a list of @imports. The imports are versioned, but if the page
      asks for zcat.css itself with no ?v=, the browser serves a CACHED copy of
