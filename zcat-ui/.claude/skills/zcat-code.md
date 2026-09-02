@@ -499,15 +499,6 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   headings/items, and item icons. The sidemenu service header logo must be an
   existing `*-color.svg` from `docs/icons/` (if the service has no logo in the
   set, use the closest one and tell the user — never a plain stroke icon file).
-- **Copy, never author.** Half of a screen is shell + side menu + scaffolding,
-  identical on every page (542 of 1062 elements on a recent build; an empty
-  state spent 208 elements on 39 elements of content). First page:
-  `cp zcat-ui/docs/template.html pages/x.html`, then repoint `../zcat.css`,
-  `../zcat.js` and `icons.svg#` for the pages/ depth. Every page after:
-  `cp` the sibling and change only the Sub Header and container content. When
-  editing a copy, grep for the block's id and edit that region — never read a
-  50 KB page back to change one table. This is about typing, not thinking:
-  every layout and composition decision is still yours.
 - **A build writes pages and nothing else.** `zcat-ui/`, `.claude/hooks/`,
   `CLAUDE.md`, `HANDOFF.md`, `README.md` and `package.json` are read-only to an
   agent, enforced at PreToolUse for Write/Edit **and** for Bash writes (`>`,
