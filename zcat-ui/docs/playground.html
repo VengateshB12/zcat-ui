@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=109">
+  <link rel="stylesheet" href="../zcat.css?v=110">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -642,6 +642,25 @@ HARD RULES (violating these is the failure mode)
   Header TITLE becomes that item's name — the row you clicked, the card you
   opened — shown with the Back Nav beside it. The title always names what you
   are looking at, never the section you came from.
+- NAME THE REQUIREMENT SO THE GATE CAN READ IT. When you record feature
+  coverage, "source" must be the URL or the file path of the requirement, not a
+  description of it. If it is readable, the gate FETCHES it, pulls out every
+  tab, nav item, action and heading, and diffs that against your page — so a
+  section you quietly left out comes back as a named list. Give it a phrase
+  instead of a path and you lose that check, and you are back to grading your
+  own work. Every label it names must either be built or listed in "dropped"
+  with my recorded approval.
+- A SUB-SECTION LIST IS A FEATURE, NOT A DECORATION. When a requirement shows a
+  section with its own list of sub-pages — Tables, Schema Visualiser, Queries,
+  Functions, Triggers, Indexes, Extensions — that is SEVEN screens, not one
+  screen with a menu drawn beside it. Build each one, or tell me which you are
+  deferring and why, BEFORE you build. Collapsing them into a single list is
+  the largest and quietest way to lose a requirement, and it looks finished.
+- AN OVERLAY THAT OPENS OFF SCREEN IS BROKEN. Menus, dropdowns and tooltips are
+  judged OPEN, not closed. A three-dot menu belongs in a shell carrying
+  data-menu="action", which right-aligns it to its trigger; without that it
+  drops leftward from a trigger that is already at the right edge and lands
+  outside the shell. The audit opens every overlay and measures it.
 - ONE CONTAINER SIDE MENU PER PAGE. Wireframes often draw a second vertical
   list beside the first — a section list AND a record list. Two side menus give
   the reader two competing answers to "where am I". The inner list is RECORDS,

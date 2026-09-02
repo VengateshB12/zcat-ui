@@ -421,6 +421,54 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 18g2. Overlays must open ON the screen ─────────────────────────
+     Everything above this line judges the page in its CLOSED state, because
+     that is the state a page loads in. So every menu, dropdown and popup — the
+     parts most likely to be positioned wrongly — was invisible to the audit. A
+     three-dot menu in a Sub Header opened 118px past the right edge of the
+     shell and every gate still said PASS.
+     zcat.js opens a menu by putting .is-open on it, so we can open each one,
+     measure it, and close it again without clicking anything. An overlay that
+     leaves the viewport, or that an ancestor's overflow cuts off, is broken
+     however good it looks while shut. */
+  {
+    const OVERLAY = ".zc-menu, .zc-dropdown__menu, .zc-tooltip, .zc-popover";
+    for (const ov of document.querySelectorAll(OVERLAY)) {
+      const wasOpen = ov.classList.contains("is-open");
+      if (!wasOpen) ov.classList.add("is-open");
+      const b = ov.getBoundingClientRect();
+      if (b.width > 0 && b.height > 0) {
+        const offR = Math.round(b.right - window.innerWidth);
+        const offL = Math.round(-b.left);
+        let cut = null;
+        for (let e = ov.parentElement; e && e !== document.body; e = e.parentElement) {
+          const c = getComputedStyle(e);
+          if (!/hidden|auto|scroll/.test(c.overflow + c.overflowX + c.overflowY)) continue;
+          const eb = e.getBoundingClientRect();
+          if (b.right > eb.right + 1 || b.left < eb.left - 1) {
+            cut = { by: e.className.toString().split(" ")[0],
+                    px: Math.round(Math.max(b.right - eb.right, eb.left - b.left)) };
+            break;
+          }
+        }
+        const trigger = (ov.closest("[data-menu], .zc-select-shell") || ov)
+                          .getAttribute("aria-label") || ov.className.split(" ")[0];
+        if (offR > 0 || offL > 0)
+          fail("OVERLAY OFF SCREEN",
+            `${trigger} opens ${offR > 0 ? offR + "px past the right edge" : offL + "px past the left edge"} ` +
+            "— an action menu is right-aligned to its trigger (data-menu=\"action\"); " +
+            "a menu that opens off screen is unusable however good it looks closed",
+            ov.className || "overlay");
+        else if (cut)
+          fail("OVERLAY CLIPPED",
+            `${trigger} is cut off by ${cut.by} (${cut.px}px) — the overlay opens ` +
+            "outside its scrolling ancestor, so part of it can never be read",
+            ov.className || "overlay");
+      }
+      if (!wasOpen) ov.classList.remove("is-open");
+    }
+  }
+
   /* ── 18h. The stylesheet link must carry a version ──────────────────
      zcat.css is a list of @imports. The imports are versioned, but if the page
      asks for zcat.css itself with no ?v=, the browser serves a CACHED copy of

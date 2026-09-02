@@ -537,6 +537,20 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   or styling. A control drawn on the left may belong on the right once it is a
   real Container Header. If you cannot name the component you used for
   something, you drew it yourself — that is the failure.
+- **`source` in the features receipt is a URL or a path, never a phrase.** The
+  gate fetches a readable source, extracts its tabs, nav items, actions and
+  headings, and diffs them against the built page; anything absent is listed by
+  name and must be built or recorded in `dropped` with the user's approval.
+  This exists because the declaration is written AFTER the build, so an agent
+  otherwise declares what it built rather than what was asked for — and a
+  Postgres console shipped with 47 of its 72 labels missing, gates green.
+- **A sub-section list is N screens, not one.** Tables / Schema Visualiser /
+  Queries / Functions / Triggers / Indexes / Extensions is seven screens.
+  Collapsing them into one list is the quietest way to lose a requirement.
+- **Overlays are judged open.** A three-dot menu goes in a shell with
+  `data-menu="action"`, which right-aligns it to its trigger. Without it the
+  menu drops leftward from a right-edge trigger and lands outside the shell.
+  Audit: `OVERLAY OFF SCREEN`, `OVERLAY CLIPPED`.
 - **One Container Side Menu per page.** Wireframes often draw a second vertical
   list beside the first (a section list AND a record list). Two `.zc-csm`
   give two competing "where am I" signals. The inner list is RECORDS — use a

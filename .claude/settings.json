@@ -2,11 +2,7 @@
   "permissions": {
     "deny": [
       "Write(AI Automation/**)",
-      "Edit(AI Automation/**)",
-      "Write(zcat-ui/**)",
-      "Edit(zcat-ui/**)",
-      "Write(.claude/hooks/**)",
-      "Edit(.claude/hooks/**)"
+      "Edit(AI Automation/**)"
     ]
   },
   "hooks": {

@@ -540,6 +540,29 @@
   max-height: 300px; overflow: hidden;
 }
 .zc-menu.is-open { display: flex; }
+
+/* A THREE-DOT ACTION MENU IS RIGHT-ALIGNED, WHEREVER IT LIVES.
+   The default menu drops from the trigger's LEFT edge, which is right for a
+   Select — the field is wide and sits away from the edge. A three-dot trigger
+   is the opposite: it is small and it is almost always the LAST thing in a row,
+   so dropping leftward sends the menu off the edge of the shell. That fix used
+   to live on .zc-table__menushell, so it only worked inside tables; the same
+   menu in a Sub Header opened 118px past the right edge and was clipped.
+   data-menu="action" is the semantic marker for "this is an action menu", so
+   the rule belongs here, once, for every place one is used. */
+.zc-select-shell[data-menu="action"] {
+  position: relative;
+  width: auto;
+  display: inline-flex;
+  vertical-align: middle;
+}
+.zc-select-shell[data-menu="action"] .zc-menu {
+  left: auto;
+  right: 0;
+  width: auto;
+  text-align: left;
+  min-width: 120px;
+}
 .zc-menu__body { padding: var(--zc-space-8); overflow-y: auto; flex: 1 1 auto; }
 .zc-menu__heading {
   font-family: var(--zc-font-primary); font-weight: 600;

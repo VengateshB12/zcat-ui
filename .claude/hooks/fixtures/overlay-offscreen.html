@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fixture — an action menu that opens off screen</title>
+<!--
+  Regression fixture for OVERLAY OFF SCREEN.
+
+  Every rule above this one judged a page in its CLOSED state, because that is
+  how a page loads. So a menu positioned wrongly was invisible to the audit: a
+  three-dot menu in a Sub Header opened 118px past the right edge of the shell
+  and all four gates still said PASS.
+
+  This reproduces that with the library's own classes, but forces the OLD
+  left-aligned drop with an inline style, so the fixture keeps failing even
+  after the library fix. If this file ever PASSES, the rule has regressed.
+-->
+<link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=110">
+<style>
+  body { margin: 0; }
+  .row {
+    display: flex; justify-content: flex-end; align-items: center;
+    gap: 12px; padding: 10px 14px; overflow: hidden;
+  }
+  /* the bug: drop from the LEFT edge of a trigger that is itself flush right */
+  .row .zc-menu { left: 0 !important; right: auto !important; }
+</style>
+
+<div class="zc-layout">
+  <div class="zc-layout__shell" style="overflow:hidden">
+    <div class="row">
+      <span class="zc-select-shell" data-menu="action" id="m">
+        <button class="zc-btn" data-variant="grey" data-size="small"
+                data-content="icon" type="button" aria-label="More actions">…</button>
+        <div class="zc-menu" data-size="small" role="menu">
+          <div class="zc-menu__body">
+            <div class="zc-menu__item" role="menuitem">
+              <span class="zc-menu__label">Rename instance</span></div>
+            <div class="zc-menu__item" role="menuitem">
+              <span class="zc-menu__label">Restart instance</span></div>
+            <div class="zc-menu__item" role="menuitem">
+              <span class="zc-menu__label">View connection details</span></div>
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
