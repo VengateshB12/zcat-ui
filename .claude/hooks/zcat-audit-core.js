@@ -498,6 +498,36 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 18g4. Stretch is for a table that is alone ─────────────────────
+     The Table ships two styles and the choice is not decoration. STRETCH is
+     edge-to-edge with no outer border: it works when the table IS the page,
+     because the page container already draws the boundary. Put stat cards or
+     any other surface above it and that boundary now belongs to the cards —
+     the table loses its edge, and the filter row above it reads as floating
+     junk rather than the table's own header. BOXY gives the table back its
+     own border and radius, and the whole block reads as one object again. */
+  {
+    for (const tw of document.querySelectorAll('.zc-table-wrap[data-style="stretch"]')) {
+      if (!vis(tw)) continue;
+      const scope = tw.closest(".zc-layout__container, .zc-layout__body") || document.body;
+      const others = [...scope.querySelectorAll(
+          ".zc-card, .zc-container-el, .zc-gdetails, .zc-empty, .zc-timeline, .zc-codeblock")]
+        .filter(vis)
+        .filter(e => !e.contains(tw) && !tw.contains(e));
+      if (others.length) {
+        const what = others.slice(0, 3)
+          .map(e => "." + e.className.toString().split(" ")[0]).join(", ");
+        fail("STRETCH TABLE SHARING A PAGE",
+          `this table is data-style="stretch" but ${others.length} other surface(s) ` +
+          `share the page (${what}) — stretch is only for a table that is ALONE, ` +
+          'where the page container is its edge. With anything else on the page use ' +
+          'data-style="boxy" so the table keeps its own border and the filter row ' +
+          'above it belongs to something',
+          ".zc-table-wrap");
+      }
+    }
+  }
+
   /* ── 18h. The stylesheet link must carry a version ──────────────────
      zcat.css is a list of @imports. The imports are versioned, but if the page
      asks for zcat.css itself with no ?v=, the browser serves a CACHED copy of

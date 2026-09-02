@@ -547,6 +547,14 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
 - **A sub-section list is N screens, not one.** Tables / Schema Visualiser /
   Queries / Functions / Triggers / Indexes / Extensions is seven screens.
   Collapsing them into one list is the quietest way to lose a requirement.
+- **Table style: ALONE = `stretch`, SHARING = `boxy`.** `data-style="stretch"`
+  is edge-to-edge with no outer border and relies on the page container for its
+  boundary — valid only when the table is the whole page. Add stat cards, a
+  `.zc-gdetails`, a second table or an Attention Box and that boundary belongs
+  to them instead: the table loses its edge and the Container Header above it
+  reads as loose furniture. `data-style="boxy"` restores the 1px border and
+  6px radius so header + table + pagination read as one object.
+  Audit: `STRETCH TABLE SHARING A PAGE`.
 - **Sprite icons take no `fill`.** 26 of 27 symbols are stroke-drawn and SVG
   defaults to `fill:black`, so a bare `<svg><use href="#i-x"/></svg>` used to
   render as a solid shape — invisible at 16px, a black rectangle at 350px.

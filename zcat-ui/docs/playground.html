@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=111">
+  <link rel="stylesheet" href="../zcat.css?v=112">
   <script src="../zcat.js?v=16"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -656,6 +656,19 @@ HARD RULES (violating these is the failure mode)
   screen with a menu drawn beside it. Build each one, or tell me which you are
   deferring and why, BEFORE you build. Collapsing them into a single list is
   the largest and quietest way to lose a requirement, and it looks finished.
+- STRETCH OR BOXY IS A DECISION, NOT A DEFAULT. The Table ships two styles and
+  picking the wrong one is why a screen looks loose:
+    data-style="stretch" — edge-to-edge, no outer border. ONLY when the table IS
+      the page: nothing above it but the Sub Header, nothing beside it. The page
+      container draws the boundary, so the table does not need one.
+    data-style="boxy" — its own 1px border and 6px radius. The moment ANYTHING
+      else shares the page — stat cards, a General Details block, a second
+      table, an Attention Box — the page container's edge now belongs to those,
+      the stretched table loses its boundary, and the search/filter/button row
+      above it reads as loose furniture floating on the background. Boxy gives
+      the table its edge back and the whole block reads as one object.
+  The rule in one line: ALONE = STRETCH, SHARING = BOXY. The audit fails the
+  wrong choice as STRETCH TABLE SHARING A PAGE.
 - NEVER PUT fill ON A SPRITE ICON. 26 of the 27 sprite symbols are drawn with
   strokes, and SVG's own default is fill:black — so an <svg> that says nothing
   used to render the icon as a SOLID BLACK SHAPE. At 16px that passes for a

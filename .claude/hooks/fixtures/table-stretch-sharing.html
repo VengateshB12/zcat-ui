@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fixture — a stretch table on a page it does not own</title>
+<!--
+  Regression fixture for STRETCH TABLE SHARING A PAGE.
+
+  data-style="stretch" is edge-to-edge with no outer border: it borrows its
+  boundary from the page container. That works when the table IS the page. Put
+  stat tiles above it and the boundary now belongs to the tiles — the table
+  loses its edge and the search / filter / button row above it reads as loose
+  furniture floating on the background. data-style="boxy" is the fix.
+
+  If this file ever PASSES, the rule has regressed.
+-->
+<link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=112">
+<style>
+  body { margin: 0; background: var(--zc-body-bg-default); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+</style>
+
+<div class="zc-layout">
+  <div class="zc-layout__body">
+    <div class="zc-layout__container">
+
+      <!-- the other surfaces that take ownership of the page's edge -->
+      <div class="stats">
+        <div class="zc-container-el"><span class="zc-body-3 zc-text-secondary">Keys</span>
+          <span class="zc-h3">9,847</span></div>
+        <div class="zc-container-el"><span class="zc-body-3 zc-text-secondary">Memory</span>
+          <span class="zc-h3">112 MB</span></div>
+        <div class="zc-container-el"><span class="zc-body-3 zc-text-secondary">Avg TTL</span>
+          <span class="zc-h3">28 min</span></div>
+        <div class="zc-container-el"><span class="zc-body-3 zc-text-secondary">Hit Rate</span>
+          <span class="zc-h3">98.4%</span></div>
+      </div>
+
+      <!-- MUST FAIL: stretch, but the page is shared -->
+      <div class="zc-table-wrap" data-style="stretch">
+        <table class="zc-table">
+          <thead class="zc-table__head"><tr>
+            <th class="zc-table__th">Key</th><th class="zc-table__th">Type</th>
+          </tr></thead>
+          <tbody>
+            <tr class="zc-table__row"><td class="zc-table__td">session:8f21c9a4</td>
+              <td class="zc-table__td">JSON</td></tr>
+            <tr class="zc-table__row"><td class="zc-table__td">cart:u-4821</td>
+              <td class="zc-table__td">JSON</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
