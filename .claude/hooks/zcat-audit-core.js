@@ -244,13 +244,29 @@ function __zcatAudit() {
     return others === 0;
   })();
 
-  /* ── 13. Built from components, not divs ──────────────────────────── */
-  const zcSet = new Set();
-  for (const el of all) for (const c of el.classList) if (c.startsWith("zc-")) zcSet.add(c.split("__")[0]);
-  if (zcSet.size < 10 && !isEmptyState)
-    F.push({ rule: "TOO FEW COMPONENTS",
-      msg: `only ${zcSet.size} distinct zc-* components used — a real screen uses 10+; this looks hand-built`,
+  /* ── 13. Built from components, not divs ──────────────────────────────
+     This used to demand 10 distinct zc-* families, which measured the wrong
+     thing. A card grid repeats ONE card many times: the landing page in
+     reference-screenshots/23 is properly composed, every element carries a
+     library class, and it uses eight families. It failed as "hand-built".
+     Page shape is not evidence of hand-building.
+
+     What is evidence: inventing your own classes instead of using the
+     library's. Measured across real pages that share runs 91-100% — template
+     99, databases 99, detail 91, empty 100, card grid 94. A page that has
+     genuinely been hand-built out of divs sits far below that. */
+  const classed = all.filter(el => typeof el.className === "string" && el.className.trim());
+  const usingLib = classed.filter(el => /\bzc-/.test(el.className));
+  const share = classed.length ? usingLib.length / classed.length : 1;
+  if (classed.length >= 8 && share < 0.6) {
+    const invented = [...new Set(classed.filter(el => !/\bzc-/.test(el.className))
+      .map(el => "." + el.className.trim().split(/\s+/)[0]))].slice(0, 4).join(", ");
+    F.push({ rule: "HAND-BUILT PAGE",
+      msg: `only ${Math.round(share * 100)}% of classed elements use a library class ` +
+           `(${usingLib.length} of ${classed.length}) — the rest are page-invented ` +
+           `(${invented}). Compose from the library; a real screen runs 90%+`,
       sel: "(page)" });
+  }
 
   /* ── 14. Typography hierarchy must exist ──────────────────────────── */
   const heads = [...document.querySelectorAll(
@@ -746,7 +762,11 @@ function __zcatAudit() {
 
   return {
     fails: F, warns: W,
-    stats: { components: zcSet.size, elements: all.length, cards: cards.length,
+    stats: { components: (() => { const f = new Set();
+               for (const el of all) for (const c of el.classList)
+                 if (c.startsWith("zc-")) f.add(c.split("__")[0]);
+               return f.size; })(),
+             elements: all.length, cards: cards.length,
              fills: fills.length, headings: heads.length,
              gridCols, typeLevels: typeClasses.size, stackRun,
              scopes: dScopes.length,

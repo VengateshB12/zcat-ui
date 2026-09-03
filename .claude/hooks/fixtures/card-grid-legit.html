@@ -1,0 +1,70 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fixture — a legitimate card grid with few component types</title>
+<!--
+  This is a REAL page shape: the card-grid landing in
+  reference-screenshots/22-no-sidebar-card-grid-slate-landing.png and
+  23-card-grid-event-listeners-sidebar.png.
+
+  It is properly composed — every element carries a library class, there is
+  real typographic hierarchy, and nothing is hand-built. But it uses only a
+  handful of DISTINCT component families, because a card grid repeats one card
+  many times rather than reaching for many different components.
+
+  Counting distinct families punished exactly this page. It must PASS.
+-->
+<link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=112">
+<style>
+  body { margin: 0; background: var(--zc-body-bg-default); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .head { margin-bottom: 20px; }
+</style>
+
+<body data-zcat-no-shell>
+<!-- no-shell: this fixture is a content stub, not a product screen. It
+     exists to prove the component rule does not misfire on a card grid. -->
+<div class="zc-layout">
+  <div class="zc-layout__body">
+    <div class="zc-layout__container">
+
+      <div class="head">
+        <h2 class="zc-h2">Event Listeners</h2>
+        <p class="zc-body-2 zc-text-secondary">Route platform events to a function or a webhook.</p>
+      </div>
+
+      <div class="grid">
+        <div class="zc-card">
+          <span class="zc-subtitle-1">order.created</span>
+          <span class="zc-badge" data-type="secondary" data-color="success">Active</span>
+          <p class="zc-body-3 zc-text-secondary">Fires when a checkout completes.</p>
+        </div>
+        <div class="zc-card">
+          <span class="zc-subtitle-1">user.signup</span>
+          <span class="zc-badge" data-type="secondary" data-color="success">Active</span>
+          <p class="zc-body-3 zc-text-secondary">Fires on first successful login.</p>
+        </div>
+        <div class="zc-card">
+          <span class="zc-subtitle-1">invoice.failed</span>
+          <span class="zc-badge" data-type="secondary" data-color="warning">Paused</span>
+          <p class="zc-body-3 zc-text-secondary">Fires when a charge is declined.</p>
+        </div>
+        <div class="zc-card">
+          <span class="zc-subtitle-1">replica.promoted</span>
+          <span class="zc-badge" data-type="secondary" data-color="success">Active</span>
+          <p class="zc-body-3 zc-text-secondary">Fires when a read replica takes over.</p>
+        </div>
+        <div class="zc-card">
+          <span class="zc-subtitle-1">backup.completed</span>
+          <span class="zc-badge" data-type="secondary" data-color="success">Active</span>
+          <p class="zc-body-3 zc-text-secondary">Fires after a nightly snapshot.</p>
+        </div>
+        <div class="zc-card">
+          <span class="zc-subtitle-1">quota.exceeded</span>
+          <span class="zc-badge" data-type="secondary" data-color="error">Erroring</span>
+          <p class="zc-body-3 zc-text-secondary">Fires when a plan limit is hit.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
