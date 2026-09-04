@@ -16,6 +16,14 @@
   .live { padding:16px; margin:12px 0; background:var(--zc-bg-page);
            border:1px dashed var(--zc-border-subtle); border-radius:6px; }
   .live > * { max-width:100%; }
+  /* A popup scrim is position:fixed, so dropped into a preview box it escapes
+     and covers the viewport — which stretched the selection card until its
+     16px icon rendered as a 200px illustration, the exact trap our own rules
+     warn about. Pin it back into the box for the preview only. */
+  .live .zc-popup-scrim { position:static; inset:auto; background:none;
+                           display:block; padding:0; }
+  .live .zc-popup { max-width:414px; margin:0; }
+  .live .zc-fullpopup { position:static; inset:auto; }
   pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
          border:1px solid var(--zc-border-subtle); border-radius:6px; }
   code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
