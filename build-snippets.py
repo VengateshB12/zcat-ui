@@ -64,8 +64,12 @@ def extract(cls, cap=4200):
                               default=0)
                     b = "\n".join([L[0]] + [l[ind:] if len(l) > ind else l.lstrip()
                                             for l in L[1:]])
-                    b = b.replace('src="/zcat-ui/docs/icons/', 'src="icons/')
-                    b = b.replace("src='/zcat-ui/docs/icons/", "src='icons/")
+                    # Blocks come from pages that sit two levels down, so their
+                    # icon paths are ../../zcat-ui/docs/icons/. snippets.html
+                    # lives in docs/, where the icons are simply icons/.
+                    for _pre in ('../../zcat-ui/docs/icons/', '/zcat-ui/docs/icons/'):
+                        b = b.replace('src="' + _pre, 'src="icons/')
+                        b = b.replace("src='" + _pre, "src='icons/")
                     if len(b) > cap:
                         b = b[:cap].rsplit("\n", 1)[0] + f"\n<!-- … full block in {path} -->"
                     return b, path
