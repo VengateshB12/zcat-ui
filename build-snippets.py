@@ -235,6 +235,21 @@ for name, items in SPEC:
     if rows:
         sections.append(f'<h2 class="zc-h4 sec">{name}</h2>\n' + "\n".join(rows))
 
+# THE STYLESHEET VERSION IS A CONTENT HASH, NOT A NUMBER SOMEONE REMEMBERS.
+# This file hardcoded ?v=118 while the rest of the library moved to 120, so the
+# published page loaded a stylesheet cached from before the chart components
+# existed — the pie rendered with black slices and the bars with no fill at all,
+# on a page whose whole job is showing what components look like. Hashing the
+# CSS means the URL changes exactly when the CSS changes, and never otherwise.
+import hashlib
+_css = []
+for _root, _dirs, _files in os.walk("zcat-ui/src"):
+    for _f in sorted(_files):
+        if _f.endswith(".css"):
+            _css.append(open(os.path.join(_root, _f), encoding="utf-8").read())
+_css.append(open("zcat-ui/zcat.css", encoding="utf-8").read())
+cssv = hashlib.sha1("".join(_css).encode()).hexdigest()[:8]
+
 # The icon sprite, merged from EVERY source page. Without it a <use href="#i-…">
 # renders an EMPTY BOX — the trap our own rules warn about, which this page fell
 # into twice: first with no sprite at all, then with only the template's 27
@@ -274,7 +289,7 @@ DOC = f'''<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head><meta charset="utf-8">
 <title>zcat UI — copy these</title>
-<link rel="stylesheet" href="../zcat.css?v=118">
+<link rel="stylesheet" href="../zcat.css?v={cssv}">
 <style>
   body {{ margin:0; padding:32px; background:var(--zc-bg-page);
          color:var(--zc-text-primary); font-family:var(--zc-font); }}
