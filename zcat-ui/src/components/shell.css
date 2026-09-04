@@ -276,7 +276,10 @@
   font-family: var(--zc-font-primary);
 }
 .zc-empty__art { width: 200px; }
-.zc-empty__art img { width: 100%; display: block; }
+/* `content:` replaces the image the page already points at, so the artwork
+   follows the theme with no markup change anywhere. A page that wants its own
+   illustration overrides --zc-empty-art, or sets content:none to keep its src. */
+.zc-empty__art img { width: 100%; display: block; content: var(--zc-empty-art); }
 .zc-empty__content {
   display: flex;
   flex-direction: column;

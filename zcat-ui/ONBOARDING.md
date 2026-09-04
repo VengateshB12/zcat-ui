@@ -45,6 +45,11 @@ HARD RULES (violating these is the failure mode)
   .zc-btn, a menu is .zc-menu — even inside bigger things you build.
 - Icons come only from zcat-ui/docs/icons/ (stroke icons bind to currentColor;
   recolor files via the .zc-mask-icon pattern). No other icon sets.
+- The Empty State illustration follows the THEME on its own. Keep the
+  <img src="…/Empty State Illustration.svg"> the template gives you; the library
+  swaps the artwork in dark mode via --zc-empty-art. Never hand-swap it per page,
+  and never point a page at the dark file directly — it would then stay dark in
+  light mode.
 - THE PAGE SPRITE IS A SUBSET. docs/template.html ships 27 <symbol> definitions;
   docs/icons/ holds 483 files. Referencing one that is not in the sprite gives
   you a <use> pointing at nothing, which renders as an EMPTY BOX with no error.

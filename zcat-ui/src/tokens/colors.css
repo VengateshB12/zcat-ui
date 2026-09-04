@@ -632,11 +632,21 @@
   /* Figma full-page-popup-header/bg/bg (node 548:9060, verified 2026-08-28).
      The dark value below is DERIVED, not from Figma — see the note there. */
   --zc-fullpopup-header-bg: #F4F7FE;
+  /* The Empty State illustration is an <img>, which CSS cannot normally swap.
+     Declaring it as a token and applying it with `content:` lets the theme
+     change the artwork without a single page being edited — the pages keep the
+     <img src="…"> they already have.
+     NOTE the url() is relative to THIS stylesheet's consumer (src/components/
+     shell.css), NOT to the HTML — that is a trap this codebase has hit before. */
+  --zc-empty-art: url('../../docs/icons/Empty State Illustration.svg');
 }
 
 /* ─── DARK THEME ─── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+  /* Dark artwork supplied by the designer (2026-09-04). Same trap note as the
+     light value: the url() resolves against src/components/shell.css. */
+  --zc-empty-art: url('../../docs/icons/Empty State Illustration Dark.svg');
   /* Generated 2026-08-27 from the Figma "Mode" variable collection (Dark mode),
      file KvuuNJuZsONc1ohPM6Fpq2 (user-sanctioned copy of ugOZk4O0g6XpviEBSN24mF).
      477/478 tokens Figma-verified; unresolved tokens are flagged inline. */
@@ -1238,6 +1248,9 @@
 }
 
 :root[data-theme="dark"] {
+  /* Dark artwork supplied by the designer (2026-09-04). Same trap note as the
+     light value: the url() resolves against src/components/shell.css. */
+  --zc-empty-art: url('../../docs/icons/Empty State Illustration Dark.svg');
   /* Generated 2026-08-27 from the Figma "Mode" variable collection (Dark mode),
      file KvuuNJuZsONc1ohPM6Fpq2 (user-sanctioned copy of ugOZk4O0g6XpviEBSN24mF).
      477/478 tokens Figma-verified; unresolved tokens are flagged inline. */
