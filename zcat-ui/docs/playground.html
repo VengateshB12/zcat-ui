@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=112">
-  <script src="../zcat.js?v=16"></script>
+  <link rel="stylesheet" href="../zcat.css?v=114">
+  <script src="../zcat.js?v=18"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -400,7 +400,7 @@ You are going to build product screens with the zcat UI component library.
 This message is the SETUP and the RULES. My requirement comes in my NEXT
 message — it is deliberately not here yet, so do not treat it as missing.
   Library:  https://github.com/VengateshB12/zcat-ui
-  Rules:    the zcat MCP at https://zcat.catalystappsail.in/mcp
+  Rules:    this prompt + zcat-ui/rules/ and the skill, all inside the clone
   Docs:     https://zcatdocs.onslate.in
 
 SET UP FIRST (do this yourself — do not ask me to)
@@ -426,13 +426,10 @@ A. Get the repo and WORK INSIDE THE CLONE:
    That last command must print PASS. If the install needs my approval, ASK me
    for it and wait — do not skip the gates and do not build unguarded. Halting
    here is the correct behaviour.
-B. If the zcat MCP is not already connected, connect it. It is public — no key,
-   no login, just a URL. In Claude Code:
-     claude mcp add --transport http zcat https://zcat.catalystappsail.in/mcp
-   In Cursor or another editor, add the same URL to its MCP settings file. Tell
-   me if it needs a restart to take effect. If you cannot connect it, say so and
-   carry on using the rules files inside the repo — but tell me they may be
-   older than the server's.
+B. Do NOT connect an MCP server for this work. Everything you need ships in
+   the clone. The zcat MCP answers with the FIGMA workflow — Figma file keys,
+   library subscriptions, auto-layout mechanics — none of which exists in code,
+   and fetching it costs thousands of tokens that buy you nothing here.
 C. Link the library in every page you create, unmodified:
      <link rel="stylesheet" href="zcat-ui/zcat.css">
      <script src="zcat-ui/zcat.js" defer><\/script>
@@ -443,18 +440,81 @@ D. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
    apologise, do not say anything is missing, and do not guess a screen and
    start building. Wait for my reply.
 
+NEVER BUILD A PAGE FROM SCRATCH — COPY ONE AND DELETE WHAT YOU DO NOT NEED.
+Half of any screen is the shell, the side menu and the scaffolding, and it is
+IDENTICAL on every page. Re-typing it is not design work, it is just tokens,
+and every re-type is a chance for the shell to drift.
+
+  FIRST PAGE of a set — copy the worked template and repoint its paths:
+    cp zcat-ui/docs/template.html pages/my-page.html
+    # the template lives in docs/, your page lives in pages/ — repoint:
+    #   ../zcat.css   ->  ../zcat-ui/zcat.css      (keep the ?v=)
+    #   ../zcat.js    ->  ../zcat-ui/zcat.js       (keep the ?v=)
+    #   src="icons/   ->  src="../zcat-ui/docs/icons/
+    # then run the audit on the copy BEFORE editing it, so a missed path shows
+    # up as a 404 now rather than as a blank logo three screens later.
+
+  EVERY PAGE AFTER THAT — copy the sibling you just built:
+    cp pages/my-page.html pages/my-page-detail.html
+  and change ONLY the Sub Header and the container's content. Delete the blocks
+  you do not need. The rail, the topbar, the side menu and the sprite are
+  already right and already agreed.
+
+  EDITING A COPY: find the block by its id or class and edit that region. Do
+  not read a 50 KB page back in full to change one table.
+
+  This is a rule about TYPING, not thinking. Every layout decision, every
+  composition direction, every word of copy is still yours.
+
 ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
 1. Read zcat-ui/ONBOARDING.md fully — it is the contract. The component API
    tables there are authoritative; docs/playground.html render functions and the
    usage comments at the top of each src/components/*.css file are the reference
    markup. Do not invent markup shapes.
-2. The zcat MCP is the CURRENT source of the design rules —
-   prefer it over any rules file on disk, which may be a stale copy. Use
-   zcat_get_hard_rules, zcat_get_decision_rules (read only the topic you need),
-   zcat_get_sample_data and zcat_search_components / zcat_search_icons. Apply
-   the DESIGN decision from those rules and skip their Figma mechanics
-   (component keys, setProperties, auto-layout) — none of that exists in code.
-3. List back every screen and state my requirement implies (a list page usually
+2. THE DESIGN RULES ARE IN THE CLONE. Nothing to fetch, no server to connect:
+     - this prompt and zcat-ui/.claude/skills/zcat-code.md — always in force
+     - zcat-ui/rules/_index.md — a 2 KB topic index. Read the INDEX, then the
+       ONE file matching your question, never all of them. Composition, spacing,
+       which component, data display, table columns, detail pages, popups,
+       navigation — one file each.
+     - zcat-ui/rules/sample-data.md — realistic rows by domain. Use these
+       instead of inventing data, and never lorem ipsum.
+   Those files come from the Figma project, so a few mention Figma mechanics
+   (component keys, setProperties, auto-layout). Take the DESIGN decision and
+   ignore the mechanism — none of it exists in code. The mechanical rules (even
+   spacing, no raw hex, 10px minimum type, stroke icons, radius 6) you do not
+   need to look up at all: a hook auto-fixes those on save and the four gates
+   block whatever it cannot fix.
+3. ASK ME WHICH MODE THIS IS, AND SAY WHICH YOU RECOMMEND. There are two
+   ways to build from a requirement and they want opposite things, so guessing
+   is not allowed:
+
+     REDESIGN — the requirement is a FEATURE LIST. Everything in it survives,
+       none of its arrangement does. All the rules below apply and all four
+       gates run. This is the default when the requirement is a rough
+       wireframe, a PRD, a screenshot of someone else's product, or a sketch.
+
+     MATCH — the requirement IS the design. Reproduce it. Do not improve the
+       layout, do not move actions, do not re-compose anything. The design
+       score and the design review are the WRONG instrument here — they exist
+       to reward divergence — so they are replaced by the visual match gate:
+         node .claude/hooks/zcat-match.js <page.html> <reference-url>
+       which renders your page and the reference and reports how much of the
+       reference survived. It needs a URL it can open, not a screenshot.
+       The library rules still apply: real components, tokens, no raw hex —
+       matching a design does not mean hand-building it.
+
+   LOOK AT THE REQUIREMENT BEFORE YOU ASK. If it is already a considered
+   design — real spacing, a clear hierarchy, states that have been thought
+   about — say so plainly: "this page already looks well designed; I would
+   match it rather than redesign it — which do you want?" Recommending a
+   redesign of something already good is how you make it worse. If it is a
+   rough wireframe, recommend redesign and say why.
+
+   Record the answer in the features receipt as "mode": "redesign" | "match".
+   The gates read it and change what they demand.
+
+4. List back every screen and state my requirement implies (a list page usually
    also means an empty state, a create/edit popup and a detail page), count the
    tabs, columns, buttons and fields you found, and confirm with me before
    building. If anything is ambiguous, ASK — do not guess.
@@ -476,8 +536,8 @@ Following the rules below only makes a screen CORRECT. Correct and boring is
 still a failure. Components are building material, not the design.
 
 Q1. NAME THE QUALITY BAR AND LOOK AT IT. Pick the production screen this page
-    should feel like from reference-screenshots/ in the repo (with the MCP
-    connected, zcat_get_screenshot_patterns maps page type -> screenshot).
+    should feel like from reference-screenshots/ in the repo — the filenames
+    say what each one is (list view, detail view, card grid, settings popup).
     OPEN THE PNG and look at it — do not just cite the filename. Tell me which
     one you picked and which patterns you are taking from it: how it groups
     things, where it puts weight, how dense it is.
@@ -608,8 +668,15 @@ HARD RULES (violating these is the failure mode)
   top of the side menu is an existing *-color.svg from docs/icons/ — if the
   service has no logo in that set, use the closest one and tell me. Never
   invent a logo and never substitute a stroke icon for it.
-  So the only parts a page may change are: the side menu's content and item
-  icons, the SUB HEADER, and the container's content. If the service you are
+  THE SERVICE RAIL IS NOT YOURS TO TOUCH AT ALL. It already has its services,
+  their logos, their names and their hover and active states, and they are
+  correct. Do not re-point a logo, do not rename a service, do not re-order
+  them, do not add one. If I ask for another service, add it with an EXISTING
+  logo from the set and tell me which you reused — a repeated logo is fine, a
+  missing one is not. Every blank chip you have ever seen came from a page
+  editing paths it had no reason to edit.
+  So the only parts a page may change are: the side menu's CONTENT and its
+  per-item icons, the SUB HEADER, and the container's content. If the service you are
   building for has no logo in the *-color.svg set, pick ANY existing one from
   that set and tell me which — an empty or invented logo is never acceptable,
   and a blank service chip means you changed something you should not have. A wireframe showing a
@@ -656,6 +723,19 @@ HARD RULES (violating these is the failure mode)
   screen with a menu drawn beside it. Build each one, or tell me which you are
   deferring and why, BEFORE you build. Collapsing them into a single list is
   the largest and quietest way to lose a requirement, and it looks finished.
+- THE WHOLE ROW IS THE CLICK TARGET, NEVER ONE CELL. Every row highlights on
+  hover, so every row promises it can be clicked. Put the link on the name cell
+  alone and that promise is false across the rest of the row: the user aims at
+  the row, hits nothing, and decides the page is broken. So the entity cell is
+  PLAIN TEXT and the <tr> carries data-rowlink:
+      <tr class="zc-table__row" data-rowlink="database-detail.html">   navigates
+      <tr class="zc-table__row" data-rowlink>                          emits only
+  zcat.js gives it a pointer, a focus ring, Enter/Space, and a zcat:row:click
+  event — and it never steals a click from a control inside the row, so the
+  three-dot, the checkbox and any real link keep working. Do not hand-wire a
+  click listener on the tbody; that is what pages used to do, and it is why
+  only the first column ever ended up clickable. Audit: ROW IS NOT THE CLICK
+  TARGET.
 - STRETCH OR BOXY IS A DECISION, NOT A DEFAULT. The Table ships two styles and
   picking the wrong one is why a screen looks loose:
     data-style="stretch" — edge-to-edge, no outer border. ONLY when the table IS
@@ -800,6 +880,30 @@ HARD RULES (violating these is the failure mode)
 BEFORE YOU SHOW ME ANYTHING — FOUR GATES, ALL BLOCKING
 The repo ships hooks that must all pass. Do not skip them, do not work around
 them, and do not tell me a screen is ready until every one is green.
+
+WHEN THE PAGE IS BUILT, CHECK IT AND THEN ASK ME ONCE.
+Do not run the full set straight away — the expensive gates are the two that
+need receipts, and there is no point paying for them on a screen I may want
+changed anyway. So:
+
+  1. Run the two CHEAP checks. Both are seconds and neither needs a receipt:
+       npm run audit -- pages/my-page.html
+       python3 .claude/hooks/zcat-design-score.py pages/my-page.html
+  2. Screenshot the page and LOOK at it yourself. Say in three or four lines
+     what you see: whether the hierarchy reads, whether anything repeats that
+     should not, whether the empty parts are empty on purpose, and the one
+     thing you would change if it were yours.
+  3. Then ask me exactly this and WAIT:
+       "Rendered audit PASS, design score NN/100. <your three lines>.
+        Do you want the full gates, or does this look good to stop here?"
+
+  If I say stop, you stop — no receipts, no review, nothing further. If I say
+  continue, run the full set below.
+
+ASK ME NOTHING ELSE. The mode question in step 3 above and this one are the
+only two questions in the whole build. Everything else you decide yourself and
+tell me what you decided. A build that stops to ask about spacing, or wording,
+or which icon, is a build that has forgotten it is the designer here.
 
 RUN THEM WITH ONE COMMAND. Never run a single gate on its own and call the
 page done — that is how a broken screen shipped: the score failed on two
@@ -3752,15 +3856,15 @@ const COMPONENTS = {
 
       h += '<div><h3>How to use it in a project</h3><ol class="doc-steps">' +
         stepEl(1, 'Paste the prompt into your coding agent',
-          '<p>Claude, Cursor, or anything else with a terminal. The prompt does the setup itself — it clones the library, connects the zcat MCP for the live design rules, links the two files, and reads the contract in <code>ONBOARDING.md</code> before writing a line of code.</p>' +
+          '<p>Claude, Cursor, or anything else with a terminal. The prompt does the setup itself — it clones the library, links the two files, and reads the contract in <code>ONBOARDING.md</code> before writing a line of code.</p>' +
           '<p>Nothing to install and nothing to configure first. The MCP is public — no key, no login.</p>') +
         stepEl(2, 'Describe what you want built',
           '<p>Text, a wireframe, a screenshot, or a PRD. The agent lists back every screen and state it found — including the empty and create/edit states — and confirms with you before building.</p>') +
         '</ol>' +
         '<p class="doc-lead" style="margin-top:16px">Prefer to set up by hand? Clone <code>' +
-        esc('github.com/VengateshB12/zcat-ui') + '</code>, add the MCP URL <code>' +
-        esc('https://zcat.catalystappsail.in/mcp') + '</code> to your editor, and link ' +
-        '<code>zcat.css</code> + <code>zcat.js</code>. Run <code>git pull</code> for the latest components.</p></div>';
+        esc('github.com/VengateshB12/zcat-ui') + '</code> and link ' +
+        '<code>zcat.css?v=</code> + <code>zcat.js?v=</code> — keep the <code>?v=</code> on both, or the browser serves a cached library and your page renders against rules that no longer exist. ' +
+        'No MCP server: the design rules ship in <code>zcat-ui/rules/</code> (read <code>_index.md</code>, then the one topic you need). Run <code>git pull</code> for the latest components.</p></div>';
 
       h += '<div><div class="doc-actions"><h3 style="margin:0">The first prompt</h3>' +
            '<span style="display:inline-flex;gap:10px">' +

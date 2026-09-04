@@ -513,17 +513,32 @@
   width: 18px;
   height: 18px;
 }
-/* Active service shows the BRAND-COLOURED artwork: drop the mask so the SVG's
-   own fills render. Consumers supply --icon-active with the "-color" asset;
-   without it the masked monochrome glyph is kept. */
-.zc-layout__service[data-state="active"] .zc-layout__service-chip .zc-mask-icon[style*="--icon-active"] {
+/* THE SERVICE RAIL NEVER MASKS ITS LOGOS.
+   Masking was how an inactive chip got recoloured: the monochrome asset is
+   #101F3E, invisible on a navy rail, so it was used as a stencil and tinted.
+   That works until anything about the path, the custom property or the
+   consuming stylesheet shifts — and then the chip silently paints NOTHING and
+   no gate notices, because a mask URL that resolves to nothing is still a mask
+   URL. Blank blue squares, every time, for a purely cosmetic mechanism.
+
+   So the rail now draws the brand-coloured asset directly as a background
+   image, in every state. It cannot go blank: a broken background is a visibly
+   broken image, not an invisible stencil. Inactive chips are dimmed with
+   opacity rather than recoloured, which needs no mask at all. */
+.zc-layout__service-chip .zc-mask-icon {
   background-color: transparent;
   -webkit-mask: none;
   mask: none;
-  background-image: var(--icon-active);
+  background-image: var(--icon-active, var(--icon));
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  opacity: .72;
+  transition: opacity 120ms ease;
+}
+.zc-layout__service:hover .zc-layout__service-chip .zc-mask-icon { opacity: .9; }
+.zc-layout__service[data-state="active"] .zc-layout__service-chip .zc-mask-icon {
+  opacity: 1;
 }
 .zc-layout__service[data-state="active"] .zc-layout__service-name {
   color: var(--zc-servicemenu-text-active);

@@ -77,7 +77,15 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+/* A COMPONENT IS NOT A LINK, EVEN WHEN IT IS AN <a>.
+   `a:hover` is specificity (0,1,1) and beats `.zc-btn`'s (0,1,0), so every
+   <a class="zc-btn"> and <a class="zc-tab"> grew an underline on hover — the
+   component set text-decoration:none for its resting state only. Verified:
+   button link -> underline, tab link -> underline, .zc-link -> none (it had
+   its own :hover rule), bare anchor -> underline (correct).
+   Excluding component-classed anchors fixes all of them at once and leaves a
+   real link underlining as it should. */
+a:not([class*="zc-"]):hover {
   text-decoration: underline;
 }
 

@@ -72,6 +72,46 @@ def main():
     else:
         print(f"        OK ({json.load(open(f)).get('_checked', '?')} features verified)")
 
+    # Which gates apply depends on the mode the user chose.
+    mode = "redesign"
+    if os.path.exists(f):
+        try:
+            mode = (json.load(open(f)).get("mode") or "redesign").lower()
+        except Exception:
+            pass
+
+    if mode == "match":
+        # The score and the review exist to reward divergence; in match mode
+        # divergence IS the failure, so they are the wrong instrument. The
+        # visual match gate replaces both.
+        print("  [3/4] visual match (match mode) …")
+        m = os.path.join(STATE, sl + ".match.json")
+        if not os.path.exists(m):
+            problems.append("no visual-match receipt — this page is in MATCH mode, so "
+                            "run: node .claude/hooks/zcat-match.js "
+                            f'"{rel}" <reference-url>')
+            print("        MISSING")
+        elif os.path.getmtime(m) < page_mtime:
+            problems.append("the visual-match receipt predates your last edit — re-run it")
+            print("        STALE")
+        else:
+            d2 = json.load(open(m))
+            ok = d2.get("pass")
+            print(f"        {'OK' if ok else 'FAILED'} — {d2.get('content')}% content, "
+                  f"{d2.get('layout')}% layout vs {d2.get('reference')}")
+            if not ok:
+                problems.append(f"the visual match is only {d2.get('content')}% — you were "
+                                "asked to reproduce this design, not improve it")
+        print("  [4/4] design review … SKIPPED (match mode: reproducing, not composing)")
+        print()
+        if problems:
+            print(f"GATES FAILED — {len(problems)} not green:")
+            for pr in problems:
+                print(f"  - {pr}")
+            sys.exit(1)
+        print("GATES PASSED — all green against the current version of this page.")
+        sys.exit(0)
+
     print("  [3/4] design score …")
     r = subprocess.run([sys.executable, os.path.join(HOOKS, "zcat-design-score.py"), abs_p],
                        capture_output=True, text=True)

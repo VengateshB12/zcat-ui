@@ -547,6 +547,31 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
 - **A sub-section list is N screens, not one.** Tables / Schema Visualiser /
   Queries / Functions / Triggers / Indexes / Extensions is seven screens.
   Collapsing them into one list is the quietest way to lose a requirement.
+- **Never build from scratch — copy and delete.** First page:
+  `cp zcat-ui/docs/template.html pages/x.html`, repoint `../zcat.css`,
+  `../zcat.js` and `src="icons/` for the pages/ depth, then audit the copy
+  before editing. Every page after: `cp` the sibling and change only the Sub
+  Header and container. Edit a copy by grepping for the block's id — never read
+  a 50 KB page back to change one table. About typing, not thinking.
+- **The service rail is untouchable.** Its services, logos, names and states
+  are already correct. Never re-point a logo path, rename, re-order or add a
+  service. If asked for another, reuse an EXISTING logo and say which — a
+  repeated logo is fine, a blank chip is not. A page may change only: the side
+  menu's content and per-item icons, the Sub Header, and the container.
+- **Two questions in the whole build, no more.** (1) redesign or match, before
+  building. (2) after building: run the two cheap checks (`npm run audit`,
+  `zcat-design-score.py`), screenshot it, look at it, report in three lines,
+  then ask "full gates, or good to stop here?" and wait. Stopping there is a
+  legitimate answer and saves the two receipt gates. Everything else the agent
+  decides and reports — it is the designer.
+- **The whole row is the click target.** Entity cells are plain text; the
+  `<tr>` carries `data-rowlink="target.html"` (navigates) or bare `data-rowlink`
+  (emits `zcat:row:click`). `zcat.js` adds pointer, focus ring, Enter/Space, and
+  excludes controls inside the row (`a, button, input, .zc-select-shell,
+  [data-menu], .zc-checkbox, .zc-toggle`) so the three-dot still works. Never
+  hand-wire a tbody click listener — that is why pages ended up with only the
+  first column clickable while the whole row lit up on hover.
+  Audit: `ROW IS NOT THE CLICK TARGET`.
 - **Table style: ALONE = `stretch`, SHARING = `boxy`.** `data-style="stretch"`
   is edge-to-edge with no outer border and relies on the page container for its
   boundary — valid only when the table is the whole page. Add stat cards, a

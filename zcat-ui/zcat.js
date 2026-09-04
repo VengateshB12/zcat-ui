@@ -121,6 +121,37 @@
     });
   }
 
+  /* ── Table rows: the whole row is one click target ───────────────────
+     A row that highlights on hover but only responds on its first cell is a
+     broken affordance. Controls INSIDE the row keep their own behaviour —
+     without that exclusion this would swallow every three-dot menu. */
+  function initTableRows(root) {
+    var CONTROLS = 'a, button, input, select, textarea, label, summary, ' +
+                   '.zc-select-shell, .zc-menu, [data-menu], .zc-checkbox, ' +
+                   '.zc-radio, .zc-toggle, .zc-table__threedot';
+    each(root, '.zc-table__row[data-rowlink]', function (row) {
+      if (row.getAttribute('data-rowlink-bound')) return;
+      row.setAttribute('data-rowlink-bound', '1');
+      if (!row.hasAttribute('tabindex')) row.setAttribute('tabindex', '0');
+      if (!row.hasAttribute('role')) row.setAttribute('role', 'link');
+
+      function go(e) {
+        if (e.target.closest && e.target.closest(CONTROLS)) return;
+        emit(row, 'row:click');
+        var href = row.getAttribute('data-rowlink');
+        if (href) window.location.href = href;
+      }
+      row.addEventListener('click', go);
+      row.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          if (e.target !== row) return;
+          e.preventDefault();
+          go(e);
+        }
+      });
+    });
+  }
+
   /* ── Dropdown: open/close, select, keyboard, outside click ───────────── */
   function initDropdown(root) {
     each(root, '.zc-select-shell', function (shell) {
@@ -130,10 +161,29 @@
       if (!trigger || !menu) return;
 
       function isDisabled() { return trigger.getAttribute('data-state') === 'disabled'; }
+      /* Drop upward when there is no room below. The clipper is usually
+         .zc-table-wrap, which needs overflow-x for wide tables and therefore
+         clips vertically too; without this the last rows' menus are cut off. */
+      function placeMenu() {
+        menu.removeAttribute('data-drop');
+        var m = menu.getBoundingClientRect();
+        if (!m.height) return;
+        var limit = window.innerHeight;
+        for (var e = menu.parentElement; e && e !== document.body; e = e.parentElement) {
+          var c = getComputedStyle(e);
+          if (/hidden|auto|scroll/.test(c.overflow + c.overflowX + c.overflowY)) {
+            limit = Math.min(limit, e.getBoundingClientRect().bottom);
+            break;
+          }
+        }
+        if (m.bottom > limit + 1) menu.setAttribute('data-drop', 'up');
+      }
+
       function open() {
         if (isDisabled()) return;
         closeAll();
         menu.classList.add('is-open');
+        placeMenu();
         trigger.setAttribute('data-open', 'true');
         trigger.setAttribute('aria-expanded', 'true');
         emit(shell, 'dropdown:open');
@@ -936,6 +986,7 @@
     initPassword(root);
     initStepper(root);
     initDropdown(root);
+    initTableRows(root);
     initAutocomplete(root);
     initInlineEdit(root);
     initUpload(root);

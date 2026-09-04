@@ -456,14 +456,32 @@ function __zcatAudit() {
       if (b.width > 0 && b.height > 0) {
         const offR = Math.round(b.right - window.innerWidth);
         const offL = Math.round(-b.left);
+        /* All FOUR edges. This checked left and right only, which is why a
+           three-dot menu on a table's last row — cut off at the BOTTOM by
+           .zc-table-wrap's overflow-y — passed every gate. Measured on a real
+           page: row 2 lost 19px, row 3 lost 67px, audit green.
+
+           zcat.js flips a clipped menu upward on open (data-drop="up"), and
+           this synthetic open does not run that code, so mirror it here:
+           only report an overlay that is STILL clipped once flipped. */
         let cut = null;
         for (let e = ov.parentElement; e && e !== document.body; e = e.parentElement) {
           const c = getComputedStyle(e);
           if (!/hidden|auto|scroll/.test(c.overflow + c.overflowX + c.overflowY)) continue;
           const eb = e.getBoundingClientRect();
-          if (b.right > eb.right + 1 || b.left < eb.left - 1) {
+          const over = { right: b.right - eb.right, left: eb.left - b.left,
+                         bottom: b.bottom - eb.bottom, top: eb.top - b.top };
+          // would flipping upward rescue it? the library does exactly that
+          const trig = ov.previousElementSibling;
+          const roomAbove = trig ? trig.getBoundingClientRect().top - eb.top : 0;
+          const rescuedByFlip = over.bottom > 1 && over.top <= 1 && roomAbove >= b.height;
+          const worst = Math.max(over.right, over.left,
+                                 rescuedByFlip ? -1 : over.bottom, over.top);
+          if (worst > 1) {
+            const side = over.right === worst ? "right" : over.left === worst ? "left"
+                       : over.bottom === worst ? "bottom" : "top";
             cut = { by: e.className.toString().split(" ")[0],
-                    px: Math.round(Math.max(b.right - eb.right, eb.left - b.left)) };
+                    px: Math.round(worst), side };
             break;
           }
         }
@@ -477,8 +495,9 @@ function __zcatAudit() {
             ov.className || "overlay");
         else if (cut)
           fail("OVERLAY CLIPPED",
-            `${trigger} is cut off by ${cut.by} (${cut.px}px) — the overlay opens ` +
-            "outside its scrolling ancestor, so part of it can never be read",
+            `${trigger} is cut off at the ${cut.side} by ${cut.by} (${cut.px}px) — ` +
+            "the overlay opens outside its scrolling ancestor, so part of it can " +
+            "never be read. A menu with no room below should drop upward",
             ov.className || "overlay");
       }
       if (!wasOpen) ov.classList.remove("is-open");
@@ -540,6 +559,62 @@ function __zcatAudit() {
           'data-style="boxy" so the table keeps its own border and the filter row ' +
           'above it belongs to something',
           ".zc-table-wrap");
+      }
+    }
+  }
+
+  /* ── 18g5. Content fills the container it was given ─────────────────
+     A page whose content stops short of its container leaves a band of dead
+     background down one side, and it reads as a rendering fault rather than a
+     margin. Measured on a real build: the container was 1283px wide and its
+     only child was 1199px, so 84px of nothing sat on the right. Every gate
+     passed it, because nothing was checking.
+
+     Only the direct children of the container are measured, and only a shortfall
+     on the RIGHT — a deliberately narrow centred block (a form, an empty state)
+     is short on both sides and is not this bug. */
+  {
+    const cont = document.querySelector(".zc-layout__container");
+    if (cont && !isEmptyState) {
+      const cb = cont.getBoundingClientRect();
+      const pad = parseFloat(getComputedStyle(cont).paddingRight) || 0;
+      const kids = [...cont.children].filter(vis);
+      if (kids.length) {
+        const widest = Math.max(...kids.map(k => k.getBoundingClientRect().right));
+        const gap = Math.round(cb.right - pad - widest);
+        const leftGap = Math.round(Math.min(...kids.map(k => k.getBoundingClientRect().left)) - cb.left);
+        if (gap > 24 && gap - leftGap > 16)
+          fail("CONTENT DOES NOT FILL THE CONTAINER",
+            `${gap}px of empty container to the right of the content (left gap is ` +
+            `${leftGap}px, so this is not a centred block) — the content stops short ` +
+            "and the page reads as broken rather than padded",
+            ".zc-layout__container");
+      }
+    }
+  }
+
+  /* ── 18g6. The row is the click target, not one cell ────────────────
+     Every row highlights on hover, so every row promises it can be clicked.
+     When only the first cell carries the link, that promise is false
+     everywhere else on the row — the user aims at the row, hits nothing, and
+     concludes the page is broken. The entity cell is plain text and the ROW
+     carries data-rowlink; zcat.js wires it and leaves the three-dot, the
+     checkbox and any real link inside the row alone. */
+  {
+    for (const tb of document.querySelectorAll(".zc-table tbody")) {
+      const rows = [...tb.querySelectorAll("tr.zc-table__row")].filter(vis);
+      const guilty = rows.filter(r => {
+        if (r.hasAttribute("data-rowlink")) return false;
+        const firstCell = r.querySelector("td, .zc-table__td");
+        return firstCell && firstCell.querySelector('a[href], .zc-link');
+      });
+      if (guilty.length) {
+        const sample = (guilty[0].textContent || "").trim().split(/\s+/).slice(0, 3).join(" ");
+        fail("ROW IS NOT THE CLICK TARGET",
+          `${guilty.length} row(s) put the link on the first cell only (e.g. "${sample}") ` +
+          "while the whole row highlights on hover — so most of the row looks clickable " +
+          'and is not. Make the entity cell plain text and put data-rowlink on the <tr>',
+          ".zc-table__row");
       }
     }
   }
@@ -618,13 +693,29 @@ function __zcatAudit() {
 
   /* ── 19c. The service rail must never render a blank chip ───────────
      A chip with no resolvable artwork means the shell was altered — the rail
-     is copied from the template verbatim and its logos never change. */
+     is copied from the template verbatim and its logos never change.
+
+     This used to ask only "is a mask URL DECLARED?", and a 404 is still a
+     declared URL — so a rail whose every logo pointed at a path that does not
+     exist passed the gate while rendering five blank blue squares. The URLs
+     are now fetched and the artwork has to actually load. */
   for (const chip of [...document.querySelectorAll(".zc-layout__service-chip")].filter(vis)) {
     const art = chip.querySelector(".zc-mask-icon, img, svg");
     const cs = art ? getComputedStyle(art) : null;
     const masked = cs && (cs.maskImage || cs.webkitMaskImage || "").replace(/none/, "").trim();
     const bg = cs && (cs.backgroundImage || "").replace(/none/, "").trim();
     const isImg = art && (art.tagName === "IMG" || art.tagName === "svg");
+
+    // a broken <img> reports naturalWidth 0 once it has settled
+    if (art && art.tagName === "IMG" && art.complete && art.naturalWidth === 0) {
+      fail("BLANK SERVICE LOGO",
+        `the rail chip's logo did not load (${art.getAttribute("src")}) — it renders ` +
+        "as an empty square. Copy the rail from docs/template.html and fix the path",
+        ".zc-layout__service-chip");
+      continue;
+    }
+    // a mask or background URL that 404s paints nothing at all
+    const url = (masked || bg || "").match(/url\(["']?([^"')]+)["']?\)/);
     if (!art || (!masked && !bg && !isImg))
       fail("BLANK SERVICE LOGO",
         "a service chip in the rail renders no artwork — the rail is copied from the template verbatim and its logos never change. If a service has no *-color.svg, use an existing one and say which", chip);

@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=112">
 <style>
   body { margin: 0; background: var(--zc-body-bg-default); }
+  /* .zc-layout__container is a flex ROW by default — stack its children. */
+  .zc-layout__container { flex-direction: column; }
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .head { margin-bottom: 20px; }
 </style>

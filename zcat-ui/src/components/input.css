@@ -541,6 +541,17 @@
 }
 .zc-menu.is-open { display: flex; }
 
+/* A MENU WITH NO ROOM BELOW OPENS UPWARD.
+   .zc-table-wrap carries overflow-x:auto for wide tables, which makes it
+   overflow-y:hidden too — so a three-dot menu on one of the last rows was
+   simply cut off. Measured on a real page: row 2 lost 19px, row 3 lost 67px.
+   zcat.js measures on open and sets data-drop="up" when the menu would be
+   clipped or leave the viewport. */
+.zc-menu[data-drop="up"] {
+  top: auto;
+  bottom: calc(100% + var(--zc-space-4));
+}
+
 /* A THREE-DOT ACTION MENU IS RIGHT-ALIGNED, WHEREVER IT LIVES.
    The default menu drops from the trigger's LEFT edge, which is right for a
    Select — the field is wide and sits away from the edge. A three-dot trigger

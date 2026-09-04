@@ -1,0 +1,75 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fixture — a row menu with no room below it</title>
+<!--
+  Regression fixture for the clipped row menu.
+
+  .zc-table-wrap carries overflow-x:auto so wide tables can scroll, which makes
+  it overflow-y:hidden as well. A three-dot menu on one of the LAST rows was
+  therefore cut off at the bottom. Measured on a real page before the fix:
+  row 2 lost 19px, row 3 lost 67px, and every gate still said PASS because the
+  audit only checked the left and right edges of an overlay, never top/bottom.
+
+  zcat.js now measures on open and sets data-drop="up" when the menu would be
+  clipped. Open the last row's menu: it must flip upward and stay inside the
+  wrapper.
+-->
+<link rel="stylesheet" href="../../../zcat-ui/zcat.css?v=113">
+<script src="../../../zcat-ui/zcat.js?v=17" defer></script>
+<style> body { margin: 0; padding: 24px; background: var(--zc-body-bg-default); } </style>
+
+<body data-zcat-no-shell>
+<div class="zc-layout"><div class="zc-layout__body"><div class="zc-layout__container">
+
+  <div class="zc-table-wrap" data-style="boxy">
+    <table class="zc-table">
+      <thead class="zc-table__head"><tr>
+        <th class="zc-table__th">Key</th>
+        <th class="zc-table__th">Value</th>
+        <th class="zc-table__th zc-table__th--threedot"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="zc-table__row" data-rowlink>
+          <td class="zc-table__td">TOKEN_TTL_SECONDS</td>
+          <td class="zc-table__td">900</td>
+          <td class="zc-table__td zc-table__td--threedot">
+            <span class="zc-select-shell zc-table__menushell" data-menu="action">
+              <button class="zc-table__threedot zc-select-wrap" type="button" aria-label="Row actions">…</button>
+              <div class="zc-menu" data-size="small" role="menu"><div class="zc-menu__body">
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Edit variable</span></div>
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Delete variable</span></div>
+              </div></div>
+            </span>
+          </td>
+        </tr>
+        <tr class="zc-table__row" data-rowlink>
+          <td class="zc-table__td">JWT_ISSUER</td>
+          <td class="zc-table__td">https://auth.acme.com</td>
+          <td class="zc-table__td zc-table__td--threedot">
+            <span class="zc-select-shell zc-table__menushell" data-menu="action">
+              <button class="zc-table__threedot zc-select-wrap" type="button" aria-label="Row actions">…</button>
+              <div class="zc-menu" data-size="small" role="menu"><div class="zc-menu__body">
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Edit variable</span></div>
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Delete variable</span></div>
+              </div></div>
+            </span>
+          </td>
+        </tr>
+        <tr class="zc-table__row" data-rowlink>
+          <td class="zc-table__td">ALLOW_LEGACY_HS256</td>
+          <td class="zc-table__td">false</td>
+          <td class="zc-table__td zc-table__td--threedot">
+            <span class="zc-select-shell zc-table__menushell" data-menu="action">
+              <button class="zc-table__threedot zc-select-wrap" type="button" aria-label="Row actions" id="last-trigger">…</button>
+              <div class="zc-menu" data-size="small" role="menu" id="last-menu"><div class="zc-menu__body">
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Edit variable</span></div>
+                <div class="zc-menu__item" role="menuitem"><span class="zc-menu__label">Delete variable</span></div>
+              </div></div>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div></div></div>

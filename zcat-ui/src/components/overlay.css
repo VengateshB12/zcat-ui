@@ -330,6 +330,20 @@
   flex-direction: column;
   background: var(--zc-fullpopup-header-bg);
   font-family: var(--zc-font-primary);
+  animation: zc-fullpopup-in 220ms cubic-bezier(.22, .61, .36, 1);
+}
+
+/* A FULL-PAGE POPUP RISES FROM THE BOTTOM.
+   It replaces the entire screen, so appearing instantly reads as a failed
+   navigation — the reader cannot tell whether they moved or something broke.
+   Coming up from the bottom says "this is layered over what you were doing"
+   and makes the way back obvious. */
+@keyframes zc-fullpopup-in {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zc-fullpopup { animation: none; }
 }
 .zc-fullpopup__header {
   min-height: 42px;

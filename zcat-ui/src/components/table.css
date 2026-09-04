@@ -91,6 +91,23 @@
 .zc-table__row { background: var(--zc-table-bg-row); transition: background 0.1s; }
 /* States below are NOT in the Figma Table AI set — carried over, unverified */
 .zc-table__row:hover { background: var(--zc-table-bg-row-hover); }
+
+/* THE WHOLE ROW IS THE TARGET, NOT ONE CELL.
+   The library used to provide nothing here: a hover colour and no cursor, no
+   click handling, no keyboard. Every page hand-wired its own listener — the
+   template still carries `#db-rows [data-rowlink] { cursor: pointer }` as page
+   glue — and when a page did not, only the name cell ended up clickable while
+   the rest of the row still lit up on hover. A row that highlights but does
+   not respond is worse than one that never highlighted.
+
+   Add data-rowlink to the <tr>: with a value it navigates there, without one
+   it just emits zcat:row:click. zcat.js handles both, and never hijacks a
+   control inside the row — the three-dot, a checkbox, a link keep working. */
+.zc-table__row[data-rowlink] { cursor: pointer; }
+.zc-table__row[data-rowlink]:focus-visible {
+  outline: var(--zc-border-focus, 2px) solid var(--zc-body-border-focus, currentColor);
+  outline-offset: -2px;
+}
 .zc-table__row[data-state="selected"] { background: var(--zc-table-bg-row-selected); }
 .zc-table__row[data-state="disabled"] {
   background: var(--zc-table-bg-row-disabled);

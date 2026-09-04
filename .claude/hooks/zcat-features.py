@@ -230,6 +230,16 @@ def main():
     elif (d.get("source") or "").strip():
         d["_source_unread"] = True
 
+    # ── which mode was agreed ───────────────────────────────────────────
+    mode = str(d.get("mode") or "").strip().lower()
+    if mode not in ("redesign", "match"):
+        errs.append('"mode" must be "redesign" or "match", and it is the user\'s '
+                    "call, not yours. REDESIGN treats the requirement as a feature "
+                    "list and runs the design score and review. MATCH reproduces the "
+                    "given design and runs zcat-match.js against the reference URL "
+                    "instead. Ask before building; if the requirement is already a "
+                    "considered design, say so and recommend matching it.")
+
     # ── the furniture checklist — identical for every page ──────────────
     f = d.get("furniture")
     if not isinstance(f, dict):
