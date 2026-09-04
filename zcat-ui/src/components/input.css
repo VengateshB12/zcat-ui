@@ -456,7 +456,15 @@
 }
 .zc-kvfield[data-state="hover"] { background: var(--zc-input-bg-keyvalue-hover); }
 .zc-kvfield[data-state="error"] { background: var(--zc-input-bg-keyvalue-hover); }
-.zc-kvfield__btn:disabled { opacity: .4; cursor: not-allowed; }
+/* A disabled icon takes the disabled COLOUR, never a fade. Opacity dims the
+   whole button including its focus ring and any border, and it cannot be
+   themed — --zc-body-icon-disabled is already the right value in light and
+   dark. */
+.zc-kvfield__btn:disabled {
+  color: var(--zc-body-icon-disabled);
+  cursor: not-allowed;
+}
+.zc-kvfield__btn:disabled svg { stroke: var(--zc-body-icon-disabled); }
 .zc-kvfield__btn:disabled:hover { background: var(--zc-body-border-default); }
 .zc-kvfield__fields { display: flex; flex: 1 1 0%; min-width: 0; gap: var(--zc-space-16); align-items: center; }
 .zc-kvfield__fields > * { flex: 1 1 0%; min-width: 0; }
@@ -782,13 +790,22 @@
 
 /* ── Key Value: live hover + drag to reorder ── */
 .zc-kvfield:hover { background: var(--zc-input-bg-keyvalue-hover); }
-.zc-kvfield.is-dragging { opacity: .5; }
+
 .zc-kvfield.is-dragover { position: relative; }
 .zc-kvfield.is-dragover::before {
   content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 2px;
   background: var(--zc-input-border-active); border-radius: 2px; pointer-events: none;
 }
-.zc-kvfield.is-dragging { opacity: .4; background: var(--zc-input-bg-keyvalue-hover); }
+/* The row being dragged is marked with tokens, not a fade: the hover
+   background plus a dashed active-coloured outline. A translucent row lets the
+   rows beneath bleed through it and becomes hard to read at exactly the moment
+   the person is trying to aim it. (There were two .is-dragging rules here,
+   opacity .5 and .4; only the second ever applied.) */
+.zc-kvfield.is-dragging {
+  background: var(--zc-input-bg-keyvalue-hover);
+  outline: var(--zc-border-default) dashed var(--zc-input-border-active);
+  outline-offset: -2px;
+}
 .zc-kvfield__drag { cursor: grab; }
 .zc-kvfield__drag:active { cursor: grabbing; }
 

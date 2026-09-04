@@ -580,6 +580,11 @@ Exact markup shapes: ONBOARDING.md + the owning CSS file's usage comment. Do not
   reads as loose furniture. `data-style="boxy"` restores the 1px border and
   6px radius so header + table + pagination read as one object.
   Audit: `STRETCH TABLE SHARING A PAGE`.
+- **A state is a colour, never a fade.** Disabled/hover/active/inactive all
+  have tokens. Opacity dims border and focus ring too, cannot be themed, and
+  drops contrast — a `.75` secondary line measured 3.54:1, failing our own
+  audit. Opacity is only `0` (hidden) or the Overlay scrim.
+  Save-time check: `OPACITY USED FOR A STATE`.
 - **Sprite icons take no `fill`.** 26 of 27 symbols are stroke-drawn and SVG
   defaults to `fill:black`, so a bare `<svg><use href="#i-x"/></svg>` used to
   render as a solid shape — invisible at 16px, a black rectangle at 350px.

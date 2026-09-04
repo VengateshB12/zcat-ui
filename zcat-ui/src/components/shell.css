@@ -533,13 +533,13 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: .72;
-  transition: opacity 120ms ease;
 }
-.zc-layout__service:hover .zc-layout__service-chip .zc-mask-icon { opacity: .9; }
-.zc-layout__service[data-state="active"] .zc-layout__service-chip .zc-mask-icon {
-  opacity: 1;
-}
+/* NO OPACITY ON THE LOGO. The state already has colour tokens of its own —
+   the chip's background is --zc-servicemenu-icon-bg-default and
+   --zc-servicemenu-icon-bg-active — so dimming the artwork on top of that is
+   a second, weaker way of saying the same thing, and it makes a brand logo
+   render wrong. The logo is identical in every state; the chip behind it
+   changes. */
 .zc-layout__service[data-state="active"] .zc-layout__service-name {
   color: var(--zc-servicemenu-text-active);
 }

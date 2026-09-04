@@ -11,6 +11,9 @@ RE_RAWCOLOR = re.compile(
 RE_SVGCOLOR = re.compile(r'(?:fill|stroke)="(#[0-9a-fA-F]{3,8})"')
 RE_ODDPX = re.compile(r'(?<![0-9.])(3|5|7|9|1[13579]|2[13579]|3[13579])px\b')
 RE_ZC_RESTYLE = re.compile(r'^\s*\.zc-[A-Za-z0-9_-]+[^{}]*\{')
+RE_STATE_OPACITY = re.compile(
+    r"(?::hover|:active|:focus|:disabled|\[data-state|\.is-)[^{]*\{[^}]*"
+    r"opacity:\s*(?:0?\.\d+|0\.\d+)", re.I)
 RE_FONT = re.compile(r'\bfont-(?:size|weight|family)\s*:', re.I)
 RE_EMOJI = re.compile('[\U0001F000-\U0001FAFF☀-➿←-⇿■-◿⬀-⯿]')
 RE_SIDEMENU_STROKE = re.compile(
@@ -63,6 +66,13 @@ def static_issues(path, text):
                 add(i, f"ODD PIXEL VALUE {m.group(0)} — use even --zc-space-* tokens", ln)
             if RE_FONT.search(ln):
                 add(i, "RAW FONT RULE — use .zc-h*/.zc-subtitle-*/.zc-body-* classes", ln)
+            # A state is a COLOUR, never a fade. Opacity dims everything at once
+            # — border, focus ring, the lot — cannot be themed light/dark, and
+            # silently drops contrast below the 4.5:1 this system enforces.
+            if RE_STATE_OPACITY.search(ln):
+                add(i, "OPACITY USED FOR A STATE — use a colour token "
+                       "(--zc-body-icon-disabled, --zc-*-text-disabled, a hover/active "
+                       "bg). Opacity cannot be themed and quietly fails contrast", ln)
         if RE_ZC_RESTYLE.match(ln):
             add(i, "RESTYLED zc-* CLASS — never redefine library classes; use page-scoped glue classes", ln)
         m = RE_EMOJI.search(ln)

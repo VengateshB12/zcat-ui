@@ -96,7 +96,12 @@
 .zc-avatar[data-state="disabled"] { color: var(--zc-avatar-text-disabled); }
 .zc-avatar[data-state="disabled"] .zc-avatar__icon { stroke: var(--zc-avatar-icon-disabled); }
 .zc-avatar[data-state="disabled"][data-type="icon-filled"] .zc-avatar__icon { fill: var(--zc-avatar-icon-disabled); }
-.zc-avatar[data-state="disabled"] img { opacity: .5; }
+/* A PHOTO CANNOT TAKE A COLOUR TOKEN, so it desaturates instead of fading.
+   The text and icon variants above already use --zc-avatar-text-disabled and
+   --zc-avatar-icon-disabled; a photograph has no colour to swap. Grayscale
+   says "inactive" while leaving the image fully opaque, so nothing behind it
+   shows through and no contrast is lost — which is what opacity costs. */
+.zc-avatar[data-state="disabled"] img { filter: grayscale(1); }
 
 /* Status dot */
 /* Reference shows the status dot at TOP-RIGHT, overlapping the edge,

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=117">
+  <link rel="stylesheet" href="../zcat.css?v=118">
   <script src="../zcat.js?v=20"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -749,6 +749,15 @@ HARD RULES (violating these is the failure mode)
       the table its edge back and the whole block reads as one object.
   The rule in one line: ALONE = STRETCH, SHARING = BOXY. The audit fails the
   wrong choice as STRETCH TABLE SHARING A PAGE.
+- A STATE IS A COLOUR, NEVER A FADE. Disabled, hover, active, inactive — every
+  one of them has a token. Do not reach for opacity to make something look
+  lighter: it dims the whole element including its border and focus ring, it
+  cannot be themed for light and dark, and it quietly drops contrast below the
+  4.5:1 this system enforces everywhere else. Measured on a real component, a
+  secondary line at .75 opacity fell to 3.54:1 — a fail by our own audit.
+  Use --zc-body-icon-disabled, --zc-*-text-disabled, the hover and active
+  background tokens. Opacity is only ever 0 (genuinely hidden) or the Overlay
+  component, where a translucent scrim IS the component.
 - NEVER PUT fill ON A SPRITE ICON. 26 of the 27 sprite symbols are drawn with
   strokes, and SVG's own default is fill:black — so an <svg> that says nothing
   used to render the icon as a SOLID BLACK SHAPE. At 16px that passes for a

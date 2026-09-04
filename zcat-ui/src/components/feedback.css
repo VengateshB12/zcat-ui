@@ -134,9 +134,16 @@
    column of identical notices covered the screen. The library had no container
    for this at all, so every page invented its own — one shipped as .fn-toasts.
 
-   They now stack like a deck. The newest is fully legible in front; the ones
-   behind are offset, scaled back and dimmed so you can see there are more
-   without reading them twice. Beyond three they are hidden rather than piled.
+   They now stack like a deck: the newest in front, the ones behind offset and
+   scaled back so you can see there are more. Beyond three they are hidden
+   rather than piled.
+
+   NO OPACITY ON THE ONES BEHIND. Dimming them is the usual convention and it
+   is wrong here — measured, a subtext at .75 drops to 3.54:1, below the 4.5:1
+   this design system enforces on every page it audits. A toast is a message
+   someone still has to read; the offset and the scale already say which is
+   newest, and fading a notice to prove it is decoration paid for in
+   legibility.
 
      <div class="zc-toasts">…toasts, newest appended last…</div>
 */
@@ -161,8 +168,8 @@
   transition: transform 160ms ease, opacity 160ms ease;
 }
 .zc-toasts > .zc-toast:nth-last-child(1) { transform: none;                       z-index: 3; }
-.zc-toasts > .zc-toast:nth-last-child(2) { transform: translateY(8px)  scale(.96); z-index: 2; opacity: .9; }
-.zc-toasts > .zc-toast:nth-last-child(3) { transform: translateY(16px) scale(.92); z-index: 1; opacity: .75; }
+.zc-toasts > .zc-toast:nth-last-child(2) { transform: translateY(8px)  scale(.96); z-index: 2; }
+.zc-toasts > .zc-toast:nth-last-child(3) { transform: translateY(16px) scale(.92); z-index: 1; }
 .zc-toasts > .zc-toast:nth-last-child(n+4) { opacity: 0; pointer-events: none; }
 /* a stack that grows downward pushes the older ones UP instead */
 .zc-toasts[data-position="bottom-right"] > .zc-toast:nth-last-child(2) { transform: translateY(-8px)  scale(.96); }
