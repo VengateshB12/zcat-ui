@@ -36,8 +36,16 @@ SOURCES = ["zcat-ui/docs/template.html",
 
 JS_TELLS = ("${", " r += ", "function(", "){", "=>")
 
+# Classes whose FIRST match on a page is a look-alike, not the thing.
+# The first .zc-input-wrap is always the topbar Search, so "Text field" shipped
+# a search box — right classes, wrong component, and it teaches the wrong shape.
+EXCLUDE = {
+    "zc-input-wrap": ("zc-search-wrap", "zc-select-wrap", "zc-kvfield"),
+}
+
 def extract(cls, cap=4200):
-    """First balanced element carrying `cls` that is real markup."""
+    """First balanced element carrying `cls` that is real markup, and is not a
+       look-alike of something else."""
     for path in SOURCES:
         try: s = open(path, encoding="utf-8").read()
         except OSError: continue
@@ -51,6 +59,8 @@ def extract(cls, cap=4200):
                     b = s[i:i + t.end()]
                     if any(j in b for j in JS_TELLS):
                         break                      # JS source, not markup
+                    if any(x in m.group(2) for x in EXCLUDE.get(cls, ())):
+                        break                      # a look-alike, keep looking
                     # A HOLLOW BLOCK IS NOT A REFERENCE.
                     # template.html carries <div class="zc-gdetails" id="wiz-review">
                     # </div> — empty, filled by JavaScript at runtime. Extracting it
@@ -157,8 +167,8 @@ for name, items in SPEC:
             missing.append((title, cls)); continue
         count += 1
         v = variants(cls)
-        vline = (f'<p class="zc-body-4 src">variants: <code>{html.escape(" ".join(v[:10]))}</code></p>'
-                 if v else "")
+        vline = (f'<p class="zc-body-4 src">variants ({len(v)}), all of them: '
+                 f'<code>{html.escape(" ".join(v))}</code></p>' if v else "")
         gcss, gnames = glue_for(b, path)
         gblock = (f'<p class="zc-body-3 glue-note">This block also needs {len(gnames)} '
                   f'page-glue class(es) — <code>{html.escape(", ".join(gnames))}</code>. '
@@ -256,6 +266,12 @@ change the variant.</strong> Do not rebuild a component from a written
 description — that is how popups, empty states and detail views come out subtly
 wrong every time, with every class name perfectly correct. If what you need is
 not here, copy the closest sibling page and delete what you do not need.</p>
+<p class="zc-body-3 lede" style="margin-top:12px">Each block lists EVERY
+<code>data-*</code> variant its CSS defines, and you may use any of them — the
+one shown in the markup is just the instance that page happened to use. The list
+is read from the stylesheet, so it cannot go stale, but it only catches variants
+written directly on that class; a few components take options on a child element
+instead, and <code>ONBOARDING.md</code> remains the full API.</p>
 ''' + "\n".join(sections) + "\n</div></body></html>\n"
 
 open("zcat-ui/docs/snippets.html", "w", encoding="utf-8").write(DOC)
