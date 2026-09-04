@@ -6,7 +6,15 @@ component library generated from the Figma file "ZCat-AI Understandable"
 against a Figma variable. When this folder is imported into a project and you are
 asked to build UI, you build it **from these components — never from scratch**.
 
-## The startup comment (paste this to begin a build chat)
+## The startup comment
+
+> **This section is history.** The build prompt now lives in
+> `docs/playground.html` (Getting Started → Copy prompt) and on the docs site.
+> It asks which mode you are in, checks the page before the expensive gates,
+> and runs four blocking gates — none of which is described below. Follow the
+> current prompt; what follows is kept only because older chats reference it.
+
+<details><summary>The superseded startup comment</summary>
 
 ```text
 Build my requirement with the zcat UI component library in the zcat-ui/ folder.
@@ -27,8 +35,8 @@ HARD RULES (violating these is the failure mode)
   STATE or a VARIANT on the component (data-state / data-variant / data-size) —
   if none exists, say so and ask. Concretely: never recolour a table cell,
   never override a card's border, never change a button's background.
-- Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css">
-  and <script src="zcat-ui/zcat.js" defer></script>. Never copy rules out of it,
+- Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css?v=119">
+  and <script src="zcat-ui/zcat.js?v=21" defer></script>. Never copy rules out of it,
   never restyle a zc-* class, never write a raw hex — every colour is a
   var(--zc-*) token from src/tokens/colors.css.
 - No odd numbers for spacing/sizing/radius; use the --zc-space-* / --zc-radius-*
@@ -37,6 +45,11 @@ HARD RULES (violating these is the failure mode)
   .zc-btn, a menu is .zc-menu — even inside bigger things you build.
 - Icons come only from zcat-ui/docs/icons/ (stroke icons bind to currentColor;
   recolor files via the .zc-mask-icon pattern). No other icon sets.
+- THE PAGE SPRITE IS A SUBSET. docs/template.html ships 27 <symbol> definitions;
+  docs/icons/ holds 483 files. Referencing one that is not in the sprite gives
+  you a <use> pointing at nothing, which renders as an EMPTY BOX with no error.
+  To use another icon, copy its <symbol> into the page's sprite block first.
+  The audit fails this as ICON SYMBOL NOT FOUND.
 - Pages that belong to a product shell start from .zc-layout (the Catalyst
   layout) with .zc-sidemenu, .zc-layout__topbar, .zc-layout__subheader, and a
   .zc-layout__container holding .zc-cheader + content.
@@ -51,14 +64,16 @@ my requirement needed that the library does not have — do not improvise a
 lookalike component.
 ```
 
+</details>
+
 Then paste the requirement (text, screenshot, PRD). Everything below is the
 reference the startup comment points to.
 
 ## Include
 
 ```html
-<link rel="stylesheet" href="zcat-ui/zcat.css">
-<script src="zcat-ui/zcat.js" defer></script>
+<link rel="stylesheet" href="zcat-ui/zcat.css?v=119">
+<script src="zcat-ui/zcat.js?v=21" defer></script>
 ```
 
 `zcat.js` auto-initialises every interactive component (dropdowns, tooltips,

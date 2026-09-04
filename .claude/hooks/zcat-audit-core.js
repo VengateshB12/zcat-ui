@@ -269,9 +269,19 @@ function __zcatAudit() {
   }
 
   /* ── 14. Typography hierarchy must exist ──────────────────────────── */
+  /* Components carry headings of their own — .zc-cheader__title,
+     .zc-empty__heading, .zc-popup__title, .zc-csm__title are all 16/20 600 or
+     larger. Counting only the zc-h and zc-subtitle classes reported "all text is Regular
+     weight" on pages whose headings came from the components they were told to
+     use, which pushed the author to bolt on a redundant class to satisfy it. */
+  const COMPONENT_HEADINGS = ".zc-cheader__title, .zc-empty__heading, " +
+    ".zc-popup__title, .zc-fullpopup__title, .zc-csm__title, .zc-csm__heading, " +
+    ".zc-sidemenu__heading, .zc-layout__subheader-title, .zc-card__title";
   const heads = [...document.querySelectorAll(
-    '[class^="zc-h"],[class*=" zc-h"],[class*="zc-subtitle-"]')]
-    .filter(el => /\bzc-(h[1-6]|subtitle-[123])\b/.test(el.className)).filter(vis);
+    '[class^="zc-h"],[class*=" zc-h"],[class*="zc-subtitle-"],' + COMPONENT_HEADINGS)]
+    .filter(el => /\bzc-(h[1-6]|subtitle-[123])\b/.test(el.className) ||
+                  el.matches(COMPONENT_HEADINGS))
+    .filter(vis);
   const cards = [...document.querySelectorAll(".zc-card")].filter(vis);
   const tableDriven = [...document.querySelectorAll(".zc-table")].filter(vis).length > 0 &&
                       cards.length < 2;
@@ -331,6 +341,19 @@ function __zcatAudit() {
     });
     if (new Set(pads).size > 1)
       fail("CARD PADDING", `sibling cards have different padding (${[...new Set(pads)].join("  vs  ")})`, parent);
+    // Consistency was the only thing checked, so cards with NO padding at all
+    // passed as long as they agreed — and content sat on the border.
+    const bare = cards.filter(c => {
+      const st = getComputedStyle(c);
+      if (c.hasAttribute("data-pad")) return false;      // deliberate opt-out
+      return ["Top", "Right", "Bottom", "Left"]
+        .every(side => parseFloat(st["padding" + side]) === 0);
+    });
+    if (bare.length)
+      fail("CARD PADDING",
+        `${bare.length} card(s) have no padding on any side — content sits on the ` +
+        'border. Use the component\'s padding, or data-pad="none" if the card ' +
+        "deliberately wraps something that bleeds to its edge", parent);
   }
 
   /* ── 17. Fixed heights on cards/containers ────────────────────────── */
@@ -451,7 +474,19 @@ function __zcatAudit() {
     const OVERLAY = ".zc-menu, .zc-dropdown__menu, .zc-tooltip, .zc-popover";
     for (const ov of document.querySelectorAll(OVERLAY)) {
       const wasOpen = ov.classList.contains("is-open");
-      if (!wasOpen) ov.classList.add("is-open");
+      /* OPEN IT THE WAY A PERSON DOES. Adding .is-open skips zcat.js entirely,
+         so the placement code that flips a clipped menu upward never runs — and
+         this then reported every short table's row menu as cut off when a real
+         click flips it and it fits. Click the trigger; fall back to the class
+         only when there is no trigger to click. */
+      let clicked = false;
+      if (!wasOpen) {
+        const shell = ov.closest(".zc-select-shell, [data-menu]");
+        const trigger = shell && shell.querySelector(
+          ".zc-select-wrap, .zc-table__threedot, button");
+        if (trigger) { trigger.click(); clicked = ov.classList.contains("is-open"); }
+        if (!clicked) ov.classList.add("is-open");
+      }
       const b = ov.getBoundingClientRect();
       if (b.width > 0 && b.height > 0) {
         const offR = Math.round(b.right - window.innerWidth);
@@ -471,12 +506,9 @@ function __zcatAudit() {
           const eb = e.getBoundingClientRect();
           const over = { right: b.right - eb.right, left: eb.left - b.left,
                          bottom: b.bottom - eb.bottom, top: eb.top - b.top };
-          // would flipping upward rescue it? the library does exactly that
-          const trig = ov.previousElementSibling;
-          const roomAbove = trig ? trig.getBoundingClientRect().top - eb.top : 0;
-          const rescuedByFlip = over.bottom > 1 && over.top <= 1 && roomAbove >= b.height;
-          const worst = Math.max(over.right, over.left,
-                                 rescuedByFlip ? -1 : over.bottom, over.top);
+          // No estimating whether a flip would help: it has already happened if
+          // it was going to. Guessing at it is what produced the false failures.
+          const worst = Math.max(over.right, over.left, over.bottom, over.top);
           if (worst > 1) {
             const side = over.right === worst ? "right" : over.left === worst ? "left"
                        : over.bottom === worst ? "bottom" : "top";
@@ -500,7 +532,15 @@ function __zcatAudit() {
             "never be read. A menu with no room below should drop upward",
             ov.className || "overlay");
       }
-      if (!wasOpen) ov.classList.remove("is-open");
+      if (!wasOpen) {
+        if (clicked) {
+          const shell = ov.closest(".zc-select-shell, [data-menu]");
+          const trigger = shell && shell.querySelector(
+            ".zc-select-wrap, .zc-table__threedot, button");
+          if (trigger) trigger.click();
+        }
+        ov.classList.remove("is-open");
+      }
     }
   }
 
@@ -617,6 +657,27 @@ function __zcatAudit() {
           ".zc-table__row");
       }
     }
+  }
+
+  /* ── 18g7. Every icon reference must resolve to a symbol ────────────
+     The template ships 27 symbols; docs/icons/ holds 483 files. Referencing any
+     of the other ~456 by id gives you a <use> that points at nothing, and it
+     renders as an EMPTY BOX — no error, no console warning, and every gate
+     green. Two of these shipped on a real build and were only caught by eye. */
+  {
+    const missing = new Set();
+    for (const u of document.querySelectorAll("svg use")) {
+      const href = u.getAttribute("href") || u.getAttribute("xlink:href") || "";
+      if (!href.startsWith("#")) continue;             // external sprite, checked elsewhere
+      if (!document.querySelector(href)) missing.add(href);
+    }
+    if (missing.size)
+      fail("ICON SYMBOL NOT FOUND",
+        `${missing.size} icon reference(s) point at a symbol this page does not ` +
+        `define (${[...missing].slice(0, 5).join(", ")}) — they render as empty ` +
+        "boxes. The sprite ships a subset; copy the symbol you need from " +
+        "docs/icons/ into the page's sprite",
+        "svg use");
   }
 
   /* ── 18h. The stylesheet link must carry a version ──────────────────

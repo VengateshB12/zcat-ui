@@ -53,16 +53,26 @@
      </div>
    ============================================================================= */
 
+/* THE WRAPPER ONLY CLIPS WHEN IT HAS TO.
+   overflow-x:auto was unconditional, and a horizontal overflow makes the other
+   axis clip too — so a row's three-dot menu was cut off by its own table. On a
+   SHORT table there is no rescue: flip it up and it is cut at the top instead,
+   flip it down and it is cut at the bottom. Measured, both.
+   zcat.js measures each table on load and sets data-scrollx only when the table
+   really is wider than the wrapper. Until then nothing clips and menus are free
+   to leave the box, which is what an overlay is for. */
 .zc-table-wrap {
   width: 100%;
-  overflow-x: auto;
+  overflow: visible;
   font-family: var(--zc-font-primary);
 }
 /* Style=Boxy — outer border + radius (Stretch has neither) */
+.zc-table-wrap[data-scrollx] { overflow-x: auto; }
 .zc-table-wrap[data-style="boxy"] {
   border: var(--zc-border-default) solid var(--zc-table-border);
   border-radius: var(--zc-radius-6);
-  overflow: hidden;
+  /* clip only for the rounded corners, and only when scrolling */
+  overflow: clip visible;
 }
 
 .zc-table {

@@ -16,7 +16,16 @@
   border-radius: var(--zc-radius-6);
   overflow: hidden;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  /* A CARD HAS PADDING. It shipped with none — background, border, radius and
+     nothing to hold content off the edge — so every page invented its own and
+     no two looked alike. Measured on a real build, footer buttons ended up 1px
+     from the border. Opt out with data-pad="none" when a card wraps something
+     that must bleed to its edge, like a table or a media panel. */
+  padding: var(--zc-space-16);
 }
+.zc-card[data-pad="none"]  { padding: 0; }
+.zc-card[data-pad="small"] { padding: var(--zc-space-12); }
+.zc-card[data-pad="large"] { padding: var(--zc-space-24); }
 .zc-card:hover:not([data-state]),
 .zc-card[data-state="hover"] {
   background: var(--zc-cards-bg-hover);

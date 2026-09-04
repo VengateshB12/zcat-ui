@@ -7,20 +7,22 @@
 
 # Decision Rules — Topic Index
 
-Pick the file that matches your current question. Read ONLY that file, not all of them.
+Pick the file that matches your current question. Read ONLY that file, not all
+of them. The sizes below are real — they were wrong by up to 10x, which meant
+a file listed as "~6k" cost 15k tokens to open. Budget from these.
 
 | Question | File | Size |
 |----------|------|------|
-| Which component should I use? / Search before build | `rules-which-component.md` | ~4k |
-| How to compose a polished design from wireframe? | `rules-design-composition.md` | ~6k |
-| What are the visual standards / design uniforms? | `rules-design-uniforms.md` | ~6k |
-| How to display data (table vs cards vs list)? | `rules-data-display.md` | ~5k |
-| How to configure Table AI columns? | `rules-table-columns.md` | ~4k |
-| How to build detail page / master-detail / empty state? | `rules-detail-page.md` | ~4k |
+| Which component should I use? / Search before build | `rules-which-component.md` | ~6k |
+| How to compose a polished design from wireframe? | `rules-design-composition.md` | ~56k |
+| What are the visual standards / design uniforms? | `rules-design-uniforms.md` | ~5k |
+| How to display data (table vs cards vs list)? | `rules-data-display.md` | ~7k |
+| How to configure Table AI columns? | `rules-table-columns.md` | ~22k |
+| How to build detail page / master-detail / empty state? | `rules-detail-page.md` | ~11k |
 | Which input component (dropdown vs radio vs toggle)? | `rules-input-selection.md` | ~3k |
-| How to build a popup / dialog / footer layout? | `rules-popup-footer.md` | ~5k |
-| Tabs vs sidebar vs accordion / actions / navigation? | `rules-navigation-actions.md` | ~5k |
-| Spacing values / layout rules / container patterns? | `rules-spacing-layout.md` | ~6k |
+| How to build a popup / dialog / footer layout? | `rules-popup-footer.md` | ~11k |
+| Tabs vs sidebar vs accordion / actions / navigation? | `rules-navigation-actions.md` | ~15k |
+| Spacing values / layout rules / container patterns? | `rules-spacing-layout.md` | ~12k |
 | Token optimization / error recovery / Figma quirks? | `rules-build-reference.md` | ~4k |
 
 ## Topic Keywords → File Mapping

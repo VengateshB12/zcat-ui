@@ -121,6 +121,24 @@
     });
   }
 
+  /* ── Table wrap: clip horizontally only when the table overflows ─────
+     Clipping unconditionally cut off row menus, because a horizontal overflow
+     forces the vertical axis to clip as well. */
+  function initTableWrap(root) {
+    each(root, '.zc-table-wrap', function (wrap) {
+      var table = wrap.querySelector('.zc-table');
+      if (!table) return;
+      function measure() {
+        var needs = table.scrollWidth > wrap.clientWidth + 1;
+        if (needs) wrap.setAttribute('data-scrollx', '');
+        else wrap.removeAttribute('data-scrollx');
+      }
+      measure();
+      requestAnimationFrame(measure);
+      if (global.ResizeObserver) new ResizeObserver(measure).observe(wrap);
+    });
+  }
+
   /* ── Table rows: the whole row is one click target ───────────────────
      A row that highlights on hover but only responds on its first cell is a
      broken affordance. Controls INSIDE the row keep their own behaviour —
@@ -1018,6 +1036,7 @@
     initPassword(root);
     initStepper(root);
     initDropdown(root);
+    initTableWrap(root);
     initTableRows(root);
     initAutocomplete(root);
     initInlineEdit(root);

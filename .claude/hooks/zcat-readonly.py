@@ -81,6 +81,14 @@ def command_word(seg):
     return ""
 
 
+# cp/mv/ln/rsync READ their first arguments and WRITE only the last one.
+# Treating every argument as a target blocked `cp zcat-ui/docs/template.html
+# pages/x.html` — which is the copy the build prompt itself instructs, so the
+# very first step of a build was impossible. Copying INTO the library must of
+# course still be refused.
+LAST_ARG_ONLY = {"cp", "mv", "ln", "rsync", "install"}
+
+
 def writes_to(seg, token):
     """Does this ONE segment write to the path matching `token`?"""
     if re.search(r">>?\s*['\"]?" + token, seg):           # > path / >> path
@@ -93,6 +101,13 @@ def writes_to(seg, token):
             return False
     elif verb != "sed" and verb not in WRITE_VERBS:
         return False
+
+    if verb in LAST_ARG_ONLY:
+        # only the destination counts — everything before it is being read
+        args = [t for t in seg.strip().split()[1:] if not t.startswith("-")]
+        target = args[-1] if args else ""
+        return bool(re.search(token, target))
+
     return bool(re.search(token, seg))
 
 

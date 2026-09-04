@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=118">
-  <script src="../zcat.js?v=20"></script>
+  <link rel="stylesheet" href="../zcat.css?v=119">
+  <script src="../zcat.js?v=21"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -518,11 +518,11 @@ ONCE I SEND THE REQUIREMENT — BEFORE WRITING ANY CODE
    also means an empty state, a create/edit popup and a detail page), count the
    tabs, columns, buttons and fields you found, and confirm with me before
    building. If anything is ambiguous, ASK — do not guess.
-4. Never assume a component is missing. The library has ~65 including many that
+5. Never assume a component is missing. The library has ~65 including many that
    get overlooked — General Details, Container Side Menu, Empty State, Attention
    Box, Timeline, Stepper, Tour, Code Block, Key Value fields. Check
    ONBOARDING.md before hand-building anything.
-5. MAP EVERY ELEMENT TO A COMPONENT **AND ITS VARIANT** before you write any
+6. MAP EVERY ELEMENT TO A COMPONENT **AND ITS VARIANT** before you write any
    markup, and show me that mapping. For each thing in my requirement name the
    zc-* component AND which variant/props you will use — e.g. "entity header ->
    Sub Header, Back Nav + title + Status Badge", "page tabs -> .zc-tabs

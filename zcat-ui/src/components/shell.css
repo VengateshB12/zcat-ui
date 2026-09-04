@@ -199,6 +199,28 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* GROUPED SECTIONS. The Container Side Menu shipped with header/title/list/
+   item and no way to group anything — but the screens that need it most, a
+   Settings sheet with General / Project / Billing, are exactly grouped. Its
+   sibling .zc-sidemenu has had section headings all along. Without these a
+   page invents its own classes and the grouping stops looking like grouping. */
+.zc-csm__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zc-space-2);
+}
+.zc-csm__section + .zc-csm__section { margin-top: var(--zc-space-16); }
+.zc-csm__heading {
+  padding: var(--zc-space-6) var(--zc-space-12);
+  font-family: var(--zc-font-primary);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--zc-body-text-light);
+}
+
 .zc-csm__list {
   display: flex;
   flex-direction: column;

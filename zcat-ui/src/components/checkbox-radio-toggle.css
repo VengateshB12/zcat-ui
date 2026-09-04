@@ -79,6 +79,22 @@
   width: 0;
   height: 0;
 }
+
+/* THE NATIVE INPUT IS HIDDEN WHETHER OR NOT IT WAS GIVEN THE CLASS.
+   Only .zc-toggle__input was hidden, so the obvious markup —
+   <label class="zc-toggle"><input type="checkbox"><span class="zc-toggle__track">
+   — rendered the browser's own checkbox next to the track. The result looks
+   broken rather than wrong, and no gate could see it. Hiding by ELEMENT makes
+   the component behave for the markup people actually write. */
+.zc-toggle > input[type="checkbox"],
+.zc-checkbox > input[type="checkbox"],
+.zc-radio > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
 .zc-checkbox:has(.zc-checkbox__input:disabled),
 .zc-radio:has(.zc-radio__input:disabled),
 .zc-toggle:has(.zc-toggle__input:disabled) { cursor: not-allowed; }
