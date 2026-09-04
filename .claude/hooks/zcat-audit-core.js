@@ -745,6 +745,245 @@ function __zcatAudit() {
         "svg use");
   }
 
+  /* ── 18g3. A row of repeated items must line up ─────────────────────
+     Stat rows, metric strips, KPI tiles: three or more siblings laid out
+     across, each a label over a value. Composing one is DESIGN and stays free
+     — but a row whose items sit at different heights, or whose gaps jump about,
+     reads as broken however correct every class name is.
+
+     This is the gap the designer kept hitting: RHYTHM was a WARNING and looked
+     only at vertical gaps between sections, so a stat row with a badge sitting
+     off the numbers' baseline and gaps running 16px, 48px, 16px passed every
+     gate cleanly. Two things are checked, and both are failures:
+       GAPS — the horizontal gaps between items should agree;
+       BASELINE — the items' value text should sit on one line. A Badge is
+         taller than a number, so a row mixing them has to align them, not
+         leave each to fall where it lands. */
+  {
+    const rows = new Set();
+    for (const el of all) {
+      if (!vis(el)) continue;
+      const kids = [...el.children].filter(vis);
+      if (kids.length < 3) continue;
+      const boxes = kids.map(k => k.getBoundingClientRect());
+      // laid out ACROSS: every item shares roughly the same top
+      const tops = boxes.map(b => b.top);
+      if (Math.max(...tops) - Math.min(...tops) > 4) continue;
+      if (boxes[0].width > 0.6 * el.getBoundingClientRect().width) continue;
+      rows.add(el);
+    }
+    for (const row of rows) {
+      const kids = [...row.children].filter(vis);
+      const boxes = kids.map(k => k.getBoundingClientRect());
+      const gaps = [];
+      for (let i = 1; i < boxes.length; i++)
+        gaps.push(Math.round(boxes[i].left - boxes[i - 1].right));
+      const good = gaps.filter(g => g >= 0 && g < 200);
+      if (good.length >= 2) {
+        const lo = Math.min(...good), hi = Math.max(...good);
+        if (hi - lo > 6)
+          fail("UNEVEN ROW SPACING",
+            `a row of ${kids.length} items has gaps of ${good.join(", ")}px — pick ` +
+            "ONE spacing token and use it between every item. Gaps that jump about " +
+            "read as broken however correct every class name is", row);
+      }
+      /* A BADGE IN A STAT ROW MUST SIT ON THE NUMBERS BESIDE IT.
+         This is the defect the designer photographed: a row reading
+         Columns 5 · Rows 312 · RLS [Enabled] · Policies 2 · Data API [Exposed],
+         where the badges sit lower than the plain numbers and the value line
+         goes ragged.
+
+         Two earlier versions of this check tried to compare "the value" of every
+         item generically — once by the last text leaf, once by the largest text
+         — and BOTH failed our own correct page, because a stat card is allowed
+         to compose its value differently (ours puts a progress bar where the
+         others put a caption). Generic is the wrong altitude. So this checks the
+         one case that is unambiguous: a row that mixes Badges with plain text
+         values must align their centres, because a Badge is taller and will
+         otherwise land wherever it falls. */
+      const badges = kids.filter(k => k.querySelector(".zc-badge"));
+      if (badges.length && badges.length < kids.length) {
+        const centre = k => {
+          const b = k.querySelector(".zc-badge");
+          if (b) { const r = b.getBoundingClientRect(); return r.top + r.height / 2; }
+          const leaves = [...k.querySelectorAll("*")].filter(
+            n => n.children.length === 0 && (n.textContent || "").trim() && vis(n));
+          if (!leaves.length) return null;
+          let best = leaves[0], sz = 0;
+          for (const n of leaves) {
+            const f = parseFloat(getComputedStyle(n).fontSize) || 0;
+            if (f > sz) { sz = f; best = n; }
+          }
+          const r = best.getBoundingClientRect();
+          return r.top + r.height / 2;
+        };
+        const cs = kids.map(centre).filter(c => c !== null);
+        if (cs.length >= 3) {
+          const lo = Math.min(...cs), hi = Math.max(...cs);
+          if (hi - lo > 4)
+            fail("BADGE OFF THE ROW BASELINE",
+              `this row mixes ${badges.length} Badge(s) with plain values and their ` +
+              `centres sit ${Math.round(hi - lo)}px apart — a Badge is taller than a ` +
+              "number, so centre them on each other. Left alone the value line goes " +
+              "ragged, which the eye reads as broken before it notices anything " +
+              "else being right", row);
+        }
+      }
+    }
+  }
+
+  /* ── 18g4. Stretch is for a table that is alone ─────────────────────
+     The Table ships two styles and the choice is not decoration. STRETCH is
+     edge-to-edge with no outer border: it works when the table IS the page,
+     because the page container already draws the boundary. Put stat cards or
+     any other surface above it and that boundary now belongs to the cards —
+     the table loses its edge, and the filter row above it reads as floating
+     junk rather than the table's own header. BOXY gives the table back its
+     own border and radius, and the whole block reads as one object again. */
+  {
+    for (const tw of document.querySelectorAll('.zc-table-wrap[data-style="stretch"]')) {
+      if (!vis(tw)) continue;
+      const scope = tw.closest(".zc-layout__container, .zc-layout__body") || document.body;
+      const others = [...scope.querySelectorAll(
+          ".zc-card, .zc-container-el, .zc-gdetails, .zc-empty, .zc-timeline, .zc-codeblock")]
+        .filter(vis)
+        .filter(e => !e.contains(tw) && !tw.contains(e));
+      if (others.length) {
+        const what = others.slice(0, 3)
+          .map(e => "." + e.className.toString().split(" ")[0]).join(", ");
+        fail("STRETCH TABLE SHARING A PAGE",
+          `this table is data-style="stretch" but ${others.length} other surface(s) ` +
+          `share the page (${what}) — stretch is only for a table that is ALONE, ` +
+          'where the page container is its edge. With anything else on the page use ' +
+          'data-style="boxy" so the table keeps its own border and the filter row ' +
+          'above it belongs to something',
+          ".zc-table-wrap");
+      }
+    }
+  }
+
+  /* ── 18g5. Content fills the container it was given ─────────────────
+     A page whose content stops short of its container leaves a band of dead
+     background down one side, and it reads as a rendering fault rather than a
+     margin. Measured on a real build: the container was 1283px wide and its
+     only child was 1199px, so 84px of nothing sat on the right. Every gate
+     passed it, because nothing was checking.
+
+     Only the direct children of the container are measured, and only a shortfall
+     on the RIGHT — a deliberately narrow centred block (a form, an empty state)
+     is short on both sides and is not this bug. */
+  {
+    const cont = document.querySelector(".zc-layout__container");
+    if (cont && !isEmptyState) {
+      const cb = cont.getBoundingClientRect();
+      const pad = parseFloat(getComputedStyle(cont).paddingRight) || 0;
+      const kids = [...cont.children].filter(vis);
+      if (kids.length) {
+        const widest = Math.max(...kids.map(k => k.getBoundingClientRect().right));
+        const gap = Math.round(cb.right - pad - widest);
+        const leftGap = Math.round(Math.min(...kids.map(k => k.getBoundingClientRect().left)) - cb.left);
+        if (gap > 24 && gap - leftGap > 16)
+          fail("CONTENT DOES NOT FILL THE CONTAINER",
+            `${gap}px of empty container to the right of the content (left gap is ` +
+            `${leftGap}px, so this is not a centred block) — the content stops short ` +
+            "and the page reads as broken rather than padded",
+            ".zc-layout__container");
+      }
+    }
+  }
+
+  /* ── 18g6. The row is the click target, not one cell ────────────────
+     Every row highlights on hover, so every row promises it can be clicked.
+     When only the first cell carries the link, that promise is false
+     everywhere else on the row — the user aims at the row, hits nothing, and
+     concludes the page is broken. The entity cell is plain text and the ROW
+     carries data-rowlink; zcat.js wires it and leaves the three-dot, the
+     checkbox and any real link inside the row alone. */
+  {
+    for (const tb of document.querySelectorAll(".zc-table tbody")) {
+      const rows = [...tb.querySelectorAll("tr.zc-table__row")].filter(vis);
+      const guilty = rows.filter(r => {
+        if (r.hasAttribute("data-rowlink")) return false;
+        const firstCell = r.querySelector("td, .zc-table__td");
+        return firstCell && firstCell.querySelector('a[href], .zc-link');
+      });
+      if (guilty.length) {
+        const sample = (guilty[0].textContent || "").trim().split(/\s+/).slice(0, 3).join(" ");
+        fail("ROW IS NOT THE CLICK TARGET",
+          `${guilty.length} row(s) put the link on the first cell only (e.g. "${sample}") ` +
+          "while the whole row highlights on hover — so most of the row looks clickable " +
+          'and is not. Make the entity cell plain text and put data-rowlink on the <tr>',
+          ".zc-table__row");
+      }
+    }
+  }
+
+  /* ── 18g7. Every icon reference must resolve to a symbol ────────────
+     The template ships 27 symbols; docs/icons/ holds 483 files. Referencing any
+     of the other ~456 by id gives you a <use> that points at nothing, and it
+     renders as an EMPTY BOX — no error, no console warning, and every gate
+     green. Two of these shipped on a real build and were only caught by eye. */
+  {
+    const missing = new Set();
+    for (const u of document.querySelectorAll("svg use")) {
+      const href = u.getAttribute("href") || u.getAttribute("xlink:href") || "";
+      if (!href.startsWith("#")) continue;             // external sprite, checked elsewhere
+      if (!document.querySelector(href)) missing.add(href);
+    }
+    if (missing.size)
+      fail("ICON SYMBOL NOT FOUND",
+        `${missing.size} icon reference(s) point at a symbol this page does not ` +
+        `define (${[...missing].slice(0, 5).join(", ")}) — they render as empty ` +
+        "boxes. The sprite ships a subset; copy the symbol you need from " +
+        "docs/icons/ into the page's sprite",
+        "svg use");
+  }
+
+  /* ── 18g3. A row of repeated items must line up ─────────────────────
+     Stat rows, metric strips, KPI tiles: three or more siblings laid out
+     across, each a label over a value. Composing one is DESIGN and stays free
+     — but a row whose items sit at different heights, or whose gaps jump about,
+     reads as broken however correct every class name is.
+
+     This is the gap the designer kept hitting: RHYTHM was a WARNING and looked
+     only at vertical gaps between sections, so a stat row with a badge sitting
+     off the numbers' baseline and gaps running 16px, 48px, 16px passed every
+     gate cleanly. Two things are checked, and both are failures:
+       GAPS — the horizontal gaps between items should agree;
+       BASELINE — the items' value text should sit on one line. A Badge is
+         taller than a number, so a row mixing them has to align them, not
+         leave each to fall where it lands. */
+  {
+    const rows = new Set();
+    for (const el of all) {
+      if (!vis(el)) continue;
+      const kids = [...el.children].filter(vis);
+      if (kids.length < 3) continue;
+      const boxes = kids.map(k => k.getBoundingClientRect());
+      // laid out ACROSS: every item shares roughly the same top
+      const tops = boxes.map(b => b.top);
+      if (Math.max(...tops) - Math.min(...tops) > 4) continue;
+      if (boxes[0].width > 0.6 * el.getBoundingClientRect().width) continue;
+      rows.add(el);
+    }
+    for (const row of rows) {
+      const kids = [...row.children].filter(vis);
+      const boxes = kids.map(k => k.getBoundingClientRect());
+      const gaps = [];
+      for (let i = 1; i < boxes.length; i++)
+        gaps.push(Math.round(boxes[i].left - boxes[i - 1].right));
+      const good = gaps.filter(g => g >= 0 && g < 200);
+      if (good.length >= 2) {
+        const lo = Math.min(...good), hi = Math.max(...good);
+        if (hi - lo > 6)
+          fail("UNEVEN ROW SPACING",
+            `a row of ${kids.length} items has gaps of ${good.join(", ")}px — pick ` +
+            "ONE spacing token and use it between every item. Gaps that jump about " +
+            "read as broken however correct every class name is", row);
+      }
+    }
+  }
+
   /* ── 18g4. Two Container Side Menus on one page ─────────────────────
      The rule "one Container Side Menu per page" has been written down for a
      long time with nothing checking it, so a build shipped a page with the

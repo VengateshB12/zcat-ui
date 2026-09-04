@@ -269,6 +269,50 @@ const slug = f => path.relative(PROJECT, f).replace(/[\/\\]/g, "__").replace(/\.
       out.fails.push(...light.fails); out.warns.push(...light.warns); out.stats = light.stats;
       await page.screenshot({ path: path.join(SHOTS, slug(abs) + "-light.png"), fullPage: true });
 
+      /* EVERY TAB IS AUDITED, NOT JUST THE ONE THAT HAPPENS TO BE OPEN.
+         A tabbed page shows one panel and hides the rest, so the audit was
+         seeing a third of some pages — 188 of 576 elements on the DirectDB
+         detail page — and passing them. That is the honest explanation for a
+         build scoring five green gates while the designer opens tab two and
+         finds it wrong: tab two was never looked at. Walk the tabs, run the
+         same checks on each, and report anything new against the tab it is on. */
+      try {
+        const tabNames = await page.evaluate(() =>
+          [...document.querySelectorAll(".zc-tab")]
+            .filter(t => t.getBoundingClientRect().height > 0)
+            .map(t => (t.textContent || "").trim()));
+        const seen = new Set(out.fails.map(f => f.rule + "|" + (f.sel || "")));
+        for (let i = 0; i < tabNames.length; i++) {
+          const name = tabNames[i];
+          if (!name) continue;
+          const moved = await page.evaluate((idx) => {
+            const tabs = [...document.querySelectorAll(".zc-tab")]
+              .filter(t => t.getBoundingClientRect().height > 0);
+            const t = tabs[idx];
+            if (!t || t.getAttribute("data-state") === "active" ||
+                t.classList.contains("is-active")) return false;
+            t.click();
+            return true;
+          }, i);
+          if (!moved) continue;
+          await page.waitForTimeout(250);
+          const r = await page.evaluate(src + "; __zcatAudit()");
+          for (const f of r.fails) {
+            const k = f.rule + "|" + (f.sel || "");
+            if (seen.has(k)) continue;
+            seen.add(k);
+            out.fails.push({ ...f, msg: `[tab: ${name}] ${f.msg}` });
+          }
+        }
+        // leave the page on the tab it started on
+        await page.evaluate(() => {
+          const t = [...document.querySelectorAll(".zc-tab")]
+            .filter(x => x.getBoundingClientRect().height > 0)[0];
+          if (t) t.click();
+        });
+        await page.waitForTimeout(150);
+      } catch (e) { /* walking tabs must never break the audit */ }
+
       // dark mode: only contrast + collapse matter here, geometry is shared
       await page.evaluate(() => document.documentElement.setAttribute("data-theme", "dark"));
       await page.waitForTimeout(200);
