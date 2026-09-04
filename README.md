@@ -23,8 +23,8 @@ out on its own; that discards the gates.
 Link the two files in your page, unmodified:
 
 ```html
-<link rel="stylesheet" href="zcat-ui/zcat.css?v=119">
-<script src="zcat-ui/zcat.js?v=21" defer></script>
+<link rel="stylesheet" href="zcat-ui/zcat.css?v=120">
+<script src="zcat-ui/zcat.js?v=22" defer></script>
 ```
 
 Keep the `?v=` on both. `zcat.css` is a list of `@import`s: the imports carry

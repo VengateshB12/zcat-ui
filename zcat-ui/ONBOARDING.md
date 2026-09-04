@@ -35,8 +35,8 @@ HARD RULES (violating these is the failure mode)
   STATE or a VARIANT on the component (data-state / data-variant / data-size) —
   if none exists, say so and ask. Concretely: never recolour a table cell,
   never override a card's border, never change a button's background.
-- Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css?v=119">
-  and <script src="zcat-ui/zcat.js?v=21" defer></script>. Never copy rules out of it,
+- Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css?v=120">
+  and <script src="zcat-ui/zcat.js?v=22" defer></script>. Never copy rules out of it,
   never restyle a zc-* class, never write a raw hex — every colour is a
   var(--zc-*) token from src/tokens/colors.css.
 - No odd numbers for spacing/sizing/radius; use the --zc-space-* / --zc-radius-*
@@ -72,8 +72,8 @@ reference the startup comment points to.
 ## Include
 
 ```html
-<link rel="stylesheet" href="zcat-ui/zcat.css?v=119">
-<script src="zcat-ui/zcat.js?v=21" defer></script>
+<link rel="stylesheet" href="zcat-ui/zcat.css?v=120">
+<script src="zcat-ui/zcat.js?v=22" defer></script>
 ```
 
 `zcat.js` auto-initialises every interactive component (dropdowns, tooltips,

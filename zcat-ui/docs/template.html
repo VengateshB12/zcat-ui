@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Basic Template</title>
-  <link rel="stylesheet" href="../zcat.css?v=119">
-  <script src="../zcat.js?v=21"></script>
+  <link rel="stylesheet" href="../zcat.css?v=120">
+  <script src="../zcat.js?v=22"></script>
   <style>
     /* Flow glue: view switching, toast host, wizard engine cards — layout
        positioning only, all visual styling comes from zcat.css tokens. */
@@ -243,7 +243,7 @@
               <div class="zc-cheader__left zc-cheader__left--row">
                 <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:300px">
                   <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
-                  <input class="zc-input" type="text" placeholder="Search Here">
+                  <input class="zc-input" type="text" placeholder="Search databases" data-filter="#db-rows tr">
                   <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
                 </div>
               </div>
@@ -291,6 +291,14 @@
                     <th class="zc-table__th zc-table__th--actions"></th>
                   </tr></thead>
                   <tbody id="db-rows"></tbody>
+                </table>
+                <div class="zc-empty" data-empty-for="#db-rows" hidden>
+                  <div class="zc-empty__content">
+                    <span class="zc-empty__heading">No databases match that search</span>
+                    <span class="zc-empty__desc">Check the spelling, or clear the search to see all of them again.</span>
+                  </div>
+                </div>
+                <table style="display:none">
                 </table>
               </div>
               <div class="zc-pagination">

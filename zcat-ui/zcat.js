@@ -57,7 +57,46 @@
       var input = wrap.querySelector('.zc-input');
       var clear = wrap.querySelector('.zc-input__clear');
       if (!input) return;
-      function sync() { wrap.classList.toggle('is-filled', input.value.length > 0); }
+      /* THE SEARCH BOX SEARCHES.
+         initSearch used to toggle a class and nothing else — every page had to
+         hand-write the filtering, and when it did not you got a box you could
+         type into that did nothing, with no gate able to see it. Point the
+         input at what it should filter:
+
+           <input class="zc-input" data-filter="#user-rows tr">
+           <div data-empty-for="#user-rows" hidden> …no results… </div>
+
+         Rows whose text does not contain the query are hidden; when everything
+         is hidden the matching [data-empty-for] element is shown. Both are
+         optional — a page that filters its own way just omits them. */
+      var filterSel = input.getAttribute('data-filter');
+      var noResults = null;
+      if (filterSel) {
+        var owner = filterSel.split(' ')[0];
+        noResults = document.querySelector('[data-empty-for="' + owner + '"]');
+        // Never the input or its own wrapper: putting the attribute on both
+        // made the field match its own no-results selector and hide itself.
+        if (noResults && (noResults === input || noResults.contains(input))) noResults = null;
+      }
+
+      function applyFilter() {
+        if (!filterSel) return;
+        var q = input.value.trim().toLowerCase();
+        var rows = document.querySelectorAll(filterSel);
+        var shown = 0;
+        for (var i = 0; i < rows.length; i++) {
+          var hit = !q || (rows[i].textContent || '').toLowerCase().indexOf(q) !== -1;
+          rows[i].hidden = !hit;
+          if (hit) shown++;
+        }
+        if (noResults) noResults.hidden = shown !== 0;
+        emit(wrap, 'search:filter', { query: q, shown: shown, total: rows.length });
+      }
+
+      function sync() {
+        wrap.classList.toggle('is-filled', input.value.length > 0);
+        applyFilter();
+      }
       input.addEventListener('input', sync);
       if (clear) clear.addEventListener('click', function () {
         input.value = '';

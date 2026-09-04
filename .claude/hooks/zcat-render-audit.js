@@ -157,6 +157,61 @@ const slug = f => path.relative(PROJECT, f).replace(/[\/\\]/g, "__").replace(/\.
         }
       } catch (e) { /* no template to compare against: not this check's problem */ }
 
+      /* A SEARCH BOX THAT DOES NOTHING.
+         Every page here has to search, and the rule has said so for a while —
+         but it was words only, so a build shipped a search field you could type
+         into that never filtered and never said "no results". Nothing static
+         can see that: you have to type. */
+      try {
+        const searchProbe = await page.evaluate(async () => {
+          // The shell's own search (topbar, service finder) is not a filter for
+          // the page's rows — it searches the product. Only page-level searches
+          // are held to this.
+          const wraps = [...document.querySelectorAll(".zc-search-wrap")]
+            .filter(w => w.getBoundingClientRect().height > 0)
+            .filter(w => !w.closest(".zc-layout__topbar, .zc-layout__rail, .zc-sidemenu"));
+          const out = [];
+          for (const w of wraps) {
+            const input = w.querySelector(".zc-input");
+            if (!input) continue;
+            const rowsOf = () => [...document.querySelectorAll(
+              ".zc-table__row, .zc-card, .zc-csm__item")].filter(
+              e => e.getBoundingClientRect().height > 0).length;
+            const before = rowsOf();
+            if (before === 0) continue;              // nothing to filter yet
+            const prev = input.value;
+            input.value = "zzqqxx-no-such-thing";
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            await new Promise(r => setTimeout(r, 120));
+            const after = rowsOf();
+            const empty = [...document.querySelectorAll(
+              ".zc-empty, [data-empty-for]")].some(
+              e => e.getBoundingClientRect().height > 0);
+            input.value = prev;
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            await new Promise(r => setTimeout(r, 60));
+            out.push({ before, after, empty,
+                       label: input.getAttribute("placeholder") || "search" });
+          }
+          return out;
+        });
+        for (const r of searchProbe) {
+          if (r.after === r.before)
+            out.fails.push({ rule: "SEARCH DOES NOT FILTER",
+              msg: `typing into "${r.label}" changed nothing — ${r.before} items ` +
+                   "before and after a query that matches none of them. A search " +
+                   'box that does not search is worse than none. Point it at its ' +
+                   'rows with data-filter="<selector>"',
+              sel: ".zc-search-wrap" });
+          else if (!r.empty)
+            out.fails.push({ rule: "NO SEARCH EMPTY STATE",
+              msg: `"${r.label}" filters correctly but a query matching nothing ` +
+                   "leaves a blank panel — no message, no way back. Add a " +
+                   'no-results block with data-empty-for="<the list>"',
+              sel: ".zc-search-wrap" });
+        }
+      } catch (e) { /* probing must never break the audit */ }
+
       const light = await page.evaluate(src + "; __zcatAudit()");
       out.fails.push(...light.fails); out.warns.push(...light.warns); out.stats = light.stats;
       await page.screenshot({ path: path.join(SHOTS, slug(abs) + "-light.png"), fullPage: true });
