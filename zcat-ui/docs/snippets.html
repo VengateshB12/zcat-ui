@@ -24,16 +24,23 @@
                            display:block; padding:0; }
   .live .zc-popup { max-width:414px; margin:0; }
   .live .zc-fullpopup { position:static; inset:auto; }
-  /* Overlays ship CLOSED — a popup scrim carries `hidden`, a menu is absolutely
-     positioned and shut. Both previewed as an empty box, and the menu's chevron
-     escaped the box entirely. base.css now makes [hidden] win everywhere, which
-     is right, so the preview has to out-specify it deliberately: these selectors
-     are 0-2-1 against its 0-1-0, so they win on specificity, not by accident. */
-  .live .zc-popup-scrim[hidden],
-  .live .zc-popup[hidden] { display:block !important; }
-  .live .zc-menu { position:static !important; display:block !important;
-                    inset:auto !important; transform:none !important; }
-  .live .zc-menu[hidden] { display:block !important; }
+  /* Overlays ship CLOSED, so a preview of one shows an empty box. Only the
+     block that IS the overlay gets opened — marked data-open on the preview.
+     Doing this for every .live indiscriminately is what pulled the Key Value
+     field apart (its select menu unfurled inline) and wrecked the Layout shell
+     (every menu in the shell sprang open at once). base.css makes [hidden] win
+     everywhere, correctly, so these selectors out-specify it deliberately. */
+  .live[data-open] .zc-popup-scrim[hidden],
+  .live[data-open] .zc-popup[hidden] { display:block !important; }
+  .live[data-open] > .zc-menu { position:static !important;
+                    display:block !important; inset:auto !important;
+                    transform:none !important; width:240px; }
+  .live[data-open] > .zc-menu[hidden] { display:block !important; }
+  /* The shell is position:fixed and full-viewport. Contain it or it escapes. */
+  .live[data-shell] { height:460px; overflow:hidden; position:relative;
+                       padding:0; }
+  .live[data-shell] .zc-layout { position:absolute !important; inset:0 !important;
+                                  height:100% !important; min-height:0 !important; }
   pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
          border:1px solid var(--zc-border-subtle); border-radius:6px; }
   code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -193,6 +200,22 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   
 </section>
 <section class="snip">
+  <h3 class="zc-h6">Search</h3>
+  <p class="zc-body-3 note">Point it at what it filters with data-filter=&quot;&lt;rows&gt;&quot; and give it a data-empty-for no-results block, or it is a box you can type into that does nothing.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants (1), all of them: <code>data-state=&quot;filled&quot;</code></p>
+  <div class="live"><style></style><div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
+  <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+  <input class="zc-input" type="text" placeholder="Search Here">
+  <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;default&quot; style=&quot;width:390px&quot;&gt;
+  &lt;svg class=&quot;zc-input__icon zc-input__icon--left&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-search&quot;/&gt;&lt;/svg&gt;
+  &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; placeholder=&quot;Search Here&quot;&gt;
+  &lt;svg class=&quot;zc-input__clear&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-x&quot;/&gt;&lt;/svg&gt;
+&lt;/div&gt;</code></pre>
+  
+</section>
+<section class="snip">
   <h3 class="zc-h6">Dropdown (Select)</h3>
   <p class="zc-body-3 note">Never a bare &lt;select&gt;. The ghost variant adds .zc-ghostdd-shell.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants (1), all of them: <code>data-menu=&quot;action&quot;</code></p>
@@ -256,7 +279,7 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   <h3 class="zc-h6">Three-dot menu</h3>
   <p class="zc-body-3 note">The real menu component, not a hand-made dropdown. It flips up when it would be clipped.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants (2), all of them: <code>data-drop=&quot;up&quot; data-size=&quot;small&quot;</code></p>
-  <div class="live"><style></style><div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+  <div class="live" data-open><style></style><div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
   <div class="zc-menu__item" role="option" data-value="Acme Analytics" aria-selected="true"><span class="zc-menu__label">Acme Analytics</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
   <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
 </div></div></div>
@@ -295,7 +318,7 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   <h3 class="zc-h6">Popup — create / edit</h3>
   <p class="zc-body-3 note">The ONLY correct shape for create and edit. NO close X. Footer: Cancel grey left, action fill right. Every control stretches to the body width. Tabs or a Stepper go in the header, under the title — never in the body.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
-  <div class="live"><style>.tpl-wizard-step.act { display: flex; flex-direction: column; gap: 16px; }
+  <div class="live" data-open><style>.tpl-wizard-step.act { display: flex; flex-direction: column; gap: 16px; }
 .tpl-chip { width: 36px; height: 36px; border-radius: var(--zc-radius-6); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .tpl-chip svg { width: 16px; height: 16px; fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
 .tpl-engine-card { display: flex; align-items: center; gap: var(--zc-space-12); }
@@ -439,7 +462,7 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   <h3 class="zc-h6">Full-page popup</h3>
   <p class="zc-body-3 note">Only for &gt;8 fields, a wizard, or an embedded table. Unlike the small popup this one DOES close from its header. Page content goes inside __sheet.</p>
   <p class="zc-body-4 src">verified in <code>pages/samples/pipelines-fullpopup.html</code></p>
-  <div class="live"><style>.pl-empty-region { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: var(--zc-space-24); }</style><div class="zc-fullpopup">
+  <div class="live" data-open><style>.pl-empty-region { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: var(--zc-space-24); }</style><div class="zc-fullpopup">
   <div class="zc-fullpopup__header">
     <span class="zc-fullpopup__service">
       <img src="icons/Pipeline -color.svg" alt="">
@@ -525,68 +548,7 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   <h3 class="zc-h6">Layout shell</h3>
   <p class="zc-body-3 note">EVERY screen starts here: service rail, topbar, side menu, Sub Header, container. Never build a page without it — copy docs/template.html for the first page and a sibling for the rest.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
-  <div class="live"><style>.tpl-layout { height: 100vh; }</style><div class="zc-layout tpl-layout">
-
-  <!-- Service rail -->
-  <div class="zc-layout__rail">
-    <img class="zc-layout__logo" src="icons/Catalyst Color Logo.svg" alt="Catalyst">
-    <span class="zc-layout__rail-divider"></span>
-    <span class="zc-layout__rail-label">Services</span>
-    <div class="zc-layout__services">
-      <button class="zc-layout__service" type="button" data-state="active">
-        <span class="zc-layout__tab"></span>
-        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('../../docs/icons/1 Cloud Scale.svg');--icon-active:url('../../docs/icons/Cloud Scale -color.svg')"></span></span>
-        <span class="zc-layout__service-name">CloudScale</span>
-      </button>
-      <button class="zc-layout__service" type="button">
-        <span class="zc-layout__tab"></span>
-        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('../../docs/icons/1 Serverless.svg');--icon-active:url('../../docs/icons/Serverless -color.svg')"></span></span>
-        <span class="zc-layout__service-name">Serverless</span>
-      </button>
-      <button class="zc-layout__service" type="button">
-        <span class="zc-layout__tab"></span>
-        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('../../docs/icons/1 Smart browzz.svg');--icon-active:url('../../docs/icons/Smart browzz -color.svg')"></span></span>
-        <span class="zc-layout__service-name">SmartBrowz</span>
-      </button>
-      <button class="zc-layout__service" type="button">
-        <span class="zc-layout__tab"></span>
-        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('../../docs/icons/1 Quick ML.svg');--icon-active:url('../../docs/icons/Quick ML -color.svg')"></span></span>
-        <span class="zc-layout__service-name">QuickML</span>
-      </button>
-      <button class="zc-layout__service" type="button">
-        <span class="zc-layout__tab"></span>
-        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('../../docs/icons/1 Pipeline.svg');--icon-active:url('../../docs/icons/Pipeline -color.svg')"></span></span>
-        <span class="zc-layout__service-name">Pipeline</span>
-      </button>
-    </div>
-    <div class="zc-layout__rail-bottom">
-      <span class="zc-layout__rail-divider"></span>
-      <span class="zc-mask-icon" style="--icon:url('../../docs/icons/clapperboard.svg')"></span>
-      <span class="zc-mask-icon" style="--icon:url('../../docs/icons/figma.svg')"></span>
-      <span class="zc-mask-icon" style="--icon:url('../../docs/icons/command.svg')"></span>
-    </div>
-  </div>
-
-  <!-- White shell -->
-  <div class="zc-layout__shell">
-
-    <header class="zc-layout__topbar">
-      <div class="zc-layout__topbar-left">
-        <div class="zc-select-shell zc-ghostdd-shell">
-          <div class="zc-ghostdd zc-select-wrap">
-            <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">A</span></span>
-            <span class="zc-ghostdd__box"><span class="zc-ghostdd__label">Acme Analytics</span>
-              <svg class="zc-ghostdd__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg></span>
-          </div>
-          <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
-            <div class="zc-menu__item" role="option" data-value="Acme Analytics" aria-selected="true"><span class="zc-menu__label">Acme Analytics</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
-            <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
-          </div></div>
-        </div>
-        <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
-          <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
-          <input class="zc-input" type="text" placeholder="Search Here">
-<!-- … full block in zcat-ui/docs/template.html --></div>
+  <p class="zc-body-3 note">This one is a whole page, so there is no useful inline preview. <a href="template.html">Open template.html</a> — that file IS the shell, and copying it is how you start a build. The markup below is its opening structure for reference.</p>
   <pre><code>&lt;div class=&quot;zc-layout tpl-layout&quot;&gt;
 
   &lt;!-- Service rail --&gt;

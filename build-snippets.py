@@ -161,6 +161,7 @@ SPEC = [
   ("Key Value field", "zc-kvfield", "Editing in place. Not a form — a form belongs in a popup."),
   ("Radio", "zc-radio", "Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else."),
   ("Toggle", "zc-toggle", "For instant-apply flags. A toggle that needs a Save button should be a checkbox."),
+  ("Search", "zc-search-wrap", "Point it at what it filters with data-filter=\"<rows>\" and give it a data-empty-for no-results block, or it is a box you can type into that does nothing."),
   ("Dropdown (Select)", "zc-select-shell", "Never a bare <select>. The ghost variant adds .zc-ghostdd-shell."),
   ("Tabs", "zc-tabs", "Exactly ONE tab is active and the visible content is that tab's. Sub Header tabs carry NO icons."),
   ("Link box", "zc-linkbox", "Copy icon shows a Copy tooltip on hover, Link copied on click."),
@@ -199,7 +200,22 @@ for name, items in SPEC:
         v = variants(cls)
         vline = (f'<p class="zc-body-4 src">variants ({len(v)}), all of them: '
                  f'<code>{html.escape(" ".join(v))}</code></p>' if v else "")
+        # Which previews need a state forced, and which need containing.
+        opener = ""
+        if cls in ("zc-menu", "zc-popup-scrim", "zc-popup", "zc-fullpopup"):
+            opener = " data-open"
         gcss, gnames = glue_for(b, path)
+        if cls == "zc-layout":
+            # A whole page does not preview inside a card. Squeezed into one it
+            # cropped the rail and let the code block bleed through it. Point at
+            # the real thing instead — template.html IS the shell, complete.
+            live_html = ('<p class="zc-body-3 note">This one is a whole page, so there is '
+                         'no useful inline preview. <a href="template.html">Open '
+                         'template.html</a> — that file IS the shell, and copying it is '
+                         'how you start a build. The markup below is its opening '
+                         'structure for reference.</p>')
+        else:
+            live_html = f'<div class="live"{opener}><style>{gcss}</style>{b}</div>' 
         gblock = (f'<p class="zc-body-3 glue-note">This block also needs {len(gnames)} '
                   f'page-glue class(es) — <code>{html.escape(", ".join(gnames))}</code>. '
                   'They are PAGE CSS, not library CSS: copy them into your page\'s '
@@ -209,7 +225,7 @@ for name, items in SPEC:
   <h3 class="zc-h6">{html.escape(title)}</h3>
   <p class="zc-body-3 note">{html.escape(note)}</p>
   <p class="zc-body-4 src">verified in <code>{path}</code></p>{vline}
-  <div class="live"><style>{gcss}</style>{b}</div>
+  {live_html}
   <pre><code>{html.escape(b)}</code></pre>
   {gblock}
 </section>''')
@@ -277,16 +293,23 @@ DOC = f'''<!DOCTYPE html>
                            display:block; padding:0; }}
   .live .zc-popup {{ max-width:414px; margin:0; }}
   .live .zc-fullpopup {{ position:static; inset:auto; }}
-  /* Overlays ship CLOSED — a popup scrim carries `hidden`, a menu is absolutely
-     positioned and shut. Both previewed as an empty box, and the menu's chevron
-     escaped the box entirely. base.css now makes [hidden] win everywhere, which
-     is right, so the preview has to out-specify it deliberately: these selectors
-     are 0-2-1 against its 0-1-0, so they win on specificity, not by accident. */
-  .live .zc-popup-scrim[hidden],
-  .live .zc-popup[hidden] {{ display:block !important; }}
-  .live .zc-menu {{ position:static !important; display:block !important;
-                    inset:auto !important; transform:none !important; }}
-  .live .zc-menu[hidden] {{ display:block !important; }}
+  /* Overlays ship CLOSED, so a preview of one shows an empty box. Only the
+     block that IS the overlay gets opened — marked data-open on the preview.
+     Doing this for every .live indiscriminately is what pulled the Key Value
+     field apart (its select menu unfurled inline) and wrecked the Layout shell
+     (every menu in the shell sprang open at once). base.css makes [hidden] win
+     everywhere, correctly, so these selectors out-specify it deliberately. */
+  .live[data-open] .zc-popup-scrim[hidden],
+  .live[data-open] .zc-popup[hidden] {{ display:block !important; }}
+  .live[data-open] > .zc-menu {{ position:static !important;
+                    display:block !important; inset:auto !important;
+                    transform:none !important; width:240px; }}
+  .live[data-open] > .zc-menu[hidden] {{ display:block !important; }}
+  /* The shell is position:fixed and full-viewport. Contain it or it escapes. */
+  .live[data-shell] {{ height:460px; overflow:hidden; position:relative;
+                       padding:0; }}
+  .live[data-shell] .zc-layout {{ position:absolute !important; inset:0 !important;
+                                  height:100% !important; min-height:0 !important; }}
   pre {{ margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
          border:1px solid var(--zc-border-subtle); border-radius:6px; }}
   code {{ font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
