@@ -3493,6 +3493,87 @@ const COMPONENTS = {
       ['events', 'zcat:dropdown:change|open|close', '—']])
   },
 
+  /* ─── Pie / Donut Chart ─── colour comes only from --zc-graph-series-1..6 */
+  piechart: {
+    title: 'Pie / Donut Chart',
+    wide: true,
+    controls: [
+      { id: 'variant', type: 'seg', label: 'Variant', value: 'donut', options: ['pie', 'donut'] },
+      { id: 'slices', type: 'seg', label: 'Slices', value: '4', options: ['3', '4', '5', '6'] },
+      { id: 'showLegend', type: 'bool', label: 'Legend', value: true },
+    ],
+    render(s) {
+      var data = [
+        ['Aurora MySQL', 42], ['PostgreSQL', 27], ['MySQL 8.0', 18],
+        ['Redis', 13], ['MongoDB', 9], ['Cassandra', 6]
+      ].slice(0, parseInt(s.slices, 10));
+      var total = data.reduce(function (a, r) { return a + r[1]; }, 0);
+      var off = 0, arcs = '', legend = '';
+      data.forEach(function (r, i) {
+        var pct = Math.round(r[1] / total * 100);
+        arcs += '<circle class="zc-piechart__slice" data-series="' + (i + 1) +
+                '" stroke-dasharray="' + pct + ' ' + (100 - pct) +
+                '" stroke-dashoffset="' + (-off) + '"></circle>';
+        legend += '<div class="zc-piechart__item" data-series="' + (i + 1) + '">' +
+                  '<span class="zc-piechart__dot"></span>' +
+                  '<span class="zc-piechart__label zc-body-1">' + r[0] + '</span>' +
+                  '<span class="zc-piechart__value zc-body-1">' + pct + '%</span></div>';
+        off += pct;
+      });
+      return '<div class="zc-piechart" data-variant="' + s.variant + '">' +
+        '<svg class="zc-piechart__svg" viewBox="0 0 42 42">' + arcs + '</svg>' +
+        (s.showLegend ? '<div class="zc-piechart__legend">' + legend + '</div>' : '') +
+        '</div>';
+    },
+    overview: ovw('Pie / Donut Chart',
+      'A breakdown, not a trend. Slice geometry is a stroke-dasharray on a circle whose circumference is 100, so a slice is one number and nothing is computed in JavaScript. Colour comes only from --zc-graph-series-1..6 — never pick a hex.',
+      [['Use it for', 'parts of a whole: storage by engine, spend by service'],
+       ['Not for', 'anything over time — that is the Graph Card'],
+       ['Slices', 'six series colours exist; beyond that, group the tail into "Other"']]),
+    api: apiTable([
+      ['.zc-piechart', 'root', 'data-variant="pie|donut"'],
+      ['.zc-piechart__slice', 'one slice', 'data-series="1".."6", stroke-dasharray="<pct> <100-pct>"'],
+      ['.zc-piechart__legend', 'legend column', '—'],
+      ['.zc-piechart__item', 'legend row', 'data-series matches its slice']])
+  },
+
+  /* ─── Bar Chart ─── */
+  barchart: {
+    title: 'Bar Chart',
+    wide: true,
+    controls: [
+      { id: 'bars', type: 'seg', label: 'Bars', value: '5', options: ['3', '5', '7'] },
+      { id: 'series', type: 'seg', label: 'Colour', value: '1', options: ['1', '2', '3', '4'] },
+      { id: 'showLabels', type: 'bool', label: 'Labels', value: true },
+    ],
+    render(s) {
+      var d = [['us-east-1', 72], ['eu-west-1', 48], ['ap-south-1', 91],
+               ['us-west-2', 34], ['us-east-2', 60], ['sa-east-1', 55], ['eu-north-1', 41]]
+              .slice(0, parseInt(s.bars, 10));
+      var cols = d.map(function (r) {
+        return '<div class="zc-barchart__col" data-series="' + s.series + '">' +
+               '<span class="zc-barchart__bar" style="height:' + r[1] + '%"></span></div>';
+      }).join('');
+      var labs = d.map(function (r) {
+        return '<span class="zc-barchart__label zc-body-4">' + r[0] + '</span>';
+      }).join('');
+      return '<div class="zc-barchart" style="width:560px;max-width:100%">' +
+        '<div class="zc-barchart__plot">' + cols + '</div>' +
+        (s.showLabels ? '<div class="zc-barchart__labels">' + labs + '</div>' : '') +
+        '</div>';
+    },
+    overview: ovw('Bar Chart',
+      'Comparison across a handful of named things. A bar is a percentage height, so a bar is one number. Same series tokens and the same type classes as everything else.',
+      [['Use it for', 'comparing categories: connections by region, calls by function'],
+       ['Not for', 'a trend over time, and not for parts of a whole'],
+       ['Labels', 'take --zc-graph-text-2; text-3 fails contrast on white']]),
+    api: apiTable([
+      ['.zc-barchart__plot', 'the bars row', '—'],
+      ['.zc-barchart__col', 'one column', 'data-series="1".."6"'],
+      ['.zc-barchart__bar', 'the bar', 'style="height:<pct>%"'],
+      ['.zc-barchart__labels', 'label row under the axis', '—']])
+  },
+
   /* ─── Graph Card ─── Figma frames 13302:12827/12846/12865 (Referance Templates) */
   graphcard: {
     title: 'Graph Card',
@@ -3841,7 +3922,7 @@ const NAV = [
     ['datepicker','Date Picker'],['slider','Slider']]],
   ['Navigation', [['tabs','Tabs'],['breadcrumbs','Breadcrumbs'],['stepper','Stepper'],
     ['profilemenu','Profile Menu'],['notifications','Notifications']]],
-  ['Data', [['table','Table'],['graphcard','Graph Card'],['generaldetails','General Details'],['emptystate','Empty State'],
+  ['Data', [['table','Table'],['graphcard','Graph Card'],['piechart','Pie / Donut Chart'],['barchart','Bar Chart'],['generaldetails','General Details'],['emptystate','Empty State'],
     ['codeblock','Code Block'],['timeline','Timeline']]],
   ['Feedback', [['toast','Toast'],['attention','Attention Box'],
     ['progressbar','Progress Bar'],['skeleton','Skeleton'],
