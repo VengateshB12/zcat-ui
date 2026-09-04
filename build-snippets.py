@@ -35,7 +35,13 @@ SOURCES = ["zcat-ui/docs/template.html",
            "pages/samples/controls.html",
            "pages/samples/charts.html"]
 
-JS_TELLS = ("${", " r += ", "function(", "){", "=>")
+# Markup written INSIDE JavaScript looks like markup until you read it. The
+# Badge shipped as <span class="zc-badge" data-color="' + r[2] + '">' + r[1] + '
+# — perfectly valid-looking, and it rendered the literal text ' + r[1] + ' on the
+# page. The old tells (${...}, r +=, function() ) matched none of it, because
+# string concatenation has no keyword. These do.
+JS_TELLS = ("${", " r += ", "function(", "){", "=>",
+            "' + ", " + '", '" + ', ' + "')
 
 # Classes whose FIRST match on a page is a look-alike, not the thing.
 # The first .zc-input-wrap is always the topbar Search, so "Text field" shipped
@@ -293,7 +299,9 @@ for path in SOURCES:
 # Link Box, Attention Box and Container Side Menu blocks. Build the missing
 # ones from the icon files instead, so a copied block carries working icons.
 ICON_DIR = "zcat-ui/docs/icons"
-FALLBACK = {"i-copy": "Copy.svg", "i-db": "database-01.svg", "i-info": "info-circle.svg"}
+FALLBACK = {"i-copy": "Copy.svg", "i-db": "database-01.svg",
+            "i-info": "info-circle.svg", "i-alert": "alert-triangle.svg",
+            "i-warning": "alert-triangle.svg"}
 referenced = set()
 for _sec in sections:
     referenced |= {u.lstrip("#") for u in re.findall(r'<use[^>]*href="([^"]+)"', _sec)}
