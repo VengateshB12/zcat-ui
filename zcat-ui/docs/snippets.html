@@ -548,69 +548,8 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
   <h3 class="zc-h6">Layout shell</h3>
   <p class="zc-body-3 note">EVERY screen starts here: service rail, topbar, side menu, Sub Header, container. Never build a page without it — copy docs/template.html for the first page and a sibling for the rest.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
-  <p class="zc-body-3 note">This one is a whole page, so there is no useful inline preview. <a href="template.html">Open template.html</a> — that file IS the shell, and copying it is how you start a build. The markup below is its opening structure for reference.</p>
-  <pre><code>&lt;div class=&quot;zc-layout tpl-layout&quot;&gt;
-
-  &lt;!-- Service rail --&gt;
-  &lt;div class=&quot;zc-layout__rail&quot;&gt;
-    &lt;img class=&quot;zc-layout__logo&quot; src=&quot;icons/Catalyst Color Logo.svg&quot; alt=&quot;Catalyst&quot;&gt;
-    &lt;span class=&quot;zc-layout__rail-divider&quot;&gt;&lt;/span&gt;
-    &lt;span class=&quot;zc-layout__rail-label&quot;&gt;Services&lt;/span&gt;
-    &lt;div class=&quot;zc-layout__services&quot;&gt;
-      &lt;button class=&quot;zc-layout__service&quot; type=&quot;button&quot; data-state=&quot;active&quot;&gt;
-        &lt;span class=&quot;zc-layout__tab&quot;&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-chip&quot;&gt;&lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/1 Cloud Scale.svg&#x27;);--icon-active:url(&#x27;../../docs/icons/Cloud Scale -color.svg&#x27;)&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-name&quot;&gt;CloudScale&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button class=&quot;zc-layout__service&quot; type=&quot;button&quot;&gt;
-        &lt;span class=&quot;zc-layout__tab&quot;&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-chip&quot;&gt;&lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/1 Serverless.svg&#x27;);--icon-active:url(&#x27;../../docs/icons/Serverless -color.svg&#x27;)&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-name&quot;&gt;Serverless&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button class=&quot;zc-layout__service&quot; type=&quot;button&quot;&gt;
-        &lt;span class=&quot;zc-layout__tab&quot;&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-chip&quot;&gt;&lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/1 Smart browzz.svg&#x27;);--icon-active:url(&#x27;../../docs/icons/Smart browzz -color.svg&#x27;)&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-name&quot;&gt;SmartBrowz&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button class=&quot;zc-layout__service&quot; type=&quot;button&quot;&gt;
-        &lt;span class=&quot;zc-layout__tab&quot;&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-chip&quot;&gt;&lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/1 Quick ML.svg&#x27;);--icon-active:url(&#x27;../../docs/icons/Quick ML -color.svg&#x27;)&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-name&quot;&gt;QuickML&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button class=&quot;zc-layout__service&quot; type=&quot;button&quot;&gt;
-        &lt;span class=&quot;zc-layout__tab&quot;&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-chip&quot;&gt;&lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/1 Pipeline.svg&#x27;);--icon-active:url(&#x27;../../docs/icons/Pipeline -color.svg&#x27;)&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-        &lt;span class=&quot;zc-layout__service-name&quot;&gt;Pipeline&lt;/span&gt;
-      &lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;zc-layout__rail-bottom&quot;&gt;
-      &lt;span class=&quot;zc-layout__rail-divider&quot;&gt;&lt;/span&gt;
-      &lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/clapperboard.svg&#x27;)&quot;&gt;&lt;/span&gt;
-      &lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/figma.svg&#x27;)&quot;&gt;&lt;/span&gt;
-      &lt;span class=&quot;zc-mask-icon&quot; style=&quot;--icon:url(&#x27;../../docs/icons/command.svg&#x27;)&quot;&gt;&lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;!-- White shell --&gt;
-  &lt;div class=&quot;zc-layout__shell&quot;&gt;
-
-    &lt;header class=&quot;zc-layout__topbar&quot;&gt;
-      &lt;div class=&quot;zc-layout__topbar-left&quot;&gt;
-        &lt;div class=&quot;zc-select-shell zc-ghostdd-shell&quot;&gt;
-          &lt;div class=&quot;zc-ghostdd zc-select-wrap&quot;&gt;
-            &lt;span class=&quot;zc-ghostdd__avatar&quot;&gt;&lt;span class=&quot;zc-ghostdd__avatar-box&quot;&gt;A&lt;/span&gt;&lt;/span&gt;
-            &lt;span class=&quot;zc-ghostdd__box&quot;&gt;&lt;span class=&quot;zc-ghostdd__label&quot;&gt;Acme Analytics&lt;/span&gt;
-              &lt;svg class=&quot;zc-ghostdd__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
-          &lt;/div&gt;
-          &lt;div class=&quot;zc-menu&quot; data-size=&quot;default&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
-            &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Acme Analytics&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Acme Analytics&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-            &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Zylker Store&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Zylker Store&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-          &lt;/div&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;default&quot; style=&quot;width:390px&quot;&gt;
-          &lt;svg class=&quot;zc-input__icon zc-input__icon--left&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-search&quot;/&gt;&lt;/svg&gt;
-          &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; placeholder=&quot;Search Here&quot;&gt;
-&lt;!-- … full block in zcat-ui/docs/template.html --&gt;</code></pre>
+  <p class="zc-body-1 note">The shell is a whole page, so there is no block to copy here — and a truncated one would be worse than none: the first version of this showed 4,000 characters that stopped before the container and the side menu, with the divs left unclosed. <strong><a href="template.html">Open template.html</a></strong> — that file IS the shell. Copy the whole file for your first page, then copy a sibling page for each one after, and delete what you do not need.</p>
+  
   <p class="zc-body-3 glue-note">This block also needs 1 page-glue class(es) — <code>tpl-layout</code>. They are PAGE CSS, not library CSS: copy them into your page's &lt;style&gt; too, or the block will not lay out.</p><pre class="glue"><code>.tpl-layout { height: 100vh; }</code></pre>
 </section>
 <h2 class="zc-h4 sec">PAGE FURNITURE</h2>

@@ -212,12 +212,17 @@ for name, items in SPEC:
             # A whole page does not preview inside a card. Squeezed into one it
             # cropped the rail and let the code block bleed through it. Point at
             # the real thing instead — template.html IS the shell, complete.
-            live_html = ('<p class="zc-body-3 note">This one is a whole page, so there is '
-                         'no useful inline preview. <a href="template.html">Open '
-                         'template.html</a> — that file IS the shell, and copying it is '
-                         'how you start a build. The markup below is its opening '
-                         'structure for reference.</p>')
+            live_html = ('<p class="zc-body-1 note">The shell is a whole page, so there '
+                         'is no block to copy here — and a truncated one would be worse '
+                         'than none: the first version of this showed 4,000 characters '
+                         'that stopped before the container and the side menu, with the '
+                         'divs left unclosed. <strong><a href="template.html">Open '
+                         'template.html</a></strong> — that file IS the shell. Copy the '
+                         'whole file for your first page, then copy a sibling page for '
+                         'each one after, and delete what you do not need.</p>')
+            skip_code = True
         else:
+            skip_code = False
             live_html = f'<div class="live"{opener}><style>{gcss}</style>{b}</div>' 
         gblock = (f'<p class="zc-body-3 glue-note">This block also needs {len(gnames)} '
                   f'page-glue class(es) — <code>{html.escape(", ".join(gnames))}</code>. '
@@ -229,7 +234,7 @@ for name, items in SPEC:
   <p class="zc-body-3 note">{html.escape(note)}</p>
   <p class="zc-body-4 src">verified in <code>{path}</code></p>{vline}
   {live_html}
-  <pre><code>{html.escape(b)}</code></pre>
+  {"" if skip_code else f'<pre><code>{html.escape(b)}</code></pre>'}
   {gblock}
 </section>''')
     if rows:
