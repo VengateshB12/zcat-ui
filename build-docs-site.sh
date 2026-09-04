@@ -47,11 +47,18 @@ cp zcat-ui/ONBOARDING.md "$OUT/docs/" 2>/dev/null || true
 # The sidebar's "Basic Template" link is NOT a literal href — the NAV registry
 # stores it as '@template.html' and the renderer strips the '@'. It needs the
 # same rewrite or it 404s from the site root.
+# Static files are cached for a year, so a rebuilt page keeps serving the old
+# one until the URL changes. CSS and JS already carry ?v=; the snippets link did
+# not, so the docs kept handing people a stale component reference — 9 stale
+# components while the deployed file held 22. Key it to the content, so it moves
+# only when the page actually changes.
+SNIPV=$(shasum -a 1 zcat-ui/docs/snippets.html | cut -c1-8)
+
 sed -e 's|href="\.\./zcat\.css|href="zcat.css|g' \
     -e 's|src="\.\./zcat\.js|src="zcat.js|g' \
     -e 's|src="icons/|src="docs/icons/|g' \
     -e 's|href="template\.html"|href="docs/template.html"|g' \
-    -e 's|href="snippets\.html"|href="docs/snippets.html"|g' \
+    -e "s|href=\"snippets\.html\"|href=\"docs/snippets.html?v=$SNIPV\"|g" \
     -e "s|'@template\.html'|'@docs/template.html'|g" \
     zcat-ui/docs/playground.html > "$OUT/index.html"
 
