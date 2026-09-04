@@ -244,28 +244,93 @@ function __zcatAudit() {
     return others === 0;
   })();
 
-  /* ── 13. Built from components, not divs ──────────────────────────────
-     This used to demand 10 distinct zc-* families, which measured the wrong
-     thing. A card grid repeats ONE card many times: the landing page in
-     reference-screenshots/23 is properly composed, every element carries a
-     library class, and it uses eight families. It failed as "hand-built".
-     Page shape is not evidence of hand-building.
+  /* ── 13. Invent LAYOUTS freely. Never invent a CONTROL. ─────────────
+     This used to demand that 90% of classed elements carry a library class,
+     which is the wrong line entirely: it made composing a custom card, a hero
+     block or a stat treatment a violation, and that is DESIGN — the part a
+     person is supposed to be doing. A design system hands you tokens and
+     controls; it does not dictate every arrangement.
 
-     What is evidence: inventing your own classes instead of using the
-     library's. Measured across real pages that share runs 91-100% — template
-     99, databases 99, detail 91, empty 100, card grid 94. A page that has
-     genuinely been hand-built out of divs sits far below that. */
-  const classed = all.filter(el => typeof el.className === "string" && el.className.trim());
-  const usingLib = classed.filter(el => /\bzc-/.test(el.className));
-  const share = classed.length ? usingLib.length / classed.length : 1;
-  if (classed.length >= 8 && share < 0.6) {
-    const invented = [...new Set(classed.filter(el => !/\bzc-/.test(el.className))
-      .map(el => "." + el.className.trim().split(/\s+/)[0]))].slice(0, 4).join(", ");
-    F.push({ rule: "HAND-BUILT PAGE",
-      msg: `only ${Math.round(share * 100)}% of classed elements use a library class ` +
-           `(${usingLib.length} of ${classed.length}) — the rest are page-invented ` +
-           `(${invented}). Compose from the library; a real screen runs 90%+`,
-      sel: "(page)" });
+     So the rule is split where it actually matters:
+       LAYOUT and PRESENTATION — invent whatever the screen needs, as long as
+         every colour, size, radius and type style comes from a token. That is
+         enforced at save time (RAW COLOR, RAW FONT RULE, ODD PIXEL VALUE,
+         RESTYLED), so nothing here needs to police it again.
+       CONTROLS — never. A button, field, checkbox, select, tab, badge or
+         toggle built out of divs loses its states, its keyboard, its focus
+         ring and its dark mode, and no amount of care puts those back.
+
+     Only the second is checked here. */
+  {
+    const inComponent = el => el.closest(
+      ".zc-btn, .zc-input-wrap, .zc-select-shell, .zc-checkbox, .zc-radio, " +
+      ".zc-toggle, .zc-tabs, .zc-badge, .zc-menu, .zc-table, .zc-csm, " +
+      ".zc-sidemenu, .zc-layout__rail, .zc-layout__topbar, .zc-pagination, " +
+      ".zc-linkbox, .zc-kvfield, .zc-empty, .zc-stepper, .zc-chip");
+
+    const offenders = [];
+
+    // a div that behaves like a button
+    for (const el of all) {
+      if (!vis(el) || inComponent(el)) continue;
+      const tag = el.tagName;
+      if (tag === "BUTTON" || tag === "A" || tag === "INPUT" || tag === "LABEL") continue;
+      if (el.children.length > 1) continue;                 // a wrapper, not a control
+      const cs = getComputedStyle(el);
+      const looksClickable = cs.cursor === "pointer" ||
+        el.getAttribute("role") === "button" || el.hasAttribute("onclick");
+      const txt = (el.textContent || "").trim();
+      if (looksClickable && txt && txt.length < 30)
+        offenders.push({ what: "a button", sel: el.className || tag.toLowerCase(), txt });
+    }
+
+    // a bare field with no library wrapper
+    for (const el of document.querySelectorAll("input, select, textarea")) {
+      if (!vis(el)) continue;
+      if (el.type === "checkbox" || el.type === "radio" || el.type === "hidden") continue;
+      if (inComponent(el)) continue;
+      offenders.push({ what: "a form field", sel: el.className || el.tagName.toLowerCase(),
+                       txt: el.getAttribute("placeholder") || "" });
+    }
+
+    // a table built as a <table> without the component, or out of divs
+    for (const t of document.querySelectorAll("table")) {
+      if (!vis(t) || t.classList.contains("zc-table")) continue;
+      offenders.push({ what: "a table", sel: t.className || "table", txt: "" });
+    }
+
+    // a pill that is doing a Badge's job
+    for (const el of all) {
+      if (!vis(el) || inComponent(el)) continue;
+      if (el.children.length) continue;
+      const cs = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      const radius = parseFloat(cs.borderRadius) || 0;
+      const bg = cs.backgroundColor;
+      const painted = bg && !/rgba\(0, 0, 0, 0\)/.test(bg);
+      const txt = (el.textContent || "").trim();
+      if (painted && radius >= 8 && r.height <= 28 && txt && txt.length <= 24)
+        offenders.push({ what: "a badge", sel: el.className || el.tagName.toLowerCase(), txt });
+    }
+
+    if (offenders.length) {
+      const seen = new Set(), list = [];
+      for (const o of offenders) {
+        const k = o.what + o.sel;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        list.push(`${o.what} built as .${String(o.sel).split(" ")[0]}` +
+                  (o.txt ? ` ("${o.txt.slice(0, 22)}")` : ""));
+      }
+      fail("HAND-BUILT CONTROL",
+        `${list.length} control(s) are made of plain elements instead of the ` +
+        `component: ${list.slice(0, 4).join("; ")}` +
+        (list.length > 4 ? ` (+${list.length - 4} more)` : "") +
+        ". Compose the LAYOUT however the screen needs — that is design — but a " +
+        "control built from divs has no states, no keyboard, no focus ring and no " +
+        "dark mode, and cannot get them back",
+        "(page)");
+    }
   }
 
   /* ── 14. Typography hierarchy must exist ──────────────────────────── */

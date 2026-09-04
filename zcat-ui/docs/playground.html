@@ -618,9 +618,32 @@ LAYOUT AND HIERARCHY
   table, a card list, or a master panel.
 
 COMPONENTS
-- Never invent what exists. ~65 components, including the ones people assume
-  are missing: General Details, Container Side Menu, Empty State, Attention
-  Box, Timeline, Stepper, Tour, Code Block, Key Value, Selection Cards.
+- INVENT LAYOUTS FREELY. NEVER INVENT A CONTROL. This is the line, and it is
+  not "use components for everything":
+    LAYOUT AND PRESENTATION ARE YOURS. A custom card, a hero block, a stat
+      treatment, a two-column split, a way of grouping things nobody has built
+      before — invent it. That is the design work, and refusing to is how a
+      screen ends up assembled instead of composed. The only condition is that
+      every colour, size, radius, weight and type style comes from a token:
+      var(--zc-*), --zc-space-*, --zc-radius-*, the .zc-h*/.zc-body-* classes.
+      Build it with your own class names on plain elements. That is allowed and
+      always was.
+    CONTROLS ARE NOT YOURS, EVER. These are always the component, however
+      creative the screen:
+        button · text box and every field · checkbox · radio · select ·
+        TABS · TABLE · badge · toggle · menu · pagination · search
+      and TYPE is always the classes (.zc-h*, .zc-subtitle-*, .zc-body-*),
+      never a raw font rule. One of these built from divs loses its states, its
+      keyboard, its focus ring and its dark mode, and no amount of care puts
+      them back. The audit fails these as HAND-BUILT CONTROL — and only these.
+      A CARD or a plain DIV is not on that list: those you may design.
+  So: if you can name a component that does the job, use it. If you cannot,
+  build it out of tokens and tell me what you built and why. Do not force a
+  component into a shape it was not made for just to avoid inventing.
+- Before inventing, check it does not exist. ~65 components, including ones
+  people assume are missing: General Details, Container Side Menu, Empty State,
+  Attention Box, Timeline, Stepper, Tour, Code Block, Key Value, Selection
+  Cards.
 - Map every element to a component AND its variant before writing markup. If
   you cannot name the component you used, you drew it yourself.
 - Never restyle a zc-* class. A different look is a data-state or data-variant.
