@@ -174,6 +174,26 @@ for path in SOURCES:
     for sm in re.finditer(r'<symbol\b[^>]*\bid="([^"]+)"[^>]*>.*?</symbol>', txt, re.S):
         if sm.group(1) in seen: continue
         seen.add(sm.group(1)); symbols.append(sm.group(0))
+# Some blocks reference symbols their source page builds in JAVASCRIPT, so
+# there is no <symbol> to lift and the icon renders as an EMPTY BOX — the trap
+# our own rules warn about, and it shipped here: seven dead icons across the
+# Link Box, Attention Box and Container Side Menu blocks. Build the missing
+# ones from the icon files instead, so a copied block carries working icons.
+ICON_DIR = "zcat-ui/docs/icons"
+FALLBACK = {"i-copy": "Copy.svg", "i-db": "database-01.svg", "i-info": "info-circle.svg"}
+referenced = set()
+for _sec in sections:
+    referenced |= {u.lstrip("#") for u in re.findall(r'<use[^>]*href="([^"]+)"', _sec)}
+for _id in sorted(referenced - seen):
+    _f = FALLBACK.get(_id)
+    if not _f or not os.path.exists(os.path.join(ICON_DIR, _f)): continue
+    _svg = open(os.path.join(ICON_DIR, _f), encoding="utf-8").read()
+    _vb = (re.search(r'viewBox="([^"]+)"', _svg) or [None, "0 0 16 16"])[1]
+    _inner = re.sub(r"^.*?<svg[^>]*>|</svg>.*?$", "", _svg, flags=re.S).strip()
+    _inner = re.sub(r'\s(?:stroke|fill)="[^"]*"', "", _inner)   # let the library colour it
+    symbols.append(f'<symbol id="{_id}" viewBox="{_vb}">{_inner}</symbol>')
+    seen.add(_id)
+
 sprite = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
           + "".join(symbols) + "</defs></svg>") if symbols else ""
 
