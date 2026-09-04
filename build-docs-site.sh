@@ -24,8 +24,20 @@ mkdir -p "$OUT/docs"
 # drift from the library the way COMPONENTS.md did.
 python3 build-snippets.py
 
-# The library itself
-cp zcat-ui/zcat.css zcat-ui/zcat.js "$OUT/"
+# The library itself.
+#
+# zcat.css is an @import shell, and every one of its imports carries a
+# hand-written ?v=120. Static files are cached for a year, so bumping only the
+# OUTER link achieves nothing: the fresh zcat.css still asks for
+# organisms.css?v=120, which the CDN serves from cache. That is exactly how the
+# chart components shipped and rendered with black slices — the page had the new
+# markup and a stylesheet from before the components were written.
+#
+# Rewrite every ?v= inside the shell to one hash of ALL the CSS, so a change to
+# any file gives every import a new URL. Nobody has to remember a number.
+CSSV=$(cat zcat-ui/zcat.css $(find zcat-ui/src -name '*.css' | sort) | shasum -a 1 | cut -c1-8)
+sed -E "s/\?v=[0-9]+'\)/?v=$CSSV')/g" zcat-ui/zcat.css > "$OUT/zcat.css"
+cp zcat-ui/zcat.js "$OUT/"
 cp -R zcat-ui/src "$OUT/src"
 
 # Docs: the playground, the worked template and the icon set.
