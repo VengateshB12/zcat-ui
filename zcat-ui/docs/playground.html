@@ -431,8 +431,8 @@ B. Do NOT connect an MCP server for this work. Everything you need ships in
    library subscriptions, auto-layout mechanics — none of which exists in code,
    and fetching it costs thousands of tokens that buy you nothing here.
 C. Link the library in every page you create, unmodified:
-     <link rel="stylesheet" href="zcat-ui/zcat.css">
-     <script src="zcat-ui/zcat.js" defer><\/script>
+     <link rel="stylesheet" href="zcat-ui/zcat.css?v=120">
+     <script src="zcat-ui/zcat.js?v=22" defer><\/script>
 D. THEN STOP AND ASK ME FOR THE REQUIREMENT. Confirm setup in a few lines —
    library in place, MCP connected or not, contract read — and then invite it,
    e.g. "Setup is complete and I'm ready to build. Send me your requirement:
@@ -560,342 +560,103 @@ Q4. CRITIQUE YOUR OWN SCREEN BEFORE SHOWING ME. Render it, look at the
     like the same layout side by side, you have failed: redesign, don't tweak.
 
 HARD RULES (violating these is the failure mode)
-- NEVER ADD A STATE SWITCHER. Do not put a "Preview" dropdown, a debug toggle
-  or any control that flips between states — that is a developer's harness, not
-  a product screen, and it would ship to a real user. Build the states as a REAL
-  FLOW that a person walks through: the empty screen with its create button →
-  the create popup → the populated list → click a row → the detail screen →
-  its loading state. Separate files (functions-empty.html, functions.html,
-  function-detail.html) or genuine in-page navigation, each one reachable by
-  doing the thing a user would do. Tell me the entry point and how to walk it.
-- SUB HEADER PRIMARY TABS CARRY NO ICONS. Text only, even when the wireframe
-  draws an icon on every tab. Icons in a primary tab row add noise to the one
-  element that should read as a clean line of words. (Secondary tabs may take
-  an icon where it genuinely disambiguates.)
-- 100% FEATURE COVERAGE. EVERY tab, field, column, button, link, filter, copy
-  icon, menu item and action in what I give you must exist in what you build.
-  Rearranging, regrouping and repositioning are expected. DROPPING is not —
-  not because a screen felt crowded, not because you judged something
-  redundant, not silently. If you believe something should go, ASK ME FIRST and
-  wait; telling me afterwards is not the same thing. Before you show me a
-  screen, count the features in my input and count them in your page.
-- SUPPLY THE STATES A WIREFRAME NEVER DRAWS. Wireframes show one happy path —
-  a full table, a filled form. Real screens have more, and providing them is
-  basic senior-designer work, not extra credit. For every screen, work out and
-  build the states it implies:
-  * EMPTY — no data yet, or a filter that matched nothing. Use .zc-empty
-    (illustration + heading + one-line explanation + the action that fixes it).
-    A first-run empty state and a no-search-results one are different screens.
-  * LOADING — .zc-skeleton for content, .zc-progress where there is progress.
-  * ERROR / permission denied, where the flow can fail.
-  * SELECTION — if a table has checkboxes it needs its default, single-select
-    and multi-select bars.
-  Tell me which states you added. If a state genuinely does not apply, say so
-  rather than skipping it silently.
-- ONE PRIMARY BUTTON PER SCREEN. Exactly one filled button
-  (data-variant="fill") is the page's call to action — the single thing you
-  most want the user to do. Count every fill button visible at once, including
-  the one that opens a popup; demote the rest to outline, grey or ghost. Two
-  filled buttons side by side means neither is the primary. A popup's own
-  footer action is a separate surface and does not count against the page.
-  Destructive actions are never the page's primary CTA — they belong in a
-  Danger Zone or a three-dot menu.
-- YOU MAY WRITE PAGES. NOTHING ELSE. The component library, this prompt, the
-  skill and the gates are read-only to you, and the block happens before the
-  write lands — through Bash too, not just Edit. Do not try to route around it.
-  If a component is genuinely missing something, or a gate is genuinely wrong,
-  STOP and tell me, with the evidence: what you needed, what you tried, what the
-  gate said. I will decide, and I will make the change myself. A library edited
-  mid-screen-build is how a fix for one page quietly becomes everyone's problem.
-- A WIREFRAME IS A FEATURE LIST, NOT A LAYOUT. Take from it WHAT must exist —
-  every tab, field, column, button, action. Do not take HOW it is arranged.
-  100% of the features must survive; the arrangement must not. If my wireframe
-  and your page look like the same layout side by side, you have failed even
-  though every feature is present. Wireframes are drawn quickly and put things
-  wherever there was room; our components already say where things go.
-- TRIAGE EVERY WIREFRAME INTO THREE BUCKETS BEFORE YOU BUILD. This is the same
-  method for every wireframe I will ever give you — it is not a list of fixes
-  for one drawing, and you should be able to apply it to a wireframe neither of
-  us has seen yet.
+Most of these are checked. When one fires, the gate explains itself in full —
+so what follows is the RULE, not the argument for it.
 
-  BUCKET 1 — FUNCTION. What the screen must let a person DO and KNOW: tabs,
-  columns, fields, actions, rules, states named in the requirement. ALL of it
-  survives, exactly. Nothing here is ever dropped, merged or renamed without
-  asking me first.
+READING THE REQUIREMENT
+- A wireframe is a FEATURE LIST, not a layout. Triage everything in it:
+    FUNCTION — what it lets a person do and know. 100% survives, exactly.
+    DRAWING ARTEFACTS — never survive: which side a control sits on, column
+      counts, what is in a card, drawn type and colour, nesting depth, how often
+      a control repeats, whether something reads as button/link/chip, block
+      order, widths. A grey rectangle is a FUNCTION awaiting a component.
+    MISSING FURNITURE — always added, drawn or not: the shell; the container;
+      the Sub Header (Back Nav + entity name on detail pages); empty, loading
+      and error states; a confirm before anything destructive; success feedback;
+      long-list handling (pagination, search) and long-value handling; the
+      reduced-permission view.
+  What the wireframe LEAVES OUT is not permission to leave it out. If your page
+  and my wireframe look like the same layout side by side, you have failed.
+- 100% feature coverage. Every tab, field, column, button, link, filter and
+  copy affordance survives. Dropping one needs my recorded approval.
+- A sub-section list is N SCREENS, not one. Tables / Schema / Queries /
+  Functions / Triggers / Indexes is seven screens, not a menu beside one.
+- Name the requirement so the gate can read it: "source" is a URL or a file
+  path, never a description. The gate fetches it and names what you dropped.
 
-  BUCKET 2 — DRAWING ARTEFACTS. How it happened to be drawn. NONE of it
-  survives. Everything below is an artefact, always, in every wireframe:
-  which side a control sits on; how many columns; what is in a card and what is
-  bare; the type sizes, weights and colours drawn; how deep the navigation is
-  nested; how many times a control is repeated; whether something is a button,
-  a link or a chip; the order of blocks down the page; the width of anything.
-  A grey rectangle in a wireframe is not a grey rectangle in our product — it is
-  a FUNCTION waiting for you to pick the component that provides it. If you
-  cannot name the component you used for something, you drew it yourself, and
-  that is the failure.
+THE SHELL
+- You may write PAGES and nothing else. The library, this prompt, the skill and
+  the gates are read-only. If one is wrong, STOP and tell me with evidence.
+- Never build from scratch: copy docs/template.html for the first page, copy the
+  sibling for every page after, then delete what you do not need.
+- The SERVICE RAIL is untouchable — its services, logos, names and states are
+  already correct. Never re-point a logo, rename, re-order or add one. If I ask
+  for another, reuse an EXISTING logo and say which.
+- A page may change only: the side menu's content and per-item icons, the Sub
+  Header, and the container. CHANGE THE SIDE MENU — a copied page that keeps
+  the template's navigation is the most common thing shipped wrong.
+- Every screen starts from .zc-layout. Content lives in a container.
+- Keep the ?v= on both library links, or the browser serves a cached library.
 
-  BUCKET 3 — MISSING FURNITURE. What every real product has and almost no
-  wireframe draws, because it is boring to draw and does not communicate the
-  idea. You ADD ALL OF IT BACK, every time, whether or not the drawing hints at
-  it. Absence from the wireframe is never permission to leave it out. This list
-  does not change from wireframe to wireframe:
-    · the full shell — service rail, topbar, side menu
-    · the container holding the content
-    · the Sub Header, with Back Nav and the entity name on a detail page
-    · the EMPTY state of every list, table and panel
-    · the LOADING state of anything that fetches
-    · the ERROR state of anything that can fail
-    · a CONFIRM step before anything destructive
-    · SUCCESS feedback after anything that changes data
-    · what happens when a list gets long — pagination, search, filters
-    · what happens when a value gets long — truncation, tooltip, wrapping
-    · what a user without permission sees
-  The features gate asks you for this list by name and refuses a bare "n/a".
-  Answering it is a design task, not paperwork: decide what each state SAYS and
-  offers, do not just drop a component in.
+LAYOUT AND HIERARCHY
+- TAB PLACEMENT, the rule broken most often. One level of tabs: they go in the
+  SUB HEADER, never floating in the container. Two levels: primary in the Sub
+  Header, secondary inside the container. Exactly ONE tab is active, and the
+  visible content is that tab's.
+- Sub Header primary tabs carry NO icons. Text only.
+- Detail pages: the entity name, its status badge and the Back Nav live in the
+  SUB HEADER. The title always names what you are looking at.
+- ONE primary (fill) button per screen. A fill button repeated per row or card
+  is not one CTA, it is N — per-row actions are links or ghost buttons.
+- Never leave an action button floating alone: a bar above a table is a
+  Container Header, with something on the left.
+- Table style: ALONE = data-style="stretch"; SHARING the page with cards or
+  anything else = data-style="boxy".
+- Content fills its container. A band of dead background down one side reads as
+  a rendering fault, not a margin.
+- One Container Side Menu per page. A second vertical list is RECORDS — a
+  table, a card list, or a master panel.
 
-  The rules that follow are worked EXAMPLES of buckets 2 and 3 — the artefacts
-  and omissions I have seen most often. They are not the whole of either bucket.
-  When you meet an artefact or an omission that is not named below, the buckets
-  still decide it: artefacts never survive, furniture is always added.
-- THE SHELL IS SACRED. Copy it from docs/template.html VERBATIM. The service
-  RAIL — its five services, their logos and the active state — and the TOPBAR
-  — the project switcher, the search field and the avatar — NEVER change. Do
-  not swap the Catalyst logo, do not restyle or re-order the rail, do not
-  invent service icons. The SIDE MENU keeps the template's structure too — the
-  only things you change in it are its CONTENT (service name, section headings
-  and items) and the per-item LINE ICONS. NOT the logo: the service logo at the
-  top of the side menu is an existing *-color.svg from docs/icons/ — if the
-  service has no logo in that set, use the closest one and tell me. Never
-  invent a logo and never substitute a stroke icon for it.
-  THE SERVICE RAIL IS NOT YOURS TO TOUCH AT ALL. It already has its services,
-  their logos, their names and their hover and active states, and they are
-  correct. Do not re-point a logo, do not rename a service, do not re-order
-  them, do not add one. If I ask for another service, add it with an EXISTING
-  logo from the set and tell me which you reused — a repeated logo is fine, a
-  missing one is not. Every blank chip you have ever seen came from a page
-  editing paths it had no reason to edit.
-  So the only parts a page may change are: the side menu's CONTENT and its
-  per-item icons, the SUB HEADER, and the container's content. If the service you are
-  building for has no logo in the *-color.svg set, pick ANY existing one from
-  that set and tell me which — an empty or invented logo is never acceptable,
-  and a blank service chip means you changed something you should not have. A wireframe showing a
-  different rail or topbar is describing its own product, not ours — keep ours.
-  AND WHAT THE WIREFRAME LEAVES OUT IS NOT PERMISSION TO LEAVE IT OUT. Most
-  wireframes are drawn as a bare content area: no service rail, no topbar, no
-  container, a header sketched freehand, the body sitting on the page
-  background. That is the drawing being economical, not the product being
-  designed. You ALWAYS build the full shell — rail, topbar, side menu, Sub
-  Header — and the content ALWAYS sits inside a container, even when the
-  wireframe shows none of it. Never delete a piece of the shell because the
-  picture did not draw it, and never rebuild a piece of it because the picture
-  drew a different one.
-- THE WIREFRAME'S CONTROLS ARE NOT OUR CONTROLS. A button, a header row, an
-  empty state or a chip in the wireframe is a sketch of a FUNCTION. Find the
-  component that provides that function and use it — Empty State, Container
-  Header, Button with a real data-variant, Badge — rather than reproducing the
-  sketch's shape, alignment or styling. Two things follow: a control drawn on
-  the left may well belong on the right once it is our Container Header, and a
-  control the wireframe drew flat and grey is still a real Button with a real
-  variant. If you cannot name the component you used for something, you drew it
-  yourself, and that is the failure.
-- DETAIL PAGES: the entity name, its status badge and the back affordance live
-  in the SUB HEADER — the Back Nav round-button variant in the left group, with
-  the plain title and a Status Badge beside it. Do not hand-build an entity
-  header block inside the container, and do not put a breadcrumb frame there
-  instead. Supporting facts (engine, region, size) belong in the content as
-  General Details or stat cards, not stacked under a hand-made title.
-  NAVIGATION RULE: whenever a table row or a card opens a detail page, the Sub
-  Header TITLE becomes that item's name — the row you clicked, the card you
-  opened — shown with the Back Nav beside it. The title always names what you
-  are looking at, never the section you came from.
-- NAME THE REQUIREMENT SO THE GATE CAN READ IT. When you record feature
-  coverage, "source" must be the URL or the file path of the requirement, not a
-  description of it. If it is readable, the gate FETCHES it, pulls out every
-  tab, nav item, action and heading, and diffs that against your page — so a
-  section you quietly left out comes back as a named list. Give it a phrase
-  instead of a path and you lose that check, and you are back to grading your
-  own work. Every label it names must either be built or listed in "dropped"
-  with my recorded approval.
-- A SUB-SECTION LIST IS A FEATURE, NOT A DECORATION. When a requirement shows a
-  section with its own list of sub-pages — Tables, Schema Visualiser, Queries,
-  Functions, Triggers, Indexes, Extensions — that is SEVEN screens, not one
-  screen with a menu drawn beside it. Build each one, or tell me which you are
-  deferring and why, BEFORE you build. Collapsing them into a single list is
-  the largest and quietest way to lose a requirement, and it looks finished.
-- THE WHOLE ROW IS THE CLICK TARGET, NEVER ONE CELL. Every row highlights on
-  hover, so every row promises it can be clicked. Put the link on the name cell
-  alone and that promise is false across the rest of the row: the user aims at
-  the row, hits nothing, and decides the page is broken. So the entity cell is
-  PLAIN TEXT and the <tr> carries data-rowlink:
-      <tr class="zc-table__row" data-rowlink="database-detail.html">   navigates
-      <tr class="zc-table__row" data-rowlink>                          emits only
-  zcat.js gives it a pointer, a focus ring, Enter/Space, and a zcat:row:click
-  event — and it never steals a click from a control inside the row, so the
-  three-dot, the checkbox and any real link keep working. Do not hand-wire a
-  click listener on the tbody; that is what pages used to do, and it is why
-  only the first column ever ended up clickable. Audit: ROW IS NOT THE CLICK
-  TARGET.
-- STRETCH OR BOXY IS A DECISION, NOT A DEFAULT. The Table ships two styles and
-  picking the wrong one is why a screen looks loose:
-    data-style="stretch" — edge-to-edge, no outer border. ONLY when the table IS
-      the page: nothing above it but the Sub Header, nothing beside it. The page
-      container draws the boundary, so the table does not need one.
-    data-style="boxy" — its own 1px border and 6px radius. The moment ANYTHING
-      else shares the page — stat cards, a General Details block, a second
-      table, an Attention Box — the page container's edge now belongs to those,
-      the stretched table loses its boundary, and the search/filter/button row
-      above it reads as loose furniture floating on the background. Boxy gives
-      the table its edge back and the whole block reads as one object.
-  The rule in one line: ALONE = STRETCH, SHARING = BOXY. The audit fails the
-  wrong choice as STRETCH TABLE SHARING A PAGE.
-- A STATE IS A COLOUR, NEVER A FADE. Disabled, hover, active, inactive — every
-  one of them has a token. Do not reach for opacity to make something look
-  lighter: it dims the whole element including its border and focus ring, it
-  cannot be themed for light and dark, and it quietly drops contrast below the
-  4.5:1 this system enforces everywhere else. Measured on a real component, a
-  secondary line at .75 opacity fell to 3.54:1 — a fail by our own audit.
-  Use --zc-body-icon-disabled, --zc-*-text-disabled, the hover and active
-  background tokens. Opacity is only ever 0 (genuinely hidden) or the Overlay
-  component, where a translucent scrim IS the component.
-- NEVER PUT fill ON A SPRITE ICON. 26 of the 27 sprite symbols are drawn with
-  strokes, and SVG's own default is fill:black — so an <svg> that says nothing
-  used to render the icon as a SOLID BLACK SHAPE. At 16px that passes for a
-  heavy glyph and nobody notices; at illustration size it is a black rectangle
-  in the middle of the screen. The library now defaults sprite icons to stroke,
-  so the correct markup is simply:
-      <svg width="16" height="16" viewBox="0 0 16 16"><use href="#i-database"/></svg>
-  Add class="zc-icon-stroke" if you want it stated. The one exception is a
-  COLOUR LOGO, which carries its own fill on the path and keeps it. If you ever
-  find yourself writing fill="currentColor" on a sprite icon, you are about to
-  make a blob. The audit fails this as ICON RENDERED SOLID.
-- AN ICON IS NEVER AN ILLUSTRATION. A 16px glyph blown up to 200px is not an
-  empty-state or loading graphic — it is a 16px glyph blown up to 200px, and it
-  reads as one. Use the Empty State component's own artwork. Never point an
-  <img> at a *mask.svg either: those are solid shapes meant for CSS masking and
-  render as a black rectangle (audit: MASK USED AS IMAGE).
-- AN OVERLAY THAT OPENS OFF SCREEN IS BROKEN. Menus, dropdowns and tooltips are
-  judged OPEN, not closed. A three-dot menu belongs in a shell carrying
-  data-menu="action", which right-aligns it to its trigger; without that it
-  drops leftward from a trigger that is already at the right edge and lands
-  outside the shell. The audit opens every overlay and measures it.
-- ONE CONTAINER SIDE MENU PER PAGE. Wireframes often draw a second vertical
-  list beside the first — a section list AND a record list. Two side menus give
-  the reader two competing answers to "where am I". The inner list is RECORDS,
-  not navigation: make it a table, a card list or a master panel beside the
-  detail. The audit fails this as TWO SIDE MENUS.
-- A REPEATED FILL BUTTON IS NOT ONE CTA, IT IS N. A filled button once per row
-  or per card leaves the eye nowhere to land, however sensible each one looks
-  alone. Per-row actions are links or ghost buttons; the one fill on the page is
-  its single real next step. The audit fails this as REPEATED PRIMARY BUTTON.
-- A POPUP MAY USE PRIMARY TABS IN ITS HEADER. When a popup offers two routes
-  to the same outcome — set it up with the CLI or in the editor, upload a file
-  or paste a URL — that is a TAB, and .zc-popup__header takes .zc-tabs
-  data-type="primary" flush to its bottom edge, the same as the Sub Header
-  does. Never invent a segmented control for it.
-- TEXT IN A POPUP USES THE TYPE CLASSES. .zc-popup__title is 18/22 and
-  .zc-popup__desc is 12/16 secondary; body copy is .zc-body-3 (14/20) unless it
-  has a reason to be bigger. An unclassed paragraph used to fall back to the
-  browser's 16px — larger than the description above it — so the hierarchy read
-  backwards and the popup looked shouty. Colours are tokens: primary for
-  content, secondary for supporting lines, never a raw hex.
-- A LONE FIELD IN A POPUP LOOKS BROKEN. Popup form controls stretch to the
-  body's full width — never leave one narrow field floating in a wide popup.
-  If a step has a single short input, either let it span the full width or pair
-  it with its natural companion on one row (region + version, port + database).
-  A wizard step with one small field usually means the steps were split too
-  finely: merge it into the step it belongs with.
-- POPUP ANATOMY IS FIXED. There is NO close (X) in any popup variant — a
-  wireframe that draws one is wrong; dismissal is the footer's Cancel. Footer
-  buttons are real .zc-btn components, never text links: a simple form is
-  Cancel (data-variant="grey") then the action (data-variant="fill"
-  data-color="primary"); a wizard is Back (grey) pushed to the far LEFT with
-  .zc-popup__footer-back, then Cancel (grey) and Continue (fill) on the right.
-  A blue "Cancel" written as a link is not our component. Popup widths are
-  fixed — 550px, or 414px with data-size="small". Never set a custom width.
-  A wizard's step indicator is the real .zc-stepper, in the header area under
-  the title, never in the body.
-- ICONS ARE LINE ICONS, FROM OUR SET, FULL STOP. Every icon comes from
-  zcat-ui/docs/icons/ and is stroke-only — bind stroke to currentColor at
-  stroke-width 1.3, never fill it. No emoji, no Unicode glyphs, no third-party
-  icon packs, and no coloured product artwork (a dolphin for MySQL, an elephant
-  for PostgreSQL, a coloured cloud). If a wireframe shows brand artwork, map it
-  to the closest line icon from our set and tell me which you chose. The one
-  exception is a SERVICE LOGO in the shell, which must be an existing
-  *-color.svg from docs/icons/ — never a stroke icon file, and never anywhere
-  else.
-- TABLE STATUS IS THE BADGE COMPONENT — never your own. A status cell is
-  <span class="zc-badge" data-type="secondary" data-color="…">, always
-  data-type="secondary" in a table, with SEMANTIC colours: success for
-  active/available, danger for failed/stopped, warning for pending/modifying,
-  info for processing/provisioning, grey for inactive. Never hand-build a
-  coloured pill out of a span, never restyle .zc-badge, and never give every
-  row the same colour. Badge text is 12px — the component's size. If a
-  wireframe shows a bigger table badge, it is still the 12px component.
-  Use a badge ONLY for varying categorical status (fewer than ~10 distinct
-  values whose meanings differ); if every row says the same thing, it is plain
-  text. The badge palette has no blue — processing maps to info.
-- CHECKBOX / RADIO / TOGGLE LABEL WEIGHT IS A CHOICE. SemiBold when the label
-  is a TITLE — a setting with sub-text under it, or a standalone choice.
-  Regular when it is one OPTION among several in a list. Say which you mean
-  with data-weight="semibold" or data-weight="regular" on the control. Inside
-  a popup body Regular is the default (that is what Figma's popup shows), and
-  data-weight overrides it either way.
-- SELECTION CARDS ARE A COMPONENT. A list of choosable options — engines,
-  instance sizes, plans — is .zc-card with data-state="selected" and a
-  <span class="zc-card__check"></span> inside; the blue corner check is built
-  in. Do not hand-build a bordered box with a radio in the corner, and do not
-  compose your own indicator onto a card. For a numeric range use the real
-  .zc-slider. Check ONBOARDING.md before building any chooser.
-- CREATE AND EDIT ARE ALWAYS POPUPS. Never put editable inputs on a page.
-  A detail or settings screen is READ-ONLY: show the values with General
-  Details (.zc-gdetails), stat cards or plain read-only text, and put the way
-  in behind an Edit action — a three-dot menu on the section, or an Edit
-  button in the Container Header — which opens a .zc-popup with the fields and
-  Cancel + Save. A wireframe that draws form fields and an "Apply changes"
-  button straight on the page is describing WHAT is editable, not HOW to build
-  it; convert it to read-only display plus an edit popup. The only inputs
-  allowed to sit directly on a settings page are instant-apply toggles
-  (something that takes effect the moment you flip it, with no Save).
-  Destructive actions go last, in a Danger Zone at the bottom or in the
-  three-dot menu, and always confirm in a popup.
-- NEVER LEAVE AN ACTION BUTTON FLOATING ALONE. Any bar above a table or list
-  is the Container Header (.zc-cheader): actions on the RIGHT, and something
-  real on the LEFT — a section heading, a Search field, or the filters. A
-  primary button sitting by itself on the right with empty space beside it is
-  wrong every time. If the requirement gives you nothing for the left, use the
-  section heading or a Search — do not ship the empty half. And do not build
-  that bar out of divs: it is .zc-cheader.
-- TAB PLACEMENT — the rule broken most often. If a page has ONE level of tabs,
-  they are the PAGE's tabs and they belong in the SUB HEADER, full width, as
-  <div class="zc-tabs zc-layout__subheader-tabs" data-type="primary"> inside
-  the sub header's second row. NEVER put page-level tabs inside the container.
-  Wireframes almost always draw them inside the container — that is the
-  wireframe being low-fidelity, NOT a layout instruction. Copying it is a
-  failure even though the wireframe "said" so.
-  Two levels of tabs: the primary level goes in the Sub Header, and only the
-  secondary level may sit inside the container, as data-type="secondary" in
-  the Container Header. Section-scoped tabs (tabs that switch content within
-  one card or panel) may sit in the container as secondary.
-  Exactly ONE tab carries data-state="active", and the visible content must be
-  that tab's content.
-- Include the library as-is: <link rel="stylesheet" href="zcat-ui/zcat.css">
-  and <script src="zcat-ui/zcat.js" defer><\/script>. Never copy rules out of it,
-  never restyle a zc-* class, never write a raw hex — every colour is a
-  var(--zc-*) token from src/tokens/colors.css.
-- No odd numbers for spacing/sizing/radius; use the --zc-space-* / --zc-radius-*
-  tokens.
-- Compose, don't duplicate: a search field is .zc-search-wrap, a button is
-  .zc-btn, a menu is .zc-menu — even inside bigger things you build.
-- Icons come only from zcat-ui/docs/icons/ (stroke icons bind to currentColor;
-  recolor files via the .zc-mask-icon pattern). No other icon sets.
-- Pages that belong to a product shell start from .zc-layout (the Catalyst
-  layout) with .zc-sidemenu, .zc-layout__topbar, .zc-layout__subheader, and a
-  .zc-layout__container holding .zc-cheader + content.
-- Use realistic sample data (names, regions, dates) — never lorem ipsum in
-  tables, lists, or titles.
-- Page-level glue CSS (grid placement, demo heights) is allowed; component
-  styling changes are not. Follow docs/template.html as the worked example.
+COMPONENTS
+- Never invent what exists. ~65 components, including the ones people assume
+  are missing: General Details, Container Side Menu, Empty State, Attention
+  Box, Timeline, Stepper, Tour, Code Block, Key Value, Selection Cards.
+- Map every element to a component AND its variant before writing markup. If
+  you cannot name the component you used, you drew it yourself.
+- Never restyle a zc-* class. A different look is a data-state or data-variant.
+- Table status is the Badge component. Selection cards are a component.
+- The whole ROW is the click target: entity cells are plain text, the <tr>
+  carries data-rowlink. Never hand-wire a tbody listener.
+- A search must SEARCH: data-filter="<rows>" plus a data-empty-for no-results
+  block. A box you can type into that does nothing is worse than none.
+- Create and edit are POPUPS, never a page. Detail pages are read-only.
+- Popup anatomy is fixed: no close (X); actions live in the footer; a lone
+  field looks broken, so form controls stretch. A popup MAY carry primary tabs
+  in its header. Its text uses the type classes — title 18/22, desc 12/16
+  secondary, body 14/20.
+- Never add a state switcher. Build each state as a REAL screen.
+- Checkbox / radio / toggle label weight is a choice: SemiBold when the label
+  is the thing being chosen, Regular when it qualifies something else.
+
+COLOUR, TYPE AND ICONS
+- Every colour is a var(--zc-*) token. Never a raw hex.
+- A STATE IS A COLOUR, never a fade. Opacity cannot be themed and quietly fails
+  contrast. It is only ever 0, or the Overlay scrim.
+- Typography is the .zc-h* / .zc-subtitle-* / .zc-body-* classes. No raw font
+  rules. No odd numbers for spacing, sizing or radius.
+- Icons are LINE icons from zcat-ui/docs/icons/ only. No emoji, no other set.
+- Sprite icons take no fill — the library draws them as strokes. THE PAGE
+  SPRITE IS A SUBSET: the template ships 27 symbols, the folder holds 483.
+  Referencing one that is not in the sprite renders an EMPTY BOX. Copy the
+  symbol in first.
+- An icon is never an illustration. A 16px glyph at 200px reads as exactly
+  that. Never point an <img> at a *mask.svg — it renders black.
+- Overlays are judged OPEN. A menu that opens off screen or gets clipped is
+  broken however good it looks shut.
+- Real sample data — names, regions, dates. Never lorem ipsum.
+- Page-level glue CSS (grid placement, demo heights) is allowed. Component
+  styling changes are not.
+
 
 BEFORE YOU SHOW ME ANYTHING — FOUR GATES, ALL BLOCKING
 The repo ships hooks that must all pass. Do not skip them, do not work around
