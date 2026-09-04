@@ -630,7 +630,7 @@
   --zc-fullpopup-text: #101F3E;
   --zc-fullpopup-text-secondary: #4D618A;
   /* Figma full-page-popup-header/bg/bg (node 548:9060, verified 2026-08-28).
-     LIGHT-ONLY — dark pending the dark audit (falls back to light). */
+     The dark value below is DERIVED, not from Figma — see the note there. */
   --zc-fullpopup-header-bg: #F4F7FE;
 }
 
@@ -1224,6 +1224,16 @@
   --zc-fullpopup-border: #33373F;
   --zc-fullpopup-text: #EEEEEE;
   --zc-fullpopup-text-secondary: #AAAAAA;
+  /* DERIVED, NOT FROM FIGMA — pending the designer's dark audit.
+     This token had no dark value at all, so the full-page popup's header bar
+     stayed #F4F7FE in dark mode: a pale bar with near-invisible text above a
+     dark sheet. Every sibling (--zc-fullpopup-bg/-text/-text-secondary) already
+     had one; only this was missed.
+     The light relationship is a RECESSED header with the white sheet raised on
+     top of it. #151516 is --zc-body-bg-body, the recessed surface in this
+     palette, so it keeps that relationship against the #1A1B1D sheet. Replace
+     it if the audit says otherwise. */
+  --zc-fullpopup-header-bg: #151516;
   }
 }
 
@@ -1815,4 +1825,7 @@
   --zc-fullpopup-border: #33373F;
   --zc-fullpopup-text: #EEEEEE;
   --zc-fullpopup-text-secondary: #AAAAAA;
+  /* DERIVED, NOT FROM FIGMA — pending the designer's dark audit. Mirrors the
+     media-query block above; see the note there for why #151516. */
+  --zc-fullpopup-header-bg: #151516;
 }

@@ -89,6 +89,17 @@
           rows[i].hidden = !hit;
           if (hit) shown++;
         }
+        /* NO RESULTS HIDES THE TABLE HEAD.
+           A column header row sitting above an empty table is furniture with
+           nothing under it — it reads as a broken table rather than an answer.
+           When a search empties the list, take the head away and let the
+           no-results message have the full width; put it back the moment a
+           row matches. */
+        var head = null;
+        for (var n = rows[0]; n; n = n.parentNode) {
+          if (n.tagName === 'TABLE') { head = n.tHead; break; }
+        }
+        if (head) head.hidden = shown === 0 && !!q;
         if (noResults) noResults.hidden = shown !== 0;
         emit(wrap, 'search:filter', { query: q, shown: shown, total: rows.length });
       }

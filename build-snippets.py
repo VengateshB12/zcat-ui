@@ -51,11 +51,21 @@ def extract(cls, cap=4200):
                     b = s[i:i + t.end()]
                     if any(j in b for j in JS_TELLS):
                         break                      # JS source, not markup
+                    # A HOLLOW BLOCK IS NOT A REFERENCE.
+                    # template.html carries <div class="zc-gdetails" id="wiz-review">
+                    # </div> — empty, filled by JavaScript at runtime. Extracting it
+                    # shipped a blank card under "General Details", which teaches
+                    # nothing. Keep looking for one that actually holds content.
+                    inner = re.sub(r"<[^>]+>", "", b).strip()
+                    if not inner and b.count("<") < 4:
+                        break          # next MATCH, not next closing tag
                     L = b.split("\n")
                     ind = min((len(l) - len(l.lstrip()) for l in L[1:] if l.strip()),
                               default=0)
                     b = "\n".join([L[0]] + [l[ind:] if len(l) > ind else l.lstrip()
                                             for l in L[1:]])
+                    b = b.replace('src="/zcat-ui/docs/icons/', 'src="icons/')
+                    b = b.replace("src='/zcat-ui/docs/icons/", "src='icons/")
                     if len(b) > cap:
                         b = b[:cap].rsplit("\n", 1)[0] + f"\n<!-- … full block in {path} -->"
                     return b, path
