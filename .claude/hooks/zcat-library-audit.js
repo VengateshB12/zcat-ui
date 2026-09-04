@@ -144,6 +144,39 @@ const CHECKS = `(() => {
   }
   await browser.close();
 
+  /* EVERY LIGHT TOKEN NEEDS A DARK COUNTERPART, IN BOTH DARK BLOCKS.
+     --zc-fullpopup-header-bg had none, so the full-page popup's header stayed
+     #F4F7FE over a #1A1B1D sheet — a pale bar with near-invisible text. Its own
+     comment admitted it ("LIGHT-ONLY, dark pending the dark audit") and it sat
+     that way until the designer opened the page in dark mode. A comment is not
+     a check. This is. A rendering audit cannot catch it either: nothing on
+     screen is wrong until you switch theme, and then everything about that
+     surface is. */
+  try {
+    const css = fs.readFileSync(
+      path.join(PROJECT, "zcat-ui", "src", "tokens", "colors.css"), "utf8");
+    const lines = css.split("\n");
+    const iMedia = lines.findIndex(l => l.includes(':root:not([data-theme="light"])'));
+    const iAttr  = lines.findIndex(l => l.startsWith(':root[data-theme="dark"]'));
+    if (iMedia > 0 && iAttr > iMedia) {
+      const names = seg => new Set(
+        (seg.join("\n").match(/--zc-[a-z0-9-]+(?=\s*:)/g) || []));
+      const light = names(lines.slice(0, iMedia));
+      const media = names(lines.slice(iMedia, iAttr));
+      const attr  = names(lines.slice(iAttr));
+      for (const t of [...light].sort()) {
+        const missing = [!media.has(t) && "the prefers-color-scheme block",
+                         !attr.has(t)  && 'the [data-theme="dark"] block'].filter(Boolean);
+        if (missing.length)
+          results.push({ component: "tokens/colors.css", theme: "dark",
+            rule: "LIGHT-ONLY TOKEN",
+            msg: `${t} has no dark value in ${missing.join(" or ")} — it keeps its ` +
+                 "light colour in dark mode, which usually lands as pale text on a " +
+                 "dark surface, or a bright panel in a dark page" });
+      }
+    }
+  } catch (e) { /* the token pass must never break the render audit */ }
+
   fs.mkdirSync(STATE, { recursive: true });
   fs.writeFileSync(path.join(STATE, "library-audit.json"),
     JSON.stringify({ ts: new Date().toISOString(), checked: list.length, fails: results }, null, 1));
