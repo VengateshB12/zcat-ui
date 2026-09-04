@@ -618,6 +618,14 @@ LAYOUT AND HIERARCHY
   table, a card list, or a master panel.
 
 COMPONENTS
+- COPY THE BLOCK, DO NOT REBUILD IT. docs/snippets.html holds the real markup
+  for the popup, full popup, empty state, loading skeleton, Sub Header,
+  Container Header, Container Side Menu, table and General Details — every one
+  lifted from a page that passes all four gates. Open it, copy the block, rename
+  the content, change the variant. Rebuilding a control from a written
+  description is why popups, empty states and detail views come out subtly wrong
+  EVERY time. If what you need is not in there, copy the closest sibling page and
+  delete what you do not need.
 - INVENT LAYOUTS FREELY. NEVER INVENT A CONTROL. This is the line, and it is
   not "use components for everything":
     LAYOUT AND PRESENTATION ARE YOURS. A custom card, a hero block, a stat
@@ -3682,6 +3690,7 @@ const COMPONENTS = {
            '<span style="display:inline-flex;gap:10px">' +
            '<a class="zc-btn" data-variant="outline" data-color="primary" data-size="small" href="template.html" target="_blank" rel="noopener"><span>Open template</span></a>' +
            '<button class="zc-btn" data-variant="fill" data-color="primary" data-size="small" type="button" onclick="copyFirstPrompt(this)"><span>Copy prompt</span></button>' +
+           ' <a class="zc-btn" data-variant="outline" data-size="small" href="snippets.html"><span>Copy these components</span></a>' +
            '</span></div>' +
            '<pre class="doc-prompt" style="margin-top:12px">' + esc(prompt) + '</pre></div>';
 

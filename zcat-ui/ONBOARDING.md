@@ -165,6 +165,13 @@ checkbox supports `data-indeterminate`) + `__box`/`__circle`/`__track` +
 | Carousel Dot | `.zc-carousel` > `__dot` (`data-state="active"`) — click-to-activate built in |
 | Rating | `.zc-rating` (interactive stars) — no Figma source, flagged |
 
+> **Copy the markup; do not rebuild it from this page.** Everything below is a
+> class REFERENCE — what the classes are called and what they do. It is not a
+> build spec. The real, gate-passing markup for the popup, empty state, loading,
+> Sub Header, Container Header, Container Side Menu, table and General Details
+> lives in `docs/snippets.html`. Reconstructing a component from the prose here
+> is what makes popups and detail views come out subtly wrong.
+
 ### Overlays — `src/components/overlay.css`
 `.zc-popup` (`data-size="small"` 414px, `[data-scroll]` shadows); `__header`
 (`__title`, `__desc` — **no close X, per Figma**), `__body` (real inputs),

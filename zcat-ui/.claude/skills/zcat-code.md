@@ -221,6 +221,11 @@ into ONE list, or an accordion per item revealing its table only when expanded.
 - **Section heading + its content live in ONE card** — the heading is the card's title, never a separate sibling card.
 - **Detail/settings pages are READ-ONLY.** Values shown via General Details / stat cards / read-only text + an "Edit" button opening a popup. Never editable inputs directly in a detail page body (toggles OK only for instant-apply flags). Destructive actions → "Danger Zone" at the bottom or in a three-dot menu.
 - **Create/Edit = popup** (`.zc-popup` + `.zc-popup-scrim`), per the Catalyst pattern — even if the wireframe drew it as a page. Escalate to a full-page popup only for genuine need (>~8 fields, wizard with Stepper, embedded tables/editors).
+- **COPY THE BLOCK, DO NOT REBUILD IT.** `docs/snippets.html` carries the real,
+  gate-passing markup for popup, full popup, empty state, skeleton, Sub Header,
+  Container Header, Container Side Menu, table and General Details. Copy it,
+  rename the content, change the variant. The prose below describes what the
+  copied block already does — it is a CHECKLIST, not a build spec.
 - **Popup anatomy:** NO close X anywhere (per Figma). Footer buttons: simple form = Cancel (grey, left) + Create (fill, right); wizard = Back (outline, far left) + spacer + Cancel (grey) + Continue (fill, right). Stepper/tabs go directly below the title in the header area, full width — never in the body. All form controls inside stretch to the popup body width.
 - **Empty states** → `.zc-empty` (illustration + heading + desc + actions). No Container Header, no search/filters above it, two buttons must have different labels.
 - **Tables:** `.zc-table-wrap` `data-style="stretch"` (full-bleed list pages) or `"boxy"` (inside cards/popups — popups are ALWAYS boxy). Column typing follows the data:

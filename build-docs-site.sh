@@ -27,7 +27,7 @@ cp -R zcat-ui/src "$OUT/src"
 # docs/index.html is DELIBERATELY excluded — it is the superseded long-scroll
 # page that documents markup which no longer exists. Shipping it would let the
 # stale docs win at /docs/.
-cp zcat-ui/docs/playground.html zcat-ui/docs/template.html "$OUT/docs/"
+cp zcat-ui/docs/playground.html zcat-ui/docs/template.html zcat-ui/docs/snippets.html "$OUT/docs/"
 cp -R zcat-ui/docs/icons "$OUT/docs/icons"
 cp zcat-ui/ONBOARDING.md "$OUT/docs/" 2>/dev/null || true
 
@@ -46,6 +46,7 @@ sed -e 's|href="\.\./zcat\.css|href="zcat.css|g' \
     -e 's|src="\.\./zcat\.js|src="zcat.js|g' \
     -e 's|src="icons/|src="docs/icons/|g' \
     -e 's|href="template\.html"|href="docs/template.html"|g' \
+    -e 's|href="snippets\.html"|href="docs/snippets.html"|g' \
     -e "s|'@template\.html'|'@docs/template.html'|g" \
     zcat-ui/docs/playground.html > "$OUT/index.html"
 

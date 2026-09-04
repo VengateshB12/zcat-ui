@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>zcat UI — copy these</title>
+<link rel="stylesheet" href="../zcat.css?v=118">
+<style>
+  body { color:var(--zc-text-primary, #1c2229); margin:0; padding:32px; background:var(--zc-bg-page, #f4f6f8); font-family:var(--zc-font, -apple-system, "Segoe UI", Roboto, sans-serif); }
+  .wrap { max-width:1000px; margin:0 auto; }
+  .sec { margin:40px 0 8px; padding-bottom:8px; border-bottom:1px solid var(--zc-border-subtle, #e3e7ea); }
+  .snip { margin:24px 0; padding:20px; background:var(--zc-bg-container, #ffffff);
+          border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:8px; }
+  .note { margin:6px 0 4px; color:var(--zc-text-secondary, #5a6672); }
+  .src  { margin:0 0 12px; color:var(--zc-text-tertiary, #8a949e); }
+  pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page, #f4f6f8);
+        border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:6px; }
+  code { font-family:var(--zc-font-mono, ui-monospace, monospace); font-size:12px; line-height:20px; }
+  .lede { padding:16px 20px; background:var(--zc-bg-container, #ffffff);
+          border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:8px; }
+</style></head><body><div class="wrap">
+<h1 class="zc-h2">Copy these</h1>
+<p class="zc-body-1 lede">Every block below is real markup lifted from a page that
+passes all four gates. <strong>Copy the block, rename the content, change the
+variant.</strong> Do not rebuild one from a written description — that is how
+popups, empty states and detail views come out subtly wrong every time. If what
+you need is not here, copy the closest sibling page and delete what you do not
+need.</p>
+<h2 class="zc-h4 sec">OVERLAYS</h2>
+<section class="snip">
+  <h3 class="zc-h6">Popup — create / edit</h3>
+  <p class="zc-body-3 note">The ONLY correct shape for create and edit. NO close X. Footer: Cancel grey left, action fill right. Every control stretches to the body width. Tabs or a Stepper go in the header, under the title — never in the body.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-popup-scrim&quot; id=&quot;wizard-scrim&quot; hidden&gt;
+  &lt;div class=&quot;zc-popup&quot;&gt;
+    &lt;div class=&quot;zc-popup__header&quot;&gt;
+      &lt;span class=&quot;zc-popup__title&quot;&gt;Create Database&lt;/span&gt;
+      &lt;span class=&quot;zc-popup__desc&quot;&gt;Provision a new managed database instance in four steps.&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;zc-popup__body&quot;&gt;
+      &lt;div class=&quot;zc-stepper&quot; id=&quot;wiz-stepper&quot;&gt;
+        &lt;div class=&quot;zc-stepper__step&quot; data-state=&quot;active&quot; data-wstep=&quot;1&quot;&gt;
+          &lt;span class=&quot;zc-stepper__number&quot;&gt;1&lt;/span&gt;
+          &lt;div class=&quot;zc-stepper__content&quot;&gt;&lt;span class=&quot;zc-stepper__label&quot;&gt;Engine&lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__divider&quot; data-state=&quot;default&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__step&quot; data-state=&quot;default&quot; data-wstep=&quot;2&quot;&gt;
+          &lt;span class=&quot;zc-stepper__number&quot;&gt;2&lt;/span&gt;
+          &lt;div class=&quot;zc-stepper__content&quot;&gt;&lt;span class=&quot;zc-stepper__label&quot;&gt;Configuration&lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__divider&quot; data-state=&quot;default&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__step&quot; data-state=&quot;default&quot; data-wstep=&quot;3&quot;&gt;
+          &lt;span class=&quot;zc-stepper__number&quot;&gt;3&lt;/span&gt;
+          &lt;div class=&quot;zc-stepper__content&quot;&gt;&lt;span class=&quot;zc-stepper__label&quot;&gt;Backup &amp;amp; Scale&lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__divider&quot; data-state=&quot;default&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-stepper__step&quot; data-state=&quot;default&quot; data-wstep=&quot;4&quot;&gt;
+          &lt;span class=&quot;zc-stepper__number&quot;&gt;4&lt;/span&gt;
+          &lt;div class=&quot;zc-stepper__content&quot;&gt;&lt;span class=&quot;zc-stepper__label&quot;&gt;Review&lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;tpl-wizard-step act&quot; data-step=&quot;1&quot;&gt;
+        &lt;div class=&quot;tpl-engine-title zc-subtitle-1&quot;&gt;Choose a database engine&lt;/div&gt;
+        &lt;div data-interactive class=&quot;zc-container-el tpl-engine-card&quot; data-state=&quot;selected&quot; data-engine=&quot;Aurora MySQL (Managed)&quot;&gt;
+          &lt;span class=&quot;tpl-chip&quot; style=&quot;background:var(--zc-shade-theme-4)&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; style=&quot;stroke:var(--zc-shade-theme-1)&quot;&gt;&lt;use href=&quot;#i-database&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+          &lt;div class=&quot;tpl-engine-text&quot;&gt;
+            &lt;span class=&quot;tpl-engine-title zc-subtitle-1&quot;&gt;Aurora MySQL (Managed)&lt;/span&gt;
+            &lt;span class=&quot;tpl-engine-desc zc-body-3 zc-text-secondary&quot;&gt;MySQL-compatible with up to 5x throughput, automated failover and patching.&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;label class=&quot;zc-radio&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;wiz-engine&quot; class=&quot;zc-radio__input&quot; checked&gt;&lt;span class=&quot;zc-radio__circle&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div data-interactive class=&quot;zc-container-el tpl-engine-card&quot; data-engine=&quot;MySQL&quot;&gt;
+          &lt;span class=&quot;tpl-chip&quot; style=&quot;background:var(--zc-shade-orange-4)&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; style=&quot;stroke:var(--zc-shade-orange-1)&quot;&gt;&lt;use href=&quot;#i-database&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+          &lt;div class=&quot;tpl-engine-text&quot;&gt;
+            &lt;span class=&quot;tpl-engine-title zc-subtitle-1&quot;&gt;MySQL&lt;/span&gt;
+            &lt;span class=&quot;tpl-engine-desc zc-body-3 zc-text-secondary&quot;&gt;Community MySQL 8.0 on dedicated instances you manage yourself.&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;label class=&quot;zc-radio&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;wiz-engine&quot; class=&quot;zc-radio__input&quot;&gt;&lt;span class=&quot;zc-radio__circle&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div data-interactive class=&quot;zc-container-el tpl-engine-card&quot; data-engine=&quot;PostgreSQL&quot;&gt;
+          &lt;span class=&quot;tpl-chip&quot; style=&quot;background:var(--zc-shade-blue-4)&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; style=&quot;stroke:var(--zc-shade-blue-1)&quot;&gt;&lt;use href=&quot;#i-database&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+          &lt;div class=&quot;tpl-engine-text&quot;&gt;
+            &lt;span class=&quot;tpl-engine-title zc-subtitle-1&quot;&gt;PostgreSQL&lt;/span&gt;
+            &lt;span class=&quot;tpl-engine-desc zc-body-3 zc-text-secondary&quot;&gt;PostgreSQL 16 with full extension support and logical replication.&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;label class=&quot;zc-radio&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;wiz-engine&quot; class=&quot;zc-radio__input&quot;&gt;&lt;span class=&quot;zc-radio__circle&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;tpl-wizard-step&quot; data-step=&quot;2&quot;&gt;
+        &lt;div class=&quot;zc-input-group&quot;&gt;
+          &lt;label class=&quot;zc-label&quot;&gt;Database Name&lt;/label&gt;
+          &lt;div class=&quot;zc-input-wrap&quot; data-size=&quot;default&quot; id=&quot;wiz-name-wrap&quot;&gt;
+            &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; id=&quot;wiz-name&quot; placeholder=&quot;e.g. orders-prod&quot;&gt;
+  &lt;!-- … full block in zcat-ui/docs/template.html --&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Full-page popup</h3>
+  <p class="zc-body-3 note">Only for &gt;8 fields, a wizard, or an embedded table. Unlike the small popup this one DOES close from its header. Page content goes inside __sheet.</p>
+  <p class="zc-body-5 src">verified in <code>pages/samples/pipelines-fullpopup.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-fullpopup&quot;&gt;
+  &lt;div class=&quot;zc-fullpopup__header&quot;&gt;
+    &lt;span class=&quot;zc-fullpopup__service&quot;&gt;
+      &lt;img src=&quot;/zcat-ui/docs/icons/Pipeline -color.svg&quot; alt=&quot;&quot;&gt;
+      &lt;span class=&quot;zc-fullpopup__title&quot;&gt;Pipelines&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;ghost-grey&quot; data-size=&quot;small&quot; data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; type=&quot;button&quot; aria-label=&quot;Close&quot; onclick=&quot;window.history.length &gt; 1 ? window.history.back() : window.location.assign(&#x27;../directdb/databases.html&#x27;)&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-x&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-fullpopup__sheet&quot;&gt;
+    &lt;div class=&quot;pl-empty-region&quot;&gt;
+      &lt;div class=&quot;zc-empty&quot;&gt;
+        &lt;div class=&quot;zc-empty__art&quot;&gt;&lt;img src=&quot;/zcat-ui/docs/icons/Empty State Illustration.svg&quot; alt=&quot;&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-empty__content&quot;&gt;
+          &lt;div class=&quot;zc-empty__heading&quot;&gt;Create your first pipeline&lt;/div&gt;
+          &lt;div class=&quot;zc-empty__desc&quot;&gt;Create your first pipeline to automate the build, test and deploy processes.&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;zc-empty__actions&quot;&gt;
+          &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot;&gt;Create Pipeline&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<h2 class="zc-h4 sec">STATES</h2>
+<section class="snip">
+  <h3 class="zc-h6">Empty state</h3>
+  <p class="zc-body-3 note">Icon, heading, one line of help, one action. Never a bare &#x27;No data&#x27;. Every list page needs one, drawn in the wireframe or not.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/databases-empty.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-empty&quot;&gt;
+  &lt;div class=&quot;zc-empty__art&quot;&gt;&lt;img src=&quot;/zcat-ui/docs/icons/Empty State Illustration.svg&quot; alt=&quot;&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-empty__content&quot;&gt;
+    &lt;div class=&quot;zc-empty__heading&quot;&gt;No databases yet&lt;/div&gt;
+    &lt;div class=&quot;zc-empty__desc&quot;&gt;Spin up a MySQL, PostgreSQL, or managed Aurora database in minutes. Connection strings, backups, and replicas are handled for you.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-empty__actions&quot;&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;outline&quot; data-color=&quot;primary&quot; type=&quot;button&quot;&gt;View Documentation&lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot; onclick=&quot;window.location.href=&#x27;./databases.html?create=1&#x27;&quot;&gt;Create Database&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Loading — skeleton</h3>
+  <p class="zc-body-3 note">Match the shape of what is coming: rows for a table, blocks for cards. Never a spinner over a blank page.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-skeleton&quot;&#x27; + (s.variant === &#x27;Secondary&#x27; ? &#x27; data-variant=&quot;secondary&quot;&#x27; : &#x27;&#x27;) +
+        (s.animated ? &#x27;&#x27; : &#x27; data-static&#x27;) + &#x27; style=&quot;width:480px;max-width:100%&quot;&gt;&#x27;;
+for (var i = 0; i &lt; parseInt(s.lines, 10); i++) h += &#x27;&lt;span class=&quot;zc-skeleton__bar&quot; style=&quot;width:&#x27; + widths[i % widths.length] + &#x27;&quot;&gt;&lt;/span&gt;&#x27;;
+return h + &#x27;&lt;/div&gt;</code></pre>
+</section>
+<h2 class="zc-h4 sec">PAGE FURNITURE</h2>
+<section class="snip">
+  <h3 class="zc-h6">Sub Header — detail page</h3>
+  <p class="zc-body-3 note">Back Nav + entity name + status badge. Primary tabs live HERE, never floating in the container. Tabs carry no icons.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-layout__subheader&quot;&gt;
+  &lt;span class=&quot;zc-layout__subheader-left&quot;&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;ghost-grey&quot; data-size=&quot;small&quot; data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; type=&quot;button&quot; aria-label=&quot;Back to databases&quot; onclick=&quot;window.location.href=&#x27;./databases.html&#x27;&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-left&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;span class=&quot;zc-layout__subheader-title&quot;&gt;orders-prod&lt;/span&gt;
+    &lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;
+  &lt;/span&gt;
+  &lt;span class=&quot;zc-layout__subheader-right&quot;&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; data-size=&quot;small&quot; type=&quot;button&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-refresh&quot;/&gt;&lt;/svg&gt;Refresh
+    &lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;outline&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot; onclick=&quot;ddbToast(&#x27;Connection details&#x27;, &#x27;Host, port and credentials are on the Overview tab.&#x27;, &#x27;info&#x27;)&quot;&gt;Connect&lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;ghost&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-help&quot;/&gt;&lt;/svg&gt;Help
+    &lt;/button&gt;
+  &lt;/span&gt;
+  &lt;div class=&quot;zc-tabs zc-layout__subheader-tabs&quot; data-type=&quot;primary&quot; id=&quot;detail-tabs&quot;&gt;
+      &lt;button class=&quot;zc-tab&quot; data-state=&quot;active&quot; data-panel=&quot;overview&quot; type=&quot;button&quot;&gt;Overview&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;console&quot; type=&quot;button&quot;&gt;SQL Console&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;schema&quot; type=&quot;button&quot;&gt;Schema&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;backups&quot; type=&quot;button&quot;&gt;Backups&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;replicas&quot; type=&quot;button&quot;&gt;Replicas&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;monitoring&quot; type=&quot;button&quot;&gt;Monitoring&lt;/button&gt;
+      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;settings&quot; type=&quot;button&quot;&gt;Settings&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Container Header — bar above a table</h3>
+  <p class="zc-body-3 note">Never leave an action button floating alone. Title/search on the left, actions on the right.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-cheader&quot;&gt;
+  &lt;div class=&quot;zc-cheader__left zc-cheader__left--row&quot;&gt;
+    &lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;default&quot; style=&quot;width:300px&quot;&gt;
+      &lt;svg class=&quot;zc-input__icon zc-input__icon--left&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-search&quot;/&gt;&lt;/svg&gt;
+      &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; placeholder=&quot;Search databases&quot; data-filter=&quot;#db-rows tr&quot;&gt;
+      &lt;svg class=&quot;zc-input__clear&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-x&quot;/&gt;&lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-cheader__right&quot;&gt;
+    &lt;div class=&quot;zc-select-shell zc-cheader__filter&quot;&gt;
+      &lt;div class=&quot;zc-input-wrap zc-select-wrap&quot; data-size=&quot;default&quot;&gt;
+        &lt;span class=&quot;zc-input zc-select__value&quot;&gt;All Engines&lt;/span&gt;
+        &lt;svg class=&quot;zc-select__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;zc-menu&quot; data-size=&quot;small&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;All Engines&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;All Engines&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Aurora MySQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Aurora MySQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;MySQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;MySQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;PostgreSQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;PostgreSQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+      &lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;zc-select-shell zc-cheader__filter&quot;&gt;
+      &lt;div class=&quot;zc-input-wrap zc-select-wrap&quot; data-size=&quot;default&quot;&gt;
+        &lt;span class=&quot;zc-input zc-select__value&quot;&gt;All Status&lt;/span&gt;
+        &lt;svg class=&quot;zc-select__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;zc-menu&quot; data-size=&quot;small&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;All Status&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;All Status&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Available&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Available&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Provisioning&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Provisioning&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Modifying&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Modifying&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Stopped&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Stopped&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+      &lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; data-content=&quot;icon&quot; type=&quot;button&quot; aria-label=&quot;Refresh&quot; data-tooltip=&quot;Refresh&quot; data-tooltip-side=&quot;bottom&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-refresh&quot;/&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot; id=&quot;create-db&quot;&gt;
+      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-plus&quot;/&gt;&lt;/svg&gt;Create Database
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Container Side Menu</h3>
+  <p class="zc-body-3 note">ONE per page. A second vertical list is RECORDS — a table or card list, not navigation.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-csm&quot;&gt;
+  &lt;div class=&quot;zc-csm__header&quot;&gt;&lt;span class=&quot;zc-csm__title&quot;&gt;Tables&lt;/span&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot; onclick=&quot;ddbToast(&#x27;New table&#x27;, &#x27;Table designer opens here in the full product.&#x27;, &#x27;info&#x27;)&quot;&gt;New Table&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;small&quot;&gt;
+    &lt;svg class=&quot;zc-input__icon zc-input__icon--left&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-search&quot;/&gt;&lt;/svg&gt;
+    &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; placeholder=&quot;Search tables&quot;&gt;
+    &lt;svg class=&quot;zc-input__clear&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-x&quot;/&gt;&lt;/svg&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-csm__list&quot; id=&quot;schema-list&quot;&gt;
+    &lt;button class=&quot;zc-csm__item&quot; type=&quot;button&quot; data-state=&quot;selected&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-db&quot;/&gt;&lt;/svg&gt;orders&lt;/button&gt;
+    &lt;button class=&quot;zc-csm__item&quot; type=&quot;button&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-db&quot;/&gt;&lt;/svg&gt;customers&lt;/button&gt;
+    &lt;button class=&quot;zc-csm__item&quot; type=&quot;button&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-db&quot;/&gt;&lt;/svg&gt;products&lt;/button&gt;
+    &lt;button class=&quot;zc-csm__item&quot; type=&quot;button&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-db&quot;/&gt;&lt;/svg&gt;invoices&lt;/button&gt;
+    &lt;button class=&quot;zc-csm__item&quot; type=&quot;button&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-db&quot;/&gt;&lt;/svg&gt;audit_log&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<h2 class="zc-h4 sec">DATA</h2>
+<section class="snip">
+  <h3 class="zc-h6">Table — stretch (alone on the page)</h3>
+  <p class="zc-body-3 note">The WHOLE ROW clicks: data-rowlink on the &lt;tr&gt;, entity cell is plain text. Status is a Badge. Use data-style=&quot;boxy&quot; instead when the table shares the page with cards, or sits in a popup.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-table-wrap&quot; data-style=&quot;stretch&quot;&gt;
+  &lt;table class=&quot;zc-table&quot;&gt;
+    &lt;thead class=&quot;zc-table__head&quot;&gt;&lt;tr&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Name&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Engine&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Status&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Region&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Compute&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Storage&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Connections&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Created&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th zc-table__th--actions&quot;&gt;&lt;/th&gt;
+    &lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody id=&quot;db-rows&quot;&gt;
+      &lt;tr class=&quot;zc-table__row&quot;&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;orders-prod&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;Aurora MySQL 3.0&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;us-east-1&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;2 vCPU / 8 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;41 / 100 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;64&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;May 12, 2026&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class=&quot;zc-table__row&quot;&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;analytics-pg&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;PostgreSQL 16&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;eu-west-1&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;4 vCPU / 16 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;132 / 250 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;22&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;Jun 2, 2026&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class=&quot;zc-table__row&quot;&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;sessions-cache&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;MySQL 8.0&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;warning&quot;&gt;Modifying&lt;/span&gt;&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;ap-south-1&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;1 vCPU / 4 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;12 / 50 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;8&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;Jul 19, 2026&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class=&quot;zc-table__row&quot;&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;billing-staging&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;PostgreSQL 16&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;info&quot;&gt;Provisioning&lt;/span&gt;&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;us-west-2&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;2 vCPU / 8 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;0 / 80 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;0&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;Aug 9, 2026&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr class=&quot;zc-table__row&quot;&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;audit-archive&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;MySQL 8.0&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;grey&quot;&gt;Stopped&lt;/span&gt;&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;us-east-2&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;1 vCPU / 4 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;67 / 100 GB&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;0&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td&quot;&gt;Sep 30, 2025&lt;/td&gt;
+        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+      &lt;/table&gt;
+      &lt;div class=&quot;zc-empty&quot; data-empty-for=&quot;#db-rows&quot; hidden&gt;
+        &lt;div class=&quot;zc-empty__content&quot;&gt;
+          &lt;span class=&quot;zc-empty__heading&quot;&gt;No databases match that search&lt;/span&gt;
+          &lt;span class=&quot;zc-empty__desc&quot;&gt;Check the spelling, or clear the search to see all of them again.&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;table style=&quot;display:none&quot;&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">General Details — read-only detail</h3>
+  <p class="zc-body-3 note">Detail pages are READ-ONLY. Values display here; an Edit button opens a popup.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <pre><code>&lt;div class=&quot;zc-gdetails&quot; style=&quot;width:100%&quot;&gt;
+  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Region&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;us-east-1 · N. Virginia&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;VPC&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;vpc-0a12b3cd&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Created&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;May 12, 2026&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Maintenance window&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;Sun 02:00–02:30 UTC&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Deletion protection&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;Enabled&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+</div></body></html>

@@ -745,6 +745,46 @@ function __zcatAudit() {
         "svg use");
   }
 
+  /* ── 18g8. Create and edit are popups, never pages ──────────────────
+     This has been a written rule for a long time and nothing checked it, so a
+     build shipped postgres-create.html — a whole PAGE for a create form — and
+     scored 95/100 with five of five gates green. The rule exists because
+     leaving the list to fill in a form loses your place and your context; a
+     popup keeps both, and closing it puts you back where you were.
+
+     What counts: editable fields sitting in the page's container rather than
+     inside a popup. Search and filter controls do not count — they act ON the
+     list rather than replacing it — and neither does an inline edit inside a
+     row or a Key Value field, which is editing in place, not a form. */
+  {
+    const cont = document.querySelector(".zc-layout__container");
+    if (cont) {
+      const fields = [...cont.querySelectorAll("input, textarea, select")]
+        .filter(vis)
+        .filter(el => !el.closest(".zc-popup, .zc-fullpopup, .zc-popup-scrim"))
+        .filter(el => !el.closest(".zc-search-wrap, .zc-cheader__filter, .zc-kvfield, " +
+                                 ".zc-inline-edit, .zc-table, .zc-pagination"))
+        .filter(el => {
+          const t = (el.getAttribute("type") || "text").toLowerCase();
+          if (["checkbox", "radio", "hidden", "submit", "button"].includes(t)) return false;
+          const ph = (el.getAttribute("placeholder") || "").toLowerCase();
+          const lbl = (el.getAttribute("aria-label") || "").toLowerCase();
+          return !/search|filter|find/.test(ph + " " + lbl);
+        });
+      if (fields.length >= 3) {
+        const names = fields.slice(0, 4).map(f =>
+          f.getAttribute("placeholder") || f.getAttribute("name") ||
+          f.getAttribute("aria-label") || f.tagName.toLowerCase());
+        fail("FORM ON A PAGE",
+          `${fields.length} editable fields sit in the container instead of a popup ` +
+          `(${names.join(", ")}) — create and edit are ALWAYS popups. Leaving the ` +
+          "list to fill in a form loses your place; a popup keeps the list behind " +
+          "it and closing it puts you back. A detail page is read-only",
+          ".zc-layout__container");
+      }
+    }
+  }
+
   /* ── 18h. The stylesheet link must carry a version ──────────────────
      zcat.css is a list of @imports. The imports are versioned, but if the page
      asks for zcat.css itself with no ?v=, the browser serves a CACHED copy of
