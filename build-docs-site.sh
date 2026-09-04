@@ -44,7 +44,9 @@ cp -R zcat-ui/src "$OUT/src"
 # docs/index.html is DELIBERATELY excluded — it is the superseded long-scroll
 # page that documents markup which no longer exists. Shipping it would let the
 # stale docs win at /docs/.
-cp zcat-ui/docs/playground.html zcat-ui/docs/template.html "$OUT/docs/"
+cp zcat-ui/docs/playground.html "$OUT/docs/"
+sed -E "s/zcat\.(css|js)\?v=[0-9a-z]+/zcat.\1?v=$CSSV/g" \
+    zcat-ui/docs/template.html > "$OUT/docs/template.html"
 
 # snippets.html computes its own stylesheet hash from the SOURCE css, but the
 # shell we serve is rewritten here — so its body can change while that hash does
@@ -78,6 +80,8 @@ sed -e 's|href="\.\./zcat\.css|href="zcat.css|g' \
     -e 's|src="icons/|src="docs/icons/|g' \
     -e 's|href="template\.html"|href="docs/template.html"|g' \
     -e "s|href=\"snippets\.html\"|href=\"docs/snippets.html?v=$SNIPV\"|g" \
+    -e "s|zcat\.css?v=[0-9a-z]*|zcat.css?v=$CSSV|g" \
+    -e "s|zcat\.js?v=[0-9a-z]*|zcat.js?v=$CSSV|g" \
     -e "s|'@template\.html'|'@docs/template.html'|g" \
     zcat-ui/docs/playground.html > "$OUT/index.html"
 
