@@ -44,8 +44,20 @@ EXCLUDE = {
 }
 
 def extract(cls, cap=4200):
-    """First balanced element carrying `cls` that is real markup, and is not a
-       look-alike of something else."""
+    """The CLEANEST instance of `cls` across the reference pages.
+
+    Taking the FIRST match kept picking special-purpose instances: the first
+    .zc-btn on a page is the side menu's collapse chevron (which is absolutely
+    positioned, so its preview floated off to the right), the first
+    .zc-select-shell is the ghost dropdown, the first .zc-input-wrap is the
+    topbar search. Every one had the right class and the wrong shape to copy.
+
+    A per-class blocklist was whack-a-mole. The general rule is simpler: the
+    instance with the FEWEST extra classes on its root is the plain one, and the
+    plain one is what belongs in a copy-this reference. Modifier classes are
+    exactly what makes an instance special, so counting them ranks candidates
+    without anyone having to know the special cases in advance."""
+    best = None                      # (extra_class_count, markup, path)
     for path in SOURCES:
         try: s = open(path, encoding="utf-8").read()
         except OSError: continue
@@ -82,9 +94,24 @@ def extract(cls, cap=4200):
                         b = b.replace("src='" + _pre, "src='icons/")
                     if len(b) > cap:
                         b = b[:cap].rsplit("\n", 1)[0] + f"\n<!-- … full block in {path} -->"
-                    return b, path
+                    # A hidden instance previews as nothing at all, so it is
+                    # never the one to copy — the Badge block picked one and
+                    # showed an empty box.
+                    # …except overlays, which ship hidden BY DESIGN. The popup
+                    # scrim is always <div class="zc-popup-scrim" hidden>, and
+                    # rejecting it dropped the popup block entirely. The preview
+                    # CSS opens overlays anyway.
+                    if (re.search(r'\shidden(?:\s|=|>)', m.group(0))
+                            and "popup" not in cls):
+                        break
+                    root = re.search(r'class="([^"]+)"', m.group(0))
+                    extra = len([c for c in root.group(1).split() if c != cls]) if root else 9
+                    if best is None or extra < best[0]:
+                        best = (extra, b, path)
+                    if extra == 0:
+                        return b, path         # nothing plainer exists
                     break
-    return None, None
+    return (best[1], best[2]) if best else (None, None)
 
 def glue_for(block, path):
     """The page-glue CSS a block needs to render.
@@ -134,7 +161,7 @@ SPEC = [
   ("Key Value field", "zc-kvfield", "Editing in place. Not a form — a form belongs in a popup."),
   ("Radio", "zc-radio", "Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else."),
   ("Toggle", "zc-toggle", "For instant-apply flags. A toggle that needs a Save button should be a checkbox."),
-  ("Select", "zc-select-shell", "Never a bare <select>."),
+  ("Dropdown (Select)", "zc-select-shell", "Never a bare <select>. The ghost variant adds .zc-ghostdd-shell."),
   ("Tabs", "zc-tabs", "Exactly ONE tab is active and the visible content is that tab's. Sub Header tabs carry NO icons."),
   ("Link box", "zc-linkbox", "Copy icon shows a Copy tooltip on hover, Link copied on click."),
   ("Three-dot menu", "zc-menu", "The real menu component, not a hand-made dropdown. It flips up when it would be clipped."),
@@ -146,6 +173,9 @@ SPEC = [
  ]),
  ("STATES", [
   ("Empty state", "zc-empty", "Icon, heading, one line of help, one action. Never a bare 'No data'. Every list page needs one, drawn in the wireframe or not."),
+ ]),
+ ("THE PAGE ITSELF", [
+  ("Layout shell", "zc-layout", "EVERY screen starts here: service rail, topbar, side menu, Sub Header, container. Never build a page without it — copy docs/template.html for the first page and a sibling for the rest."),
  ]),
  ("PAGE FURNITURE", [
   ("Sub Header", "zc-layout__subheader", "Back Nav + entity name + status badge. Primary tabs live HERE, never floating in the container, and carry no icons."),
@@ -247,6 +277,16 @@ DOC = f'''<!DOCTYPE html>
                            display:block; padding:0; }}
   .live .zc-popup {{ max-width:414px; margin:0; }}
   .live .zc-fullpopup {{ position:static; inset:auto; }}
+  /* Overlays ship CLOSED — a popup scrim carries `hidden`, a menu is absolutely
+     positioned and shut. Both previewed as an empty box, and the menu's chevron
+     escaped the box entirely. base.css now makes [hidden] win everywhere, which
+     is right, so the preview has to out-specify it deliberately: these selectors
+     are 0-2-1 against its 0-1-0, so they win on specificity, not by accident. */
+  .live .zc-popup-scrim[hidden],
+  .live .zc-popup[hidden] {{ display:block !important; }}
+  .live .zc-menu {{ position:static !important; display:block !important;
+                    inset:auto !important; transform:none !important; }}
+  .live .zc-menu[hidden] {{ display:block !important; }}
   pre {{ margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
          border:1px solid var(--zc-border-subtle); border-radius:6px; }}
   code {{ font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
