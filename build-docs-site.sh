@@ -44,7 +44,14 @@ cp -R zcat-ui/src "$OUT/src"
 # docs/index.html is DELIBERATELY excluded — it is the superseded long-scroll
 # page that documents markup which no longer exists. Shipping it would let the
 # stale docs win at /docs/.
-cp zcat-ui/docs/playground.html zcat-ui/docs/template.html zcat-ui/docs/snippets.html "$OUT/docs/"
+cp zcat-ui/docs/playground.html zcat-ui/docs/template.html "$OUT/docs/"
+
+# snippets.html computes its own stylesheet hash from the SOURCE css, but the
+# shell we serve is rewritten here — so its body can change while that hash does
+# not, and the URL keeps serving a cached copy. Point every page at the SAME
+# build hash instead, so one value covers the shell, its imports and the links.
+sed -E "s/zcat\.css\?v=[a-z0-9]+/zcat.css?v=$CSSV/g" \
+    zcat-ui/docs/snippets.html > "$OUT/docs/snippets.html"
 cp -R zcat-ui/docs/icons "$OUT/docs/icons"
 cp zcat-ui/ONBOARDING.md "$OUT/docs/" 2>/dev/null || true
 
