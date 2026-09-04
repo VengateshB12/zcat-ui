@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en" data-theme="light"><head><meta charset="utf-8">
 <title>zcat UI — copy these</title>
 <link rel="stylesheet" href="../zcat.css?v=118">
 <style>
-  body { color:var(--zc-text-primary, #1c2229); margin:0; padding:32px; background:var(--zc-bg-page, #f4f6f8); font-family:var(--zc-font, -apple-system, "Segoe UI", Roboto, sans-serif); }
+  body { color:var(--zc-text-primary); margin:0; padding:32px; background:var(--zc-bg-page); font-family:var(--zc-font, -apple-system, "Segoe UI", Roboto, sans-serif); }
   .wrap { max-width:1000px; margin:0 auto; }
-  .sec { margin:40px 0 8px; padding-bottom:8px; border-bottom:1px solid var(--zc-border-subtle, #e3e7ea); }
-  .snip { margin:24px 0; padding:20px; background:var(--zc-bg-container, #ffffff);
-          border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:8px; }
-  .note { margin:6px 0 4px; color:var(--zc-text-secondary, #5a6672); }
-  .src  { margin:0 0 12px; color:var(--zc-text-tertiary, #8a949e); }
-  pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page, #f4f6f8);
-        border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:6px; }
+  .sec { margin:40px 0 8px; padding-bottom:8px; border-bottom:1px solid var(--zc-border-subtle); }
+  .snip { margin:24px 0; padding:20px; background:var(--zc-bg-container);
+          border:1px solid var(--zc-border-subtle); border-radius:8px; }
+  .note { margin:6px 0 4px; color:var(--zc-text-secondary); }
+  .src  { margin:0 0 12px; color:var(--zc-text-tertiary); }
+  pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
+        border:1px solid var(--zc-border-subtle); border-radius:6px; }
   code { font-family:var(--zc-font-mono, ui-monospace, monospace); font-size:12px; line-height:20px; }
-  .lede { padding:16px 20px; background:var(--zc-bg-container, #ffffff);
-          border:1px solid var(--zc-border-subtle, #e3e7ea); border-radius:8px; }
+  .lede { padding:16px 20px; background:var(--zc-bg-container);
+          border:1px solid var(--zc-border-subtle); border-radius:8px; }
+  .live { padding:16px; margin-bottom:12px; background:var(--zc-bg-page);
+          border:1px dashed var(--zc-border-subtle); border-radius:6px; }
+  .live > * { max-width:100%; }
 </style></head><body><div class="wrap">
 <h1 class="zc-h2">Copy these</h1>
 <p class="zc-body-1 lede">Every block below is real markup lifted from a page that
@@ -23,6 +26,207 @@ variant.</strong> Do not rebuild one from a written description — that is how
 popups, empty states and detail views come out subtly wrong every time. If what
 you need is not here, copy the closest sibling page and delete what you do not
 need.</p>
+<h2 class="zc-h4 sec">EVERYDAY CONTROLS</h2>
+<section class="snip">
+  <h3 class="zc-h6">Label</h3>
+  <p class="zc-body-3 note">Wraps its text in a &lt;span&gt;. Never a bare &lt;label&gt;.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-state=&quot;disabled&quot;</code></p>
+  <div class="live"><label class="zc-label">Database Name</label></div>
+  <pre><code>&lt;label class=&quot;zc-label&quot;&gt;Database Name&lt;/label&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Text field</h3>
+  <p class="zc-body-3 note">The input always sits inside .zc-input-wrap — a bare &lt;input&gt; loses focus ring, states and dark mode.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;default&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-state=&quot;active&quot; data-state=&quot;disabled&quot; data-state=&quot;error&quot; data-state=&quot;hover&quot;</code></p>
+  <div class="live"><div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
+  <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+  <input class="zc-input" type="text" placeholder="Search Here">
+  <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;default&quot; style=&quot;width:390px&quot;&gt;
+  &lt;svg class=&quot;zc-input__icon zc-input__icon--left&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-search&quot;/&gt;&lt;/svg&gt;
+  &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; placeholder=&quot;Search Here&quot;&gt;
+  &lt;svg class=&quot;zc-input__clear&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-x&quot;/&gt;&lt;/svg&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Button</h3>
+  <p class="zc-body-3 note">ONE fill button per screen. Per-row actions are links or ghost.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; data-size=&quot;large&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-variant=&quot;fill&quot; data-variant=&quot;ghost&quot; data-variant=&quot;ghost-grey&quot; data-variant=&quot;gradient&quot; data-variant=&quot;grey&quot;</code></p>
+  <div class="live"><button class="zc-btn zc-sidemenu__expand" data-variant="grey" data-size="small" data-content="icon" data-radius="rounded" aria-label="Toggle side menu">
+  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-right"/></svg>
+</button></div>
+  <pre><code>&lt;button class=&quot;zc-btn zc-sidemenu__expand&quot; data-variant=&quot;grey&quot; data-size=&quot;small&quot; data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; aria-label=&quot;Toggle side menu&quot;&gt;
+  &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-right&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Badge</h3>
+  <p class="zc-body-3 note">Every table status is a Badge. Map each status value to a semantic colour.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;disabled&quot; data-color=&quot;grey&quot; data-color=&quot;info&quot; data-color=&quot;purple&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-size=&quot;dot&quot; data-size=&quot;small&quot; data-type=&quot;secondary&quot;</code></p>
+  <div class="live"><span class="zc-badge" data-type="secondary" data-color="success" id="sh-badge" hidden>Available</span></div>
+  <pre><code>&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot; id=&quot;sh-badge&quot; hidden&gt;Available&lt;/span&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Checkbox</h3>
+  <p class="zc-body-3 note">Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
+  <div class="live"><label class="zc-checkbox"><input type="checkbox" class="zc-checkbox__input"><span class="zc-checkbox__box"></span></label></div>
+  <pre><code>&lt;label class=&quot;zc-checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;zc-checkbox__input&quot;&gt;&lt;span class=&quot;zc-checkbox__box&quot;&gt;&lt;/span&gt;&lt;/label&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Radio</h3>
+  <p class="zc-body-3 note">Same label-weight rule as the checkbox.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
+  <div class="live"><label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input" checked><span class="zc-radio__circle"></span></label></div>
+  <pre><code>&lt;label class=&quot;zc-radio&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;wiz-engine&quot; class=&quot;zc-radio__input&quot; checked&gt;&lt;span class=&quot;zc-radio__circle&quot;&gt;&lt;/span&gt;&lt;/label&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Toggle</h3>
+  <p class="zc-body-3 note">For instant-apply flags. A toggle that needs a Save button should be a checkbox.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
+  <div class="live"><label class="zc-toggle">
+  <span class="zc-toggle__row">
+    <input type="checkbox" class="zc-toggle__input" id="wiz-backups" checked>
+    <span class="zc-toggle__track"></span>
+  </span>
+</label></div>
+  <pre><code>&lt;label class=&quot;zc-toggle&quot;&gt;
+  &lt;span class=&quot;zc-toggle__row&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; class=&quot;zc-toggle__input&quot; id=&quot;wiz-backups&quot; checked&gt;
+    &lt;span class=&quot;zc-toggle__track&quot;&gt;&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/label&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Select</h3>
+  <p class="zc-body-3 note">Never a bare &lt;select&gt;.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-menu=&quot;action&quot;</code></p>
+  <div class="live"><div class="zc-select-shell zc-ghostdd-shell">
+  <div class="zc-ghostdd zc-select-wrap">
+    <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">A</span></span>
+    <span class="zc-ghostdd__box"><span class="zc-ghostdd__label">Acme Analytics</span>
+      <svg class="zc-ghostdd__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg></span>
+  </div>
+  <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+    <div class="zc-menu__item" role="option" data-value="Acme Analytics" aria-selected="true"><span class="zc-menu__label">Acme Analytics</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+    <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+  </div></div>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-select-shell zc-ghostdd-shell&quot;&gt;
+  &lt;div class=&quot;zc-ghostdd zc-select-wrap&quot;&gt;
+    &lt;span class=&quot;zc-ghostdd__avatar&quot;&gt;&lt;span class=&quot;zc-ghostdd__avatar-box&quot;&gt;A&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;zc-ghostdd__box&quot;&gt;&lt;span class=&quot;zc-ghostdd__label&quot;&gt;Acme Analytics&lt;/span&gt;
+      &lt;svg class=&quot;zc-ghostdd__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-menu&quot; data-size=&quot;default&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+    &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Acme Analytics&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Acme Analytics&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Zylker Store&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Zylker Store&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Tabs</h3>
+  <p class="zc-body-3 note">Exactly ONE tab is active and the visible content is that tab&#x27;s. Sub Header tabs carry NO icons.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-type=&quot;code&quot; data-type=&quot;primary&quot; data-type=&quot;secondary&quot;</code></p>
+  <div class="live"><div class="zc-tabs zc-layout__subheader-tabs" data-type="primary" role="tablist"
+     id="sh-tabs" hidden>
+  <button class="zc-tab" type="button">Overview</button>
+  <button class="zc-tab" type="button" data-state="active">Monitoring</button>
+  <button class="zc-tab" type="button">Backups</button>
+  <button class="zc-tab" type="button">Settings</button>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-tabs zc-layout__subheader-tabs&quot; data-type=&quot;primary&quot; role=&quot;tablist&quot;
+     id=&quot;sh-tabs&quot; hidden&gt;
+  &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Overview&lt;/button&gt;
+  &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot; data-state=&quot;active&quot;&gt;Monitoring&lt;/button&gt;
+  &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Backups&lt;/button&gt;
+  &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Settings&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Link box</h3>
+  <p class="zc-body-3 note">Copy icon shows a Copy tooltip on hover, Link copied on click.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;small&quot; data-state=&quot;hover&quot;</code></p>
+  <div class="live"><div class="zc-linkbox"><span class="zc-linkbox__inline-label">Host</span><span class="zc-linkbox__text" data-overflow="ellipsis">orders-prod.directdb.zcatalyst.com</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div></div>
+  <pre><code>&lt;div class=&quot;zc-linkbox&quot;&gt;&lt;span class=&quot;zc-linkbox__inline-label&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;zc-linkbox__text&quot; data-overflow=&quot;ellipsis&quot;&gt;orders-prod.directdb.zcatalyst.com&lt;/span&gt;&lt;span class=&quot;zc-linkbox__copy&quot; title=&quot;Copy&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-copy&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Three-dot menu</h3>
+  <p class="zc-body-3 note">The real menu component — not a hand-made dropdown. It flips up when clipped.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-drop=&quot;up&quot; data-size=&quot;small&quot;</code></p>
+  <div class="live"><div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+  <div class="zc-menu__item" role="option" data-value="Acme Analytics" aria-selected="true"><span class="zc-menu__label">Acme Analytics</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+  <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+</div></div></div>
+  <pre><code>&lt;div class=&quot;zc-menu&quot; data-size=&quot;default&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+  &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Acme Analytics&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Acme Analytics&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+  &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Zylker Store&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Zylker Store&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Key Value field</h3>
+  <p class="zc-body-3 note">Editing in place. Not a form — a form belongs in a popup.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-state=&quot;error&quot; data-state=&quot;hover&quot;</code></p>
+  <div class="live"><div class="zc-kvfield"${rowState}>\n`;
+if (s.showDrag) r += '    <span class="zc-kvfield__drag" draggable="true" aria-label="Drag to reorder">' + '<i></i>'.repeat(6) + '</span>\n';
+r += '    <div class="zc-kvfield__fields">\n';
+r += `      <div class="zc-input-wrap" data-size="default"${keyState}><input class="zc-input" placeholder="Enter Label Text"${dis}></div>\n`;
+r += '      ' + selectWithMenu(['String', 'Number', 'Boolean', 'JSON'], 'default', 'Select List', disAttr) + '\n';
+if (s.showThird) r += '      ' + selectWithMenu(['Header', 'Query', 'Body'], 'default', 'Select List', disAttr) + '\n';
+r += '    </div>\n';
+if (s.showMinus) r += `    <button class="zc-kvfield__btn zc-kvfield__minus" type="button" aria-label="Remove row"${dis}>${svg(I.minus)}</button>\n`;
+if (s.showAdd) r += `    <button class="zc-kvfield__btn zc-kvfield__add" type="button" aria-label="Add row"${dis}>${svg(I.plus)}</button>\n`;
+r += '  </div></div>
+  <pre><code>&lt;div class=&quot;zc-kvfield&quot;${rowState}&gt;\n`;
+if (s.showDrag) r += &#x27;    &lt;span class=&quot;zc-kvfield__drag&quot; draggable=&quot;true&quot; aria-label=&quot;Drag to reorder&quot;&gt;&#x27; + &#x27;&lt;i&gt;&lt;/i&gt;&#x27;.repeat(6) + &#x27;&lt;/span&gt;\n&#x27;;
+r += &#x27;    &lt;div class=&quot;zc-kvfield__fields&quot;&gt;\n&#x27;;
+r += `      &lt;div class=&quot;zc-input-wrap&quot; data-size=&quot;default&quot;${keyState}&gt;&lt;input class=&quot;zc-input&quot; placeholder=&quot;Enter Label Text&quot;${dis}&gt;&lt;/div&gt;\n`;
+r += &#x27;      &#x27; + selectWithMenu([&#x27;String&#x27;, &#x27;Number&#x27;, &#x27;Boolean&#x27;, &#x27;JSON&#x27;], &#x27;default&#x27;, &#x27;Select List&#x27;, disAttr) + &#x27;\n&#x27;;
+if (s.showThird) r += &#x27;      &#x27; + selectWithMenu([&#x27;Header&#x27;, &#x27;Query&#x27;, &#x27;Body&#x27;], &#x27;default&#x27;, &#x27;Select List&#x27;, disAttr) + &#x27;\n&#x27;;
+r += &#x27;    &lt;/div&gt;\n&#x27;;
+if (s.showMinus) r += `    &lt;button class=&quot;zc-kvfield__btn zc-kvfield__minus&quot; type=&quot;button&quot; aria-label=&quot;Remove row&quot;${dis}&gt;${svg(I.minus)}&lt;/button&gt;\n`;
+if (s.showAdd) r += `    &lt;button class=&quot;zc-kvfield__btn zc-kvfield__add&quot; type=&quot;button&quot; aria-label=&quot;Add row&quot;${dis}&gt;${svg(I.plus)}&lt;/button&gt;\n`;
+r += &#x27;  &lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Attention box</h3>
+  <p class="zc-body-3 note">For a warning or a note inside a page. Not a toast.</p>
+  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p><p class="zc-body-5 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;default&quot; data-color=&quot;info&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-type=&quot;alert&quot; data-type=&quot;message&quot;</code></p>
+  <div class="live"><div class="zc-attention" data-color="info" data-type="alert" style="margin-bottom:var(--zc-space-16)">
+  <span class="zc-attention__content">
+    <span class="zc-attention__header">
+      <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-info"/></svg>
+      <span class="zc-attention__heading">Review your database</span>
+    </span>
+    <span class="zc-attention__body">Provisioning takes 3–5 minutes. You can connect once the status is Available.</span>
+  </span>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-attention&quot; data-color=&quot;info&quot; data-type=&quot;alert&quot; style=&quot;margin-bottom:var(--zc-space-16)&quot;&gt;
+  &lt;span class=&quot;zc-attention__content&quot;&gt;
+    &lt;span class=&quot;zc-attention__header&quot;&gt;
+      &lt;svg class=&quot;zc-attention__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-info&quot;/&gt;&lt;/svg&gt;
+      &lt;span class=&quot;zc-attention__heading&quot;&gt;Review your database&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;zc-attention__body&quot;&gt;Provisioning takes 3–5 minutes. You can connect once the status is Available.&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Chip</h3>
+  <p class="zc-body-3 note">For filters and multi-select values.</p>
+  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;small&quot; data-state=&quot;disabled&quot; data-state=&quot;hover&quot;</code></p>
+  <div class="live"><span class="zc-chip" data-size="' + size + '"' + st + '>';
+if (s.iconLeft) h += svg(I.check, 'zc-chip__icon');
+h += '<span class="zc-chip__label">' + esc(s.text) + '</span>';
+if (s.close) h += '<button class="zc-chip__close" type="button" aria-label="Remove">' + svg(I.x) + '</button>';
+return h + '</span></div>
+  <pre><code>&lt;span class=&quot;zc-chip&quot; data-size=&quot;&#x27; + size + &#x27;&quot;&#x27; + st + &#x27;&gt;&#x27;;
+if (s.iconLeft) h += svg(I.check, &#x27;zc-chip__icon&#x27;);
+h += &#x27;&lt;span class=&quot;zc-chip__label&quot;&gt;&#x27; + esc(s.text) + &#x27;&lt;/span&gt;&#x27;;
+if (s.close) h += &#x27;&lt;button class=&quot;zc-chip__close&quot; type=&quot;button&quot; aria-label=&quot;Remove&quot;&gt;&#x27; + svg(I.x) + &#x27;&lt;/button&gt;&#x27;;
+return h + &#x27;&lt;/span&gt;</code></pre>
+</section>
 <h2 class="zc-h4 sec">OVERLAYS</h2>
 <section class="snip">
   <h3 class="zc-h6">Popup — create / edit</h3>
@@ -348,4 +552,5 @@ return h + &#x27;&lt;/div&gt;</code></pre>
   &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Deletion protection&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;Enabled&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </section>
-</div></body></html>
+</div><script src="../zcat.js?v=20" defer></script>
+</body></html>

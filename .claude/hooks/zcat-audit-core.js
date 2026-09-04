@@ -745,6 +745,24 @@ function __zcatAudit() {
         "svg use");
   }
 
+  /* ── 18g7. The page must declare a theme ────────────────────────────
+     Every page here carries <html data-theme="light">, and none of them got it
+     by decision — they got it by copying the template. So nothing ever checked
+     it, and the first page written from scratch shipped without it: the token
+     definitions never applied, and the library fell back to near-white text on
+     a near-white ground. Unreadable, and invisible to every other check,
+     because the class names were all perfectly correct. */
+  {
+    const t = document.documentElement.getAttribute("data-theme");
+    if (!t)
+      fail("NO THEME DECLARED",
+        'the <html> element has no data-theme — every zcat page needs ' +
+        'data-theme="light" (or "dark") or the colour tokens never apply and ' +
+        "text renders in the library's fallback colour, which can land white on " +
+        "white. Copying the template gives you this for free",
+        "<html>");
+  }
+
   /* ── 18g8. Create and edit are popups, never pages ──────────────────
      This has been a written rule for a long time and nothing checked it, so a
      build shipped postgres-create.html — a whole PAGE for a create form — and
