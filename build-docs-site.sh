@@ -19,6 +19,11 @@ OUT="slate-docs"
 rm -rf "$OUT"
 mkdir -p "$OUT/docs"
 
+# snippets.html is GENERATED from the real pages, never hand-written — see the
+# header of build-snippets.py for why. Regenerating here means it can never
+# drift from the library the way COMPONENTS.md did.
+python3 build-snippets.py
+
 # The library itself
 cp zcat-ui/zcat.css zcat-ui/zcat.js "$OUT/"
 cp -R zcat-ui/src "$OUT/src"

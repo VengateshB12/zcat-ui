@@ -1,43 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light"><head><meta charset="utf-8">
+<html lang="en" data-theme="light">
+<head><meta charset="utf-8">
 <title>zcat UI — copy these</title>
 <link rel="stylesheet" href="../zcat.css?v=118">
 <style>
-  body { color:var(--zc-text-primary); margin:0; padding:32px; background:var(--zc-bg-page); font-family:var(--zc-font, -apple-system, "Segoe UI", Roboto, sans-serif); }
+  body { margin:0; padding:32px; background:var(--zc-bg-page);
+         color:var(--zc-text-primary); font-family:var(--zc-font); }
   .wrap { max-width:1000px; margin:0 auto; }
-  .sec { margin:40px 0 8px; padding-bottom:8px; border-bottom:1px solid var(--zc-border-subtle); }
+  .sec { margin:40px 0 8px; padding-bottom:8px;
+          border-bottom:1px solid var(--zc-border-subtle); }
   .snip { margin:24px 0; padding:20px; background:var(--zc-bg-container);
-          border:1px solid var(--zc-border-subtle); border-radius:8px; }
+           border:1px solid var(--zc-border-subtle); border-radius:8px; }
   .note { margin:6px 0 4px; color:var(--zc-text-secondary); }
-  .src  { margin:0 0 12px; color:var(--zc-text-tertiary); }
-  pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
-        border:1px solid var(--zc-border-subtle); border-radius:6px; }
-  code { font-family:var(--zc-font-mono, ui-monospace, monospace); font-size:12px; line-height:20px; }
-  .lede { padding:16px 20px; background:var(--zc-bg-container);
-          border:1px solid var(--zc-border-subtle); border-radius:8px; }
-  .live { padding:16px; margin-bottom:12px; background:var(--zc-bg-page);
-          border:1px dashed var(--zc-border-subtle); border-radius:6px; }
+  .src  { margin:0 0 4px; color:var(--zc-text-tertiary); }
+  .live { padding:16px; margin:12px 0; background:var(--zc-bg-page);
+           border:1px dashed var(--zc-border-subtle); border-radius:6px; }
   .live > * { max-width:100%; }
-</style></head><body><div class="wrap">
+  pre { margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
+         border:1px solid var(--zc-border-subtle); border-radius:6px; }
+  code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size:12px; line-height:20px; }
+  .lede { padding:16px 20px; background:var(--zc-bg-container);
+           border:1px solid var(--zc-border-subtle); border-radius:8px; }
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-slate" viewBox="0 0 16 16"><path fill="currentColor" d="M8.31252 14.4169C8.6715 14.4169 8.96252 14.1259 8.96252 13.7669C8.96252 13.4079 8.6715 13.1169 8.31252 13.1169V14.4169ZM4.1103 13.7006L4.22512 13.0608C4.21515 13.059 4.20514 13.0574 4.1951 13.0561L4.1103 13.7006ZM2.00013 5.66946H2.65014L2.65013 5.66708L2.00013 5.66946ZM4.1103 2.06637L4.19464 2.71088C4.19951 2.71024 4.20436 2.70955 4.20921 2.7088L4.1103 2.06637ZM11.8898 2.06637L11.775 2.70615C11.785 2.70794 11.795 2.7095 11.805 2.71082L11.8898 2.06637ZM14 10.2113L13.7731 10.8204C13.9726 10.8947 14.1959 10.8666 14.3708 10.7451C14.5457 10.6236 14.65 10.4242 14.65 10.2113H14ZM10.5132 8.91224L10.7402 8.30313L10.7357 8.30148L10.5132 8.91224ZM9.45364 9.96473L10.0814 9.79604L10.0813 9.79585L9.45364 9.96473ZM10.3683 13.3687L9.74061 13.5374L9.74076 13.5379L10.3683 13.3687ZM11.9351 13.4351L12.5473 13.6535L12.5478 13.6522L11.9351 13.4351ZM12.2612 12.5153L12.8738 12.7325L12.8739 12.7321L12.2612 12.5153ZM12.7955 11.9844L12.9881 12.6052L12.9966 12.6025L12.7955 11.9844ZM13.6668 12.3844C14.0082 12.2733 14.1948 11.9065 14.0838 11.5651C13.9727 11.2238 13.6059 11.0371 13.2645 11.1482L13.6668 12.3844ZM8.24999 4.40319C7.89101 4.40319 7.59999 4.69421 7.59999 5.05319C7.59999 5.41218 7.89101 5.70319 8.24999 5.70319V4.40319ZM11.5918 5.70319C11.9508 5.70319 12.2418 5.41218 12.2418 5.05319C12.2418 4.69421 11.9508 4.40319 11.5918 4.40319V5.70319ZM8.31252 13.1169H5.16085V14.4169H8.31252V13.1169ZM5.16085 13.1169C4.77414 13.1169 4.48041 13.1066 4.22512 13.0608L3.99547 14.3403C4.37414 14.4083 4.7687 14.4169 5.16085 14.4169V13.1169ZM4.1951 13.0561C3.48453 12.9626 3.18354 12.7489 2.99922 12.4236C2.77078 12.0205 2.65013 11.328 2.65013 10.088H1.35013C1.35013 11.3322 1.45589 12.337 1.8682 13.0645C2.32463 13.87 3.07872 14.2204 4.0255 14.345L4.1951 13.0561ZM2.65013 10.088V5.66946H1.35013V10.088H2.65013ZM2.65013 5.66708C2.64561 4.4321 2.76463 3.74328 2.99214 3.34264C3.17573 3.01935 3.47801 2.80466 4.19464 2.71088L4.02595 1.42187C3.07619 1.54616 2.31886 1.89564 1.8617 2.70069C1.44846 3.42839 1.3456 4.43207 1.35014 5.67184L2.65013 5.66708ZM4.20921 2.7088C4.47259 2.66825 4.78088 2.65 5.16085 2.65V1.35C4.74385 1.35 4.36385 1.36968 4.01139 1.42394L4.20921 2.7088ZM5.16085 2.65H10.8393V1.35H5.16085V2.65ZM10.8393 2.65C11.226 2.65 11.5197 2.66033 11.775 2.70615L12.0047 1.4266C11.626 1.35863 11.2314 1.35 10.8393 1.35V2.65ZM11.805 2.71082C12.5156 2.80432 12.8166 3.01806 13.0009 3.34331C13.2293 3.74644 13.35 4.43897 13.35 5.67894H14.65C14.65 4.43469 14.5442 3.42997 14.1319 2.70239C13.6755 1.89694 12.9214 1.54651 11.9746 1.42193L11.805 2.71082ZM13.35 5.67894V10.2113H14.65V5.67894H13.35ZM14.2269 9.60215L10.7402 8.30314L10.2863 9.52135L13.7731 10.8204L14.2269 9.60215ZM10.7357 8.30148C9.54923 7.86943 8.52701 9.0225 8.82596 10.1336L10.0813 9.79585C10.0548 9.69723 10.0858 9.61483 10.1386 9.56253C10.1897 9.51187 10.2406 9.50471 10.2908 9.52301L10.7357 8.30148ZM8.8259 10.1334L9.74061 13.5374L10.9961 13.2L10.0814 9.79604L8.8259 10.1334ZM9.74076 13.5379C10.1213 14.9491 12.0491 15.0501 12.5473 13.6535L11.3229 13.2167C11.299 13.2838 11.2675 13.3124 11.2465 13.3262C11.222 13.3422 11.1906 13.3513 11.156 13.3498C11.1213 13.3483 11.0898 13.3365 11.0653 13.3174C11.0441 13.3008 11.0145 13.2684 10.9959 13.1994L9.74076 13.5379ZM12.5478 13.6522L12.8738 12.7325L11.6485 12.2982L11.3225 13.2179L12.5478 13.6522ZM12.8739 12.7321C12.9017 12.6535 12.9552 12.6154 12.9881 12.6052L12.6029 11.3635C12.1467 11.5051 11.8017 11.8651 11.6484 12.2986L12.8739 12.7321ZM12.9966 12.6025L13.6668 12.3844L13.2645 11.1482L12.5944 11.3663L12.9966 12.6025ZM4.83719 5.05313C4.83719 5.04048 4.84258 5.02259 4.85799 5.00645C4.87391 4.98979 4.90449 4.97204 4.9438 4.97204V6.27204C5.63068 6.27204 6.13719 5.69788 6.13719 5.05313H4.83719ZM4.9438 4.97204C4.98311 4.97204 5.01369 4.98979 5.0296 5.00645C5.04502 5.02259 5.05041 5.04048 5.05041 5.05313H3.75041C3.75041 5.69788 4.25692 6.27204 4.9438 6.27204V4.97204ZM5.05041 5.05313C5.05041 5.06579 5.04502 5.08367 5.0296 5.09981C5.01369 5.11647 4.98311 5.13422 4.9438 5.13422V3.83422C4.25692 3.83422 3.75041 4.40838 3.75041 5.05313H5.05041ZM4.9438 5.13422C4.90449 5.13422 4.87391 5.11647 4.85799 5.09981C4.84258 5.08367 4.83719 5.06579 4.83719 5.05313H6.13719C6.13719 4.40838 5.63068 3.83422 4.9438 3.83422V5.13422ZM8.24999 5.70319H11.5918V4.40319H8.24999V5.70319Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="M12 4L4 12M4 4L12 12"/></symbol>
+    <symbol id="i-down" viewBox="0 0 16 16"><path d="M4 6L8 10L12 6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 16 16"><path d="M10 12L6 8L10 4"/></symbol>
+    <symbol id="i-right" viewBox="0 0 16 16"><path d="M6 12L10 8L6 4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="M13.3333 4L6 11.3333L2.66667 8"/></symbol>
+    <symbol id="i-help" viewBox="0 0 16 16"><path d="M6.06004 5.99998C6.21678 5.55442 6.52614 5.17872 6.93334 4.9394C7.34055 4.70009 7.8193 4.61261 8.28483 4.69245C8.75035 4.7723 9.17259 5.01433 9.47676 5.37567C9.78093 5.737 9.94741 6.19433 9.94671 6.66665C9.94671 7.99998 7.94671 8.66665 7.94671 8.66665M8.00004 11.3333H8.00671M14.6667 7.99998C14.6667 11.6819 11.6819 14.6666 8.00004 14.6666C4.31814 14.6666 1.33337 11.6819 1.33337 7.99998C1.33337 4.31808 4.31814 1.33331 8.00004 1.33331C11.6819 1.33331 14.6667 4.31808 14.6667 7.99998Z"/></symbol>
+    <symbol id="i-server" viewBox="0 0 16 16"><path d="M4.00001 4.00001H4.00668M4.00001 12H4.00668M3.46668 6.66668H12.5333C13.2801 6.66668 13.6534 6.66668 13.9387 6.52135C14.1895 6.39352 14.3935 6.18955 14.5214 5.93866C14.6667 5.65345 14.6667 5.28008 14.6667 4.53334V3.46668C14.6667 2.71994 14.6667 2.34657 14.5214 2.06136C14.3935 1.81047 14.1895 1.6065 13.9387 1.47867C13.6534 1.33334 13.2801 1.33334 12.5333 1.33334H3.46668C2.71994 1.33334 2.34657 1.33334 2.06136 1.47867C1.81047 1.6065 1.6065 1.81047 1.47867 2.06136C1.33334 2.34657 1.33334 2.71994 1.33334 3.46668V4.53334C1.33334 5.28008 1.33334 5.65345 1.47867 5.93866C1.6065 6.18955 1.81047 6.39352 2.06136 6.52135C2.34657 6.66668 2.71994 6.66668 3.46668 6.66668ZM3.46668 14.6667H12.5333C13.2801 14.6667 13.6534 14.6667 13.9387 14.5214C14.1895 14.3935 14.3935 14.1895 14.5214 13.9387C14.6667 13.6534 14.6667 13.2801 14.6667 12.5333V11.4667C14.6667 10.7199 14.6667 10.3466 14.5214 10.0614C14.3935 9.81047 14.1895 9.6065 13.9387 9.47867C13.6534 9.33334 13.2801 9.33334 12.5333 9.33334H3.46668C2.71994 9.33334 2.34657 9.33334 2.06136 9.47867C1.81047 9.6065 1.6065 9.81047 1.47867 10.0614C1.33334 10.3466 1.33334 10.7199 1.33334 11.4667V12.5333C1.33334 13.2801 1.33334 13.6534 1.47867 13.9387C1.6065 14.1895 1.81047 14.3935 2.06136 14.5214C2.34657 14.6667 2.71994 14.6667 3.46668 14.6667Z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 16 16"><path d="M3.33333 14L3.33333 10M3.33333 10C4.06971 10 4.66667 9.40305 4.66667 8.66667C4.66667 7.93029 4.06971 7.33333 3.33333 7.33333C2.59695 7.33333 2 7.93029 2 8.66667C2 9.40305 2.59695 10 3.33333 10ZM3.33333 4.66667V2M8 14V10M8 4.66667V2M8 4.66667C7.26362 4.66667 6.66667 5.26362 6.66667 6C6.66667 6.73638 7.26362 7.33333 8 7.33333C8.73638 7.33333 9.33333 6.73638 9.33333 6C9.33333 5.26362 8.73638 4.66667 8 4.66667ZM12.6667 14V11.3333M12.6667 11.3333C13.403 11.3333 14 10.7364 14 10C14 9.26362 13.403 8.66667 12.6667 8.66667C11.9303 8.66667 11.3333 9.26362 11.3333 10C11.3333 10.7364 11.9303 11.3333 12.6667 11.3333ZM12.6667 6V2"/></symbol>
+    <symbol id="i-route" viewBox="0 0 16 16"><path d="M7.66665 3.33334H7.95624C9.98774 3.33334 11.0035 3.33334 11.3891 3.6982C11.7224 4.01359 11.8701 4.4782 11.7801 4.92815C11.676 5.44869 10.8467 6.03525 9.18817 7.20836L6.47846 9.12499C4.81992 10.2981 3.99064 10.8847 3.88654 11.4052C3.79655 11.8552 3.94426 12.3198 4.27755 12.6352C4.66314 13 5.67888 13 7.71038 13H8.33331M5.33331 3.33334C5.33331 4.43791 4.43788 5.33334 3.33331 5.33334C2.22874 5.33334 1.33331 4.43791 1.33331 3.33334C1.33331 2.22877 2.22874 1.33334 3.33331 1.33334C4.43788 1.33334 5.33331 2.22877 5.33331 3.33334ZM14.6666 12.6667C14.6666 13.7712 13.7712 14.6667 12.6666 14.6667C11.5621 14.6667 10.6666 13.7712 10.6666 12.6667C10.6666 11.5621 11.5621 10.6667 12.6666 10.6667C13.7712 10.6667 14.6666 11.5621 14.6666 12.6667Z"/></symbol>
+    <symbol id="i-database" viewBox="0 0 16 16"><path d="M14 3.33334C14 4.43791 11.3137 5.33334 8 5.33334C4.68629 5.33334 2 4.43791 2 3.33334M14 3.33334C14 2.22877 11.3137 1.33334 8 1.33334C4.68629 1.33334 2 2.22877 2 3.33334M14 3.33334V12.6667C14 13.7733 11.3333 14.6667 8 14.6667C4.66667 14.6667 2 13.7733 2 12.6667V3.33334M14 8.00001C14 9.10668 11.3333 10 8 10C4.66667 10 2 9.10668 2 8.00001"/></symbol>
+    <symbol id="i-box" viewBox="0 0 16 16"><path d="M13.6666 5.33333V10.8C13.6666 11.9201 13.6666 12.4802 13.4487 12.908C13.2569 13.2843 12.951 13.5903 12.5746 13.782C12.1468 14 11.5868 14 10.4666 14H5.53331C4.41321 14 3.85316 14 3.42533 13.782C3.04901 13.5903 2.74305 13.2843 2.5513 12.908C2.33331 12.4802 2.33331 11.9201 2.33331 10.8V5.33333M2.39998 2H13.6C13.9733 2 14.16 2 14.3026 2.07266C14.4281 2.13658 14.5301 2.23856 14.594 2.36401C14.6666 2.50661 14.6666 2.6933 14.6666 3.06667V4.26667C14.6666 4.64004 14.6666 4.82672 14.594 4.96933C14.5301 5.09477 14.4281 5.19676 14.3026 5.26067C14.16 5.33333 13.9733 5.33333 13.6 5.33333H2.39998C2.02661 5.33333 1.83993 5.33333 1.69732 5.26067C1.57188 5.19676 1.46989 5.09477 1.40598 4.96933C1.33331 4.82672 1.33331 4.64004 1.33331 4.26667V3.06667C1.33331 2.6933 1.33331 2.50661 1.40598 2.36401C1.46989 2.23856 1.57188 2.13658 1.69732 2.07266C1.83993 2 2.02661 2 2.39998 2ZM6.39998 7.66667H9.59998C9.97335 7.66667 10.16 7.66667 10.3026 7.73933C10.4281 7.80324 10.5301 7.90523 10.594 8.03067C10.6666 8.17328 10.6666 8.35997 10.6666 8.73333V9.26667C10.6666 9.64003 10.6666 9.82672 10.594 9.96933C10.5301 10.0948 10.4281 10.1968 10.3026 10.2607C10.16 10.3333 9.97335 10.3333 9.59998 10.3333H6.39998C6.02661 10.3333 5.83993 10.3333 5.69732 10.2607C5.57188 10.1968 5.46989 10.0948 5.40598 9.96933C5.33331 9.82672 5.33331 9.64003 5.33331 9.26667V8.73333C5.33331 8.35997 5.33331 8.17328 5.40598 8.03067C5.46989 7.90523 5.57188 7.80324 5.69732 7.73933C5.83993 7.66667 6.02661 7.66667 6.39998 7.66667Z"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 16 16"><path d="M1.33334 5.58483C1.33334 5.35128 1.33334 5.23451 1.34309 5.13615C1.43708 4.18752 2.18752 3.43708 3.13615 3.34309C3.23451 3.33334 3.35758 3.33334 3.60373 3.33334C3.69858 3.33334 3.746 3.33334 3.78627 3.3309C4.30042 3.29977 4.75064 2.97526 4.94277 2.49734C4.95782 2.45992 4.97188 2.41772 5.00001 2.33334C5.02814 2.24896 5.0422 2.20677 5.05725 2.16934C5.24938 1.69143 5.6996 1.36692 6.21375 1.33578C6.25402 1.33334 6.29849 1.33334 6.38744 1.33334H9.61258C9.70153 1.33334 9.746 1.33334 9.78627 1.33578C10.3004 1.36692 10.7506 1.69143 10.9428 2.16934C10.9578 2.20677 10.9719 2.24896 11 2.33334C11.0281 2.41772 11.0422 2.45992 11.0572 2.49734C11.2494 2.97526 11.6996 3.29977 12.2138 3.3309C12.254 3.33334 12.3014 3.33334 12.3963 3.33334C12.6424 3.33334 12.7655 3.33334 12.8639 3.34309C13.8125 3.43708 14.5629 4.18752 14.6569 5.13615C14.6667 5.23451 14.6667 5.35128 14.6667 5.58483V10.8C14.6667 11.9201 14.6667 12.4802 14.4487 12.908C14.2569 13.2843 13.951 13.5903 13.5747 13.782C13.1468 14 12.5868 14 11.4667 14H4.53334C3.41324 14 2.85319 14 2.42536 13.782C2.04904 13.5903 1.74308 13.2843 1.55133 12.908C1.33334 12.4802 1.33334 11.9201 1.33334 10.8V5.58483Z"/><path d="M8.00001 11C9.47277 11 10.6667 9.8061 10.6667 8.33334C10.6667 6.86058 9.47277 5.66668 8.00001 5.66668C6.52725 5.66668 5.33334 6.86058 5.33334 8.33334C5.33334 9.8061 6.52725 11 8.00001 11Z"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 16 16"><path d="M14.6666 8H12L9.99998 14L5.99998 2L3.99998 8H1.33331"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 16 16"><path d="M9.33334 14H6.66667M12 5.33331C12 4.27245 11.5786 3.25503 10.8284 2.50489C10.0783 1.75474 9.06087 1.33331 8 1.33331C6.93914 1.33331 5.92172 1.75474 5.17158 2.50489C4.42143 3.25503 4 4.27245 4 5.33331C4 7.39344 3.48032 8.80395 2.89978 9.73692C2.41009 10.5239 2.16524 10.9174 2.17422 11.0272C2.18416 11.1487 2.20991 11.195 2.30785 11.2677C2.39631 11.3333 2.79506 11.3333 3.59257 11.3333H12.4074C13.2049 11.3333 13.6037 11.3333 13.6922 11.2677C13.7901 11.195 13.8158 11.1487 13.8258 11.0272C13.8348 10.9174 13.5899 10.5239 13.1002 9.73692C12.5197 8.80395 12 7.39344 12 5.33331Z"/></symbol>
+    <symbol id="i-history" viewBox="0 0 16 16"><path d="M15.1333 9L13.8004 7.66667L12.4666 9M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C10.2013 2 12.1257 3.18542 13.1697 4.95273M8 4.66667V8L10 9.33333"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16"><path d="M1.61342 8.47543C1.52262 8.33167 1.47723 8.25979 1.45182 8.14892C1.43273 8.06565 1.43273 7.93431 1.45182 7.85104C1.47723 7.74017 1.52262 7.66829 1.61341 7.52453C2.36369 6.33654 4.59693 3.33331 8.00027 3.33331C11.4036 3.33331 13.6369 6.33654 14.3871 7.52453C14.4779 7.66829 14.5233 7.74017 14.5487 7.85104C14.5678 7.93431 14.5678 8.06565 14.5487 8.14892C14.5233 8.25979 14.4779 8.33167 14.3871 8.47543C13.6369 9.66342 11.4036 12.6666 8.00027 12.6666C4.59693 12.6666 2.36369 9.66342 1.61342 8.47543Z"/><path d="M8.00027 9.99998C9.10484 9.99998 10.0003 9.10455 10.0003 7.99998C10.0003 6.89541 9.10484 5.99998 8.00027 5.99998C6.8957 5.99998 6.00027 6.89541 6.00027 7.99998C6.00027 9.10455 6.8957 9.99998 8.00027 9.99998Z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 16 16"><path d="M14.6667 6.66667C14.6667 6.66667 13.33 4.84548 12.2441 3.75883C11.1582 2.67218 9.6576 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C10.7354 14 13.0433 12.1695 13.7655 9.66667M10.6667 6.66667H14.6667V2.66667"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><path d="M10.6667 3.99999V3.46666C10.6667 2.71992 10.6667 2.34656 10.5213 2.06134C10.3935 1.81046 10.1895 1.60648 9.93865 1.47865C9.65344 1.33333 9.28007 1.33333 8.53333 1.33333H7.46667C6.71993 1.33333 6.34656 1.33333 6.06135 1.47865C5.81046 1.60648 5.60649 1.81046 5.47866 2.06134C5.33333 2.34656 5.33333 2.71992 5.33333 3.46666V3.99999M2 3.99999H14M12.6667 3.99999V11.4667C12.6667 12.5868 12.6667 13.1468 12.4487 13.5746C12.2569 13.951 11.951 14.2569 11.5746 14.4487C11.1468 14.6667 10.5868 14.6667 9.46667 14.6667H6.53333C5.41323 14.6667 4.85318 14.6667 4.42535 14.4487C4.04903 14.2569 3.74307 13.951 3.55132 13.5746C3.33333 13.1468 3.33333 12.5868 3.33333 11.4667V3.99999"/></symbol>
+    <symbol id="i-up" viewBox="0 0 16 16"><path d="M12 10L8 6L4 10"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 16 16"><path d="M8.66668 1.33333L2.72898 8.45856C2.49644 8.73761 2.38017 8.87713 2.37839 8.99497C2.37685 9.09741 2.4225 9.19486 2.50218 9.25926C2.59384 9.33333 2.77546 9.33333 3.1387 9.33333H8.00001L7.33334 14.6667L13.271 7.54143C13.5036 7.26238 13.6198 7.12286 13.6216 7.00502C13.6232 6.90258 13.5775 6.80513 13.4978 6.74073C13.4062 6.66666 13.2246 6.66666 12.8613 6.66666H8.00001L8.66668 1.33333Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M7.99998 3.33337V12.6667M3.33331 8.00004H12.6666"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 16 16"><path d="M5 8L7 10L11 6M14.6667 8C14.6667 11.6819 11.6819 14.6667 8 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8C1.33333 4.3181 4.3181 1.33333 8 1.33333C11.6819 1.33333 14.6667 4.3181 14.6667 8Z"/></symbol>
+    <symbol id="i-x-circle" viewBox="0 0 16 16"><path d="M10 6L6.00001 10M6.00001 6L10 10M14.6667 8C14.6667 11.6819 11.6819 14.6667 8.00001 14.6667C4.31811 14.6667 1.33334 11.6819 1.33334 8C1.33334 4.3181 4.31811 1.33333 8.00001 1.33333C11.6819 1.33333 14.6667 4.3181 14.6667 8Z"/></symbol>
+    <symbol id="i-info-circle" viewBox="0 0 16 16"><path d="M8.00001 10.6667V8M8.00001 5.33333H8.00668M14.6667 8C14.6667 11.6819 11.6819 14.6667 8.00001 14.6667C4.31811 14.6667 1.33334 11.6819 1.33334 8C1.33334 4.3181 4.31811 1.33333 8.00001 1.33333C11.6819 1.33333 14.6667 4.3181 14.6667 8Z"/></symbol>
+    <symbol id="i-threedot" viewBox="0 0 16 16"><path d="M8.00002 8.66668C8.36821 8.66668 8.66669 8.3682 8.66669 8.00001C8.66669 7.63182 8.36821 7.33334 8.00002 7.33334C7.63183 7.33334 7.33335 7.63182 7.33335 8.00001C7.33335 8.3682 7.63183 8.66668 8.00002 8.66668Z M12.6667 8.66668C13.0349 8.66668 13.3334 8.3682 13.3334 8.00001C13.3334 7.63182 13.0349 7.33334 12.6667 7.33334C12.2985 7.33334 12 7.63182 12 8.00001C12 8.3682 12.2985 8.66668 12.6667 8.66668Z M3.33335 8.66668C3.70154 8.66668 4.00002 8.3682 4.00002 8.00001C4.00002 7.63182 3.70154 7.33334 3.33335 7.33334C2.96516 7.33334 2.66669 7.63182 2.66669 8.00001C2.66669 8.3682 2.96516 8.66668 3.33335 8.66668Z"/></symbol>
+  </defs>
+</svg>
+<div class="wrap">
 <h1 class="zc-h2">Copy these</h1>
-<p class="zc-body-1 lede">Every block below is real markup lifted from a page that
-passes all four gates. <strong>Copy the block, rename the content, change the
-variant.</strong> Do not rebuild one from a written description — that is how
-popups, empty states and detail views come out subtly wrong every time. If what
-you need is not here, copy the closest sibling page and delete what you do not
-need.</p>
+<p class="zc-body-1 lede">Every block below is real markup lifted from a page
+that passes all four gates, and this file is REGENERATED on every docs build so
+it cannot drift from the library. <strong>Copy the block, rename the content,
+change the variant.</strong> Do not rebuild a component from a written
+description — that is how popups, empty states and detail views come out subtly
+wrong every time, with every class name perfectly correct. If what you need is
+not here, copy the closest sibling page and delete what you do not need.</p>
 <h2 class="zc-h4 sec">EVERYDAY CONTROLS</h2>
 <section class="snip">
   <h3 class="zc-h6">Label</h3>
   <p class="zc-body-3 note">Wraps its text in a &lt;span&gt;. Never a bare &lt;label&gt;.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-state=&quot;disabled&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-state=&quot;disabled&quot;</code></p>
   <div class="live"><label class="zc-label">Database Name</label></div>
   <pre><code>&lt;label class=&quot;zc-label&quot;&gt;Database Name&lt;/label&gt;</code></pre>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Text field</h3>
-  <p class="zc-body-3 note">The input always sits inside .zc-input-wrap — a bare &lt;input&gt; loses focus ring, states and dark mode.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;default&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-state=&quot;active&quot; data-state=&quot;disabled&quot; data-state=&quot;error&quot; data-state=&quot;hover&quot;</code></p>
+  <p class="zc-body-3 note">The input always sits inside .zc-input-wrap — a bare &lt;input&gt; loses its focus ring, its states and dark mode.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-size=&quot;default&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-state=&quot;active&quot; data-state=&quot;disabled&quot; data-state=&quot;error&quot; data-state=&quot;hover&quot;</code></p>
   <div class="live"><div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
   <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
   <input class="zc-input" type="text" placeholder="Search Here">
@@ -51,8 +88,8 @@ need.</p>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Button</h3>
-  <p class="zc-body-3 note">ONE fill button per screen. Per-row actions are links or ghost.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; data-size=&quot;large&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-variant=&quot;fill&quot; data-variant=&quot;ghost&quot; data-variant=&quot;ghost-grey&quot; data-variant=&quot;gradient&quot; data-variant=&quot;grey&quot;</code></p>
+  <p class="zc-body-3 note">ONE fill button per screen. Per-row actions are links or ghost buttons.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; data-size=&quot;large&quot; data-size=&quot;small&quot; data-size=&quot;xs&quot; data-variant=&quot;fill&quot; data-variant=&quot;ghost&quot; data-variant=&quot;ghost-grey&quot; data-variant=&quot;gradient&quot; data-variant=&quot;grey&quot;</code></p>
   <div class="live"><button class="zc-btn zc-sidemenu__expand" data-variant="grey" data-size="small" data-content="icon" data-radius="rounded" aria-label="Toggle side menu">
   <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-right"/></svg>
 </button></div>
@@ -63,28 +100,21 @@ need.</p>
 <section class="snip">
   <h3 class="zc-h6">Badge</h3>
   <p class="zc-body-3 note">Every table status is a Badge. Map each status value to a semantic colour.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;disabled&quot; data-color=&quot;grey&quot; data-color=&quot;info&quot; data-color=&quot;purple&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-size=&quot;dot&quot; data-size=&quot;small&quot; data-type=&quot;secondary&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;disabled&quot; data-color=&quot;grey&quot; data-color=&quot;info&quot; data-color=&quot;purple&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-size=&quot;dot&quot; data-size=&quot;small&quot; data-type=&quot;secondary&quot;</code></p>
   <div class="live"><span class="zc-badge" data-type="secondary" data-color="success" id="sh-badge" hidden>Available</span></div>
   <pre><code>&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot; id=&quot;sh-badge&quot; hidden&gt;Available&lt;/span&gt;</code></pre>
 </section>
 <section class="snip">
-  <h3 class="zc-h6">Checkbox</h3>
-  <p class="zc-body-3 note">Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
-  <div class="live"><label class="zc-checkbox"><input type="checkbox" class="zc-checkbox__input"><span class="zc-checkbox__box"></span></label></div>
-  <pre><code>&lt;label class=&quot;zc-checkbox&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;zc-checkbox__input&quot;&gt;&lt;span class=&quot;zc-checkbox__box&quot;&gt;&lt;/span&gt;&lt;/label&gt;</code></pre>
-</section>
-<section class="snip">
   <h3 class="zc-h6">Radio</h3>
-  <p class="zc-body-3 note">Same label-weight rule as the checkbox.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
+  <p class="zc-body-3 note">Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
   <div class="live"><label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input" checked><span class="zc-radio__circle"></span></label></div>
   <pre><code>&lt;label class=&quot;zc-radio&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;wiz-engine&quot; class=&quot;zc-radio__input&quot; checked&gt;&lt;span class=&quot;zc-radio__circle&quot;&gt;&lt;/span&gt;&lt;/label&gt;</code></pre>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Toggle</h3>
   <p class="zc-body-3 note">For instant-apply flags. A toggle that needs a Save button should be a checkbox.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-weight=&quot;regular&quot; data-weight=&quot;semibold&quot;</code></p>
   <div class="live"><label class="zc-toggle">
   <span class="zc-toggle__row">
     <input type="checkbox" class="zc-toggle__input" id="wiz-backups" checked>
@@ -101,7 +131,7 @@ need.</p>
 <section class="snip">
   <h3 class="zc-h6">Select</h3>
   <p class="zc-body-3 note">Never a bare &lt;select&gt;.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-menu=&quot;action&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-menu=&quot;action&quot;</code></p>
   <div class="live"><div class="zc-select-shell zc-ghostdd-shell">
   <div class="zc-ghostdd zc-select-wrap">
     <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">A</span></span>
@@ -128,7 +158,7 @@ need.</p>
 <section class="snip">
   <h3 class="zc-h6">Tabs</h3>
   <p class="zc-body-3 note">Exactly ONE tab is active and the visible content is that tab&#x27;s. Sub Header tabs carry NO icons.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-type=&quot;code&quot; data-type=&quot;primary&quot; data-type=&quot;secondary&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-type=&quot;code&quot; data-type=&quot;primary&quot; data-type=&quot;secondary&quot;</code></p>
   <div class="live"><div class="zc-tabs zc-layout__subheader-tabs" data-type="primary" role="tablist"
      id="sh-tabs" hidden>
   <button class="zc-tab" type="button">Overview</button>
@@ -147,14 +177,14 @@ need.</p>
 <section class="snip">
   <h3 class="zc-h6">Link box</h3>
   <p class="zc-body-3 note">Copy icon shows a Copy tooltip on hover, Link copied on click.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;small&quot; data-state=&quot;hover&quot;</code></p>
+  <p class="zc-body-4 src">verified in <code>pages/directdb/database-detail.html</code></p><p class="zc-body-4 src">variants: <code>data-size=&quot;small&quot; data-state=&quot;hover&quot;</code></p>
   <div class="live"><div class="zc-linkbox"><span class="zc-linkbox__inline-label">Host</span><span class="zc-linkbox__text" data-overflow="ellipsis">orders-prod.directdb.zcatalyst.com</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div></div>
   <pre><code>&lt;div class=&quot;zc-linkbox&quot;&gt;&lt;span class=&quot;zc-linkbox__inline-label&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;zc-linkbox__text&quot; data-overflow=&quot;ellipsis&quot;&gt;orders-prod.directdb.zcatalyst.com&lt;/span&gt;&lt;span class=&quot;zc-linkbox__copy&quot; title=&quot;Copy&quot;&gt;&lt;svg viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot; stroke-width=&quot;1.3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;&gt;&lt;use href=&quot;#i-copy&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/div&gt;</code></pre>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Three-dot menu</h3>
-  <p class="zc-body-3 note">The real menu component — not a hand-made dropdown. It flips up when clipped.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-5 src">variants: <code>data-drop=&quot;up&quot; data-size=&quot;small&quot;</code></p>
+  <p class="zc-body-3 note">The real menu component, not a hand-made dropdown. It flips up when it would be clipped.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-drop=&quot;up&quot; data-size=&quot;small&quot;</code></p>
   <div class="live"><div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
   <div class="zc-menu__item" role="option" data-value="Acme Analytics" aria-selected="true"><span class="zc-menu__label">Acme Analytics</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
   <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
@@ -165,34 +195,9 @@ need.</p>
 &lt;/div&gt;&lt;/div&gt;</code></pre>
 </section>
 <section class="snip">
-  <h3 class="zc-h6">Key Value field</h3>
-  <p class="zc-body-3 note">Editing in place. Not a form — a form belongs in a popup.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-state=&quot;error&quot; data-state=&quot;hover&quot;</code></p>
-  <div class="live"><div class="zc-kvfield"${rowState}>\n`;
-if (s.showDrag) r += '    <span class="zc-kvfield__drag" draggable="true" aria-label="Drag to reorder">' + '<i></i>'.repeat(6) + '</span>\n';
-r += '    <div class="zc-kvfield__fields">\n';
-r += `      <div class="zc-input-wrap" data-size="default"${keyState}><input class="zc-input" placeholder="Enter Label Text"${dis}></div>\n`;
-r += '      ' + selectWithMenu(['String', 'Number', 'Boolean', 'JSON'], 'default', 'Select List', disAttr) + '\n';
-if (s.showThird) r += '      ' + selectWithMenu(['Header', 'Query', 'Body'], 'default', 'Select List', disAttr) + '\n';
-r += '    </div>\n';
-if (s.showMinus) r += `    <button class="zc-kvfield__btn zc-kvfield__minus" type="button" aria-label="Remove row"${dis}>${svg(I.minus)}</button>\n`;
-if (s.showAdd) r += `    <button class="zc-kvfield__btn zc-kvfield__add" type="button" aria-label="Add row"${dis}>${svg(I.plus)}</button>\n`;
-r += '  </div></div>
-  <pre><code>&lt;div class=&quot;zc-kvfield&quot;${rowState}&gt;\n`;
-if (s.showDrag) r += &#x27;    &lt;span class=&quot;zc-kvfield__drag&quot; draggable=&quot;true&quot; aria-label=&quot;Drag to reorder&quot;&gt;&#x27; + &#x27;&lt;i&gt;&lt;/i&gt;&#x27;.repeat(6) + &#x27;&lt;/span&gt;\n&#x27;;
-r += &#x27;    &lt;div class=&quot;zc-kvfield__fields&quot;&gt;\n&#x27;;
-r += `      &lt;div class=&quot;zc-input-wrap&quot; data-size=&quot;default&quot;${keyState}&gt;&lt;input class=&quot;zc-input&quot; placeholder=&quot;Enter Label Text&quot;${dis}&gt;&lt;/div&gt;\n`;
-r += &#x27;      &#x27; + selectWithMenu([&#x27;String&#x27;, &#x27;Number&#x27;, &#x27;Boolean&#x27;, &#x27;JSON&#x27;], &#x27;default&#x27;, &#x27;Select List&#x27;, disAttr) + &#x27;\n&#x27;;
-if (s.showThird) r += &#x27;      &#x27; + selectWithMenu([&#x27;Header&#x27;, &#x27;Query&#x27;, &#x27;Body&#x27;], &#x27;default&#x27;, &#x27;Select List&#x27;, disAttr) + &#x27;\n&#x27;;
-r += &#x27;    &lt;/div&gt;\n&#x27;;
-if (s.showMinus) r += `    &lt;button class=&quot;zc-kvfield__btn zc-kvfield__minus&quot; type=&quot;button&quot; aria-label=&quot;Remove row&quot;${dis}&gt;${svg(I.minus)}&lt;/button&gt;\n`;
-if (s.showAdd) r += `    &lt;button class=&quot;zc-kvfield__btn zc-kvfield__add&quot; type=&quot;button&quot; aria-label=&quot;Add row&quot;${dis}&gt;${svg(I.plus)}&lt;/button&gt;\n`;
-r += &#x27;  &lt;/div&gt;</code></pre>
-</section>
-<section class="snip">
   <h3 class="zc-h6">Attention box</h3>
-  <p class="zc-body-3 note">For a warning or a note inside a page. Not a toast.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p><p class="zc-body-5 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;default&quot; data-color=&quot;info&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-type=&quot;alert&quot; data-type=&quot;message&quot;</code></p>
+  <p class="zc-body-3 note">A warning or note inside a page. Not a toast.</p>
+  <p class="zc-body-4 src">verified in <code>pages/directdb/databases.html</code></p><p class="zc-body-4 src">variants: <code>data-color=&quot;danger&quot; data-color=&quot;default&quot; data-color=&quot;info&quot; data-color=&quot;success&quot; data-color=&quot;warning&quot; data-type=&quot;alert&quot; data-type=&quot;message&quot;</code></p>
   <div class="live"><div class="zc-attention" data-color="info" data-type="alert" style="margin-bottom:var(--zc-space-16)">
   <span class="zc-attention__content">
     <span class="zc-attention__header">
@@ -212,26 +217,74 @@ r += &#x27;  &lt;/div&gt;</code></pre>
   &lt;/span&gt;
 &lt;/div&gt;</code></pre>
 </section>
-<section class="snip">
-  <h3 class="zc-h6">Chip</h3>
-  <p class="zc-body-3 note">For filters and multi-select values.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p><p class="zc-body-5 src">variants: <code>data-size=&quot;small&quot; data-state=&quot;disabled&quot; data-state=&quot;hover&quot;</code></p>
-  <div class="live"><span class="zc-chip" data-size="' + size + '"' + st + '>';
-if (s.iconLeft) h += svg(I.check, 'zc-chip__icon');
-h += '<span class="zc-chip__label">' + esc(s.text) + '</span>';
-if (s.close) h += '<button class="zc-chip__close" type="button" aria-label="Remove">' + svg(I.x) + '</button>';
-return h + '</span></div>
-  <pre><code>&lt;span class=&quot;zc-chip&quot; data-size=&quot;&#x27; + size + &#x27;&quot;&#x27; + st + &#x27;&gt;&#x27;;
-if (s.iconLeft) h += svg(I.check, &#x27;zc-chip__icon&#x27;);
-h += &#x27;&lt;span class=&quot;zc-chip__label&quot;&gt;&#x27; + esc(s.text) + &#x27;&lt;/span&gt;&#x27;;
-if (s.close) h += &#x27;&lt;button class=&quot;zc-chip__close&quot; type=&quot;button&quot; aria-label=&quot;Remove&quot;&gt;&#x27; + svg(I.x) + &#x27;&lt;/button&gt;&#x27;;
-return h + &#x27;&lt;/span&gt;</code></pre>
-</section>
 <h2 class="zc-h4 sec">OVERLAYS</h2>
 <section class="snip">
   <h3 class="zc-h6">Popup — create / edit</h3>
   <p class="zc-body-3 note">The ONLY correct shape for create and edit. NO close X. Footer: Cancel grey left, action fill right. Every control stretches to the body width. Tabs or a Stepper go in the header, under the title — never in the body.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <div class="live"><div class="zc-popup-scrim" id="wizard-scrim" hidden>
+  <div class="zc-popup">
+    <div class="zc-popup__header">
+      <span class="zc-popup__title">Create Database</span>
+      <span class="zc-popup__desc">Provision a new managed database instance in four steps.</span>
+    </div>
+    <div class="zc-popup__body">
+      <div class="zc-stepper" id="wiz-stepper">
+        <div class="zc-stepper__step" data-state="active" data-wstep="1">
+          <span class="zc-stepper__number">1</span>
+          <div class="zc-stepper__content"><span class="zc-stepper__label">Engine</span></div>
+        </div>
+        <div class="zc-stepper__divider" data-state="default"></div>
+        <div class="zc-stepper__step" data-state="default" data-wstep="2">
+          <span class="zc-stepper__number">2</span>
+          <div class="zc-stepper__content"><span class="zc-stepper__label">Configuration</span></div>
+        </div>
+        <div class="zc-stepper__divider" data-state="default"></div>
+        <div class="zc-stepper__step" data-state="default" data-wstep="3">
+          <span class="zc-stepper__number">3</span>
+          <div class="zc-stepper__content"><span class="zc-stepper__label">Backup &amp; Scale</span></div>
+        </div>
+        <div class="zc-stepper__divider" data-state="default"></div>
+        <div class="zc-stepper__step" data-state="default" data-wstep="4">
+          <span class="zc-stepper__number">4</span>
+          <div class="zc-stepper__content"><span class="zc-stepper__label">Review</span></div>
+        </div>
+      </div>
+
+      <div class="tpl-wizard-step act" data-step="1">
+        <div class="tpl-engine-title zc-subtitle-1">Choose a database engine</div>
+        <div data-interactive class="zc-container-el tpl-engine-card" data-state="selected" data-engine="Aurora MySQL (Managed)">
+          <span class="tpl-chip" style="background:var(--zc-shade-theme-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-theme-1)"><use href="#i-database"/></svg></span>
+          <div class="tpl-engine-text">
+            <span class="tpl-engine-title zc-subtitle-1">Aurora MySQL (Managed)</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">MySQL-compatible with up to 5x throughput, automated failover and patching.</span>
+          </div>
+          <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input" checked><span class="zc-radio__circle"></span></label>
+        </div>
+        <div data-interactive class="zc-container-el tpl-engine-card" data-engine="MySQL">
+          <span class="tpl-chip" style="background:var(--zc-shade-orange-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-orange-1)"><use href="#i-database"/></svg></span>
+          <div class="tpl-engine-text">
+            <span class="tpl-engine-title zc-subtitle-1">MySQL</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">Community MySQL 8.0 on dedicated instances you manage yourself.</span>
+          </div>
+          <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input"><span class="zc-radio__circle"></span></label>
+        </div>
+        <div data-interactive class="zc-container-el tpl-engine-card" data-engine="PostgreSQL">
+          <span class="tpl-chip" style="background:var(--zc-shade-blue-4)"><svg viewBox="0 0 16 16" style="stroke:var(--zc-shade-blue-1)"><use href="#i-database"/></svg></span>
+          <div class="tpl-engine-text">
+            <span class="tpl-engine-title zc-subtitle-1">PostgreSQL</span>
+            <span class="tpl-engine-desc zc-body-3 zc-text-secondary">PostgreSQL 16 with full extension support and logical replication.</span>
+          </div>
+          <label class="zc-radio"><input type="radio" name="wiz-engine" class="zc-radio__input"><span class="zc-radio__circle"></span></label>
+        </div>
+      </div>
+
+      <div class="tpl-wizard-step" data-step="2">
+        <div class="zc-input-group">
+          <label class="zc-label">Database Name</label>
+          <div class="zc-input-wrap" data-size="default" id="wiz-name-wrap">
+            <input class="zc-input" type="text" id="wiz-name" placeholder="e.g. orders-prod">
+<!-- … full block in zcat-ui/docs/template.html --></div>
   <pre><code>&lt;div class=&quot;zc-popup-scrim&quot; id=&quot;wizard-scrim&quot; hidden&gt;
   &lt;div class=&quot;zc-popup&quot;&gt;
     &lt;div class=&quot;zc-popup__header&quot;&gt;
@@ -294,12 +347,37 @@ return h + &#x27;&lt;/span&gt;</code></pre>
           &lt;label class=&quot;zc-label&quot;&gt;Database Name&lt;/label&gt;
           &lt;div class=&quot;zc-input-wrap&quot; data-size=&quot;default&quot; id=&quot;wiz-name-wrap&quot;&gt;
             &lt;input class=&quot;zc-input&quot; type=&quot;text&quot; id=&quot;wiz-name&quot; placeholder=&quot;e.g. orders-prod&quot;&gt;
-  &lt;!-- … full block in zcat-ui/docs/template.html --&gt;</code></pre>
+&lt;!-- … full block in zcat-ui/docs/template.html --&gt;</code></pre>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Full-page popup</h3>
   <p class="zc-body-3 note">Only for &gt;8 fields, a wizard, or an embedded table. Unlike the small popup this one DOES close from its header. Page content goes inside __sheet.</p>
-  <p class="zc-body-5 src">verified in <code>pages/samples/pipelines-fullpopup.html</code></p>
+  <p class="zc-body-4 src">verified in <code>pages/samples/pipelines-fullpopup.html</code></p>
+  <div class="live"><div class="zc-fullpopup">
+  <div class="zc-fullpopup__header">
+    <span class="zc-fullpopup__service">
+      <img src="/zcat-ui/docs/icons/Pipeline -color.svg" alt="">
+      <span class="zc-fullpopup__title">Pipelines</span>
+    </span>
+    <button class="zc-btn" data-variant="ghost-grey" data-size="small" data-content="icon" data-radius="rounded" type="button" aria-label="Close" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('../directdb/databases.html')">
+      <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+    </button>
+  </div>
+  <div class="zc-fullpopup__sheet">
+    <div class="pl-empty-region">
+      <div class="zc-empty">
+        <div class="zc-empty__art"><img src="/zcat-ui/docs/icons/Empty State Illustration.svg" alt=""></div>
+        <div class="zc-empty__content">
+          <div class="zc-empty__heading">Create your first pipeline</div>
+          <div class="zc-empty__desc">Create your first pipeline to automate the build, test and deploy processes.</div>
+        </div>
+        <div class="zc-empty__actions">
+          <button class="zc-btn" data-variant="fill" data-color="primary" type="button">Create Pipeline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
   <pre><code>&lt;div class=&quot;zc-fullpopup&quot;&gt;
   &lt;div class=&quot;zc-fullpopup__header&quot;&gt;
     &lt;span class=&quot;zc-fullpopup__service&quot;&gt;
@@ -330,65 +408,123 @@ return h + &#x27;&lt;/span&gt;</code></pre>
 <section class="snip">
   <h3 class="zc-h6">Empty state</h3>
   <p class="zc-body-3 note">Icon, heading, one line of help, one action. Never a bare &#x27;No data&#x27;. Every list page needs one, drawn in the wireframe or not.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/databases-empty.html</code></p>
-  <pre><code>&lt;div class=&quot;zc-empty&quot;&gt;
-  &lt;div class=&quot;zc-empty__art&quot;&gt;&lt;img src=&quot;/zcat-ui/docs/icons/Empty State Illustration.svg&quot; alt=&quot;&quot;&gt;&lt;/div&gt;
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <div class="live"><div class="zc-empty" data-empty-for="#db-rows" hidden>
+  <div class="zc-empty__content">
+    <span class="zc-empty__heading">No databases match that search</span>
+    <span class="zc-empty__desc">Check the spelling, or clear the search to see all of them again.</span>
+  </div>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-empty&quot; data-empty-for=&quot;#db-rows&quot; hidden&gt;
   &lt;div class=&quot;zc-empty__content&quot;&gt;
-    &lt;div class=&quot;zc-empty__heading&quot;&gt;No databases yet&lt;/div&gt;
-    &lt;div class=&quot;zc-empty__desc&quot;&gt;Spin up a MySQL, PostgreSQL, or managed Aurora database in minutes. Connection strings, backups, and replicas are handled for you.&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class=&quot;zc-empty__actions&quot;&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;outline&quot; data-color=&quot;primary&quot; type=&quot;button&quot;&gt;View Documentation&lt;/button&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot; onclick=&quot;window.location.href=&#x27;./databases.html?create=1&#x27;&quot;&gt;Create Database&lt;/button&gt;
+    &lt;span class=&quot;zc-empty__heading&quot;&gt;No databases match that search&lt;/span&gt;
+    &lt;span class=&quot;zc-empty__desc&quot;&gt;Check the spelling, or clear the search to see all of them again.&lt;/span&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </section>
-<section class="snip">
-  <h3 class="zc-h6">Loading — skeleton</h3>
-  <p class="zc-body-3 note">Match the shape of what is coming: rows for a table, blocks for cards. Never a spinner over a blank page.</p>
-  <p class="zc-body-5 src">verified in <code>zcat-ui/docs/playground.html</code></p>
-  <pre><code>&lt;div class=&quot;zc-skeleton&quot;&#x27; + (s.variant === &#x27;Secondary&#x27; ? &#x27; data-variant=&quot;secondary&quot;&#x27; : &#x27;&#x27;) +
-        (s.animated ? &#x27;&#x27; : &#x27; data-static&#x27;) + &#x27; style=&quot;width:480px;max-width:100%&quot;&gt;&#x27;;
-for (var i = 0; i &lt; parseInt(s.lines, 10); i++) h += &#x27;&lt;span class=&quot;zc-skeleton__bar&quot; style=&quot;width:&#x27; + widths[i % widths.length] + &#x27;&quot;&gt;&lt;/span&gt;&#x27;;
-return h + &#x27;&lt;/div&gt;</code></pre>
-</section>
 <h2 class="zc-h4 sec">PAGE FURNITURE</h2>
 <section class="snip">
-  <h3 class="zc-h6">Sub Header — detail page</h3>
-  <p class="zc-body-3 note">Back Nav + entity name + status badge. Primary tabs live HERE, never floating in the container. Tabs carry no icons.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <h3 class="zc-h6">Sub Header</h3>
+  <p class="zc-body-3 note">Back Nav + entity name + status badge. Primary tabs live HERE, never floating in the container, and carry no icons.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <div class="live"><div class="zc-layout__subheader">
+  <span class="zc-layout__subheader-left">
+    <!-- Back Nav shows only on the detail view; the title names whatever
+         you opened, per the navigation rule. -->
+    <button class="zc-btn zc-subheader-back" data-variant="ghost-grey" data-size="small"
+            data-content="icon" data-radius="rounded" type="button"
+            id="detail-back" aria-label="Back to Databases" hidden>
+      <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-left"/></svg>
+    </button>
+    <span class="zc-layout__subheader-title" id="sh-title">Databases</span>
+    <span class="zc-badge" data-type="secondary" data-color="success" id="sh-badge" hidden>Available</span>
+  </span>
+  <span class="zc-layout__subheader-right">
+    <button class="zc-btn" data-variant="grey" data-size="small" type="button"
+            id="btn-export-detail" hidden>Export</button>
+    <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
+      <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
+    </button>
+  </span>
+  <!-- PRIMARY TABS LIVE HERE, never in the container. Detail view only. -->
+  <div class="zc-tabs zc-layout__subheader-tabs" data-type="primary" role="tablist"
+       id="sh-tabs" hidden>
+    <button class="zc-tab" type="button">Overview</button>
+    <button class="zc-tab" type="button" data-state="active">Monitoring</button>
+    <button class="zc-tab" type="button">Backups</button>
+    <button class="zc-tab" type="button">Settings</button>
+  </div>
+</div></div>
   <pre><code>&lt;div class=&quot;zc-layout__subheader&quot;&gt;
   &lt;span class=&quot;zc-layout__subheader-left&quot;&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;ghost-grey&quot; data-size=&quot;small&quot; data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; type=&quot;button&quot; aria-label=&quot;Back to databases&quot; onclick=&quot;window.location.href=&#x27;./databases.html&#x27;&quot;&gt;
+    &lt;!-- Back Nav shows only on the detail view; the title names whatever
+         you opened, per the navigation rule. --&gt;
+    &lt;button class=&quot;zc-btn zc-subheader-back&quot; data-variant=&quot;ghost-grey&quot; data-size=&quot;small&quot;
+            data-content=&quot;icon&quot; data-radius=&quot;rounded&quot; type=&quot;button&quot;
+            id=&quot;detail-back&quot; aria-label=&quot;Back to Databases&quot; hidden&gt;
       &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-left&quot;/&gt;&lt;/svg&gt;
     &lt;/button&gt;
-    &lt;span class=&quot;zc-layout__subheader-title&quot;&gt;orders-prod&lt;/span&gt;
-    &lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;
+    &lt;span class=&quot;zc-layout__subheader-title&quot; id=&quot;sh-title&quot;&gt;Databases&lt;/span&gt;
+    &lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot; id=&quot;sh-badge&quot; hidden&gt;Available&lt;/span&gt;
   &lt;/span&gt;
   &lt;span class=&quot;zc-layout__subheader-right&quot;&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; data-size=&quot;small&quot; type=&quot;button&quot;&gt;
-      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-refresh&quot;/&gt;&lt;/svg&gt;Refresh
-    &lt;/button&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;outline&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot; onclick=&quot;ddbToast(&#x27;Connection details&#x27;, &#x27;Host, port and credentials are on the Overview tab.&#x27;, &#x27;info&#x27;)&quot;&gt;Connect&lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; data-size=&quot;small&quot; type=&quot;button&quot;
+            id=&quot;btn-export-detail&quot; hidden&gt;Export&lt;/button&gt;
     &lt;button class=&quot;zc-btn&quot; data-variant=&quot;ghost&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot;&gt;
       &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-help&quot;/&gt;&lt;/svg&gt;Help
     &lt;/button&gt;
   &lt;/span&gt;
-  &lt;div class=&quot;zc-tabs zc-layout__subheader-tabs&quot; data-type=&quot;primary&quot; id=&quot;detail-tabs&quot;&gt;
-      &lt;button class=&quot;zc-tab&quot; data-state=&quot;active&quot; data-panel=&quot;overview&quot; type=&quot;button&quot;&gt;Overview&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;console&quot; type=&quot;button&quot;&gt;SQL Console&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;schema&quot; type=&quot;button&quot;&gt;Schema&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;backups&quot; type=&quot;button&quot;&gt;Backups&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;replicas&quot; type=&quot;button&quot;&gt;Replicas&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;monitoring&quot; type=&quot;button&quot;&gt;Monitoring&lt;/button&gt;
-      &lt;button class=&quot;zc-tab&quot; data-panel=&quot;settings&quot; type=&quot;button&quot;&gt;Settings&lt;/button&gt;
-    &lt;/div&gt;
+  &lt;!-- PRIMARY TABS LIVE HERE, never in the container. Detail view only. --&gt;
+  &lt;div class=&quot;zc-tabs zc-layout__subheader-tabs&quot; data-type=&quot;primary&quot; role=&quot;tablist&quot;
+       id=&quot;sh-tabs&quot; hidden&gt;
+    &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Overview&lt;/button&gt;
+    &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot; data-state=&quot;active&quot;&gt;Monitoring&lt;/button&gt;
+    &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Backups&lt;/button&gt;
+    &lt;button class=&quot;zc-tab&quot; type=&quot;button&quot;&gt;Settings&lt;/button&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </section>
 <section class="snip">
-  <h3 class="zc-h6">Container Header — the bar above any content block</h3>
-  <p class="zc-body-3 note">Goes above ANY content block the requirement calls for — a table, a card grid, a list, a chart panel — not just tables. Title, search or filters on the left; actions on the right. Never leave an action button floating alone.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p>
+  <h3 class="zc-h6">Container Header</h3>
+  <p class="zc-body-3 note">Goes above ANY content block the requirement calls for — a table, a card grid, a list, a chart panel — not just tables. Heading, Search or filters left; actions right. Never leave an action button floating alone.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <div class="live"><div class="zc-cheader">
+  <div class="zc-cheader__left zc-cheader__left--row">
+    <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:300px">
+      <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+      <input class="zc-input" type="text" placeholder="Search databases" data-filter="#db-rows tr">
+      <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+    </div>
+  </div>
+  <div class="zc-cheader__right">
+    <div class="zc-select-shell zc-cheader__filter">
+      <div class="zc-input-wrap zc-select-wrap" data-size="default">
+        <span class="zc-input zc-select__value">All Regions</span>
+        <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+      </div>
+      <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+        <div class="zc-menu__item" role="option" data-value="All Regions" aria-selected="true"><span class="zc-menu__label">All Regions</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="us-east-1"><span class="zc-menu__label">us-east-1</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="eu-west-1"><span class="zc-menu__label">eu-west-1</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="ap-south-1"><span class="zc-menu__label">ap-south-1</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+      </div></div>
+    </div>
+    <div class="zc-select-shell zc-cheader__filter">
+      <div class="zc-input-wrap zc-select-wrap" data-size="default">
+        <span class="zc-input zc-select__value">All Status</span>
+        <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+      </div>
+      <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+        <div class="zc-menu__item" role="option" data-value="All Status" aria-selected="true"><span class="zc-menu__label">All Status</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="Available"><span class="zc-menu__label">Available</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="Provisioning"><span class="zc-menu__label">Provisioning</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+        <div class="zc-menu__item" role="option" data-value="Stopped"><span class="zc-menu__label">Stopped</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+      </div></div>
+    </div>
+    <button class="zc-btn" data-variant="grey" type="button" id="btn-export">Export</button>
+    <button class="zc-btn" data-variant="fill" data-color="primary" type="button" id="btn-create">Create Database</button>
+  </div>
+</div></div>
   <pre><code>&lt;div class=&quot;zc-cheader&quot;&gt;
   &lt;div class=&quot;zc-cheader__left zc-cheader__left--row&quot;&gt;
     &lt;div class=&quot;zc-input-wrap zc-search-wrap&quot; data-size=&quot;default&quot; style=&quot;width:300px&quot;&gt;
@@ -400,14 +536,14 @@ return h + &#x27;&lt;/div&gt;</code></pre>
   &lt;div class=&quot;zc-cheader__right&quot;&gt;
     &lt;div class=&quot;zc-select-shell zc-cheader__filter&quot;&gt;
       &lt;div class=&quot;zc-input-wrap zc-select-wrap&quot; data-size=&quot;default&quot;&gt;
-        &lt;span class=&quot;zc-input zc-select__value&quot;&gt;All Engines&lt;/span&gt;
+        &lt;span class=&quot;zc-input zc-select__value&quot;&gt;All Regions&lt;/span&gt;
         &lt;svg class=&quot;zc-select__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;zc-menu&quot; data-size=&quot;small&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
-        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;All Engines&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;All Engines&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Aurora MySQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Aurora MySQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;MySQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;MySQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;PostgreSQL&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;PostgreSQL&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+      &lt;div class=&quot;zc-menu&quot; data-size=&quot;default&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;All Regions&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;All Regions&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;us-east-1&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;us-east-1&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;eu-west-1&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;eu-west-1&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
+        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;ap-south-1&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;ap-south-1&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
       &lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;
     &lt;div class=&quot;zc-select-shell zc-cheader__filter&quot;&gt;
@@ -415,27 +551,39 @@ return h + &#x27;&lt;/div&gt;</code></pre>
         &lt;span class=&quot;zc-input zc-select__value&quot;&gt;All Status&lt;/span&gt;
         &lt;svg class=&quot;zc-select__chevron&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-down&quot;/&gt;&lt;/svg&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;zc-menu&quot; data-size=&quot;small&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
+      &lt;div class=&quot;zc-menu&quot; data-size=&quot;default&quot; role=&quot;listbox&quot;&gt;&lt;div class=&quot;zc-menu__body&quot;&gt;
         &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;All Status&quot; aria-selected=&quot;true&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;All Status&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
         &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Available&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Available&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
         &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Provisioning&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Provisioning&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
-        &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Modifying&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Modifying&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
         &lt;div class=&quot;zc-menu__item&quot; role=&quot;option&quot; data-value=&quot;Stopped&quot;&gt;&lt;span class=&quot;zc-menu__label&quot;&gt;Stopped&lt;/span&gt;&lt;svg class=&quot;zc-menu__check&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-check&quot;/&gt;&lt;/svg&gt;&lt;/div&gt;
       &lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; data-content=&quot;icon&quot; type=&quot;button&quot; aria-label=&quot;Refresh&quot; data-tooltip=&quot;Refresh&quot; data-tooltip-side=&quot;bottom&quot;&gt;
-      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-refresh&quot;/&gt;&lt;/svg&gt;
-    &lt;/button&gt;
-    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot; id=&quot;create-db&quot;&gt;
-      &lt;svg class=&quot;zc-btn__icon&quot; viewBox=&quot;0 0 16 16&quot; fill=&quot;none&quot;&gt;&lt;use href=&quot;#i-plus&quot;/&gt;&lt;/svg&gt;Create Database
-    &lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;grey&quot; type=&quot;button&quot; id=&quot;btn-export&quot;&gt;Export&lt;/button&gt;
+    &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; type=&quot;button&quot; id=&quot;btn-create&quot;&gt;Create Database&lt;/button&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
 </section>
 <section class="snip">
   <h3 class="zc-h6">Container Side Menu</h3>
   <p class="zc-body-3 note">ONE per page. A second vertical list is RECORDS — a table or card list, not navigation.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <p class="zc-body-4 src">verified in <code>pages/directdb/database-detail.html</code></p>
+  <div class="live"><div class="zc-csm">
+  <div class="zc-csm__header"><span class="zc-csm__title">Tables</span>
+    <button class="zc-btn" data-variant="fill" data-color="primary" data-size="small" type="button" onclick="ddbToast('New table', 'Table designer opens here in the full product.', 'info')">New Table</button>
+  </div>
+  <div class="zc-input-wrap zc-search-wrap" data-size="small">
+    <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+    <input class="zc-input" type="text" placeholder="Search tables">
+    <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+  </div>
+  <div class="zc-csm__list" id="schema-list">
+    <button class="zc-csm__item" type="button" data-state="selected"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>orders</button>
+    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>customers</button>
+    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>products</button>
+    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>invoices</button>
+    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>audit_log</button>
+  </div>
+</div></div>
   <pre><code>&lt;div class=&quot;zc-csm&quot;&gt;
   &lt;div class=&quot;zc-csm__header&quot;&gt;&lt;span class=&quot;zc-csm__title&quot;&gt;Tables&lt;/span&gt;
     &lt;button class=&quot;zc-btn&quot; data-variant=&quot;fill&quot; data-color=&quot;primary&quot; data-size=&quot;small&quot; type=&quot;button&quot; onclick=&quot;ddbToast(&#x27;New table&#x27;, &#x27;Table designer opens here in the full product.&#x27;, &#x27;info&#x27;)&quot;&gt;New Table&lt;/button&gt;
@@ -456,101 +604,59 @@ return h + &#x27;&lt;/div&gt;</code></pre>
 </section>
 <h2 class="zc-h4 sec">DATA</h2>
 <section class="snip">
-  <h3 class="zc-h6">Table — stretch (alone on the page)</h3>
-  <p class="zc-body-3 note">The WHOLE ROW clicks: data-rowlink on the &lt;tr&gt;, entity cell is plain text. Status is a Badge. Use data-style=&quot;boxy&quot; instead when the table shares the page with cards, or sits in a popup.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/databases.html</code></p>
+  <h3 class="zc-h6">Table</h3>
+  <p class="zc-body-3 note">The WHOLE ROW clicks: data-rowlink on the &lt;tr&gt;, entity cell plain text. Status is a Badge. data-style=&quot;stretch&quot; when the table is alone, &quot;boxy&quot; when it shares the page or sits in a popup.</p>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants: <code>data-style=&quot;boxy&quot;</code></p>
+  <div class="live"><div class="zc-table-wrap" data-style="stretch">
+  <table class="zc-table">
+    <thead class="zc-table__head"><tr>
+      <th class="zc-table__th">Name</th>
+      <th class="zc-table__th">Status</th>
+      <th class="zc-table__th">Region</th>
+      <th class="zc-table__th">Engine</th>
+      <th class="zc-table__th">Storage</th>
+      <th class="zc-table__th">Created</th>
+      <th class="zc-table__th zc-table__th--actions"></th>
+    </tr></thead>
+    <tbody id="db-rows"></tbody>
+  </table>
+  <div class="zc-empty" data-empty-for="#db-rows" hidden>
+    <div class="zc-empty__content">
+      <span class="zc-empty__heading">No databases match that search</span>
+      <span class="zc-empty__desc">Check the spelling, or clear the search to see all of them again.</span>
+    </div>
+  </div>
+  <table style="display:none">
+  </table>
+</div></div>
   <pre><code>&lt;div class=&quot;zc-table-wrap&quot; data-style=&quot;stretch&quot;&gt;
   &lt;table class=&quot;zc-table&quot;&gt;
     &lt;thead class=&quot;zc-table__head&quot;&gt;&lt;tr&gt;
       &lt;th class=&quot;zc-table__th&quot;&gt;Name&lt;/th&gt;
-      &lt;th class=&quot;zc-table__th&quot;&gt;Engine&lt;/th&gt;
       &lt;th class=&quot;zc-table__th&quot;&gt;Status&lt;/th&gt;
       &lt;th class=&quot;zc-table__th&quot;&gt;Region&lt;/th&gt;
-      &lt;th class=&quot;zc-table__th&quot;&gt;Compute&lt;/th&gt;
+      &lt;th class=&quot;zc-table__th&quot;&gt;Engine&lt;/th&gt;
       &lt;th class=&quot;zc-table__th&quot;&gt;Storage&lt;/th&gt;
-      &lt;th class=&quot;zc-table__th&quot;&gt;Connections&lt;/th&gt;
       &lt;th class=&quot;zc-table__th&quot;&gt;Created&lt;/th&gt;
       &lt;th class=&quot;zc-table__th zc-table__th--actions&quot;&gt;&lt;/th&gt;
     &lt;/tr&gt;&lt;/thead&gt;
-    &lt;tbody id=&quot;db-rows&quot;&gt;
-      &lt;tr class=&quot;zc-table__row&quot;&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;orders-prod&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;Aurora MySQL 3.0&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;us-east-1&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;2 vCPU / 8 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;41 / 100 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;64&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;May 12, 2026&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr class=&quot;zc-table__row&quot;&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;analytics-pg&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;PostgreSQL 16&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;success&quot;&gt;Available&lt;/span&gt;&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;eu-west-1&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;4 vCPU / 16 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;132 / 250 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;22&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;Jun 2, 2026&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr class=&quot;zc-table__row&quot;&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;sessions-cache&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;MySQL 8.0&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;warning&quot;&gt;Modifying&lt;/span&gt;&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;ap-south-1&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;1 vCPU / 4 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;12 / 50 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;8&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;Jul 19, 2026&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr class=&quot;zc-table__row&quot;&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;billing-staging&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;PostgreSQL 16&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;info&quot;&gt;Provisioning&lt;/span&gt;&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;us-west-2&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;2 vCPU / 8 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;0 / 80 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;0&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;Aug 9, 2026&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr class=&quot;zc-table__row&quot;&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;audit-archive&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;MySQL 8.0&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;&lt;span class=&quot;zc-badge&quot; data-type=&quot;secondary&quot; data-color=&quot;grey&quot;&gt;Stopped&lt;/span&gt;&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;us-east-2&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;1 vCPU / 4 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;67 / 100 GB&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;0&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td&quot;&gt;Sep 30, 2025&lt;/td&gt;
-        &lt;td class=&quot;zc-table__td zc-table__td--actions&quot;&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-    &lt;/tbody&gt;
-      &lt;/table&gt;
-      &lt;div class=&quot;zc-empty&quot; data-empty-for=&quot;#db-rows&quot; hidden&gt;
-        &lt;div class=&quot;zc-empty__content&quot;&gt;
-          &lt;span class=&quot;zc-empty__heading&quot;&gt;No databases match that search&lt;/span&gt;
-          &lt;span class=&quot;zc-empty__desc&quot;&gt;Check the spelling, or clear the search to see all of them again.&lt;/span&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;table style=&quot;display:none&quot;&gt;
+    &lt;tbody id=&quot;db-rows&quot;&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+  &lt;div class=&quot;zc-empty&quot; data-empty-for=&quot;#db-rows&quot; hidden&gt;
+    &lt;div class=&quot;zc-empty__content&quot;&gt;
+      &lt;span class=&quot;zc-empty__heading&quot;&gt;No databases match that search&lt;/span&gt;
+      &lt;span class=&quot;zc-empty__desc&quot;&gt;Check the spelling, or clear the search to see all of them again.&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;table style=&quot;display:none&quot;&gt;
   &lt;/table&gt;
 &lt;/div&gt;</code></pre>
 </section>
 <section class="snip">
-  <h3 class="zc-h6">General Details — read-only detail</h3>
+  <h3 class="zc-h6">General Details</h3>
   <p class="zc-body-3 note">Detail pages are READ-ONLY. Values display here; an Edit button opens a popup.</p>
-  <p class="zc-body-5 src">verified in <code>pages/directdb/database-detail.html</code></p>
-  <pre><code>&lt;div class=&quot;zc-gdetails&quot; style=&quot;width:100%&quot;&gt;
-  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Region&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;us-east-1 · N. Virginia&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;VPC&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;vpc-0a12b3cd&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Created&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;May 12, 2026&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Maintenance window&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;Sun 02:00–02:30 UTC&lt;/span&gt;&lt;/div&gt;
-  &lt;div class=&quot;zc-gdetails__row&quot;&gt;&lt;span class=&quot;zc-gdetails__label&quot;&gt;Deletion protection&lt;/span&gt;&lt;span class=&quot;zc-gdetails__colon&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;zc-gdetails__value&quot;&gt;Enabled&lt;/span&gt;&lt;/div&gt;
-&lt;/div&gt;</code></pre>
+  <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p>
+  <div class="live"><div class="zc-gdetails" id="wiz-review"></div></div>
+  <pre><code>&lt;div class=&quot;zc-gdetails&quot; id=&quot;wiz-review&quot;&gt;&lt;/div&gt;</code></pre>
 </section>
-</div><script src="../zcat.js?v=20" defer></script>
-</body></html>
+</div></body></html>
