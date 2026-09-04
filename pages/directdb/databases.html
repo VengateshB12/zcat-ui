@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DirectDB — Databases</title>
+  <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
+  <link rel="stylesheet" href="./directdb.css?v=120">
+  <script src="./directdb-common.js" defer></script>
+  <script src="../../zcat-ui/zcat.js?v=22" defer></script>
+</head>
+<body>
+
+<div class="zc-layout ddb-layout">
+
+  <!-- Service rail -->
+  <div class="zc-layout__rail">
+    <img class="zc-layout__logo" src="/zcat-ui/docs/icons/Catalyst Color Logo.svg" alt="Catalyst">
+    <span class="zc-layout__rail-divider"></span>
+    <span class="zc-layout__rail-label">Services</span>
+    <div class="zc-layout__services">
+      <button class="zc-layout__service" type="button" data-state="active">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Cloud Scale.svg');--icon-active:url('/zcat-ui/docs/icons/Cloud Scale -color.svg')"></span></span>
+        <span class="zc-layout__service-name">CloudScale</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Serverless.svg');--icon-active:url('/zcat-ui/docs/icons/Serverless -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Serverless</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Smart browzz.svg');--icon-active:url('/zcat-ui/docs/icons/Smart browzz -color.svg')"></span></span>
+        <span class="zc-layout__service-name">SmartBrowz</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Quick ML.svg');--icon-active:url('/zcat-ui/docs/icons/Quick ML -color.svg')"></span></span>
+        <span class="zc-layout__service-name">QuickML</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Pipeline.svg');--icon-active:url('/zcat-ui/docs/icons/Pipeline -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Pipeline</span>
+      </button>
+    </div>
+    <div class="zc-layout__rail-bottom">
+      <span class="zc-layout__rail-divider"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/clapperboard.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/figma.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/command.svg')"></span>
+    </div>
+  </div>
+
+  <!-- White shell -->
+  <div class="zc-layout__shell">
+
+    <header class="zc-layout__topbar">
+      <div class="zc-layout__topbar-left">
+        <div class="zc-select-shell zc-ghostdd-shell">
+          <div class="zc-ghostdd zc-select-wrap">
+            <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">Z</span></span>
+            <span class="zc-ghostdd__box"><span class="zc-ghostdd__label">zcatalyst-trial-app</span>
+              <svg class="zc-ghostdd__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg></span>
+          </div>
+          <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+            <div class="zc-menu__item" role="option" data-value="zcatalyst-trial-app" aria-selected="true"><span class="zc-menu__label">zcatalyst-trial-app</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+          </div></div>
+        </div>
+        <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
+          <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+          <input class="zc-input" type="text" placeholder="Search Here">
+          <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+        </div>
+      </div>
+      <span class="zc-layout__avatar"><img src="/zcat-ui/docs/icons/Women.png" alt="Grace Mputhia"></span>
+    </header>
+
+    <div class="zc-layout__main">
+
+      <!-- Side menu -->
+      <aside class="zc-sidemenu">
+        <div class="zc-sidemenu__service">
+          <img src="/zcat-ui/docs/icons/Cloud Scale -color.svg" alt="">
+          <span class="zc-sidemenu__service-name">DirectDB</span>
+        </div>
+        <div class="zc-sidemenu__body">
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">DATABASES</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button" data-state="active"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-database"/></svg><span class="zc-sidemenu__label">All Databases</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-history"/></svg><span class="zc-sidemenu__label">Backups</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MONITOR</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-monitor"/></svg><span class="zc-sidemenu__label">Metrics</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-activity"/></svg><span class="zc-sidemenu__label">Query Insights</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MANAGE</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-key"/></svg><span class="zc-sidemenu__label">Access &amp; Roles</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-settings"/></svg><span class="zc-sidemenu__label">Settings</span></button>
+          </div>
+        </div>
+        <button class="zc-btn zc-sidemenu__expand" data-variant="grey" data-size="small" data-content="icon" data-radius="rounded" aria-label="Toggle side menu">
+          <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-right"/></svg>
+        </button>
+      </aside>
+
+      <div class="zc-layout__page">
+
+        <div class="zc-layout__subheader">
+          <span class="zc-layout__subheader-title">DirectDB</span>
+          <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
+            <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
+          </button>
+        </div>
+
+        <div class="zc-layout__body">
+          <div class="zc-layout__container ddb-container">
+
+            <!-- Container Header: search + filters + actions -->
+            <div class="zc-cheader">
+              <div class="zc-cheader__left zc-cheader__left--row">
+                <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:300px">
+                  <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+                  <input class="zc-input" type="text" placeholder="Search databases" data-filter="#db-rows tr">
+                  <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+                </div>
+              </div>
+              <div class="zc-cheader__right">
+                <div class="zc-select-shell zc-cheader__filter">
+                  <div class="zc-input-wrap zc-select-wrap" data-size="default">
+                    <span class="zc-input zc-select__value">All Engines</span>
+                    <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+                  </div>
+                  <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+                    <div class="zc-menu__item" role="option" data-value="All Engines" aria-selected="true"><span class="zc-menu__label">All Engines</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="Aurora MySQL"><span class="zc-menu__label">Aurora MySQL</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="MySQL"><span class="zc-menu__label">MySQL</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="PostgreSQL"><span class="zc-menu__label">PostgreSQL</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                  </div></div>
+                </div>
+                <div class="zc-select-shell zc-cheader__filter">
+                  <div class="zc-input-wrap zc-select-wrap" data-size="default">
+                    <span class="zc-input zc-select__value">All Status</span>
+                    <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+                  </div>
+                  <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+                    <div class="zc-menu__item" role="option" data-value="All Status" aria-selected="true"><span class="zc-menu__label">All Status</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="Available"><span class="zc-menu__label">Available</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="Provisioning"><span class="zc-menu__label">Provisioning</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="Modifying"><span class="zc-menu__label">Modifying</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="Stopped"><span class="zc-menu__label">Stopped</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                  </div></div>
+                </div>
+                <button class="zc-btn" data-variant="grey" data-content="icon" type="button" aria-label="Refresh" data-tooltip="Refresh" data-tooltip-side="bottom">
+                  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-refresh"/></svg>
+                </button>
+                <button class="zc-btn" data-variant="fill" data-color="primary" type="button" id="create-db">
+                  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-plus"/></svg>Create Database
+                </button>
+              </div>
+            </div>
+
+            <!-- Stretch table (5 of 5 rows visible — pagination intentionally omitted) -->
+            <div class="ddb-table-region">
+              <div class="zc-table-wrap" data-style="stretch">
+                <table class="zc-table">
+                  <thead class="zc-table__head"><tr>
+                    <th class="zc-table__th">Name</th>
+                    <th class="zc-table__th">Engine</th>
+                    <th class="zc-table__th">Status</th>
+                    <th class="zc-table__th">Region</th>
+                    <th class="zc-table__th">Compute</th>
+                    <th class="zc-table__th">Storage</th>
+                    <th class="zc-table__th">Connections</th>
+                    <th class="zc-table__th">Created</th>
+                    <th class="zc-table__th zc-table__th--actions"></th>
+                  </tr></thead>
+                  <tbody id="db-rows">
+                    <tr class="zc-table__row">
+                      <td class="zc-table__td">orders-prod</td>
+                      <td class="zc-table__td">Aurora MySQL 3.0</td>
+                      <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td>
+                      <td class="zc-table__td">us-east-1</td>
+                      <td class="zc-table__td">2 vCPU / 8 GB</td>
+                      <td class="zc-table__td">41 / 100 GB</td>
+                      <td class="zc-table__td">64</td>
+                      <td class="zc-table__td">May 12, 2026</td>
+                      <td class="zc-table__td zc-table__td--actions"></td>
+                    </tr>
+                    <tr class="zc-table__row">
+                      <td class="zc-table__td">analytics-pg</td>
+                      <td class="zc-table__td">PostgreSQL 16</td>
+                      <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td>
+                      <td class="zc-table__td">eu-west-1</td>
+                      <td class="zc-table__td">4 vCPU / 16 GB</td>
+                      <td class="zc-table__td">132 / 250 GB</td>
+                      <td class="zc-table__td">22</td>
+                      <td class="zc-table__td">Jun 2, 2026</td>
+                      <td class="zc-table__td zc-table__td--actions"></td>
+                    </tr>
+                    <tr class="zc-table__row">
+                      <td class="zc-table__td">sessions-cache</td>
+                      <td class="zc-table__td">MySQL 8.0</td>
+                      <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="warning">Modifying</span></td>
+                      <td class="zc-table__td">ap-south-1</td>
+                      <td class="zc-table__td">1 vCPU / 4 GB</td>
+                      <td class="zc-table__td">12 / 50 GB</td>
+                      <td class="zc-table__td">8</td>
+                      <td class="zc-table__td">Jul 19, 2026</td>
+                      <td class="zc-table__td zc-table__td--actions"></td>
+                    </tr>
+                    <tr class="zc-table__row">
+                      <td class="zc-table__td">billing-staging</td>
+                      <td class="zc-table__td">PostgreSQL 16</td>
+                      <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="info">Provisioning</span></td>
+                      <td class="zc-table__td">us-west-2</td>
+                      <td class="zc-table__td">2 vCPU / 8 GB</td>
+                      <td class="zc-table__td">0 / 80 GB</td>
+                      <td class="zc-table__td">0</td>
+                      <td class="zc-table__td">Aug 9, 2026</td>
+                      <td class="zc-table__td zc-table__td--actions"></td>
+                    </tr>
+                    <tr class="zc-table__row">
+                      <td class="zc-table__td">audit-archive</td>
+                      <td class="zc-table__td">MySQL 8.0</td>
+                      <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="grey">Stopped</span></td>
+                      <td class="zc-table__td">us-east-2</td>
+                      <td class="zc-table__td">1 vCPU / 4 GB</td>
+                      <td class="zc-table__td">67 / 100 GB</td>
+                      <td class="zc-table__td">0</td>
+                      <td class="zc-table__td">Sep 30, 2025</td>
+                      <td class="zc-table__td zc-table__td--actions"></td>
+                    </tr>
+                  </tbody>
+                    </table>
+                    <div class="zc-empty" data-empty-for="#db-rows" hidden>
+                      <div class="zc-empty__content">
+                        <span class="zc-empty__heading">No databases match that search</span>
+                        <span class="zc-empty__desc">Check the spelling, or clear the search to see all of them again.</span>
+                      </div>
+                    </div>
+                    <table style="display:none">
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE DATABASE WIZARD -->
+<div class="zc-popup-scrim ddb-overlay" id="wizard-overlay" hidden>
+  <div class="zc-popup ddb-wizard">
+    <div class="zc-popup__header">
+      <div class="zc-popup__title">Create Database</div>
+      <div class="zc-popup__desc">Provision a managed database for zcatalyst-trial-app.</div>
+      <div class="zc-stepper" id="wiz-stepper">
+        <span class="zc-stepper__step" data-state="active" data-step="1"><span class="zc-stepper__number">1</span><span class="zc-stepper__content"><span class="zc-stepper__label">Engine</span></span></span>
+        <span class="zc-stepper__divider" data-state="default"></span>
+        <span class="zc-stepper__step" data-state="default" data-step="2"><span class="zc-stepper__number">2</span><span class="zc-stepper__content"><span class="zc-stepper__label">Configuration</span></span></span>
+        <span class="zc-stepper__divider" data-state="default"></span>
+        <span class="zc-stepper__step" data-state="default" data-step="3"><span class="zc-stepper__number">3</span><span class="zc-stepper__content"><span class="zc-stepper__label">Backup &amp; Scale</span></span></span>
+        <span class="zc-stepper__divider" data-state="default"></span>
+        <span class="zc-stepper__step" data-state="default" data-step="4"><span class="zc-stepper__number">4</span><span class="zc-stepper__content"><span class="zc-stepper__label">Review</span></span></span>
+      </div>
+    </div>
+    <div class="zc-popup__body">
+
+      <!-- Step 1: Engine -->
+      <div class="ddb-wizstep" data-step="1">
+        <div class="ddb-choices">
+          <button class="zc-card ddb-choice" type="button" data-state="selected" data-engine="Aurora MySQL (Managed)">
+            <span class="zc-card__check"></span>
+            <span class="ddb-iconbg ddb-iconbg--round" data-color="purple"><svg viewBox="0 0 16 16"><use href="#i-cloud"/></svg></span>
+            <span class="ddb-choice__body">
+              <span class="zc-subtitle-1 zc-text-primary">Aurora MySQL (Managed)</span>
+              <span class="zc-body-3 zc-text-secondary">Catalyst DataStore — fully managed, MySQL-compatible, with auto-scaling storage and automatic failover.</span>
+            </span>
+          </button>
+          <button class="zc-card ddb-choice" type="button" data-engine="MySQL 8.0">
+            <span class="zc-card__check"></span>
+            <span class="ddb-iconbg ddb-iconbg--round" data-color="info"><svg viewBox="0 0 16 16"><use href="#i-database"/></svg></span>
+            <span class="ddb-choice__body">
+              <span class="zc-subtitle-1 zc-text-primary">MySQL</span>
+              <span class="zc-body-3 zc-text-secondary">Self-managed MySQL 8.0 with full control over parameters, users, and extensions.</span>
+            </span>
+          </button>
+          <button class="zc-card ddb-choice" type="button" data-engine="PostgreSQL 16">
+            <span class="zc-card__check"></span>
+            <span class="ddb-iconbg ddb-iconbg--round" data-color="primary"><svg viewBox="0 0 16 16"><use href="#i-server"/></svg></span>
+            <span class="ddb-choice__body">
+              <span class="zc-subtitle-1 zc-text-primary">PostgreSQL</span>
+              <span class="zc-body-3 zc-text-secondary">PostgreSQL 16 with JSONB, rich extensions, and logical replication.</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Configuration -->
+      <div class="ddb-wizstep ddb-form" data-step="2" hidden>
+        <div class="zc-input-group">
+          <label class="zc-label"><span>Database name</span></label>
+          <div class="zc-input-wrap" data-size="default"><input class="zc-input" id="wiz-name" type="text" placeholder="e.g. orders-prod"></div>
+          <span class="zc-helper">Lowercase letters, numbers and hyphens. Used as the connection database name.</span>
+        </div>
+        <div class="ddb-pair">
+          <div class="zc-input-group">
+            <label class="zc-label"><span>Region</span></label>
+            <div class="zc-select-shell">
+              <div class="zc-input-wrap zc-select-wrap" data-size="default">
+                <span class="zc-input zc-select__value">us-east-1 · N. Virginia</span>
+                <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+              </div>
+              <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+                <div class="zc-menu__item" role="option" data-value="us-east-1 · N. Virginia" aria-selected="true"><span class="zc-menu__label">us-east-1 · N. Virginia</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                <div class="zc-menu__item" role="option" data-value="us-west-2 · Oregon"><span class="zc-menu__label">us-west-2 · Oregon</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                <div class="zc-menu__item" role="option" data-value="eu-west-1 · Ireland"><span class="zc-menu__label">eu-west-1 · Ireland</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                <div class="zc-menu__item" role="option" data-value="ap-south-1 · Mumbai"><span class="zc-menu__label">ap-south-1 · Mumbai</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+              </div></div>
+            </div>
+          </div>
+          <div class="zc-input-group">
+            <label class="zc-label"><span>Version</span></label>
+            <div class="zc-select-shell">
+              <div class="zc-input-wrap zc-select-wrap" data-size="default">
+                <span class="zc-input zc-select__value">Latest (recommended)</span>
+                <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+              </div>
+              <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+                <div class="zc-menu__item" role="option" data-value="Latest (recommended)" aria-selected="true"><span class="zc-menu__label">Latest (recommended)</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                <div class="zc-menu__item" role="option" data-value="Previous major"><span class="zc-menu__label">Previous major</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+        <div class="zc-input-group">
+          <label class="zc-label"><span>Compute (instance class)</span></label>
+          <div class="ddb-plans" id="wiz-plans">
+            <button class="zc-card ddb-plan" type="button" data-plan="Small · 1 vCPU / 4 GB" data-price="$0.058/hr">
+              <span class="zc-card__check"></span>
+              <span class="zc-subtitle-2 zc-text-primary">Small</span><span class="zc-body-3 zc-text-secondary">1 vCPU · 4 GB</span><span class="zc-subtitle-3 zc-text-primary">$0.058/hr</span>
+            </button>
+            <button class="zc-card ddb-plan" type="button" data-state="selected" data-plan="Medium · 2 vCPU / 8 GB" data-price="$0.116/hr">
+              <span class="zc-card__check"></span>
+              <span class="zc-subtitle-2 zc-text-primary">Medium</span><span class="zc-body-3 zc-text-secondary">2 vCPU · 8 GB</span><span class="zc-subtitle-3 zc-text-primary">$0.116/hr</span>
+            </button>
+            <button class="zc-card ddb-plan" type="button" data-plan="Large · 4 vCPU / 16 GB" data-price="$0.232/hr">
+              <span class="zc-card__check"></span>
+              <span class="zc-subtitle-2 zc-text-primary">Large</span><span class="zc-body-3 zc-text-secondary">4 vCPU · 16 GB</span><span class="zc-subtitle-3 zc-text-primary">$0.232/hr</span>
+            </button>
+            <button class="zc-card ddb-plan" type="button" data-plan="XLarge · 8 vCPU / 32 GB" data-price="$0.464/hr">
+              <span class="zc-card__check"></span>
+              <span class="zc-subtitle-2 zc-text-primary">XLarge</span><span class="zc-body-3 zc-text-secondary">8 vCPU · 32 GB</span><span class="zc-subtitle-3 zc-text-primary">$0.464/hr</span>
+            </button>
+          </div>
+        </div>
+        <div class="zc-input-group">
+          <label class="zc-label"><span>Allocated storage (GB)</span></label>
+          <div class="zc-input-wrap" data-size="default">
+            <input class="zc-input" id="wiz-storage" type="number" value="100" min="20" max="1000" step="10">
+            <span class="zc-numstepper">
+              <button class="zc-numstepper__btn" type="button" aria-label="Increment"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10L8 6L4 10"/></svg></button>
+              <button class="zc-numstepper__btn" type="button" aria-label="Decrement"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6L8 10L12 6"/></svg></button>
+            </span>
+          </div>
+          <span class="zc-helper">20–1000 GB. Storage auto-scales up; you are billed for provisioned capacity.</span>
+        </div>
+      </div>
+
+      <!-- Step 3: Backup & Scale -->
+      <div class="ddb-wizstep ddb-form" data-step="3" hidden>
+        <div class="ddb-settingrow">
+          <label class="zc-toggle"><span class="zc-toggle__row">
+            <input type="checkbox" class="zc-toggle__input" id="wiz-backup" checked>
+            <span class="zc-toggle__track"></span>
+            <span class="zc-toggle__label">Automated backups</span></span>
+            <span class="zc-toggle__desc">Daily snapshots with point-in-time recovery.</span>
+          </label>
+        </div>
+        <div class="ddb-pair"><div class="zc-input-group" id="wiz-retention-group">
+          <label class="zc-label"><span>Backup retention</span></label>
+          <div class="zc-select-shell">
+            <div class="zc-input-wrap zc-select-wrap" data-size="default">
+              <span class="zc-input zc-select__value">7 days</span>
+              <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+            </div>
+            <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+              <div class="zc-menu__item" role="option" data-value="7 days" aria-selected="true"><span class="zc-menu__label">7 days</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+              <div class="zc-menu__item" role="option" data-value="14 days"><span class="zc-menu__label">14 days</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+              <div class="zc-menu__item" role="option" data-value="30 days"><span class="zc-menu__label">30 days</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            </div></div>
+          </div>
+        </div></div>
+        <div class="zc-input-group">
+          <label class="zc-label"><span>Read replicas</span></label>
+          <div class="ddb-plans" id="wiz-replicas">
+            <button class="zc-card ddb-plan" type="button" data-replicas="0"><span class="zc-card__check"></span><span class="zc-subtitle-2 zc-text-primary">0</span><span class="zc-body-3 zc-text-secondary">none</span></button>
+            <button class="zc-card ddb-plan" type="button" data-state="selected" data-replicas="1"><span class="zc-card__check"></span><span class="zc-subtitle-2 zc-text-primary">1</span><span class="zc-body-3 zc-text-secondary">1 reader</span></button>
+            <button class="zc-card ddb-plan" type="button" data-replicas="2"><span class="zc-card__check"></span><span class="zc-subtitle-2 zc-text-primary">2</span><span class="zc-body-3 zc-text-secondary">2 readers</span></button>
+            <button class="zc-card ddb-plan" type="button" data-replicas="3"><span class="zc-card__check"></span><span class="zc-subtitle-2 zc-text-primary">3</span><span class="zc-body-3 zc-text-secondary">3 readers</span></button>
+          </div>
+        </div>
+        <div class="ddb-settingrow">
+          <label class="zc-toggle"><span class="zc-toggle__row">
+            <input type="checkbox" class="zc-toggle__input" id="wiz-ha">
+            <span class="zc-toggle__track"></span>
+            <span class="zc-toggle__label">High availability (Multi-AZ)</span></span>
+            <span class="zc-toggle__desc">Standby instance in a second availability zone with automatic failover.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Step 4: Review -->
+      <div class="ddb-wizstep" data-step="4" hidden>
+        <div class="zc-attention" data-color="info" data-type="alert" style="margin-bottom:var(--zc-space-16)">
+          <span class="zc-attention__content">
+            <span class="zc-attention__header">
+              <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-info"/></svg>
+              <span class="zc-attention__heading">Review your database</span>
+            </span>
+            <span class="zc-attention__body">Provisioning takes 3–5 minutes. You can connect once the status is Available.</span>
+          </span>
+        </div>
+        <div class="zc-gdetails" id="wiz-review" style="width:100%">
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Engine</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="engine">Aurora MySQL (Managed)</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Name</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="name">—</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Region</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="region">us-east-1 · N. Virginia</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Compute</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="plan">Medium · 2 vCPU / 8 GB</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Storage</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="storage">100 GB</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Automated backups</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="backup">7-day retention</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">Read replicas</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="replicas">1</span></div>
+          <div class="zc-gdetails__row"><span class="zc-gdetails__label">High availability</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value" data-rev="ha">Single-AZ</span></div>
+        </div>
+        <div class="ddb-revfoot">
+          <span class="zc-body-1 zc-text-secondary">Estimated cost</span>
+          <span class="zc-h5 zc-text-primary"><span data-rev="price">$0.116/hr</span> <span class="zc-body-3 zc-text-light">+ storage</span></span>
+        </div>
+      </div>
+
+    </div>
+    <div class="zc-popup__footer">
+      <button class="zc-btn" data-variant="grey" type="button" id="wiz-back" hidden>Back</button>
+      <span class="ddb-foot-spacer"></span>
+      <button class="zc-btn" data-variant="grey" type="button" id="wiz-cancel">Cancel</button>
+      <button class="zc-btn" data-variant="fill" data-color="primary" type="button" id="wiz-next">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Page glue JS: three-dot row menus (template pattern) + wizard state. */
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* Inject three-dot action menus into every row (markup identical to docs/template.html) */
+  var menu = '<div class="zc-select-shell zc-table__menushell" data-menu="action">' +
+    '<div class="zc-table__threedot zc-select-wrap" role="button" aria-label="More actions">' +
+    '<svg viewBox="0 0 16 16" fill="none"><use href="#i-threedot"/></svg></div>' +
+    '<div class="zc-menu zc-menu--action" data-size="small" role="menu"><div class="zc-menu__body">' +
+    ['View Details', 'Create Backup', 'Delete'].map(function (a) {
+      return '<div class="zc-menu__item" role="menuitem" data-value="' + a + '"><span class="zc-menu__label">' + a + '</span></div>';
+    }).join('') + '</div></div></div>';
+  document.querySelectorAll('#db-rows .zc-table__td--actions').forEach(function (td) { td.innerHTML = menu; });
+
+  document.getElementById('db-rows').addEventListener('click', function (e) {
+    if (e.target.closest('.zc-table__menushell')) return;
+    if (e.target.closest('.zc-table__row')) window.location.href = './database-detail.html';
+  });
+
+  document.addEventListener('zcat:menu:action', function (e) {
+    var action = e.detail && e.detail.value;
+    var row = e.target.closest('.zc-table__row');
+    var name = row ? row.querySelector('.zc-table__td').textContent.trim() : '';
+    if (action === 'View Details') { window.location.href = './database-detail.html'; }
+    else if (action === 'Create Backup') { ddbToast('Backup started', 'A manual backup of "' + name + '" is being created.', 'info'); }
+    else if (action === 'Delete') { ddbToast('Delete requires confirmation', 'Open "' + name + '" and use Settings to delete it.', 'warning'); }
+  });
+
+  /* ── Wizard ── */
+  var overlay = document.getElementById('wizard-overlay');
+  var step = 1, TOTAL = 4;
+  var sel = { engine: 'Aurora MySQL (Managed)', plan: 'Medium · 2 vCPU / 8 GB', price: '$0.116/hr', replicas: '1' };
+
+  function showStep(n) {
+    step = n;
+    document.querySelectorAll('.ddb-wizstep').forEach(function (p) { p.hidden = (+p.dataset.step !== n); });
+    document.querySelectorAll('#wiz-stepper .zc-stepper__step').forEach(function (s) {
+      var k = +s.dataset.step;
+      s.dataset.state = k < n ? 'completed' : k === n ? 'active' : 'default';
+    });
+    document.querySelectorAll('#wiz-stepper .zc-stepper__divider').forEach(function (d, i) {
+      d.dataset.state = (i + 1) < n ? 'completed' : 'default';
+    });
+    document.getElementById('wiz-back').hidden = (n === 1);
+    document.getElementById('wiz-next').textContent = (n === TOTAL) ? 'Create Database' : 'Continue';
+    if (n === TOTAL) fillReview();
+  }
+
+  function fillReview() {
+    var name = document.getElementById('wiz-name').value.trim() || '—';
+    var storage = document.getElementById('wiz-storage').value || '100';
+    var backup = document.getElementById('wiz-backup').checked;
+    var ha = document.getElementById('wiz-ha').checked;
+    var region = document.querySelector('[data-step="2"] .zc-select__value').textContent;
+    var retention = document.querySelector('[data-step="3"] .zc-select__value').textContent;
+    var set = function (k, v) { document.querySelector('[data-rev="' + k + '"]').textContent = v; };
+    set('engine', sel.engine); set('name', name); set('region', region);
+    set('plan', sel.plan); set('storage', storage + ' GB');
+    set('backup', backup ? retention.replace(' days', '-day') + ' retention' : 'Disabled');
+    set('replicas', sel.replicas); set('ha', ha ? 'Multi-AZ' : 'Single-AZ'); set('price', sel.price);
+  }
+
+  function pickCard(container, attr, cb) {
+    container.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-' + attr + ']');
+      if (!card) return;
+      container.querySelectorAll('[data-' + attr + ']').forEach(function (c) { c.removeAttribute('data-state'); });
+      card.dataset.state = 'selected';
+      cb(card);
+    });
+  }
+  pickCard(document.querySelector('[data-step="1"]'), 'engine', function (c) { sel.engine = c.dataset.engine; });
+  pickCard(document.getElementById('wiz-plans'), 'plan', function (c) { sel.plan = c.dataset.plan; sel.price = c.dataset.price; });
+  pickCard(document.getElementById('wiz-replicas'), 'replicas', function (c) { sel.replicas = c.dataset.replicas; });
+
+  document.getElementById('create-db').addEventListener('click', function () { showStep(1); ddbOpen('wizard-overlay'); });
+  document.getElementById('wiz-cancel').addEventListener('click', function () { ddbClose('wizard-overlay'); });
+  document.getElementById('wiz-back').addEventListener('click', function () { if (step > 1) showStep(step - 1); });
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) ddbClose('wizard-overlay'); });
+
+  document.getElementById('wiz-next').addEventListener('click', function () {
+    if (step === 2 && !document.getElementById('wiz-name').value.trim()) {
+      var group = document.getElementById('wiz-name').closest('.zc-input-group');
+      group.querySelector('.zc-input-wrap').dataset.state = 'error';
+      group.querySelector('.zc-helper').dataset.state = 'error';
+      group.querySelector('.zc-helper').textContent = 'A database name is required.';
+      return;
+    }
+    if (step < TOTAL) { showStep(step + 1); return; }
+    /* Create */
+    var name = document.getElementById('wiz-name').value.trim();
+    ddbClose('wizard-overlay');
+    ddbToast('Database creating', '"' + name + '" is provisioning. This takes 3–5 minutes.', 'info');
+    var tbody = document.getElementById('db-rows');
+    var tr = document.createElement('tr');
+    tr.className = 'zc-table__row';
+    tr.innerHTML = '<td class="zc-table__td" data-cell="name"></td>' +
+      '<td class="zc-table__td" data-cell="engine"></td>' +
+      '<td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="info">Provisioning</span></td>' +
+      '<td class="zc-table__td" data-cell="region"></td>' +
+      '<td class="zc-table__td" data-cell="compute"></td>' +
+      '<td class="zc-table__td">0 / ' + (document.getElementById('wiz-storage').value || '100') + ' GB</td>' +
+      '<td class="zc-table__td">0</td>' +
+      '<td class="zc-table__td">Aug 28, 2026</td>' +
+      '<td class="zc-table__td zc-table__td--actions">' + menu + '</td>';
+    tr.querySelector('[data-cell="name"]').textContent = name;
+    tr.querySelector('[data-cell="engine"]').textContent = sel.engine;
+    tr.querySelector('[data-cell="region"]').textContent = document.querySelector('[data-step="2"] .zc-select__value').textContent.split(' · ')[0];
+    tr.querySelector('[data-cell="compute"]').textContent = sel.plan.split(' · ')[1];
+    tbody.insertBefore(tr, tbody.firstChild);
+  });
+
+  /* Retention only applies while automated backups are on */
+  function syncRetention() {
+    var on = document.getElementById('wiz-backup').checked;
+    var group = document.getElementById('wiz-retention-group');
+    if (on) {
+      group.querySelector('.zc-label').removeAttribute('data-state');
+      group.querySelector('.zc-select-wrap').removeAttribute('data-state');
+      group.querySelector('.zc-select-shell').style.pointerEvents = '';
+    } else {
+      group.querySelector('.zc-label').dataset.state = 'disabled';
+      group.querySelector('.zc-select-wrap').dataset.state = 'disabled';
+      group.querySelector('.zc-select-shell').style.pointerEvents = 'none';
+    }
+  }
+  document.getElementById('wiz-backup').addEventListener('change', syncRetention);
+
+  /* Deep link: the empty state's Create Database lands directly in the wizard */
+  if (window.location.search.indexOf('create=1') !== -1) { showStep(1); ddbOpen('wizard-overlay'); }
+
+  /* Clear name error while typing */
+  document.getElementById('wiz-name').addEventListener('input', function () {
+    var group = this.closest('.zc-input-group');
+    group.querySelector('.zc-input-wrap').removeAttribute('data-state');
+    var helper = group.querySelector('.zc-helper');
+    helper.removeAttribute('data-state');
+    helper.textContent = 'Lowercase letters, numbers and hyphens. Used as the connection database name.';
+  });
+});
+</script>
+</body>
+</html>

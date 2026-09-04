@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DirectDB — orders-prod</title>
+  <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
+  <link rel="stylesheet" href="./directdb.css?v=120">
+  <script src="./directdb-common.js" defer></script>
+  <script src="../../zcat-ui/zcat.js?v=22" defer></script>
+</head>
+<body>
+
+<div class="zc-layout ddb-layout">
+
+  <!-- Service rail -->
+  <div class="zc-layout__rail">
+    <img class="zc-layout__logo" src="/zcat-ui/docs/icons/Catalyst Color Logo.svg" alt="Catalyst">
+    <span class="zc-layout__rail-divider"></span>
+    <span class="zc-layout__rail-label">Services</span>
+    <div class="zc-layout__services">
+      <button class="zc-layout__service" type="button" data-state="active">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Cloud Scale.svg');--icon-active:url('/zcat-ui/docs/icons/Cloud Scale -color.svg')"></span></span>
+        <span class="zc-layout__service-name">CloudScale</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Serverless.svg');--icon-active:url('/zcat-ui/docs/icons/Serverless -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Serverless</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Smart browzz.svg');--icon-active:url('/zcat-ui/docs/icons/Smart browzz -color.svg')"></span></span>
+        <span class="zc-layout__service-name">SmartBrowz</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Quick ML.svg');--icon-active:url('/zcat-ui/docs/icons/Quick ML -color.svg')"></span></span>
+        <span class="zc-layout__service-name">QuickML</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Pipeline.svg');--icon-active:url('/zcat-ui/docs/icons/Pipeline -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Pipeline</span>
+      </button>
+    </div>
+    <div class="zc-layout__rail-bottom">
+      <span class="zc-layout__rail-divider"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/clapperboard.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/figma.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/command.svg')"></span>
+    </div>
+  </div>
+
+  <!-- White shell -->
+  <div class="zc-layout__shell">
+
+    <header class="zc-layout__topbar">
+      <div class="zc-layout__topbar-left">
+        <div class="zc-select-shell zc-ghostdd-shell">
+          <div class="zc-ghostdd zc-select-wrap">
+            <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">Z</span></span>
+            <span class="zc-ghostdd__box"><span class="zc-ghostdd__label">zcatalyst-trial-app</span>
+              <svg class="zc-ghostdd__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg></span>
+          </div>
+          <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+            <div class="zc-menu__item" role="option" data-value="zcatalyst-trial-app" aria-selected="true"><span class="zc-menu__label">zcatalyst-trial-app</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+          </div></div>
+        </div>
+        <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
+          <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+          <input class="zc-input" type="text" placeholder="Search Here">
+          <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+        </div>
+      </div>
+      <span class="zc-layout__avatar"><img src="/zcat-ui/docs/icons/Women.png" alt="Grace Mputhia"></span>
+    </header>
+
+    <div class="zc-layout__main">
+
+      <!-- Side menu -->
+      <aside class="zc-sidemenu">
+        <div class="zc-sidemenu__service">
+          <img src="/zcat-ui/docs/icons/Cloud Scale -color.svg" alt="">
+          <span class="zc-sidemenu__service-name">DirectDB</span>
+        </div>
+        <div class="zc-sidemenu__body">
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">DATABASES</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button" data-state="active" onclick="window.location.href='./databases.html'"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-database"/></svg><span class="zc-sidemenu__label">All Databases</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-history"/></svg><span class="zc-sidemenu__label">Backups</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MONITOR</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-monitor"/></svg><span class="zc-sidemenu__label">Metrics</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-activity"/></svg><span class="zc-sidemenu__label">Query Insights</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MANAGE</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-key"/></svg><span class="zc-sidemenu__label">Access &amp; Roles</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-settings"/></svg><span class="zc-sidemenu__label">Settings</span></button>
+          </div>
+        </div>
+        <button class="zc-btn zc-sidemenu__expand" data-variant="grey" data-size="small" data-content="icon" data-radius="rounded" aria-label="Toggle side menu">
+          <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-right"/></svg>
+        </button>
+      </aside>
+
+      <div class="zc-layout__page">
+
+        <!-- Sub Header: back navigation + name + status; page-level actions right -->
+        <div class="zc-layout__subheader">
+          <span class="zc-layout__subheader-left">
+            <button class="zc-btn" data-variant="ghost-grey" data-size="small" data-content="icon" data-radius="rounded" type="button" aria-label="Back to databases" onclick="window.location.href='./databases.html'">
+              <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-left"/></svg>
+            </button>
+            <span class="zc-layout__subheader-title">orders-prod</span>
+            <span class="zc-badge" data-type="secondary" data-color="success">Available</span>
+          </span>
+          <span class="zc-layout__subheader-right">
+            <button class="zc-btn" data-variant="grey" data-size="small" type="button">
+              <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-refresh"/></svg>Refresh
+            </button>
+            <button class="zc-btn" data-variant="outline" data-color="primary" data-size="small" type="button" onclick="ddbToast('Connection details', 'Host, port and credentials are on the Overview tab.', 'info')">Connect</button>
+            <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
+              <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
+            </button>
+          </span>
+          <div class="zc-tabs zc-layout__subheader-tabs" data-type="primary" id="detail-tabs">
+              <button class="zc-tab" data-state="active" data-panel="overview" type="button">Overview</button>
+              <button class="zc-tab" data-panel="console" type="button">SQL Console</button>
+              <button class="zc-tab" data-panel="schema" type="button">Schema</button>
+              <button class="zc-tab" data-panel="backups" type="button">Backups</button>
+              <button class="zc-tab" data-panel="replicas" type="button">Replicas</button>
+              <button class="zc-tab" data-panel="monitoring" type="button">Monitoring</button>
+              <button class="zc-tab" data-panel="settings" type="button">Settings</button>
+            </div>
+        </div>
+
+        <div class="zc-layout__body">
+          <div class="zc-layout__container ddb-container ddb-container--detail">
+
+
+            <!-- ══ OVERVIEW ══ -->
+            <div class="ddb-panel" id="panel-overview">
+              <div class="ddb-stats">
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="purple"><svg viewBox="0 0 16 16"><use href="#i-cloud"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Engine</span><span class="zc-h3 zc-text-primary">Aurora MySQL</span><span class="zc-body-3 zc-text-disabled">version 3.0</span></span>
+                </div>
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="primary"><svg viewBox="0 0 16 16"><use href="#i-server"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Compute</span><span class="zc-h3 zc-text-primary">2 vCPU / 8 GB</span><span class="zc-body-3 zc-text-disabled">Medium instance class</span></span>
+                </div>
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="info"><svg viewBox="0 0 16 16"><use href="#i-database"/></svg></span>
+                  <span class="ddb-stat__body">
+                    <span class="zc-body-3 zc-text-secondary">Storage</span><span class="zc-h3 zc-text-primary">41 GB <span class="zc-body-3 zc-text-disabled">of 100 GB</span></span>
+                    <div class="zc-progress" style="margin-top:var(--zc-space-6)"><div class="zc-progress__fill" style="width:41%"></div></div>
+                  </span>
+                </div>
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="success"><svg viewBox="0 0 16 16"><use href="#i-activity"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Connections</span><span class="zc-h3 zc-text-primary">64</span><span class="zc-body-3 zc-text-disabled">active now</span></span>
+                </div>
+              </div>
+
+              <div class="ddb-cols">
+                <div class="ddb-colstack">
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head"><span class="zc-h6 zc-text-primary">Connection</span></div>
+                  <div class="ddb-stack">
+                    <div class="zc-linkbox"><span class="zc-linkbox__inline-label">Host</span><span class="zc-linkbox__text" data-overflow="ellipsis">orders-prod.directdb.zcatalyst.com</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div>
+                    <div class="ddb-pair">
+                      <div class="zc-linkbox"><span class="zc-linkbox__inline-label">Port</span><span class="zc-linkbox__text" data-overflow="ellipsis">3306</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div>
+                      <div class="zc-linkbox"><span class="zc-linkbox__inline-label">Database</span><span class="zc-linkbox__text" data-overflow="ellipsis">orders-prod</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div>
+                    </div>
+                    <div class="zc-linkbox"><span class="zc-linkbox__inline-label">Connection string</span><span class="zc-linkbox__text" data-overflow="ellipsis" title="mysql://admin@orders-prod.directdb.zcatalyst.com:3306/orders-prod">mysql://admin@orders-prod.directdb.zcatalyst.com:3306/orders-prod</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div>
+                  </div>
+                  <div class="zc-attention" data-color="default" data-type="message" style="margin-top:var(--zc-space-12)">
+                    <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-key"/></svg>
+                    <span class="zc-attention__message">Credentials are managed by Catalyst. Rotate the master password from Settings.</span>
+                    <span class="zc-attention__action"><button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button" data-goto-tab="settings">Open Settings</button></span>
+                  </div>
+                </div>
+
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head"><span class="zc-h6 zc-text-primary">Instance details</span></div>
+                  <div class="zc-gdetails" style="width:100%">
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Region</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">us-east-1 · N. Virginia</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">VPC</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">vpc-0a12b3cd</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Created</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">May 12, 2026</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Maintenance window</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">Sun 02:00–02:30 UTC</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Deletion protection</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">Enabled</span></div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head">
+                    <span class="zc-h6 zc-text-primary">Recent activity</span>
+                    <a class="zc-link" href="#" onclick="return false" data-tooltip="Full activity log coming from Query Insights" data-tooltip-side="left">View All</a>
+                  </div>
+                  <div class="zc-timeline">
+                    <div class="zc-timeline__entry"><span class="zc-timeline__dot" data-color="green"></span><span class="zc-timeline__content"><span class="zc-timeline__title">Automated backup completed</span><span class="zc-timeline__time">Today, 03:00 UTC</span></span></div>
+                    <div class="zc-timeline__entry"><span class="zc-timeline__dot" data-color="blue"></span><span class="zc-timeline__content"><span class="zc-timeline__title">Read replica orders-prod-replica-1 promoted</span><span class="zc-timeline__time">Yesterday, 4:12 PM</span></span></div>
+                    <div class="zc-timeline__entry"><span class="zc-timeline__dot" data-color="orange"></span><span class="zc-timeline__content"><span class="zc-timeline__title">Compute modified to 2 vCPU / 8 GB</span><span class="zc-timeline__time">Aug 26, 2026</span></span></div>
+                    <div class="zc-timeline__entry"><span class="zc-timeline__dot" data-color="grey"></span><span class="zc-timeline__content"><span class="zc-timeline__title">Database created in us-east-1</span><span class="zc-timeline__time">May 12, 2026</span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ══ SQL CONSOLE ══ -->
+            <div class="ddb-panel" id="panel-console" hidden>
+              <div class="ddb-toolbar">
+                <div class="zc-select-shell" style="width:220px">
+                  <div class="zc-input-wrap zc-select-wrap" data-size="small">
+                    <span class="zc-input zc-select__value">orders-prod (public)</span>
+                    <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+                  </div>
+                  <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+                    <div class="zc-menu__item" role="option" data-value="orders-prod (public)" aria-selected="true"><span class="zc-menu__label">orders-prod (public)</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                    <div class="zc-menu__item" role="option" data-value="information_schema"><span class="zc-menu__label">information_schema</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+                  </div></div>
+                </div>
+                <span class="ddb-toolbar__spacer"></span>
+                <button class="zc-btn" data-variant="grey" data-size="small" type="button">Save query</button>
+                <button class="zc-btn" data-variant="grey" data-size="small" type="button">
+                  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-clock-rewind"/></svg>History
+                </button>
+              </div>
+
+              <div class="ddb-console">
+                <div class="zc-codeblock" data-type="editor" style="width:100%">
+                  <div class="zc-codeblock__lines">1<br>2<br>3<br>4<br>5</div>
+                  <pre class="zc-codeblock__code" contenteditable="true" spellcheck="false" style="margin:0;font:inherit"><span class="zc-code-k">SELECT</span> id, customer, amount, status, created_at
+<span class="zc-code-k">FROM</span> orders
+<span class="zc-code-k">WHERE</span> status = <span class="zc-code-s">'paid'</span>
+<span class="zc-code-k">ORDER BY</span> created_at <span class="zc-code-k">DESC</span>
+<span class="zc-code-k">LIMIT</span> <span class="zc-code-s2">10</span>;</pre>
+                </div>
+                <div class="ddb-consolebar">
+                  <span class="zc-body-3 zc-text-light">Ln 5, Col 10</span>
+                  <span class="ddb-consolebar__spacer"></span>
+                  <span class="zc-body-3 zc-text-secondary">Aurora MySQL · orders-prod</span>
+                  <button class="zc-btn" data-variant="fill" data-color="primary" data-size="small" type="button" id="run-query">
+                    <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-play"/></svg>Run
+                  </button>
+                </div>
+              </div>
+
+              <div id="query-result" style="margin-top:var(--zc-space-16)">
+                <div class="zc-attention" data-color="default" data-type="message">
+                  <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-terminal"/></svg>
+                  <span class="zc-attention__message">Write your query above and press Run. Results appear here.</span>
+                </div>
+              </div>
+              <div id="query-result-table" hidden style="margin-top:var(--zc-space-16)">
+                <div class="ddb-card__head">
+                  <span class="zc-badge" data-type="secondary" data-color="success">5 rows · 24 ms</span>
+                  <button class="zc-btn" data-variant="grey" data-size="xs" type="button">Export CSV</button>
+                </div>
+                <div class="zc-table-wrap" data-style="boxy">
+                  <table class="zc-table">
+                    <thead class="zc-table__head"><tr>
+                      <th class="zc-table__th">id</th><th class="zc-table__th">customer</th><th class="zc-table__th">amount</th><th class="zc-table__th">status</th><th class="zc-table__th">created_at</th>
+                    </tr></thead>
+                    <tbody>
+                      <tr class="zc-table__row"><td class="zc-table__td">1042</td><td class="zc-table__td">Acme Corp</td><td class="zc-table__td">1,240.00</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">paid</span></td><td class="zc-table__td">2026-08-10 09:14</td></tr>
+                      <tr class="zc-table__row"><td class="zc-table__td">1041</td><td class="zc-table__td">Globex</td><td class="zc-table__td">680.50</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">paid</span></td><td class="zc-table__td">2026-08-10 08:51</td></tr>
+                      <tr class="zc-table__row"><td class="zc-table__td">1039</td><td class="zc-table__td">Initech</td><td class="zc-table__td">2,410.00</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">paid</span></td><td class="zc-table__td">2026-08-09 22:03</td></tr>
+                      <tr class="zc-table__row"><td class="zc-table__td">1036</td><td class="zc-table__td">Umbrella</td><td class="zc-table__td">95.00</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">paid</span></td><td class="zc-table__td">2026-08-09 19:40</td></tr>
+                      <tr class="zc-table__row"><td class="zc-table__td">1033</td><td class="zc-table__td">Soylent</td><td class="zc-table__td">1,875.25</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">paid</span></td><td class="zc-table__td">2026-08-09 15:12</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ══ SCHEMA ══ -->
+            <div class="ddb-panel" id="panel-schema" hidden>
+              <div class="ddb-md">
+                <div class="zc-csm">
+                  <div class="zc-csm__header"><span class="zc-csm__title">Tables</span>
+                    <button class="zc-btn" data-variant="fill" data-color="primary" data-size="small" type="button" onclick="ddbToast('New table', 'Table designer opens here in the full product.', 'info')">New Table</button>
+                  </div>
+                  <div class="zc-input-wrap zc-search-wrap" data-size="small">
+                    <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+                    <input class="zc-input" type="text" placeholder="Search tables">
+                    <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+                  </div>
+                  <div class="zc-csm__list" id="schema-list">
+                    <button class="zc-csm__item" type="button" data-state="selected"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>orders</button>
+                    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>customers</button>
+                    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>products</button>
+                    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>invoices</button>
+                    <button class="zc-csm__item" type="button"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-db"/></svg>audit_log</button>
+                  </div>
+                </div>
+
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head">
+                    <span>
+                      <span class="zc-h6 zc-text-primary" id="schema-table-name">orders</span>
+                      <span class="zc-body-3 zc-text-secondary" style="margin-left:var(--zc-space-8)">1.2M rows · 820 MB</span>
+                    </span>
+                    <span style="display:flex;gap:var(--zc-space-8)">
+                      <button class="zc-btn" data-variant="grey" data-size="xs" type="button">Edit</button>
+                      <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="xs" type="button" data-goto-tab="console">Query</button>
+                    </span>
+                  </div>
+                  <div class="zc-table-wrap" data-style="boxy">
+                    <table class="zc-table">
+                      <thead class="zc-table__head"><tr>
+                        <th class="zc-table__th">Column</th><th class="zc-table__th">Type</th><th class="zc-table__th">Constraints</th>
+                      </tr></thead>
+                      <tbody>
+                        <tr class="zc-table__row"><td class="zc-table__td">id</td><td class="zc-table__td">bigint</td><td class="zc-table__td">PK, auto increment</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">customer_id</td><td class="zc-table__td">bigint</td><td class="zc-table__td">FK to customers</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">amount</td><td class="zc-table__td">numeric(12,2)</td><td class="zc-table__td">not null</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">currency</td><td class="zc-table__td">char(3)</td><td class="zc-table__td">default USD</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">status</td><td class="zc-table__td">varchar(20)</td><td class="zc-table__td">indexed</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">created_at</td><td class="zc-table__td">timestamp</td><td class="zc-table__td">default now()</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">updated_at</td><td class="zc-table__td">timestamp</td><td class="zc-table__td">nullable</td></tr>
+                        <tr class="zc-table__row"><td class="zc-table__td">metadata</td><td class="zc-table__td">json</td><td class="zc-table__td">nullable</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ══ BACKUPS ══ -->
+            <div class="ddb-panel" id="panel-backups" hidden>
+              <div class="zc-attention" data-color="info" data-type="alert" style="margin-bottom:var(--zc-space-16)">
+                <span class="zc-attention__content">
+                  <span class="zc-attention__header">
+                    <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-clock-rewind"/></svg>
+                    <span class="zc-attention__heading">Point-in-time recovery enabled</span>
+                  </span>
+                  <span class="zc-attention__body">You can restore to any second within the last 7 days. Automated backups run daily at 03:00 UTC.</span>
+                </span>
+              </div>
+              <div class="ddb-toolbar">
+                <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:300px">
+                  <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+                  <input class="zc-input" type="text" placeholder="Search backups">
+                  <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+                </div>
+                <span class="ddb-toolbar__spacer"></span>
+                <button class="zc-btn" data-variant="grey" type="button">Restore to point-in-time</button>
+                <button class="zc-btn" data-variant="fill" data-color="primary" type="button" onclick="ddbToast('Backup started', 'A manual backup of orders-prod is being created.', 'info')">
+                  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-plus"/></svg>Create Backup
+                </button>
+              </div>
+              <div class="zc-table-wrap" data-style="boxy">
+                <table class="zc-table">
+                  <thead class="zc-table__head"><tr>
+                    <th class="zc-table__th">Backup</th><th class="zc-table__th">Type</th><th class="zc-table__th">Created</th><th class="zc-table__th">Size</th><th class="zc-table__th">Status</th><th class="zc-table__th zc-table__th--actions"></th>
+                  </tr></thead>
+                  <tbody>
+                    <tr class="zc-table__row"><td class="zc-table__td">orders-prod-2026-08-28</td><td class="zc-table__td">Automated</td><td class="zc-table__td">Today, 03:00 UTC</td><td class="zc-table__td">41.2 GB</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td><td class="zc-table__td"><button class="zc-btn" data-variant="ghost" data-color="primary" data-size="xs" type="button" onclick="ddbToast('Restore started', 'Restoring this backup to a new instance.', 'info')">Restore</button></td></tr>
+                    <tr class="zc-table__row"><td class="zc-table__td">orders-prod-2026-08-27</td><td class="zc-table__td">Automated</td><td class="zc-table__td">Yesterday, 03:00 UTC</td><td class="zc-table__td">40.8 GB</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td><td class="zc-table__td"><button class="zc-btn" data-variant="ghost" data-color="primary" data-size="xs" type="button" onclick="ddbToast('Restore started', 'Restoring this backup to a new instance.', 'info')">Restore</button></td></tr>
+                    <tr class="zc-table__row"><td class="zc-table__td">pre-migration-snapshot</td><td class="zc-table__td">Manual</td><td class="zc-table__td">Aug 8, 2026 18:22</td><td class="zc-table__td">40.1 GB</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td><td class="zc-table__td"><button class="zc-btn" data-variant="ghost" data-color="primary" data-size="xs" type="button" onclick="ddbToast('Restore started', 'Restoring this backup to a new instance.', 'info')">Restore</button></td></tr>
+                    <tr class="zc-table__row"><td class="zc-table__td">orders-prod-2026-08-26</td><td class="zc-table__td">Automated</td><td class="zc-table__td">Aug 26, 2026 03:00 UTC</td><td class="zc-table__td">39.7 GB</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td><td class="zc-table__td"><button class="zc-btn" data-variant="ghost" data-color="primary" data-size="xs" type="button" onclick="ddbToast('Restore started', 'Restoring this backup to a new instance.', 'info')">Restore</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- ══ REPLICAS ══ -->
+            <div class="ddb-panel" id="panel-replicas" hidden>
+              <div class="ddb-stats ddb-stats--3">
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="primary"><svg viewBox="0 0 16 16"><use href="#i-server"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Read replicas</span><span class="zc-h3 zc-text-primary">1</span><span class="zc-body-3 zc-text-disabled">healthy</span></span>
+                </div>
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="info"><svg viewBox="0 0 16 16"><use href="#i-activity"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Replication lag</span><span class="zc-h3 zc-text-primary">12 ms</span><span class="zc-body-3 zc-text-disabled">within target</span></span>
+                </div>
+                <div class="zc-card ddb-stat">
+                  <span class="ddb-iconbg" data-color="warning"><svg viewBox="0 0 16 16"><use href="#i-shield"/></svg></span>
+                  <span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">High availability</span><span class="zc-h3 zc-text-primary">Single-AZ</span><span class="zc-body-3 zc-text-disabled">no automatic failover</span></span>
+                </div>
+              </div>
+              <div class="ddb-toolbar">
+                <span class="zc-h6 zc-text-primary">Cluster members</span>
+                <span class="ddb-toolbar__spacer"></span>
+                <button class="zc-btn" data-variant="fill" data-color="primary" type="button" onclick="ddbToast('Replica provisioning', 'A new read replica is being created in us-east-1.', 'info')">
+                  <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-plus"/></svg>Add Read Replica
+                </button>
+              </div>
+              <div class="zc-table-wrap" data-style="boxy">
+                <table class="zc-table">
+                  <thead class="zc-table__head"><tr>
+                    <th class="zc-table__th">Instance</th><th class="zc-table__th">Role</th><th class="zc-table__th">Region</th><th class="zc-table__th">Lag</th><th class="zc-table__th">Status</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr class="zc-table__row"><td class="zc-table__td">orders-prod-primary</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="info">Writer</span></td><td class="zc-table__td">us-east-1</td><td class="zc-table__td">—</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td></tr>
+                    <tr class="zc-table__row"><td class="zc-table__td">orders-prod-replica-1</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="grey">Reader</span></td><td class="zc-table__td">us-east-1</td><td class="zc-table__td">12 ms</td><td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- ══ MONITORING ══ -->
+            <div class="ddb-panel" id="panel-monitoring" hidden>
+              <div class="ddb-stats">
+                <div class="zc-card ddb-stat"><span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Memory</span><span class="zc-h3 zc-text-primary">62%</span><span class="zc-body-3 zc-text-disabled">of 8 GB</span></span></div>
+                <div class="zc-card ddb-stat"><span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Queries / sec</span><span class="zc-h3 zc-text-primary">842</span><span class="zc-body-3 zc-text-disabled">last minute</span></span></div>
+                <div class="zc-card ddb-stat"><span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Slow queries</span><span class="zc-h3 zc-text-primary">12</span><span class="zc-body-3 zc-text-disabled">over 1s, last 24 h</span></span></div>
+                <div class="zc-card ddb-stat"><span class="ddb-stat__body"><span class="zc-body-3 zc-text-secondary">Uptime</span><span class="zc-h3 zc-text-primary">99.98%</span><span class="zc-body-3 zc-text-disabled">last 30 days</span></span></div>
+              </div>
+              <div class="ddb-cols">
+                <div class="zc-card ddb-card ddb-spark">
+                  <div class="ddb-card__head"><span class="zc-subtitle-1 zc-text-primary">CPU utilization</span><span class="zc-h6 zc-text-link">38%</span></div>
+                  <svg viewBox="0 0 280 64" preserveAspectRatio="none" aria-label="CPU utilization trend">
+                    <path d="M0,50 L20,44 L40,48 L60,36 L80,40 L100,28 L120,34 L140,22 L160,30 L180,18 L200,26 L220,20 L240,30 L260,24 L280,28" fill="none" stroke="var(--zc-body-text-link)" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="zc-card ddb-card ddb-spark">
+                  <div class="ddb-card__head"><span class="zc-subtitle-1 zc-text-primary">Active connections</span><span class="zc-h6 zc-text-success">64</span></div>
+                  <svg viewBox="0 0 280 64" preserveAspectRatio="none" aria-label="Active connections trend">
+                    <path d="M0,40 L20,42 L40,36 L60,38 L80,32 L100,36 L120,28 L140,32 L160,24 L180,28 L200,22 L220,26 L240,18 L260,24 L280,20" fill="none" stroke="var(--zc-body-text-success)" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="zc-card ddb-card ddb-spark">
+                  <div class="ddb-card__head"><span class="zc-subtitle-1 zc-text-primary">Read IOPS</span><span class="zc-h6 zc-text-info">740</span></div>
+                  <svg viewBox="0 0 280 64" preserveAspectRatio="none" aria-label="Read IOPS trend">
+                    <path d="M0,30 L20,36 L40,28 L60,40 L80,34 L100,44 L120,36 L140,46 L160,38 L180,44 L200,34 L220,40 L240,32 L260,38 L280,34" fill="none" stroke="var(--zc-body-text-info)" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="zc-card ddb-card ddb-spark">
+                  <div class="ddb-card__head"><span class="zc-subtitle-1 zc-text-primary">Write latency</span><span class="zc-h6 zc-text-warning">3.1 ms</span></div>
+                  <svg viewBox="0 0 280 64" preserveAspectRatio="none" aria-label="Write latency trend">
+                    <path d="M0,44 L20,40 L40,46 L60,38 L80,42 L100,36 L120,42 L140,34 L160,40 L180,34 L200,38 L220,30 L240,36 L260,30 L280,34" fill="none" stroke="var(--zc-body-text-warning)" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- ══ SETTINGS (read-only detail + Edit popup, per Catalyst pattern) ══ -->
+            <div class="ddb-panel" id="panel-settings" hidden>
+              <div class="ddb-cols" style="margin-bottom:var(--zc-space-16)">
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head">
+                    <span class="zc-h6 zc-text-primary">Compute &amp; storage</span>
+                    <button class="zc-btn" data-variant="grey" data-size="small" type="button" onclick="ddbOpen('edit-overlay')">Edit</button>
+                  </div>
+                  <div class="zc-gdetails" style="width:100%">
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Instance class</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">Medium · 2 vCPU / 8 GB</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Allocated storage</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">100 GB (41 GB used)</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Engine version</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">Aurora MySQL 3.0</span></div>
+                    <div class="zc-gdetails__row"><span class="zc-gdetails__label">Maintenance window</span><span class="zc-gdetails__colon">:</span><span class="zc-gdetails__value">Sun 02:00–02:30 UTC</span></div>
+                  </div>
+                </div>
+
+                <div class="ddb-colstack">
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head"><span class="zc-h6 zc-text-primary">Configuration</span></div>
+                  <div class="ddb-settingrow">
+                    <label class="zc-toggle"><span class="zc-toggle__row"><input type="checkbox" class="zc-toggle__input" checked><span class="zc-toggle__track"></span><span class="zc-toggle__label">Automated backups</span></span><span class="zc-toggle__desc">Daily snapshot at 03:00 UTC, 7-day retention.</span></label>
+                  </div>
+                  <div class="ddb-settingrow">
+                    <label class="zc-toggle"><span class="zc-toggle__row"><input type="checkbox" class="zc-toggle__input" checked><span class="zc-toggle__track"></span><span class="zc-toggle__label">Connection pooling</span></span><span class="zc-toggle__desc">Managed ProxySQL connection pool.</span></label>
+                  </div>
+                  <div class="ddb-settingrow">
+                    <label class="zc-toggle"><span class="zc-toggle__row"><input type="checkbox" class="zc-toggle__input"><span class="zc-toggle__track"></span><span class="zc-toggle__label">Public access</span></span><span class="zc-toggle__desc">Allow connections from outside the VPC.</span></label>
+                  </div>
+                  <div class="ddb-settingrow">
+                    <label class="zc-toggle"><span class="zc-toggle__row"><input type="checkbox" class="zc-toggle__input" checked><span class="zc-toggle__track"></span><span class="zc-toggle__label">Deletion protection</span></span><span class="zc-toggle__desc">Prevent accidental deletion of this database.</span></label>
+                  </div>
+                </div>
+
+                <div class="zc-card ddb-card">
+                  <div class="ddb-card__head">
+                    <span class="zc-h6 zc-text-primary">Credentials</span>
+                    <button class="zc-btn" data-variant="grey" data-size="small" type="button" onclick="ddbToast('Password rotated', 'A new master password has been generated.', 'success')">
+                      <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-key"/></svg>Rotate password
+                    </button>
+                  </div>
+                  <div class="zc-linkbox"><span class="zc-linkbox__inline-label">Master username</span><span class="zc-linkbox__text" data-overflow="ellipsis">admin</span><span class="zc-linkbox__copy" title="Copy"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-copy"/></svg></span></div>
+                </div>
+                </div>
+              </div>
+
+              <!-- Danger zone -->
+              <div class="zc-attention" data-color="danger" data-type="alert">
+                <span class="zc-attention__content">
+                  <span class="zc-attention__header">
+                    <svg class="zc-attention__icon" viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><use href="#i-alert"/></svg>
+                    <span class="zc-attention__heading">Delete this database</span>
+                  </span>
+                  <span class="zc-attention__body">Permanently removes orders-prod and all its data. A final snapshot is taken first. Deletion protection must be turned off.</span>
+                </span>
+                <span class="zc-attention__action">
+                  <button class="zc-btn" data-variant="outline" data-color="danger" data-size="small" type="button" onclick="ddbOpen('delete-overlay')">Delete database</button>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT COMPUTE & STORAGE POPUP -->
+<div class="zc-popup-scrim ddb-overlay" id="edit-overlay" hidden>
+  <div class="zc-popup">
+    <div class="zc-popup__header">
+      <div class="zc-popup__title">Edit compute &amp; storage</div>
+      <div class="zc-popup__desc">Changes apply during the next maintenance window (Sun 02:00–02:30 UTC).</div>
+    </div>
+    <div class="zc-popup__body">
+      <div class="zc-input-group">
+        <label class="zc-label"><span>Instance class</span></label>
+        <div class="zc-select-shell">
+          <div class="zc-input-wrap zc-select-wrap" data-size="default">
+            <span class="zc-input zc-select__value">Medium · 2 vCPU / 8 GB</span>
+            <svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg>
+          </div>
+          <div class="zc-menu" data-size="small" role="listbox"><div class="zc-menu__body">
+            <div class="zc-menu__item" role="option" data-value="Small · 1 vCPU / 4 GB"><span class="zc-menu__label">Small · 1 vCPU / 4 GB</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="Medium · 2 vCPU / 8 GB" aria-selected="true"><span class="zc-menu__label">Medium · 2 vCPU / 8 GB</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="Large · 4 vCPU / 16 GB"><span class="zc-menu__label">Large · 4 vCPU / 16 GB</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="XLarge · 8 vCPU / 32 GB"><span class="zc-menu__label">XLarge · 8 vCPU / 32 GB</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+          </div></div>
+        </div>
+      </div>
+      <div class="zc-input-group">
+        <label class="zc-label"><span>Allocated storage (GB)</span></label>
+        <div class="zc-input-wrap" data-size="default">
+          <input class="zc-input" type="number" value="100" min="100" max="1000" step="10">
+          <span class="zc-numstepper">
+            <button class="zc-numstepper__btn" type="button" aria-label="Increment"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10L8 6L4 10"/></svg></button>
+            <button class="zc-numstepper__btn" type="button" aria-label="Decrement"><svg viewBox="0 0 16 16" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6L8 10L12 6"/></svg></button>
+          </span>
+        </div>
+        <span class="zc-helper">Storage can be increased but not decreased.</span>
+      </div>
+    </div>
+    <div class="zc-popup__footer">
+      <button class="zc-btn" data-variant="grey" type="button" onclick="ddbClose('edit-overlay')">Cancel</button>
+      <button class="zc-btn" data-variant="fill" data-color="primary" type="button" onclick="ddbClose('edit-overlay'); ddbToast('Modification queued', 'Changes apply during the next maintenance window.', 'info')">Apply changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRMATION POPUP -->
+<div class="zc-popup-scrim ddb-overlay" id="delete-overlay" hidden>
+  <div class="zc-popup" data-size="small">
+    <div class="zc-popup__header">
+      <div class="zc-popup__title">Delete orders-prod</div>
+    </div>
+    <div class="zc-popup__body">
+      <p class="zc-body-1 zc-text-primary" style="margin:0 0 var(--zc-space-12)">This permanently deletes the database and all its data after a final snapshot. This action cannot be undone.</p>
+      <div class="zc-input-group">
+        <label class="zc-label"><span>Type the database name to confirm</span></label>
+        <div class="zc-input-wrap" data-size="default"><input class="zc-input" type="text" placeholder="orders-prod"></div>
+      </div>
+    </div>
+    <div class="zc-popup__footer">
+      <button class="zc-btn" data-variant="grey" type="button" onclick="ddbClose('delete-overlay')">Cancel</button>
+      <button class="zc-btn" data-variant="fill" data-color="danger" type="button" onclick="ddbClose('delete-overlay'); ddbToast('Deletion scheduled', 'orders-prod will be removed after its final snapshot completes.', 'danger')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Page glue JS: tab-panel switching + console run + schema selection. */
+document.addEventListener('DOMContentLoaded', function () {
+
+  function showPanel(name) {
+    document.querySelectorAll('.ddb-panel').forEach(function (p) { p.hidden = (p.id !== 'panel-' + name); });
+  }
+
+  /* zcat.js handles the visual active state; we swap panels on its event */
+  document.getElementById('detail-tabs').addEventListener('zcat:tab:select', function (e) {
+    var tab = e.detail && e.detail.tab ? e.detail.tab : e.target;
+    var name = (tab.dataset && tab.dataset.panel) || (e.target.dataset && e.target.dataset.panel);
+    if (name) showPanel(name);
+  });
+  /* Fallback: direct click (covers event-shape differences) */
+  document.getElementById('detail-tabs').addEventListener('click', function (e) {
+    var tab = e.target.closest('.zc-tab');
+    if (tab && tab.dataset.panel) showPanel(tab.dataset.panel);
+  });
+
+  /* Cross-links like "Open Settings" / "Query" jump to a tab */
+  document.querySelectorAll('[data-goto-tab]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var name = btn.dataset.gotoTab;
+      var tab = document.querySelector('#detail-tabs .zc-tab[data-panel="' + name + '"]');
+      if (tab) tab.click();
+    });
+  });
+
+  /* SQL console: Run reveals the result table */
+  document.getElementById('run-query').addEventListener('click', function () {
+    document.getElementById('query-result').hidden = true;
+    document.getElementById('query-result-table').hidden = false;
+    ddbToast('Query complete', '5 rows returned in 24 ms.', 'success');
+  });
+
+  /* Schema: table selection swaps the detail heading */
+  var meta = { orders: '1.2M rows · 820 MB', customers: '340K rows · 210 MB', products: '8.4K rows · 44 MB', invoices: '980K rows · 610 MB', audit_log: '5.1M rows · 1.4 GB' };
+  document.getElementById('schema-list').addEventListener('click', function (e) {
+    var item = e.target.closest('.zc-csm__item');
+    if (!item) return;
+    var name = item.textContent.trim();
+    document.getElementById('schema-table-name').textContent = name;
+    document.getElementById('schema-table-name').nextElementSibling.textContent = meta[name] || '';
+  });
+
+  /* Close popups on scrim click */
+  ['edit-overlay', 'delete-overlay'].forEach(function (id) {
+    var ov = document.getElementById(id);
+    ov.addEventListener('click', function (e) { if (e.target === ov) ov.hidden = true; });
+  });
+});
+</script>
+</body>
+</html>

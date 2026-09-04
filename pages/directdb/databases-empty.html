@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DirectDB — No Databases</title>
+  <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
+  <link rel="stylesheet" href="./directdb.css?v=120">
+  <script src="./directdb-common.js" defer></script>
+  <script src="../../zcat-ui/zcat.js?v=22" defer></script>
+</head>
+<body>
+
+<div class="zc-layout ddb-layout">
+
+  <!-- Service rail -->
+  <div class="zc-layout__rail">
+    <img class="zc-layout__logo" src="/zcat-ui/docs/icons/Catalyst Color Logo.svg" alt="Catalyst">
+    <span class="zc-layout__rail-divider"></span>
+    <span class="zc-layout__rail-label">Services</span>
+    <div class="zc-layout__services">
+      <button class="zc-layout__service" type="button" data-state="active">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Cloud Scale.svg');--icon-active:url('/zcat-ui/docs/icons/Cloud Scale -color.svg')"></span></span>
+        <span class="zc-layout__service-name">CloudScale</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Serverless.svg');--icon-active:url('/zcat-ui/docs/icons/Serverless -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Serverless</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Smart browzz.svg');--icon-active:url('/zcat-ui/docs/icons/Smart browzz -color.svg')"></span></span>
+        <span class="zc-layout__service-name">SmartBrowz</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Quick ML.svg');--icon-active:url('/zcat-ui/docs/icons/Quick ML -color.svg')"></span></span>
+        <span class="zc-layout__service-name">QuickML</span>
+      </button>
+      <button class="zc-layout__service" type="button">
+        <span class="zc-layout__tab"></span>
+        <span class="zc-layout__service-chip"><span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/1 Pipeline.svg');--icon-active:url('/zcat-ui/docs/icons/Pipeline -color.svg')"></span></span>
+        <span class="zc-layout__service-name">Pipeline</span>
+      </button>
+    </div>
+    <div class="zc-layout__rail-bottom">
+      <span class="zc-layout__rail-divider"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/clapperboard.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/figma.svg')"></span>
+      <span class="zc-mask-icon" style="--icon:url('/zcat-ui/docs/icons/command.svg')"></span>
+    </div>
+  </div>
+
+  <!-- White shell -->
+  <div class="zc-layout__shell">
+
+    <header class="zc-layout__topbar">
+      <div class="zc-layout__topbar-left">
+        <div class="zc-select-shell zc-ghostdd-shell">
+          <div class="zc-ghostdd zc-select-wrap">
+            <span class="zc-ghostdd__avatar"><span class="zc-ghostdd__avatar-box">Z</span></span>
+            <span class="zc-ghostdd__box"><span class="zc-ghostdd__label">zcatalyst-trial-app</span>
+              <svg class="zc-ghostdd__chevron" viewBox="0 0 16 16" fill="none"><use href="#i-down"/></svg></span>
+          </div>
+          <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body">
+            <div class="zc-menu__item" role="option" data-value="zcatalyst-trial-app" aria-selected="true"><span class="zc-menu__label">zcatalyst-trial-app</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+            <div class="zc-menu__item" role="option" data-value="Zylker Store"><span class="zc-menu__label">Zylker Store</span><svg class="zc-menu__check" viewBox="0 0 16 16" fill="none"><use href="#i-check"/></svg></div>
+          </div></div>
+        </div>
+        <div class="zc-input-wrap zc-search-wrap" data-size="default" style="width:390px">
+          <svg class="zc-input__icon zc-input__icon--left" viewBox="0 0 16 16" fill="none"><use href="#i-search"/></svg>
+          <input class="zc-input" type="text" placeholder="Search Here">
+          <svg class="zc-input__clear" viewBox="0 0 16 16" fill="none"><use href="#i-x"/></svg>
+        </div>
+      </div>
+      <span class="zc-layout__avatar"><img src="/zcat-ui/docs/icons/Women.png" alt="Grace Mputhia"></span>
+    </header>
+
+    <div class="zc-layout__main">
+
+      <!-- Side menu -->
+      <aside class="zc-sidemenu">
+        <div class="zc-sidemenu__service">
+          <img src="/zcat-ui/docs/icons/Cloud Scale -color.svg" alt="">
+          <span class="zc-sidemenu__service-name">DirectDB</span>
+        </div>
+        <div class="zc-sidemenu__body">
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">DATABASES</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button" data-state="active"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-database"/></svg><span class="zc-sidemenu__label">All Databases</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-history"/></svg><span class="zc-sidemenu__label">Backups</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MONITOR</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-monitor"/></svg><span class="zc-sidemenu__label">Metrics</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-activity"/></svg><span class="zc-sidemenu__label">Query Insights</span></button>
+          </div>
+          <div class="zc-sidemenu__section">
+            <div class="zc-sidemenu__heading">MANAGE</div><span class="zc-sidemenu__divider"></span>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-key"/></svg><span class="zc-sidemenu__label">Access &amp; Roles</span></button>
+            <button class="zc-sidemenu__item" type="button"><svg class="zc-icon-stroke" viewBox="0 0 16 16"><use href="#i-settings"/></svg><span class="zc-sidemenu__label">Settings</span></button>
+          </div>
+        </div>
+        <button class="zc-btn zc-sidemenu__expand" data-variant="grey" data-size="small" data-content="icon" data-radius="rounded" aria-label="Toggle side menu">
+          <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-right"/></svg>
+        </button>
+      </aside>
+
+      <div class="zc-layout__page">
+
+        <div class="zc-layout__subheader">
+          <span class="zc-layout__subheader-title">DirectDB</span>
+          <button class="zc-btn" data-variant="ghost" data-color="primary" data-size="small" type="button">
+            <svg class="zc-btn__icon" viewBox="0 0 16 16" fill="none"><use href="#i-help"/></svg>Help
+          </button>
+        </div>
+
+        <div class="zc-layout__body">
+          <!-- Empty state: no Container Header, no search/filters, padding 0 -->
+          <div class="zc-layout__container ddb-container ddb-container--empty">
+            <div class="zc-empty">
+              <div class="zc-empty__art"><img src="/zcat-ui/docs/icons/Empty State Illustration.svg" alt=""></div>
+              <div class="zc-empty__content">
+                <div class="zc-empty__heading">No databases yet</div>
+                <div class="zc-empty__desc">Spin up a MySQL, PostgreSQL, or managed Aurora database in minutes. Connection strings, backups, and replicas are handled for you.</div>
+              </div>
+              <div class="zc-empty__actions">
+                <button class="zc-btn" data-variant="outline" data-color="primary" type="button">View Documentation</button>
+                <button class="zc-btn" data-variant="fill" data-color="primary" type="button" onclick="window.location.href='./databases.html?create=1'">Create Database</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

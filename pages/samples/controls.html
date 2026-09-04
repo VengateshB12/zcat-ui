@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controls — reference implementations</title>
+  <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
+  <style>
+    /* Page glue only. */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--zc-body-bg-body); padding: var(--zc-space-24); }
+    .cs-stack { display: flex; flex-direction: column; gap: var(--zc-space-24); max-width: 560px; }
+  </style>
+</head>
+<body data-zcat-sample data-zcat-no-shell="component reference sheet, not a product screen — it exists so the three controls that no real page uses have markup snippets.html can extract">
+
+<!-- WHY THIS PAGE EXISTS
+     Checkbox, Chip and Key Value Field had no reference implementation on any
+     real page — they existed only as JavaScript inside the playground. So
+     docs/snippets.html could not extract them, and an agent building with them
+     was back to reconstructing markup from a prose description, which is the
+     one thing that reliably comes out wrong.
+
+     The markup below is not hand-written. It is the library's OWN rendered
+     output, read out of the playground DOM after zcat.js built it, so it
+     cannot disagree with the component. -->
+
+<h1 class="zc-h4" style="margin-bottom:var(--zc-space-16)">Controls</h1>
+<p class="zc-body-3" style="margin-bottom:var(--zc-space-24);color:var(--zc-text-secondary)">Reference implementations for the three controls that had no real page using them.</p>
+<div class="cs-stack">
+
+  <label class="zc-checkbox"><span class="zc-checkbox__row"><input type="checkbox" class="zc-checkbox__input"><span class="zc-checkbox__box"></span><span class="zc-checkbox__label">Enable automatic backups</span></span></label>
+
+  <span class="zc-chip" data-size="default"><svg class="zc-chip__icon" viewBox="0 0 16 16" fill="none"><path d="M13.3333 4L6 11.3333L2.66667 8"/></svg><span class="zc-chip__label">Active list</span><button class="zc-chip__close" type="button" aria-label="Remove"><svg viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4L12 12"/></svg></button></span>
+
+  <div class="zc-kvfield">
+    <div class="zc-kvfield__fields">
+      <div class="zc-input-wrap" data-size="default"><input class="zc-input" placeholder="Enter Label Text" value="Region"></div>
+      <div class="zc-select-shell">
+        <div class="zc-input-wrap zc-select-wrap" data-size="default" aria-haspopup="listbox" aria-expanded="false" tabindex="0"><span class="zc-input zc-select__value">String</span><svg class="zc-select__chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6"/></svg></div>
+        <div class="zc-menu" data-size="default" role="listbox"><div class="zc-menu__body"><div class="zc-menu__item" role="option" data-value="String" aria-selected="true"><span class="zc-menu__label">String</span></div><div class="zc-menu__item" role="option" data-value="Number" aria-selected="false"><span class="zc-menu__label">Number</span></div><div class="zc-menu__noresult">No results found.</div></div></div>
+      </div>
+    </div>
+    <button class="zc-kvfield__btn zc-kvfield__minus" type="button" aria-label="Remove row" disabled><svg viewBox="0 0 16 16" fill="none"><path d="M5.33333 8H10.6667"/></svg></button>
+    <button class="zc-kvfield__btn zc-kvfield__add" type="button" aria-label="Add row"><svg viewBox="0 0 16 16" fill="none"><path d="M7.99998 3.33337V12.6667M3.33331 8.00004H12.6666"/></svg></button>
+  </div>
+
+</div>
+
+<script src="../../zcat-ui/zcat.js?v=20" defer></script>
+</body>
+</html>

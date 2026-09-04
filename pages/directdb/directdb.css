@@ -1,0 +1,122 @@
+/* DirectDB pages — page glue ONLY. All component styling comes from zcat.css.
+   Every color is a --zc-* token; every dimension is on the even token scale.
+   Typography is applied via .zc-h* / .zc-subtitle-* / .zc-body-* classes in
+   the markup, never here. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: var(--zc-body-bg-body); }
+
+.ddb-layout { height: 100vh; }
+
+/* ── List page: stretch-table container (pattern from docs/template.html) ── */
+.ddb-container { flex-direction: column; }
+.ddb-container > .zc-cheader { padding: var(--zc-space-16) var(--zc-space-16) 0; flex-shrink: 0; }
+.ddb-container > .zc-cheader .zc-cheader__right { flex: 1; min-width: 0; }
+.ddb-container > .zc-cheader .zc-cheader__right .zc-btn { flex-shrink: 0; }
+.ddb-table-region { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: var(--zc-space-16); }
+.ddb-table-region .zc-table-wrap { flex: 1; min-height: 0; overflow-y: auto; }
+.ddb-table-region .zc-pagination { flex-shrink: 0; }
+.ddb-table-region .zc-pagination__pershell .zc-menu { top: auto; bottom: calc(100% + var(--zc-space-4)); }
+
+/* Empty-state container: padding 0, content centered */
+.ddb-container--empty { align-items: center; justify-content: center; padding: 0; }
+
+/* Left-align the search inside a Search-type Container Header (the component's
+   column-mode `justify-content:center` would otherwise center it in row mode) */
+.ddb-cheader-left { justify-content: flex-start; }
+
+/* ── Detail page ── */
+.ddb-container--detail { flex-direction: column; overflow-y: auto; padding: var(--zc-space-16); }
+.ddb-subleft { display: flex; align-items: center; gap: var(--zc-space-10); min-width: 0; }
+.ddb-backlink { text-decoration: none; display: inline-flex; align-items: center; min-width: 0; }
+.ddb-subactions { display: flex; align-items: center; gap: var(--zc-space-8); margin-left: auto; }
+.ddb-tabsbar { flex-shrink: 0; margin-bottom: var(--zc-space-16); }
+.ddb-panel[hidden] { display: none; }
+
+/* Stat cards — Recipe A (rules-design-composition.md): 40x40 radius-10 icon BG
+   in varied badge-subtle token fills + 12 secondary label + 24 SB value */
+.ddb-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--zc-space-16); margin-bottom: var(--zc-space-16); }
+.ddb-stats--3 { grid-template-columns: repeat(3, 1fr); }
+.ddb-stat { display: flex; align-items: center; gap: var(--zc-space-12); padding: var(--zc-space-16); }
+.ddb-stat__body { display: flex; flex-direction: column; gap: var(--zc-space-2); min-width: 0; flex: 1; }
+.ddb-iconbg { width: 40px; height: 40px; border-radius: var(--zc-radius-10);
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ddb-iconbg svg { width: 18px; height: 18px; fill: none; stroke: currentColor;
+  stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.ddb-iconbg[data-color="primary"] { background: var(--zc-badge-subtle-primary-bg); color: var(--zc-badge-subtle-primary-text); }
+.ddb-iconbg[data-color="info"]    { background: var(--zc-badge-subtle-info-bg);    color: var(--zc-badge-subtle-info-text); }
+.ddb-iconbg[data-color="purple"]  { background: var(--zc-badge-subtle-purple-bg);  color: var(--zc-badge-subtle-purple-text); }
+.ddb-iconbg[data-color="success"] { background: var(--zc-badge-subtle-success-bg); color: var(--zc-badge-subtle-success-text); }
+.ddb-iconbg[data-color="warning"] { background: var(--zc-badge-subtle-warning-bg); color: var(--zc-badge-subtle-warning-text); }
+/* Recipe I/J header circle for selection cards */
+.ddb-iconbg--round { width: 48px; height: 48px; border-radius: var(--zc-radius-full); }
+.ddb-iconbg--round svg { width: 24px; height: 24px; }
+/* Card whose footer pins to the bottom (absorbs column-stretch void) */
+.ddb-card--flex { display: flex; flex-direction: column; }
+.ddb-card--flex .ddb-card__foot { margin-top: auto; padding-top: var(--zc-space-12); }
+/* Stacked cards inside one grid column; last card absorbs the stretch */
+.ddb-colstack { display: flex; flex-direction: column; gap: var(--zc-space-16); min-width: 0; }
+.ddb-colstack > .zc-card:last-child { flex: 1; }
+
+/* Content cards (zc-card ships without padding by design) */
+/* Cards in a row stretch to matching heights (design-uniform rule) */
+.ddb-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--zc-space-16); }
+.ddb-card { padding: var(--zc-space-16); }
+.ddb-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--zc-space-8); margin-bottom: var(--zc-space-12); }
+.ddb-stack { display: flex; flex-direction: column; gap: var(--zc-space-10); }
+.ddb-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--zc-space-10); }
+
+/* Toolbars inside tab panels */
+.ddb-toolbar { display: flex; align-items: center; gap: var(--zc-space-10); margin-bottom: var(--zc-space-16); }
+.ddb-toolbar__spacer { flex: 1; }
+
+/* Progress row under the storage stat */
+.ddb-progressrow { display: flex; align-items: center; justify-content: space-between; gap: var(--zc-space-8); margin-top: var(--zc-space-6); }
+
+/* SQL console: editor + attached run bar */
+.ddb-console .zc-codeblock { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.ddb-consolebar { display: flex; align-items: center; gap: var(--zc-space-10);
+  padding: var(--zc-space-8) var(--zc-space-12);
+  background: var(--zc-cards-bg-secondary);
+  border: var(--zc-border-default) solid var(--zc-codeblock-border); border-top: none;
+  border-radius: 0 0 var(--zc-radius-10) var(--zc-radius-10); }
+.ddb-consolebar__spacer { flex: 1; }
+
+/* Schema master-detail */
+.ddb-md { display: grid; grid-template-columns: minmax(260px, 1fr) 2fr; gap: var(--zc-space-16); align-items: start; }
+.ddb-md .zc-csm { width: 100%; }
+
+/* Settings tab */
+.ddb-settingrow { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--zc-space-12);
+  padding: var(--zc-space-10) 0; border-bottom: var(--zc-border-default) solid var(--zc-body-border-divider); }
+.ddb-settingrow:last-child { border-bottom: none; }
+
+/* Wizard popup — component default width (550px); only layout placement here */
+.ddb-wizard .zc-stepper { margin-top: var(--zc-space-16); width: 100%; }
+.ddb-wizard .zc-popup__footer { justify-content: flex-start; }
+.ddb-foot-spacer { flex: 1; }
+.ddb-wizstep[hidden] { display: none; }
+.ddb-wizard .zc-popup__footer [hidden] { display: none; }
+.ddb-choices { display: flex; flex-direction: column; gap: var(--zc-space-12); }
+.ddb-choice { display: flex; align-items: flex-start; gap: var(--zc-space-12); padding: var(--zc-space-16); cursor: pointer; width: 100%; text-align: left; }
+.ddb-choice__body { display: flex; flex-direction: column; gap: var(--zc-space-2); flex: 1; min-width: 0; }
+.ddb-plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--zc-space-10); }
+.ddb-plan { display: flex; flex-direction: column; align-items: center; gap: var(--zc-space-2); padding: var(--zc-space-12); cursor: pointer; text-align: center; }
+.ddb-revfoot { display: flex; align-items: center; justify-content: space-between; gap: var(--zc-space-10); margin-top: var(--zc-space-12); }
+
+/* Popup body vertical rhythm */
+.ddb-form { display: flex; flex-direction: column; gap: var(--zc-space-16); }
+
+/* Sparkline cards */
+.ddb-spark svg { width: 100%; height: 64px; display: block; }
+
+/* Toast stack — top center (product convention) */
+.ddb-toasts { position: fixed; top: var(--zc-space-20); left: 50%; transform: translateX(-50%); z-index: 90;
+  display: flex; flex-direction: column; align-items: center; gap: var(--zc-space-10);
+  width: 460px; max-width: calc(100vw - var(--zc-space-40)); }
+.ddb-toasts .zc-toast { width: 100%; }
+
+/* Scrim centering for page-triggered popups */
+.ddb-overlay { z-index: 60; }
+.ddb-overlay[hidden] { display: none; }

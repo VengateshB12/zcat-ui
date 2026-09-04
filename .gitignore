@@ -13,7 +13,14 @@
 HANDOFF.md
 
 # Pages built with the library — the author's own work, not part of it.
-/pages
+# Pages you build are yours and stay out of the repo — EXCEPT the handful the
+# docs depend on. build-snippets.py extracts real component markup from these,
+# so if they are ignored a fresh clone regenerates snippets.html with one source
+# instead of six and most components vanish, silently. They are reference
+# material, not page-build output.
+/pages/*
+!/pages/directdb/
+!/pages/samples/
 
 # STALE DOCS — kept locally, never published. Both describe markup that no
 # longer exists, and COMPONENTS.md is the file a new developer opens first by
