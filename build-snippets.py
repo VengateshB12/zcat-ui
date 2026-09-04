@@ -62,6 +62,32 @@ def extract(cls, cap=4200):
                     break
     return None, None
 
+def glue_for(block, path):
+    """The page-glue CSS a block needs to render.
+
+    A snippet that quietly depends on the page it came from is not copyable.
+    The create/edit popup uses seven .tpl-* classes defined in template.html's
+    own <style>; lifted without them the selection cards lose their sizing and
+    a 16px engine icon renders as a 466px illustration — the exact trap our
+    rules warn about, produced by our own snippet. So ship the glue with the
+    block and say plainly that it is page CSS, not library CSS."""
+    names = sorted({c for m in re.findall(r'class="([^"]+)"', block)
+                      for c in m.split() if not c.startswith("zc-")})
+    if not names: return "", []
+    try: src = open(path, encoding="utf-8").read()
+    except OSError: return "", []
+    css = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", src, re.S))
+    rules = []
+    for n in names:
+        for m in re.finditer(r"(^|\n)\s*(\.[^\n{]*\b" + re.escape(n) + r"\b[^\n{]*)\{([^}]*)\}", css):
+            rules.append(f"{m.group(2).strip()} {{{m.group(3).rstrip()} }}")
+    seen, out = set(), []
+    for r in rules:
+        if r in seen: continue
+        seen.add(r); out.append(r)
+    return "\n".join(out), names
+
+
 def variants(cls):
     """The data-* values the CSS actually defines — so 'change the variant'
        is a lookup rather than a guess."""
@@ -119,12 +145,19 @@ for name, items in SPEC:
         v = variants(cls)
         vline = (f'<p class="zc-body-4 src">variants: <code>{html.escape(" ".join(v[:10]))}</code></p>'
                  if v else "")
+        gcss, gnames = glue_for(b, path)
+        gblock = (f'<p class="zc-body-3 glue-note">This block also needs {len(gnames)} '
+                  f'page-glue class(es) — <code>{html.escape(", ".join(gnames))}</code>. '
+                  'They are PAGE CSS, not library CSS: copy them into your page\'s '
+                  '&lt;style&gt; too, or the block will not lay out.</p>'
+                  f'<pre class="glue"><code>{html.escape(gcss)}</code></pre>') if gcss else ""
         rows.append(f'''<section class="snip">
   <h3 class="zc-h6">{html.escape(title)}</h3>
   <p class="zc-body-3 note">{html.escape(note)}</p>
   <p class="zc-body-4 src">verified in <code>{path}</code></p>{vline}
-  <div class="live">{b}</div>
+  <div class="live"><style>{gcss}</style>{b}</div>
   <pre><code>{html.escape(b)}</code></pre>
+  {gblock}
 </section>''')
     if rows:
         sections.append(f'<h2 class="zc-h4 sec">{name}</h2>\n' + "\n".join(rows))
@@ -174,6 +207,8 @@ DOC = f'''<!DOCTYPE html>
          border:1px solid var(--zc-border-subtle); border-radius:6px; }}
   code {{ font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
           font-size:12px; line-height:20px; }}
+  .glue-note {{ margin:14px 0 6px; color:var(--zc-text-secondary); }}
+  pre.glue {{ background:var(--zc-bg-container); }}
   .lede {{ padding:16px 20px; background:var(--zc-bg-container);
            border:1px solid var(--zc-border-subtle); border-radius:8px; }}
 </style></head><body>
