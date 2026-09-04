@@ -639,11 +639,30 @@
      NOTE the url() is relative to THIS stylesheet's consumer (src/components/
      shell.css), NOT to the HTML — that is a trap this codebase has hit before. */
   --zc-empty-art: url('../../docs/icons/Empty State Illustration.svg');
+  /* CHART SERIES PALETTE.
+     Three series colours existed, which is enough for a line chart and not
+     enough for a pie. These are not invented: 1-3 are the existing graph
+     colours, and 4-6 are the -1 variant of palette shade families, which is
+     exactly where graph-tertiary already came from (it IS shade-orange-1). */
+  --zc-graph-series-1: #2A65F0;
+  --zc-graph-series-2: #29B260;
+  --zc-graph-series-3: #C98E06;
+  --zc-graph-series-4: #6E3D9E;
+  --zc-graph-series-5: #E417B1;
+  --zc-graph-series-6: #E22020;
 }
 
 /* ─── DARK THEME ─── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+  /* Chart series, dark. Same six hues, lifted for a dark ground — the dark
+     palette already carries lighter variants of these families. */
+  --zc-graph-series-1: #5B8DFF;
+  --zc-graph-series-2: #4CCB82;
+  --zc-graph-series-3: #E3B23C;
+  --zc-graph-series-4: #A87BD6;
+  --zc-graph-series-5: #F26FD0;
+  --zc-graph-series-6: #FF6B6B;
   /* Dark artwork supplied by the designer (2026-09-04). Same trap note as the
      light value: the url() resolves against src/components/shell.css. */
   --zc-empty-art: url('../../docs/icons/Empty State Illustration Dark.svg');
@@ -1248,6 +1267,14 @@
 }
 
 :root[data-theme="dark"] {
+  /* Chart series, dark. Same six hues, lifted for a dark ground — the dark
+     palette already carries lighter variants of these families. */
+  --zc-graph-series-1: #5B8DFF;
+  --zc-graph-series-2: #4CCB82;
+  --zc-graph-series-3: #E3B23C;
+  --zc-graph-series-4: #A87BD6;
+  --zc-graph-series-5: #F26FD0;
+  --zc-graph-series-6: #FF6B6B;
   /* Dark artwork supplied by the designer (2026-09-04). Same trap note as the
      light value: the url() resolves against src/components/shell.css. */
   --zc-empty-art: url('../../docs/icons/Empty State Illustration Dark.svg');

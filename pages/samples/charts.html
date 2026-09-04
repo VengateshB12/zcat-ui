@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charts — reference implementations</title>
+  <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
+  <style>
+    /* Page glue only. */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--zc-body-bg-body); padding: var(--zc-space-24); }
+    .ch-stack { display: flex; flex-direction: column; gap: var(--zc-space-24); max-width: 640px; }
+  </style>
+</head>
+<body data-zcat-sample data-zcat-no-shell="component reference sheet, not a product screen — it exists so the chart components have markup snippets.html can extract">
+
+<h1 class="zc-h4" style="margin-bottom:var(--zc-space-16)">Charts</h1>
+<p class="zc-body-3" style="margin-bottom:var(--zc-space-24);color:var(--zc-text-secondary)">Every colour is a series token and every label a type class. Nothing here is hand-picked.</p>
+
+<div class="ch-stack">
+
+  <div class="zc-card">
+    <div class="zc-cheader">
+      <div class="zc-cheader__left"><span class="zc-cheader__title">Storage by engine</span></div>
+    </div>
+    <div class="zc-piechart" data-variant="donut">
+      <svg class="zc-piechart__svg" viewBox="0 0 42 42" aria-label="Storage by engine">
+        <circle class="zc-piechart__slice" data-series="1" stroke-dasharray="42 58" stroke-dashoffset="0"></circle>
+        <circle class="zc-piechart__slice" data-series="2" stroke-dasharray="27 73" stroke-dashoffset="-42"></circle>
+        <circle class="zc-piechart__slice" data-series="3" stroke-dasharray="18 82" stroke-dashoffset="-69"></circle>
+        <circle class="zc-piechart__slice" data-series="4" stroke-dasharray="13 87" stroke-dashoffset="-87"></circle>
+      </svg>
+      <div class="zc-piechart__legend">
+        <div class="zc-piechart__item" data-series="1"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">Aurora MySQL</span><span class="zc-piechart__value zc-body-1">42%</span></div>
+        <div class="zc-piechart__item" data-series="2"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">PostgreSQL</span><span class="zc-piechart__value zc-body-1">27%</span></div>
+        <div class="zc-piechart__item" data-series="3"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">MySQL 8.0</span><span class="zc-piechart__value zc-body-1">18%</span></div>
+        <div class="zc-piechart__item" data-series="4"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">Redis</span><span class="zc-piechart__value zc-body-1">13%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="zc-card">
+    <div class="zc-cheader">
+      <div class="zc-cheader__left"><span class="zc-cheader__title">Connections by region</span></div>
+    </div>
+    <div class="zc-barchart">
+      <div class="zc-barchart__plot">
+        <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:72%"></span></div>
+        <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:48%"></span></div>
+        <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:91%"></span></div>
+        <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:34%"></span></div>
+        <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:60%"></span></div>
+      </div>
+      <div class="zc-barchart__labels">
+        <span class="zc-barchart__label zc-body-4">us-east-1</span>
+        <span class="zc-barchart__label zc-body-4">eu-west-1</span>
+        <span class="zc-barchart__label zc-body-4">ap-south-1</span>
+        <span class="zc-barchart__label zc-body-4">us-west-2</span>
+        <span class="zc-barchart__label zc-body-4">us-east-2</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="../../zcat-ui/zcat.js?v=20" defer></script>
+</body>
+</html>

@@ -798,6 +798,78 @@ instead, and <code>ONBOARDING.md</code> remains the full API.</p>
 </section>
 <h2 class="zc-h4 sec">DATA</h2>
 <section class="snip">
+  <h3 class="zc-h6">Pie / Donut chart</h3>
+  <p class="zc-body-3 note">Slice geometry is a stroke-dasharray on a circle, so a slice is one number — no JS. Colour comes only from --zc-graph-series-1..6. data-variant=&quot;donut&quot; thins the ring.</p>
+  <p class="zc-body-4 src">verified in <code>pages/samples/charts.html</code></p><p class="zc-body-4 src">variants (1), all of them: <code>data-variant=&quot;donut&quot;</code></p>
+  <div class="live"><style></style><div class="zc-piechart" data-variant="donut">
+  <svg class="zc-piechart__svg" viewBox="0 0 42 42" aria-label="Storage by engine">
+    <circle class="zc-piechart__slice" data-series="1" stroke-dasharray="42 58" stroke-dashoffset="0"></circle>
+    <circle class="zc-piechart__slice" data-series="2" stroke-dasharray="27 73" stroke-dashoffset="-42"></circle>
+    <circle class="zc-piechart__slice" data-series="3" stroke-dasharray="18 82" stroke-dashoffset="-69"></circle>
+    <circle class="zc-piechart__slice" data-series="4" stroke-dasharray="13 87" stroke-dashoffset="-87"></circle>
+  </svg>
+  <div class="zc-piechart__legend">
+    <div class="zc-piechart__item" data-series="1"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">Aurora MySQL</span><span class="zc-piechart__value zc-body-1">42%</span></div>
+    <div class="zc-piechart__item" data-series="2"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">PostgreSQL</span><span class="zc-piechart__value zc-body-1">27%</span></div>
+    <div class="zc-piechart__item" data-series="3"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">MySQL 8.0</span><span class="zc-piechart__value zc-body-1">18%</span></div>
+    <div class="zc-piechart__item" data-series="4"><span class="zc-piechart__dot"></span><span class="zc-piechart__label zc-body-1">Redis</span><span class="zc-piechart__value zc-body-1">13%</span></div>
+  </div>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-piechart&quot; data-variant=&quot;donut&quot;&gt;
+  &lt;svg class=&quot;zc-piechart__svg&quot; viewBox=&quot;0 0 42 42&quot; aria-label=&quot;Storage by engine&quot;&gt;
+    &lt;circle class=&quot;zc-piechart__slice&quot; data-series=&quot;1&quot; stroke-dasharray=&quot;42 58&quot; stroke-dashoffset=&quot;0&quot;&gt;&lt;/circle&gt;
+    &lt;circle class=&quot;zc-piechart__slice&quot; data-series=&quot;2&quot; stroke-dasharray=&quot;27 73&quot; stroke-dashoffset=&quot;-42&quot;&gt;&lt;/circle&gt;
+    &lt;circle class=&quot;zc-piechart__slice&quot; data-series=&quot;3&quot; stroke-dasharray=&quot;18 82&quot; stroke-dashoffset=&quot;-69&quot;&gt;&lt;/circle&gt;
+    &lt;circle class=&quot;zc-piechart__slice&quot; data-series=&quot;4&quot; stroke-dasharray=&quot;13 87&quot; stroke-dashoffset=&quot;-87&quot;&gt;&lt;/circle&gt;
+  &lt;/svg&gt;
+  &lt;div class=&quot;zc-piechart__legend&quot;&gt;
+    &lt;div class=&quot;zc-piechart__item&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-piechart__dot&quot;&gt;&lt;/span&gt;&lt;span class=&quot;zc-piechart__label zc-body-1&quot;&gt;Aurora MySQL&lt;/span&gt;&lt;span class=&quot;zc-piechart__value zc-body-1&quot;&gt;42%&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-piechart__item&quot; data-series=&quot;2&quot;&gt;&lt;span class=&quot;zc-piechart__dot&quot;&gt;&lt;/span&gt;&lt;span class=&quot;zc-piechart__label zc-body-1&quot;&gt;PostgreSQL&lt;/span&gt;&lt;span class=&quot;zc-piechart__value zc-body-1&quot;&gt;27%&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-piechart__item&quot; data-series=&quot;3&quot;&gt;&lt;span class=&quot;zc-piechart__dot&quot;&gt;&lt;/span&gt;&lt;span class=&quot;zc-piechart__label zc-body-1&quot;&gt;MySQL 8.0&lt;/span&gt;&lt;span class=&quot;zc-piechart__value zc-body-1&quot;&gt;18%&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-piechart__item&quot; data-series=&quot;4&quot;&gt;&lt;span class=&quot;zc-piechart__dot&quot;&gt;&lt;/span&gt;&lt;span class=&quot;zc-piechart__label zc-body-1&quot;&gt;Redis&lt;/span&gt;&lt;span class=&quot;zc-piechart__value zc-body-1&quot;&gt;13%&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  
+</section>
+<section class="snip">
+  <h3 class="zc-h6">Bar chart</h3>
+  <p class="zc-body-3 note">Bars are divs with a percentage height, so a bar is one number too. Same series tokens, same type classes.</p>
+  <p class="zc-body-4 src">verified in <code>pages/samples/charts.html</code></p>
+  <div class="live"><style></style><div class="zc-barchart">
+  <div class="zc-barchart__plot">
+    <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:72%"></span></div>
+    <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:48%"></span></div>
+    <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:91%"></span></div>
+    <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:34%"></span></div>
+    <div class="zc-barchart__col" data-series="1"><span class="zc-barchart__bar" style="height:60%"></span></div>
+  </div>
+  <div class="zc-barchart__labels">
+    <span class="zc-barchart__label zc-body-4">us-east-1</span>
+    <span class="zc-barchart__label zc-body-4">eu-west-1</span>
+    <span class="zc-barchart__label zc-body-4">ap-south-1</span>
+    <span class="zc-barchart__label zc-body-4">us-west-2</span>
+    <span class="zc-barchart__label zc-body-4">us-east-2</span>
+  </div>
+</div></div>
+  <pre><code>&lt;div class=&quot;zc-barchart&quot;&gt;
+  &lt;div class=&quot;zc-barchart__plot&quot;&gt;
+    &lt;div class=&quot;zc-barchart__col&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-barchart__bar&quot; style=&quot;height:72%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-barchart__col&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-barchart__bar&quot; style=&quot;height:48%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-barchart__col&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-barchart__bar&quot; style=&quot;height:91%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-barchart__col&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-barchart__bar&quot; style=&quot;height:34%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;zc-barchart__col&quot; data-series=&quot;1&quot;&gt;&lt;span class=&quot;zc-barchart__bar&quot; style=&quot;height:60%&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zc-barchart__labels&quot;&gt;
+    &lt;span class=&quot;zc-barchart__label zc-body-4&quot;&gt;us-east-1&lt;/span&gt;
+    &lt;span class=&quot;zc-barchart__label zc-body-4&quot;&gt;eu-west-1&lt;/span&gt;
+    &lt;span class=&quot;zc-barchart__label zc-body-4&quot;&gt;ap-south-1&lt;/span&gt;
+    &lt;span class=&quot;zc-barchart__label zc-body-4&quot;&gt;us-west-2&lt;/span&gt;
+    &lt;span class=&quot;zc-barchart__label zc-body-4&quot;&gt;us-east-2&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  
+</section>
+<section class="snip">
   <h3 class="zc-h6">Table</h3>
   <p class="zc-body-3 note">The WHOLE ROW clicks: data-rowlink on the &lt;tr&gt;, entity cell plain text. Status is a Badge. data-style=&quot;stretch&quot; when the table is alone, &quot;boxy&quot; when it shares the page or sits in a popup.</p>
   <p class="zc-body-4 src">verified in <code>zcat-ui/docs/template.html</code></p><p class="zc-body-4 src">variants (1), all of them: <code>data-style=&quot;boxy&quot;</code></p>

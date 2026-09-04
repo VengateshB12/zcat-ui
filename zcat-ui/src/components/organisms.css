@@ -511,6 +511,14 @@
   font-family: var(--zc-font-primary);
   font-size: 10px;
   fill: var(--zc-graph-text-3);
+  /* TEXT TAKES NO STROKE.
+     The chart <svg> carries stroke + stroke-width for the SERIES lines, and
+     <text> inherits both — so every axis label was being outlined in
+     #101F3E at 1.3px on top of its light #7988A8 fill. At 10px a 1.3px
+     outline on each side essentially fills the letterforms, which is why the
+     ticks read as heavy and dark when the fill said otherwise. */
+  stroke: none;
+  font-weight: 400;
 }
 .zc-graphcard__series { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .zc-graphcard__legend {
@@ -521,3 +529,85 @@
   color: var(--zc-graph-text-2);
 }
 .zc-graphcard__dot { width: 8px; height: 8px; border-radius: var(--zc-radius-full); display: inline-block; margin-right: var(--zc-space-4); }
+
+/* ── PIE / DONUT CHART ─────────────────────────────────────────────────
+   The library had one chart, a line graph, so any screen needing a
+   breakdown had to hand-draw it — and a hand-drawn chart picks its own
+   colours, its own type and its own legend, which is exactly how a page
+   stops looking like the rest of the system.
+
+   Colour comes only from --zc-graph-series-1..6, type only from the
+   .zc-body-* classes. The slice geometry is a stroke-dasharray on a
+   circle, so a slice is one number and nothing has to be computed in JS.
+
+   <div class="zc-piechart" data-variant="donut">
+     <svg class="zc-piechart__svg" viewBox="0 0 42 42">
+       <circle class="zc-piechart__slice" data-series="1"
+               stroke-dasharray="45 55" stroke-dashoffset="0"/>
+       …
+     </svg>
+     <div class="zc-piechart__legend"> … </div>
+   </div>                                                                */
+.zc-piechart {
+  display: flex;
+  align-items: center;
+  gap: var(--zc-space-24);
+  font-family: var(--zc-font-primary);
+}
+.zc-piechart__svg { width: 152px; height: 152px; flex-shrink: 0; transform: rotate(-90deg); }
+.zc-piechart__slice {
+  cx: 21; cy: 21; r: 15.9155;            /* circumference = 100, so 1 unit = 1% */
+  fill: none;
+  stroke-width: 9;
+  stroke: var(--zc-graph-series-1);
+  transition: stroke-width 120ms ease;
+}
+.zc-piechart[data-variant="donut"] .zc-piechart__slice { stroke-width: 6; }
+.zc-piechart__slice[data-series="2"] { stroke: var(--zc-graph-series-2); }
+.zc-piechart__slice[data-series="3"] { stroke: var(--zc-graph-series-3); }
+.zc-piechart__slice[data-series="4"] { stroke: var(--zc-graph-series-4); }
+.zc-piechart__slice[data-series="5"] { stroke: var(--zc-graph-series-5); }
+.zc-piechart__slice[data-series="6"] { stroke: var(--zc-graph-series-6); }
+.zc-piechart__hole {
+  fill: var(--zc-body-bg-container);
+  cx: 21; cy: 21; r: 11;
+}
+.zc-piechart__legend { display: flex; flex-direction: column; gap: var(--zc-space-8); min-width: 0; }
+.zc-piechart__item { display: flex; align-items: center; gap: var(--zc-space-8); }
+.zc-piechart__dot {
+  width: 8px; height: 8px; border-radius: var(--zc-radius-full);
+  flex-shrink: 0; background: var(--zc-graph-series-1);
+}
+.zc-piechart__item[data-series="2"] .zc-piechart__dot { background: var(--zc-graph-series-2); }
+.zc-piechart__item[data-series="3"] .zc-piechart__dot { background: var(--zc-graph-series-3); }
+.zc-piechart__item[data-series="4"] .zc-piechart__dot { background: var(--zc-graph-series-4); }
+.zc-piechart__item[data-series="5"] .zc-piechart__dot { background: var(--zc-graph-series-5); }
+.zc-piechart__item[data-series="6"] .zc-piechart__dot { background: var(--zc-graph-series-6); }
+.zc-piechart__label { color: var(--zc-graph-text-2); white-space: nowrap; }
+.zc-piechart__value { color: var(--zc-graph-text-1); font-weight: 600; margin-left: auto; }
+
+/* ── BAR CHART ─────────────────────────────────────────────────────────
+   Same rules: series colours only, type classes only. Bars are plain
+   divs whose height is a percentage, so a bar is one number too.        */
+.zc-barchart { font-family: var(--zc-font-primary); }
+.zc-barchart__plot {
+  display: flex; align-items: flex-end; gap: var(--zc-space-12);
+  height: 148px; padding: var(--zc-space-12) 0;
+  border-bottom: 1px solid var(--zc-graph-axis);
+}
+.zc-barchart__col { flex: 1; display: flex; flex-direction: column;
+                    align-items: center; gap: var(--zc-space-6); height: 100%;
+                    justify-content: flex-end; min-width: 0; }
+.zc-barchart__bar {
+  width: 100%; max-width: 44px; border-radius: var(--zc-radius-4) var(--zc-radius-4) 0 0;
+  background: var(--zc-graph-series-1);
+}
+.zc-barchart__col[data-series="2"] .zc-barchart__bar { background: var(--zc-graph-series-2); }
+.zc-barchart__col[data-series="3"] .zc-barchart__bar { background: var(--zc-graph-series-3); }
+.zc-barchart__col[data-series="4"] .zc-barchart__bar { background: var(--zc-graph-series-4); }
+.zc-barchart__col[data-series="5"] .zc-barchart__bar { background: var(--zc-graph-series-5); }
+.zc-barchart__col[data-series="6"] .zc-barchart__bar { background: var(--zc-graph-series-6); }
+.zc-barchart__labels { display: flex; gap: var(--zc-space-12); padding-top: var(--zc-space-8); }
+/* text-2, not text-3: #7988A8 on white is 3.56:1, under our own 4.5:1 rule.
+   An axis label is content, not decoration, so it has to be readable. */
+.zc-barchart__label { flex: 1; text-align: center; color: var(--zc-graph-text-2); min-width: 0; }

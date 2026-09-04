@@ -32,7 +32,8 @@ SOURCES = ["zcat-ui/docs/template.html",
            "pages/directdb/database-detail.html",
            "pages/directdb/databases-empty.html",
            "pages/samples/pipelines-fullpopup.html",
-           "pages/samples/controls.html"]
+           "pages/samples/controls.html",
+           "pages/samples/charts.html"]
 
 JS_TELLS = ("${", " r += ", "function(", "){", "=>")
 
@@ -184,6 +185,8 @@ SPEC = [
   ("Container Side Menu", "zc-csm", "ONE per page. A second vertical list is RECORDS — a table or card list, not navigation."),
  ]),
  ("DATA", [
+  ("Pie / Donut chart", "zc-piechart", "Slice geometry is a stroke-dasharray on a circle, so a slice is one number — no JS. Colour comes only from --zc-graph-series-1..6. data-variant=\"donut\" thins the ring."),
+  ("Bar chart", "zc-barchart", "Bars are divs with a percentage height, so a bar is one number too. Same series tokens, same type classes."),
   ("Table", "zc-table-wrap", 'The WHOLE ROW clicks: data-rowlink on the <tr>, entity cell plain text. Status is a Badge. data-style="stretch" when the table is alone, "boxy" when it shares the page or sits in a popup.'),
   ("General Details", "zc-gdetails", "Detail pages are READ-ONLY. Values display here; an Edit button opens a popup."),
  ]),
