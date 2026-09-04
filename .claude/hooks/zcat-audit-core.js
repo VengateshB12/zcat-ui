@@ -902,8 +902,14 @@ function __zcatAudit() {
         fail("LONE ACTION BUTTON",
           "this Container Header has actions on the right but nothing on the left — put the section heading, a Search field or the filters there; a primary button floating alone against empty space is the assembled-not-designed tell", ch);
     }
-    /* Buttons stacked directly above a table with no Container Header at all */
-    for (const tw of [...document.querySelectorAll(".zc-layout__container .zc-table-wrap")].filter(vis)) {
+    /* A hand-made action bar above ANY content block.
+       This used to watch tables only, so a card grid with three buttons stacked
+       above it in a bare div sailed through — and the Container Header is not a
+       table component. It belongs above whatever the block is: a table, a card
+       grid, a list, a chart panel. */
+    const BLOCKS = ".zc-layout__container .zc-table-wrap, .zc-layout__container .zc-card-grid, " +
+                   ".zc-layout__container .zc-cards, .zc-layout__container [data-cards]";
+    for (const tw of [...document.querySelectorAll(BLOCKS)].filter(vis)) {
       const prev = tw.previousElementSibling;
       if (!prev || prev.classList.contains("zc-cheader")) continue;
       const btns = [...prev.querySelectorAll(".zc-btn")].filter(vis);
@@ -911,7 +917,7 @@ function __zcatAudit() {
                       (prev.textContent || "").replace(/\s+/g, " ").trim().length > btns.reduce((n, b) => n + (b.textContent || "").trim().length, 0) + 2;
       if (btns.length && !hasLeft)
         fail("ACTION BAR NOT A CONTAINER HEADER",
-          "buttons are sitting above this table in a hand-made row — that bar is the Container Header (.zc-cheader), with actions right and a heading / Search / filters left", prev);
+          "buttons are sitting above this content in a hand-made row — that bar is the Container Header (.zc-cheader), which goes above ANY block (table, card grid, list, chart), with actions right and a heading / Search / filters left", prev);
     }
   }
 
