@@ -110,3 +110,19 @@ a:not([class*="zc-"]):hover {
   white-space: nowrap;
   border: 0;
 }
+
+/* [hidden] MUST WIN.
+   The browser's own rule is [hidden] { display: none }, specificity 0-1-0 —
+   exactly the same as .zc-empty, .zc-popup-scrim or any of the 218 component
+   rules that set a display. Same specificity means source order decides, and
+   the library always loads last, so `hidden` quietly stopped working on every
+   one of them.
+
+   What that looked like: a list page showed its five rows AND its "no results"
+   message at the same time, with hidden="true" sitting on the message. Pages
+   had started patching it one class at a time in their own <style> — which the
+   audit then flagged as restyling a library class, because it is.
+
+   !important is right here: it restores what the attribute already means, and
+   nothing should ever need to override it. */
+[hidden] { display: none !important; }

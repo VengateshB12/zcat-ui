@@ -32,6 +32,24 @@ _REF_CANDIDATES = (
 )
 SHOTS_REF = next((p for p in _REF_CANDIDATES if os.path.isdir(p)), _REF_CANDIDATES[-1])
 
+# OUR OWN PAGES COUNT AS REFERENCES TOO.
+# This used to accept ONLY the live Catalyst console screenshots, which made
+# every review compare a new screen against a product with a different shell —
+# and the findings came out as noise: "the reference topbar has an environment
+# switcher and ours does not" is not a defect, our shell is deliberately ours.
+# The designer pointed this out. The live screenshots remain the QUALITY bar
+# (density, restraint, how much air a real screen gets); our own built pages are
+# the STRUCTURAL standard, and comparing against them is usually more useful.
+OWN_SHOTS = os.path.join(HOOKS, ".zcat-state", "shots") if "HOOKS" in dir() else \
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), ".zcat-state", "shots")
+
+
+def _ref_exists(name):
+    """A reference may be a live product screenshot OR one of our own pages."""
+    if os.path.exists(os.path.join(SHOTS_REF, name)):
+        return True
+    return os.path.exists(os.path.join(OWN_SHOTS, name))
+
 GENERIC = re.compile(
     r"^(?:it |the )?(?:looks?|is|has|uses?|used)\b.*\b(better|good|nice|clean|polished|"
     r"improved|consistent)\b|^used zcat|^different colou?rs?$|^better spacing$|"
@@ -65,10 +83,13 @@ def main():
     if not ref:
         errs.append("reference_screenshot is missing — name the production screenshot "
                     "you compared against.")
-    elif os.path.isdir(SHOTS_REF) and not os.path.exists(os.path.join(SHOTS_REF, ref)):
-        avail = sorted(os.listdir(SHOTS_REF))[:8]
-        errs.append(f"reference_screenshot '{ref}' does not exist. Available e.g.: "
-                    + ", ".join(avail))
+    elif not _ref_exists(ref):
+        avail = (sorted(os.listdir(SHOTS_REF))[:6] if os.path.isdir(SHOTS_REF) else [])
+        mine = (sorted(os.listdir(OWN_SHOTS))[:4] if os.path.isdir(OWN_SHOTS) else [])
+        errs.append(f"reference_screenshot '{ref}' does not exist. Compare against the "
+                    "live product for the QUALITY bar, e.g.: " + ", ".join(avail) +
+                    (" — or against one of our OWN built pages for the STRUCTURAL "
+                     "standard, e.g.: " + ", ".join(mine) if mine else ""))
 
     diffs = d.get("three_differences") or []
     if len(diffs) < 3:
