@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DirectDB — Databases</title>
   <link rel="stylesheet" href="../../zcat-ui/zcat.css?v=120">
-  <link rel="stylesheet" href="./directdb.css?v=123">
+  <link rel="stylesheet" href="./directdb.css?v=124">
   <script src="./directdb-common.js" defer></script>
   <script src="../../zcat-ui/zcat.js?v=22" defer></script>
 </head>
@@ -180,7 +180,7 @@
                     <th class="zc-table__th zc-table__th--actions"></th>
                   </tr></thead>
                   <tbody id="db-rows">
-                    <tr class="zc-table__row">
+                    <tr class="zc-table__row" data-rowlink="database-detail.html">
                       <td class="zc-table__td">orders-prod</td>
                       <td class="zc-table__td">Aurora MySQL 3.0</td>
                       <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td>
@@ -191,7 +191,7 @@
                       <td class="zc-table__td">May 12, 2026</td>
                       <td class="zc-table__td zc-table__td--actions"></td>
                     </tr>
-                    <tr class="zc-table__row">
+                    <tr class="zc-table__row" data-rowlink="database-detail.html">
                       <td class="zc-table__td">analytics-pg</td>
                       <td class="zc-table__td">PostgreSQL 16</td>
                       <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="success">Available</span></td>
@@ -202,7 +202,7 @@
                       <td class="zc-table__td">Jun 2, 2026</td>
                       <td class="zc-table__td zc-table__td--actions"></td>
                     </tr>
-                    <tr class="zc-table__row">
+                    <tr class="zc-table__row" data-rowlink="database-detail.html">
                       <td class="zc-table__td">sessions-cache</td>
                       <td class="zc-table__td">MySQL 8.0</td>
                       <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="warning">Modifying</span></td>
@@ -213,7 +213,7 @@
                       <td class="zc-table__td">Jul 19, 2026</td>
                       <td class="zc-table__td zc-table__td--actions"></td>
                     </tr>
-                    <tr class="zc-table__row">
+                    <tr class="zc-table__row" data-rowlink="database-detail.html">
                       <td class="zc-table__td">billing-staging</td>
                       <td class="zc-table__td">PostgreSQL 16</td>
                       <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="info">Provisioning</span></td>
@@ -224,7 +224,7 @@
                       <td class="zc-table__td">Aug 9, 2026</td>
                       <td class="zc-table__td zc-table__td--actions"></td>
                     </tr>
-                    <tr class="zc-table__row">
+                    <tr class="zc-table__row" data-rowlink="database-detail.html">
                       <td class="zc-table__td">audit-archive</td>
                       <td class="zc-table__td">MySQL 8.0</td>
                       <td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="grey">Stopped</span></td>
@@ -243,8 +243,6 @@
                         <span class="zc-empty__desc">Check the spelling, or clear the search to see all of them again.</span>
                       </div>
                     </div>
-                    <table style="display:none">
-                </table>
               </div>
             </div>
 

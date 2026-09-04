@@ -689,8 +689,8 @@
 
   function renderRows() {
     $('db-rows').innerHTML = rows.map(function (r) {
-      return '<tr class="zc-table__row" data-name="' + r[0] + '">' +
-        '<td class="zc-table__td" data-rowlink role="button" tabindex="0">' + r[0] + '</td>' +
+      return '<tr class="zc-table__row" data-name="' + r[0] + '" data-rowlink="#">' +
+        '<td class="zc-table__td">' + r[0] + '</td>' +
         '<td class="zc-table__td"><span class="zc-badge" data-type="secondary" data-color="' + r[2] + '">' + r[1] + '</span></td>' +
         '<td class="zc-table__td">' + r[3] + '</td>' +
         '<td class="zc-table__td">' + r[4] + '</td>' +

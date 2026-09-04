@@ -984,6 +984,48 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 18g1. The whole row is the click target ────────────────────────
+     "In all type of tables, complete row is clickable, not only the single
+     column" — asked for a long time ago, implemented in the library
+     (zcat.js binds .zc-table__row[data-rowlink]) and then checked by nothing.
+     Both reference pages got it wrong in different ways: the template put
+     data-rowlink on the <td>, so exactly ONE CELL was clickable — the very
+     defect that was reported — and the list page had none at all.
+
+     A table of entities whose rows go nowhere is the tell. Tables that are
+     pure display (a schema listing, a read-only breakdown) are left alone:
+     the check only fires when the page has a detail view to go to, which is
+     what a three-dot menu or a row action implies. */
+  {
+    for (const table of [...document.querySelectorAll(".zc-table")].filter(vis)) {
+      const rows = [...table.querySelectorAll(".zc-table__row")].filter(vis);
+      if (rows.length < 2) continue;
+      const linked = rows.filter(r => r.hasAttribute("data-rowlink")).length;
+      // does anything on the row suggest a drill-in exists?
+      const hasDrill = !!table.querySelector(".zc-menu, [data-menu], .zc-table__td--actions");
+      if (!hasDrill) continue;
+      if (linked === 0) {
+        fail("ROW NOT CLICKABLE",
+          `this table has ${rows.length} rows and a per-row menu, but no row carries ` +
+          "data-rowlink — so the only way in is the three-dot menu. The WHOLE row " +
+          "is the click target: put data-rowlink on the <tr>, not on a cell",
+          table);
+      } else if (linked < rows.length) {
+        fail("ROW NOT CLICKABLE",
+          `${rows.length - linked} of ${rows.length} rows carry no data-rowlink — ` +
+          "rows that look identical must behave identically", table);
+      }
+      // on the CELL it makes one column clickable, which is the reported bug
+      const onCell = table.querySelectorAll("td[data-rowlink], .zc-table__td[data-rowlink]").length;
+      if (onCell)
+        fail("ROWLINK ON THE CELL",
+          `data-rowlink sits on ${onCell} cell(s) instead of the row. The library ` +
+          "binds .zc-table__row[data-rowlink], so on a cell it makes ONE COLUMN " +
+          "clickable and the rest of the row dead — which reads as a broken table",
+          table);
+    }
+  }
+
   /* ── 18g2. A Chip or Badge never stretches ──────────────────────────
      Dropped into a column flex, align-items defaults to stretch and a Chip is
      pulled to the container width — it stops reading as a tag and starts

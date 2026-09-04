@@ -44,7 +44,7 @@ EXCLUDE = {
     "zc-input-wrap": ("zc-search-wrap", "zc-select-wrap", "zc-kvfield"),
 }
 
-def extract(cls, cap=4200):
+def extract(cls, cap=14000):
     """The CLEANEST instance of `cls` across the reference pages.
 
     Taking the FIRST match kept picking special-purpose instances: the first
@@ -93,8 +93,18 @@ def extract(cls, cap=4200):
                     for _pre in ('../../zcat-ui/docs/icons/', '/zcat-ui/docs/icons/'):
                         b = b.replace('src="' + _pre, 'src="icons/')
                         b = b.replace("src='" + _pre, "src='icons/")
+                    # A TRUNCATED BLOCK IS WORSE THAN NO BLOCK.
+                    # The cap used to cut markup mid-structure and append a
+                    # "full block in …" comment, which reads as copyable and is
+                    # not: the popup was cut before its footer, so it shipped
+                    # with no Cancel and no action button while its own note
+                    # said "Cancel grey left, action fill right". The layout
+                    # shell lost its container and its closing divs the same
+                    # way. Over the cap, the block is dropped and reported —
+                    # a pointer at the source file is honest, half a component
+                    # is not.
                     if len(b) > cap:
-                        b = b[:cap].rsplit("\n", 1)[0] + f"\n<!-- … full block in {path} -->"
+                        break
                     # A hidden instance previews as nothing at all, so it is
                     # never the one to copy — the Badge block picked one and
                     # showed an empty box.
@@ -107,10 +117,20 @@ def extract(cls, cap=4200):
                         break
                     root = re.search(r'class="([^"]+)"', m.group(0))
                     extra = len([c for c in root.group(1).split() if c != cls]) if root else 9
-                    if best is None or extra < best[0]:
-                        best = (extra, b, path)
-                    if extra == 0:
-                        return b, path         # nothing plainer exists
+                    # TIE-BREAK ON CONTENT.
+                    # Both the template and the list page carry a bare
+                    # .zc-table-wrap, so "fewest extra classes" picked whichever
+                    # came first — the template, whose <tbody> is filled by JS at
+                    # runtime and is therefore EMPTY in the file. The block
+                    # previewed as a header row with nothing under it, on a
+                    # snippet whose whole point is that the row carries
+                    # data-rowlink. Not hollow enough to reject outright, just
+                    # useless. So when two candidates are equally plain, take the
+                    # one that actually holds something.
+                    content = len(re.sub(r"<[^>]+>", " ", b).split())
+                    score = (extra, -content)
+                    if best is None or score < best[0]:
+                        best = (score, b, path)
                     break
     return (best[1], best[2]) if best else (None, None)
 
