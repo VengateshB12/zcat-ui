@@ -212,6 +212,59 @@ const slug = f => path.relative(PROJECT, f).replace(/[\/\\]/g, "__").replace(/\.
         }
       } catch (e) { /* probing must never break the audit */ }
 
+      /* POPUPS ARE JUDGED OPEN.
+         Every popup on every page ships hidden, so .zc-popup__body was never
+         visible and NO popup rule could ever fire — the anatomy rules, the
+         spacing rules, all of it was unreachable. A popup that is right in
+         every other way still reads as unfinished when its field groups sit at
+         different distances apart, and that is exactly what shipped. So: open
+         each popup, measure it, put it back. */
+      try {
+        const popupProbe = await page.evaluate(async () => {
+          const out = [];
+          const hosts = [...document.querySelectorAll(".zc-popup-scrim, .zc-popup")];
+          for (const host of hosts) {
+            const undo = [];
+            for (let el = host; el && el !== document.body; el = el.parentElement) {
+              if (el.hasAttribute("hidden")) { el.removeAttribute("hidden"); undo.push([el, "h"]); }
+              const d = getComputedStyle(el).display;
+              if (d === "none") { const prev = el.style.display; el.style.display = "block";
+                                  undo.push([el, "d", prev]); }
+            }
+            await new Promise(r => requestAnimationFrame(r));
+            for (const body of host.querySelectorAll(".zc-popup__body")) {
+              const kids = [...body.children].filter(k => k.getBoundingClientRect().height > 0);
+              if (kids.length >= 3) {
+                const gaps = [];
+                for (let i = 1; i < kids.length; i++) {
+                  const A = kids[i-1].getBoundingClientRect(), B = kids[i].getBoundingClientRect();
+                  const g = Math.round(B.top - A.bottom);
+                  if (g >= 0 && g < 120) gaps.push(g);
+                }
+                if (gaps.length >= 2) out.push({ gaps, title:
+                  (host.querySelector(".zc-popup__title") || {}).textContent || "popup" });
+              }
+            }
+            for (const [el, kind, prev] of undo.reverse()) {
+              if (kind === "h") el.setAttribute("hidden", "");
+              else el.style.display = prev || "";
+            }
+          }
+          return out;
+        });
+        for (const r of popupProbe) {
+          const lo = Math.min(...r.gaps), hi = Math.max(...r.gaps);
+          if (hi - lo > 8)
+            out.fails.push({ rule: "UNEVEN POPUP SPACING",
+              msg: `"${String(r.title).trim()}" has gaps between its field groups ` +
+                   `running ${lo}px to ${hi}px (${r.gaps.join(", ")}) — pick ONE ` +
+                   "spacing token and use it between every group. Mixed gaps are " +
+                   "the assembled-not-designed tell, and the eye picks them up " +
+                   "before it notices anything else being right",
+              sel: ".zc-popup__body" });
+        }
+      } catch (e) { /* probing must never break the audit */ }
+
       const light = await page.evaluate(src + "; __zcatAudit()");
       out.fails.push(...light.fails); out.warns.push(...light.warns); out.stats = light.stats;
       await page.screenshot({ path: path.join(SHOTS, slug(abs) + "-light.png"), fullPage: true });

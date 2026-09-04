@@ -745,6 +745,82 @@ function __zcatAudit() {
         "svg use");
   }
 
+  /* ── 18g4. Two Container Side Menus on one page ─────────────────────
+     The rule "one Container Side Menu per page" has been written down for a
+     long time with nothing checking it, so a build shipped a page with the
+     service menu on the left AND a second vertical list beside it, and the
+     eye has no way to tell which one is the navigation.
+
+     The decision is about whether the list GROWS:
+       fixed, known set (Overview / Database / Access Control) -> TABS;
+       grows with the data (every table in the schema)         -> RECORDS,
+         which is a table or a card list, not a second navigation. */
+  {
+    const menus = [...document.querySelectorAll(".zc-csm")].filter(vis);
+    if (menus.length > 1) {
+      const counts = menus.map(m => m.querySelectorAll(".zc-csm__item").length);
+      fail("TWO CONTAINER SIDE MENUS",
+        `${menus.length} Container Side Menus are visible on this page ` +
+        `(${counts.join(" and ")} items) — there is no way to tell which one is ` +
+        "the navigation. Decide by whether the list grows: a FIXED, known set is " +
+        "TABS in the Sub Header; a list that grows with the data is RECORDS — a " +
+        "table or a card list — not a second navigation",
+        ".zc-csm");
+    }
+  }
+
+  /* ── 18g5. A copy affordance must be the Link Box ────────────────────
+     The Link Box already does exactly what was asked of it: "Copy" on hover,
+     "Link copied" after the click, both as tooltips on the icon itself. A page
+     shipped its own copy button wired to a TOAST instead, which is louder,
+     lands away from the thing you copied, and loses the hover affordance
+     entirely. Nothing checked it, because the class names were all fine. */
+  {
+    const copies = [...document.querySelectorAll(
+      '[aria-label*="opy" i], [title*="opy" i], [data-tip*="opy" i], .zc-copy, [data-copy]')]
+      .filter(vis)
+      .filter(el => !el.closest(".zc-linkbox"))
+      .filter(el => el.matches("button, a, [role=button]") || el.hasAttribute("data-copy"));
+    if (copies.length) {
+      const where = copies.slice(0, 3).map(el =>
+        el.getAttribute("aria-label") || el.getAttribute("data-tip") || "copy control");
+      fail("COPY NOT A LINK BOX",
+        `${copies.length} copy control(s) sit outside a Link Box (${where.join(", ")}). ` +
+        "The Link Box component already shows a Copy tooltip on hover and Link " +
+        "copied after the click, on the icon itself. A hand-wired copy that fires " +
+        "a toast is louder, appears away from the value you copied, and has no " +
+        "hover affordance at all",
+        ".zc-linkbox");
+    }
+  }
+
+  /* ── 18g6. Uneven spacing inside a popup body ────────────────────────
+     A popup that is right in every other way still reads as unfinished when
+     its field groups sit at different distances from each other. This is the
+     "assembled, not designed" tell, and it is measurable: the vertical gaps
+     between the body's own children should agree. */
+  {
+    for (const body of [...document.querySelectorAll(".zc-popup__body")].filter(vis)) {
+      const kids = [...body.children].filter(vis);
+      if (kids.length < 3) continue;
+      const gaps = [];
+      for (let i = 1; i < kids.length; i++) {
+        const a = kids[i - 1].getBoundingClientRect(), b = kids[i].getBoundingClientRect();
+        const g = Math.round(b.top - a.bottom);
+        if (g >= 0 && g < 120) gaps.push(g);
+      }
+      if (gaps.length < 2) continue;
+      const lo = Math.min(...gaps), hi = Math.max(...gaps);
+      if (hi - lo > 8)
+        fail("UNEVEN POPUP SPACING",
+          `the gaps between this popup's field groups run from ${lo}px to ${hi}px ` +
+          `(${gaps.join(", ")}) — pick ONE spacing token and use it between every ` +
+          "group. Mixed gaps are the assembled-not-designed tell, and they are the " +
+          "first thing the eye picks up even when every control is correct",
+          ".zc-popup__body");
+    }
+  }
+
   /* ── 18g7. The page must declare a theme ────────────────────────────
      Every page here carries <html data-theme="light">, and none of them got it
      by decision — they got it by copying the template. So nothing ever checked

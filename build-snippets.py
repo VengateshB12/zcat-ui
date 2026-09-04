@@ -31,7 +31,8 @@ SOURCES = ["zcat-ui/docs/template.html",
            "pages/directdb/databases.html",
            "pages/directdb/database-detail.html",
            "pages/directdb/databases-empty.html",
-           "pages/samples/pipelines-fullpopup.html"]
+           "pages/samples/pipelines-fullpopup.html",
+           "pages/samples/controls.html"]
 
 JS_TELLS = ("${", " r += ", "function(", "){", "=>")
 
@@ -78,6 +79,9 @@ SPEC = [
   ("Text field", "zc-input-wrap", "The input always sits inside .zc-input-wrap — a bare <input> loses its focus ring, its states and dark mode."),
   ("Button", "zc-btn", "ONE fill button per screen. Per-row actions are links or ghost buttons."),
   ("Badge", "zc-badge", "Every table status is a Badge. Map each status value to a semantic colour."),
+  ("Checkbox", "zc-checkbox", "Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else."),
+  ("Chip", "zc-chip", "For filters and multi-select values."),
+  ("Key Value field", "zc-kvfield", "Editing in place. Not a form — a form belongs in a popup."),
   ("Radio", "zc-radio", "Label weight: SemiBold when the label is the thing being chosen, Regular when it qualifies something else."),
   ("Toggle", "zc-toggle", "For instant-apply flags. A toggle that needs a Save button should be a checkbox."),
   ("Select", "zc-select-shell", "Never a bare <select>."),
@@ -125,12 +129,20 @@ for name, items in SPEC:
     if rows:
         sections.append(f'<h2 class="zc-h4 sec">{name}</h2>\n' + "\n".join(rows))
 
-# The icon sprite. Without it every <use href="#i-…"> renders an EMPTY BOX —
-# the trap our own rules warn about, which this page fell into on its first
-# publish: the Attention box shipped with a blank icon.
-tpl = open("zcat-ui/docs/template.html", encoding="utf-8").read()
-m = re.search(r'<svg[^>]*(?:style="display:\s*none"|hidden)[^>]*>.*?</svg>', tpl, re.S)
-sprite = m.group(0) if m and "<symbol" in m.group(0) else ""
+# The icon sprite, merged from EVERY source page. Without it a <use href="#i-…">
+# renders an EMPTY BOX — the trap our own rules warn about, which this page fell
+# into twice: first with no sprite at all, then with only the template's 27
+# symbols while blocks lifted from other pages referenced symbols those pages
+# carried. Each page ships the subset it needs, so the union is what this needs.
+symbols, seen = [], set()
+for path in SOURCES:
+    try: txt = open(path, encoding="utf-8").read()
+    except OSError: continue
+    for sm in re.finditer(r'<symbol\b[^>]*\bid="([^"]+)"[^>]*>.*?</symbol>', txt, re.S):
+        if sm.group(1) in seen: continue
+        seen.add(sm.group(1)); symbols.append(sm.group(0))
+sprite = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
+          + "".join(symbols) + "</defs></svg>") if symbols else ""
 
 DOC = f'''<!DOCTYPE html>
 <html lang="en" data-theme="light">

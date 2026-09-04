@@ -615,8 +615,18 @@ LAYOUT AND HIERARCHY
   anything else = data-style="boxy".
 - Content fills its container. A band of dead background down one side reads as
   a rendering fault, not a margin.
-- One Container Side Menu per page. A second vertical list is RECORDS — a
-  table, a card list, or a master panel.
+- One Container Side Menu per page — never two, because nothing then tells the
+  eye which one is the navigation. Decide by whether the list GROWS:
+    a FIXED, known set (Overview / Database / Access Control) -> TABS;
+    a list that grows with the data (every table in a schema) -> RECORDS, i.e.
+      a table, a card list or a master panel — not a second navigation.
+- A copy affordance is the Link Box, which already shows "Copy" on hover and
+  "Link copied" after the click, on the icon itself. Never hand-wire a copy
+  button to a toast: it is louder, it lands away from the value you copied, and
+  it has no hover affordance at all.
+- Popup spacing: pick ONE spacing token and use it between every field group.
+  Mixed gaps are the assembled-not-designed tell, and the eye catches them
+  before it notices everything else being right.
 
 COMPONENTS
 - COPY THE BLOCK, DO NOT REBUILD IT. docs/snippets.html holds the real markup
