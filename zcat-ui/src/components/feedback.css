@@ -128,6 +128,49 @@
   flex-shrink: 0;
 }
 
+/* ── Toast stack ────────────────────────────────────────────────────────────
+   Toasts arrive one at a time but they do not queue politely: a second one
+   used to appear as another full card below the first, then a third, until a
+   column of identical notices covered the screen. The library had no container
+   for this at all, so every page invented its own — one shipped as .fn-toasts.
+
+   They now stack like a deck. The newest is fully legible in front; the ones
+   behind are offset, scaled back and dimmed so you can see there are more
+   without reading them twice. Beyond three they are hidden rather than piled.
+
+     <div class="zc-toasts">…toasts, newest appended last…</div>
+*/
+.zc-toasts {
+  position: fixed;
+  top: var(--zc-space-16);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: grid;
+  width: min(560px, calc(100vw - var(--zc-space-32)));
+  pointer-events: none;
+}
+.zc-toasts[data-position="top-right"] { left: auto; right: var(--zc-space-16); transform: none; }
+.zc-toasts[data-position="bottom-right"] {
+  top: auto; bottom: var(--zc-space-16); left: auto; right: var(--zc-space-16); transform: none;
+}
+/* every toast occupies the SAME grid cell — that is what makes it a stack */
+.zc-toasts > .zc-toast {
+  grid-area: 1 / 1;
+  pointer-events: auto;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.zc-toasts > .zc-toast:nth-last-child(1) { transform: none;                       z-index: 3; }
+.zc-toasts > .zc-toast:nth-last-child(2) { transform: translateY(8px)  scale(.96); z-index: 2; opacity: .9; }
+.zc-toasts > .zc-toast:nth-last-child(3) { transform: translateY(16px) scale(.92); z-index: 1; opacity: .75; }
+.zc-toasts > .zc-toast:nth-last-child(n+4) { opacity: 0; pointer-events: none; }
+/* a stack that grows downward pushes the older ones UP instead */
+.zc-toasts[data-position="bottom-right"] > .zc-toast:nth-last-child(2) { transform: translateY(-8px)  scale(.96); }
+.zc-toasts[data-position="bottom-right"] > .zc-toast:nth-last-child(3) { transform: translateY(-16px) scale(.92); }
+@media (prefers-reduced-motion: reduce) {
+  .zc-toasts > .zc-toast { transition: none; }
+}
+
 /* ── Toast ──────────────────────────────────────────────────────────────────
    Figma: component "Alerts" 762:19318
    Metrics: bg --zc-toast-bg, border 1px --zc-toast-border, radius 6,
@@ -190,6 +233,14 @@
   stroke-width: 1.3;
   stroke-linecap: round;
   stroke-linejoin: round;
+  /* A SIZE THAT APPLIES EVEN WITHOUT data-type.
+     Only [data-type="heading"] (24) and [data-type="message"] (16) set one, so
+     a toast built without data-type — which is what a page that constructs
+     toasts in JS tends to produce — had no size at all and the icon rendered
+     at whatever the asset felt like, towering over 14px text. 16px matches the
+     message type and is the safer of the two to inherit. */
+  width: 16px;
+  height: 16px;
 }
 .zc-toast[data-color="info"]    .zc-toast__icon { color: var(--zc-toast-icon-info); }
 .zc-toast[data-color="success"] .zc-toast__icon { color: var(--zc-toast-icon-success); }

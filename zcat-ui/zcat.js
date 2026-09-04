@@ -846,15 +846,47 @@
       if (text.getAttribute('data-overflow') === 'scroll') text.addEventListener('scroll', check);
       if (global.ResizeObserver) new ResizeObserver(check).observe(box);
 
+      /* The icon carries its own label: "Copy" on hover, "Link copied" after. */
+      var TIP_IDLE = copy && (copy.getAttribute('data-tip-idle') || 'Copy');
+      var TIP_DONE = copy && (copy.getAttribute('data-tip-done') || 'Link copied');
+      if (copy && !copy.getAttribute('data-tip')) copy.setAttribute('data-tip', TIP_IDLE);
+      if (copy && !copy.getAttribute('aria-label')) copy.setAttribute('aria-label', TIP_IDLE);
+
       if (copy) copy.addEventListener('click', function () {
         var value = text.textContent.trim();
         var done = function () {
           copy.classList.add('is-copied');
+          copy.setAttribute('data-tip', TIP_DONE);
           emit(box, 'linkbox:copy', { value: value });
-          setTimeout(function () { copy.classList.remove('is-copied'); }, 1500);
+          setTimeout(function () {
+            copy.classList.remove('is-copied');
+            copy.setAttribute('data-tip', TIP_IDLE);
+          }, 1500);
+        };
+        /* Feedback is not conditional on the clipboard succeeding. The old
+           code called done() only on success and swallowed the failure, so
+           over http, without permission, or in an older browser the user
+           clicked and NOTHING happened — no tooltip, no class, no event. The
+           textarea fallback covers most of those; either way the person is
+           told what happened. */
+        var ok = function () { done(); };
+        var fallback = function () {
+          try {
+            var ta = document.createElement('textarea');
+            ta.value = value;
+            ta.setAttribute('readonly', '');
+            ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+          } catch (e) { /* nothing more we can do */ }
+          done();
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(value).then(done).catch(function () {});
+          navigator.clipboard.writeText(value).then(ok).catch(fallback);
+        } else {
+          fallback();
         }
       });
     });

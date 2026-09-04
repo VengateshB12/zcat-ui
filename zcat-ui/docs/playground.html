@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>zcat UI — Design System</title>
-  <link rel="stylesheet" href="../zcat.css?v=114">
-  <script src="../zcat.js?v=18"></script>
+  <link rel="stylesheet" href="../zcat.css?v=117">
+  <script src="../zcat.js?v=20"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -779,6 +779,17 @@ HARD RULES (violating these is the failure mode)
   or per card leaves the eye nowhere to land, however sensible each one looks
   alone. Per-row actions are links or ghost buttons; the one fill on the page is
   its single real next step. The audit fails this as REPEATED PRIMARY BUTTON.
+- A POPUP MAY USE PRIMARY TABS IN ITS HEADER. When a popup offers two routes
+  to the same outcome — set it up with the CLI or in the editor, upload a file
+  or paste a URL — that is a TAB, and .zc-popup__header takes .zc-tabs
+  data-type="primary" flush to its bottom edge, the same as the Sub Header
+  does. Never invent a segmented control for it.
+- TEXT IN A POPUP USES THE TYPE CLASSES. .zc-popup__title is 18/22 and
+  .zc-popup__desc is 12/16 secondary; body copy is .zc-body-3 (14/20) unless it
+  has a reason to be bigger. An unclassed paragraph used to fall back to the
+  browser's 16px — larger than the description above it — so the hierarchy read
+  backwards and the popup looked shouty. Colours are tokens: primary for
+  content, secondary for supporting lines, never a raw hex.
 - A LONE FIELD IN A POPUP LOOKS BROKEN. Popup form controls stretch to the
   body's full width — never leave one narrow field floating in a wide popup.
   If a step has a single short input, either let it span the full width or pair

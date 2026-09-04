@@ -385,6 +385,44 @@
 }
 .zc-linkbox__copy svg { width: 16px; height: 16px; stroke: var(--zc-input-icon-default); fill: none; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
 .zc-linkbox__copy:hover svg { stroke: var(--zc-input-icon-active); }
+
+/* THE COPY ICON SAYS WHAT IT WILL DO, THEN WHAT IT DID.
+   A bare icon with no label is a guess, and copying is the one interaction
+   where nothing visibly changes — without feedback you cannot tell whether it
+   worked, so people click it three times. Hover says "Copy"; after a click it
+   says "Link copied" for a moment and reverts.
+   Built as a pseudo-element rather than the Tooltip component because it must
+   follow a 16px icon inside a bordered box, and it uses the tooltip tokens so
+   it matches one. */
+.zc-linkbox__copy { position: relative; }
+.zc-linkbox__copy::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + var(--zc-space-6));
+  right: 0;
+  z-index: 60;
+  padding: var(--zc-space-4) var(--zc-space-8);
+  background: var(--zc-tooltip-bg);
+  border: var(--zc-border-default) solid var(--zc-tooltip-border);
+  border-radius: var(--zc-radius-6);
+  color: var(--zc-tooltip-text);
+  font-family: var(--zc-font-primary);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.zc-linkbox__copy:hover::after,
+.zc-linkbox__copy:focus-visible::after,
+.zc-linkbox__copy.is-copied::after { opacity: 1; }
+/* the confirmation outlives the pointer: it must be readable after the click
+   even if the cursor has already moved away */
+.zc-linkbox__copy.is-copied::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .zc-linkbox__copy::after { transition: none; }
+}
 .zc-linkbox[data-state="hover"] { border-color: var(--zc-input-border-hover); }
 .zc-linkbox--inside { flex-direction: row; }
 .zc-linkbox__inline-label {

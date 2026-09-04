@@ -56,6 +56,19 @@
   padding: var(--zc-space-24) var(--zc-space-24) var(--zc-space-16);
 }
 
+/* A POPUP MAY CARRY PRIMARY TABS IN ITS HEADER.
+   Some popups genuinely have two ways to do the same thing — set it up with
+   the CLI or in the editor — and that is a tab, not a choice to invent a
+   segmented control for. Without a slot for it, pages hand-built their own:
+   one shipped as .fn-popup-tab-pane, which is neither the Tabs component nor
+   anything the audit could recognise. The tabs sit flush to the bottom of the
+   header, exactly as they do in the Sub Header. */
+.zc-popup__header .zc-tabs {
+  margin: var(--zc-space-10) calc(-1 * var(--zc-space-24)) calc(-1 * var(--zc-space-16));
+  padding: 0 var(--zc-space-24);
+  width: auto;
+}
+
 .zc-popup__title {
   font-size: 18px;
   line-height: 22px;
@@ -75,6 +88,13 @@
   flex-direction: column;
   gap: var(--zc-space-24);
   padding: 0 var(--zc-space-24);
+  /* TEXT IN A POPUP HAS A SIZE. Without this, an unclassed <p> fell back to
+     the browser's 16px — larger than the 12px description directly above it,
+     so the hierarchy read backwards and the popup looked shouty. This is the
+     .zc-body-3 size; anything that wants to be bigger says so with a class. */
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--zc-body-text-primary);
   /* Default popups don't scroll (Figma "With Scroll" is a separate variant), and
      overflow:auto here clips the absolutely-positioned dropdown menu. Opt into
      scrolling with data-scroll on .zc-popup. */
