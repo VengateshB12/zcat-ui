@@ -9,7 +9,12 @@
     /* Page glue only. */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--zc-body-bg-body); padding: var(--zc-space-24); }
-    .cs-stack { display: flex; flex-direction: column; gap: var(--zc-space-24); max-width: 560px; }
+    /* align-items defaults to stretch on a column flex, which pulled the Chip out
+       to the full 560px — a Chip hugs its content, so stretched it reads as a
+       broken bar rather than a tag. Start them instead. */
+    .cs-stack { display: flex; flex-direction: column; align-items: flex-start;
+                gap: var(--zc-space-24); max-width: 560px; }
+    .cs-stack .zc-kvfield { width: 100%; }
   </style>
 </head>
 <body data-zcat-sample data-zcat-no-shell="component reference sheet, not a product screen — it exists so the three controls that no real page uses have markup snippets.html can extract">

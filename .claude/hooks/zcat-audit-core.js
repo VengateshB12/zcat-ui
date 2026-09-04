@@ -984,6 +984,38 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 18g2. A Chip or Badge never stretches ──────────────────────────
+     Dropped into a column flex, align-items defaults to stretch and a Chip is
+     pulled to the container width — it stops reading as a tag and starts
+     reading as a broken bar. It happened on our own controls sample: a 103px
+     Chip rendered 560px wide and the page still passed every gate, because
+     every class name was correct.
+
+     Only Chip and Badge are checked. A Button legitimately stretches — our own
+     rule says form controls fill the popup body width — so it is left alone. */
+  {
+    for (const el of [...document.querySelectorAll(".zc-chip, .zc-badge")].filter(vis)) {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      const pad = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+      // measure the text it actually holds
+      const probe = document.createElement("span");
+      probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;" +
+        `font:${cs.font}`;
+      probe.textContent = (el.textContent || "").trim();
+      document.body.appendChild(probe);
+      const natural = probe.getBoundingClientRect().width + pad + 40; // icons, close button
+      probe.remove();
+      if (r.width > natural + 60)
+        fail(el.classList.contains("zc-chip") ? "CHIP STRETCHED" : "BADGE STRETCHED",
+          `"${(el.textContent || "").trim().slice(0, 24)}" is ${Math.round(r.width)}px wide ` +
+          `for about ${Math.round(natural)}px of content — a Chip and a Badge hug what ` +
+          "they hold. Stretched, they stop reading as a tag and start reading as a " +
+          "broken bar. Usually a column flex: set align-items so the item does not " +
+          "stretch", el);
+    }
+  }
+
   /* ── 18g4. Two Container Side Menus on one page ─────────────────────
      The rule "one Container Side Menu per page" has been written down for a
      long time with nothing checking it, so a build shipped a page with the
