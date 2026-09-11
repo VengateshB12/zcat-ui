@@ -12,9 +12,206 @@ workflow, not this file.
 
 ---
 
+## MODE FIRST: REDESIGN or MATCH. The answer reroutes this whole file.
+
+Ask once, before anything else, and treat the answer as binding:
+
+> "Redesign this with zcat patterns, or match the given design exactly?"
+
+**REDESIGN** is what the rest of this file assumes. The input is a feature list,
+you compose the screen, every decision rule below applies.
+
+**MATCH** inverts the first non-negotiable. The given design IS the design. Your
+job is to rebuild it from zcat components so it looks the same, not to improve
+it, and not to check whether it is allowed.
+
+> **MEASURE BEFORE YOU BUILD.** Extract the spec table from the reference DOM
+> first. Choose every token by matching its **VALUE** to the measured value,
+> never by its name. Copy every control's markup verbatim from
+> `docs/snippets.html` — never type a `zc-*` control from a description.
+> Then re-measure your own build and ship the diff.
+
+That paragraph is the whole method, and each clause is there because skipping it
+shipped a defect: a token name invented from the pattern of the real ones
+(`--zc-cards-bg-default`) that resolved to nothing, a component default accepted
+without measuring (36px fields where the reference is 32), and five controls
+hand-typed instead of copied. Looking identical side by side is
+the SUCCESS condition in MATCH and the failure condition in REDESIGN, which is
+why the mode must be settled first and never revisited mid-build.
+
+### MATCH — the failure this section exists to stop
+
+Real, observed, and the reason this section was written. Asked to match the
+Catalyst console, an agent hit tabs sitting inside the container, recognised
+that `TABS IN CONTAINER` flags exactly that, and spent six commands reading the
+audit to learn what it enforced, then went looking for another reference page to
+"settle" whether the console's placement was legitimate. The designer stopped
+it: *"i said u have to match console ui so dont need to follow rules just match
+it using our component?"*
+
+The mistake is not which answer it reached. It is that in MATCH mode the
+question is not open. The design already decided. **Do not adjudicate the given
+design against these rules. Do not hunt for a reference to justify it. Do not
+report a matched deviation as an issue.** If the design puts tabs in the
+container, build tabs in the container, and move on.
+
+### MATCH — what has authority over what
+
+| | Authority |
+|---|---|
+| The layout shell | `docs/template.html`, ALWAYS. Not matched, not changed. |
+| Everything inside the container | the given design |
+| Side menu items and Sub Header content | the given design |
+| Which component, which variant, which state | the given design |
+| Grouping, order, proportion, spacing between blocks | the given design |
+| Colour, radius and spacing VALUES | the given design, expressed as `--zc-*` tokens |
+| A component's own internals | the given design, via a PAGE-SCOPED override |
+| Anything the design does not show | the rules in this file |
+
+**The layout is common to every page, so it is never part of the match.** The
+service rail, topbar, side menu, sub header and container come from
+`docs/template.html` and look identical on every screen in the product. Do not
+compare them to the design, do not adjust them to the design, do not rebuild
+them. A page changes only three things: the side menu's items and icons, the Sub
+Header, and what sits inside the container. MATCH mode governs those three and
+the container's contents above all. If the design appears to disagree with the
+shell itself, that is a question for the designer, not an edit.
+
+**RESTYLING IS SANCTIONED IN MATCH MODE.** Designer's decision, 2026-09-09:
+*"Match mode u can restyle as per the given match screens, it should match 100
+percentage of size, container, placement alignment and all."* So if the design's
+badge is 14px and ours is 12px, you override it to 14px. A component default
+that disagrees with the reference is a value to change, not a deviation to
+report. There is no "component internals" exemption any more.
+
+**Two boundaries remain, and they are what make this safe:**
+1. **The override lives in the PAGE**, in its own `<style>` block or page CSS —
+   NEVER in `zcat-ui/`. The library is read-only during a page build and the
+   guard enforces that. This is the whole reason restyling can be allowed: no
+   other page inherits your override.
+2. **The shell is still not restyled.** Service rail, topbar, side menu and sub
+   header are common to every page in the product, and the layout is not part of
+   the match at all. Everything from `.zc-layout__container` inwards is fair
+   game; the chrome around it is not.
+
+**Declare the mode in the page:** put `data-zcat-mode="match"` on `<html>`.
+The save-time static check reads it there and stops flagging
+`RESTYLED zc-* CLASS`; the rendered audit reads the same attribute. It lives in
+the page rather than in a receipt because a save-time check runs long before any
+receipt exists. In REDESIGN mode the no-restyling rule is unchanged.
+
+**Components and tokens stand; decisions do not.** MATCH mode drops the design
+DECISIONS, never the library. Still binding:
+- Real `zc-*` components. Never a hand-built lookalike.
+- Restyle a `zc-*` class ONLY in the page's own CSS, and only in MATCH mode
+  with `data-zcat-mode="match"` declared. Never edit `zcat-ui/`.
+- Every colour a `--zc-*` token, every icon from the sprite. No raw hex, no
+  emoji, no off-scale values in glue CSS.
+- The shell is copied from `docs/template.html` and its five surfaces keep the
+  look they ship with. Non-negotiable #2 below survives MATCH mode.
+- Real sample data. Never lorem, never repeated placeholder rows.
+- Component behaviour contracts, e.g. `data-rowlink` on the `<tr>`.
+
+**Switched OFF in MATCH mode.** Do not apply these, do not measure against
+them, do not raise them:
+- Non-negotiable #1, and the whole of G0-G3. The layout is given, not derived.
+- "A reference supplies FEATURES AND CONTENT ONLY. Never styling."
+- ONE fill button per page · no primary tabs inside the container · one tab
+  level in the sub header · the container surface table · stretch vs boxy ·
+  a single action on an empty state · the semantic badge colour map ·
+  CTA hierarchy · card padding · hierarchy scoring.
+- STEP 3's "what improves on the wireframe", and the whole of STEP 7.
+
+### MATCH — the two places it cannot be literal
+
+Both go in the build summary. Decide them out loud, never silently.
+
+1. **A value with no token.** The design measures 15px, the scale has 14 and 16:
+   take the nearest step, and report any gap over 2px. The point is the TOKEN
+   LAYER, not the component — restyling a component page-scoped is fine in
+   MATCH mode, but reaching an off-scale number with a raw `15px` is not, in
+   either mode, because a raw value cannot be themed. A COLOUR with no token is
+   different again — stop and ask, because a new colour is a change to the
+   design system, not to a page.
+2. **What the design does not show.** A reference is one theme and one state.
+   Dark mode, hover, focus, disabled, error and narrow widths have no reference,
+   so this file's rules decide them. You MAY add a state the design omits, and
+   the empty state first, since designs skip it most often. Every added state is
+   built to the rules and LISTED as an addition, so it is never mistaken for
+   something that was matched.
+
+### MATCH — verification, which replaces the design gates
+
+The design score cannot judge a match: it scores house composition, the exact
+thing you were told not to do. So MATCH mode has its own mandatory stage in the
+workflow, **STEP 7-M**, which replaces STEP 7 and must never be skipped.
+
+In short: screenshot every screen and every state, place each beside its
+reference, score seven dimensions out of 100 by LOOKING, and **PASS IS 100/100
+on every row.** The full scorecard, the dimensions and their marks, and the
+rules for states that have no reference all live in STEP 7-M. Read it there
+rather than working from this summary.
+
+"It uses the right classes" is not a match, and neither is a green gate. Every
+defect this project has shipped passed its gates with every class name correct.
+
+### MATCH — the gates, and which rules the mode switches off
+
+**You do not waive anything by hand. Declare the mode and the gates follow.**
+Record `"mode": "match"` in the page's feature receipt
+(`zcat-features.py <page> --json '{... "mode":"match" ...}'`). `zcat-gate-all.py`
+reads it and swaps the design score and the design review for the visual match
+gate; `zcat-render-audit.js` reads the same field and drops the DECISION rules,
+printing each one it dropped as a `waived` line so a real defect can never hide
+behind the mode flag.
+
+An earlier version of this section told the agent to "waive these per page and
+say which". Nothing implemented that, so gate 1 ran the whole rule set against a
+faithful reproduction and `CTA HIERARCHY` alone failed twenty console-accurate
+pages. An instruction no tool can honour is not a rule, it is a wish. It is
+mechanical now.
+
+**Switched off in MATCH mode** (our composition decisions, which the given
+design has already made): `CTA HIERARCHY` · `REPEATED PRIMARY BUTTON` ·
+`LONE ACTION BUTTON` · `STRETCH TABLE SHARING A PAGE` · `FORM ON A PAGE` ·
+`COPY NOT A LINK BOX` · `TABS IN CONTAINER` · `ACTION BAR NOT A CONTAINER
+HEADER` · `CARD PADDING` · `NO HIERARCHY` · `CONTENT DOES NOT FILL THE
+CONTAINER`.
+
+**Still ON in MATCH mode, deliberately** — a faithful copy of a design does not
+excuse a broken screen: every render, asset, contrast, overflow, clipping and
+console rule, plus the alignment and row-behaviour rules
+`BADGE OFF THE ROW BASELINE` · `MISALIGNED ROW` · `EDGE MISALIGN` ·
+`ROW NOT CLICKABLE` · `ROW IS NOT THE CLICK TARGET` · `ROWLINK ON THE CELL`,
+and these three, which exist because a correct class name hid each of them:
+
+- **`UNDEFINED TOKEN`** (static, blocks on save) — any `var(--zc-*)` not
+  defined anywhere in `zcat-ui/src/`. An undefined custom property fails
+  SILENTLY: the whole declaration is dropped and the element renders unstyled.
+  That is how a table shipped with no background, from a name invented to fit
+  the pattern of the real ones. Pick the token by its VALUE.
+- **`CONTROL MARK HAND-DRAWN`** — `.zc-checkbox__box` / `.zc-radio__circle`
+  must be EMPTY; the library paints tick and dash with `::after`.
+- **`CONTROL SHAPE WRONG`** — a `.zc-select-wrap` with no other class, so
+  nothing owns its shell and it renders with no border; and a code block whose
+  line-number gutter renders fewer lines than the code beside it.
+
+None of those is a matter of taste. Never switch the audit off to earn a green
+line.
+
+**Receipt order: build → features → match → gate, with NO rebuild in between.**
+A receipt only counts if it was written AFTER the page's last edit, which is
+deliberate: touching a page invalidates every gate at once. So a generator that
+rewrites all twenty pages invalidates all forty receipts, and re-running the
+build "just to be safe" costs a full cycle every time. Finish editing, then
+record, then gate.
+
+---
+
 ## THE TWO NON-NEGOTIABLES (everything else serves these)
 
-1. **The wireframe is ONLY a feature list — NEVER the design.** A wireframe is a
+1. **The wireframe is ONLY a feature list — NEVER the design.**
+   *(REDESIGN mode. MATCH mode INVERTS this — see MODE FIRST above.)* A wireframe is a
    low-fi capture of WHAT must exist (tabs, fields, columns, actions). Its
    layout, proportions, grouping, and visuals are throwaway. You are a DESIGNER:
    extract the features, then compose a creative, polished UI from zcat
@@ -32,6 +229,10 @@ workflow, not this file.
 ---
 
 ## HOW TO ARRIVE AT A LAYOUT — CLASSIFY, THEN TWO GATES
+
+**REDESIGN mode only.** In MATCH mode the layout is given, not derived, so skip
+G0-G3 entirely. STEP 2's screen inventory still applies and still needs the
+designer's confirmation; only the layout DERIVATION is dropped.
 
 Asking for thought does not produce thought. The old instruction ("decide the layout,
 record it") got three labels describing one layout — the wireframe's. These gates
@@ -99,6 +300,9 @@ both and the only valid output is one where you actually decided something.
 ## BUILD DISCIPLINE — REFERENCES AND THE SHELL
 
 ### A reference supplies FEATURES AND CONTENT ONLY. Never styling.
+
+**REDESIGN mode only.** In MATCH mode the design's styling IS the spec — see
+MODE FIRST above.
 
 You know its LAYOUT is throwaway. Its **STYLING is equally throwaway** — and that is
 the half that gets missed. From a wireframe, screenshot, HTML prototype or live page
@@ -190,7 +394,8 @@ into ONE list, or an accordion per item revealing its table only when expanded.
   `<link rel="stylesheet" href="<path>/zcat-ui/zcat.css">` and
   `<script src="<path>/zcat-ui/zcat.js" defer></script>`.
   Never copy rules out of it, never edit any file inside `zcat-ui/`.
-- **NEVER restyle a `zc-*` class.** Page-level glue CSS (grid placement, page-specific column widths, demo heights) is allowed; changing how a component looks is not. Glue CSS selectors must be page-scoped classes (e.g. `.db-overview-grid`), never `zc-*` selectors.
+- **NEVER restyle a `zc-*` class — IN REDESIGN MODE.** Page-level glue CSS (grid placement, page-specific column widths, demo heights) is allowed; changing how a component looks is not. Glue CSS selectors must be page-scoped classes (e.g. `.db-overview-grid`), never `zc-*` selectors.
+  **IN MATCH MODE this rule is LIFTED** — see "RESTYLING IS SANCTIONED IN MATCH MODE" under MODE FIRST. Background, border and whatever else the given design needs may be overridden, in the PAGE's own CSS only, once the page declares `data-zcat-mode="match"`. Never inside `zcat-ui/`, so no other page inherits it.
 - **ZERO raw colors.** Every `color`, `background`, `border-color`, `fill`, `stroke` in glue CSS must be `var(--zc-*)` from `src/tokens/colors.css`. Even black text (`--zc-body-text-primary`), even white card backgrounds (`--zc-cards-bg-primary`). Raw hex is the #1 cause of dark-mode breakage.
 - **No odd numbers** for spacing/padding/gap/sizing/radius. Use `--zc-space-*` / `--zc-radius-*` tokens (spacing: 2,4,6,8,10,12,14,16,20,24,32,48,64…; radius: 2,4,6,10,14,18,20,full).
 - **Typography via classes, never raw font rules.** Headings/values use `.zc-h1`–`.zc-h6`, `.zc-subtitle-1/2/3` (Semi Bold); body text `.zc-body-1`–`.zc-body-5`; code `.zc-code-body`. Color via `.zc-text-*` utilities or a `--zc-body-text-*` var. NEVER write `font-size`/`font-weight`/`font-family` in glue CSS. A larger Regular size is NOT hierarchy — emphasis means a Subtitle/Headline class. Minimum text size 10px.
@@ -267,16 +472,96 @@ into ONE list, or an accordion per item revealing its table only when expanded.
 Read `zcat-ui/ONBOARDING.md` fully. Note the components you'll likely need and open the usage comments of their owning CSS files. Never invent markup shapes.
 
 ### STEP 1 — Input collection
-Accept wireframe images, screenshots, PRDs, or text. Screenshots/existing designs are REFERENCE ONLY — understand patterns and intent, never copy exact visuals.
+Accept wireframe images, screenshots, PRDs, or text. **In REDESIGN mode** screenshots/existing designs are REFERENCE ONLY — understand patterns and intent, never copy exact visuals. **In MATCH mode the opposite holds** and the design is authoritative down to spacing, radii and colour — see MODE FIRST above. Settle the mode before anything else.
 
 ### STEP 2 — Flow analysis → screen inventory (MANDATORY, needs user confirmation)
 List back every screen AND state implied by the requirement. A "list page" usually implies: empty state, populated state, create popup, and often detail page + edit popup + delete confirmation. Output the inventory as a table (screen, states, key features found in the wireframe — count tabs, columns, buttons, links, copy icons). If anything is ambiguous, ASK. **Do not build before the user confirms the inventory.**
 
 ### STEP 3 — Composition direction (per screen)
+**REDESIGN mode only** — in MATCH mode the design has already made every call below. Record which components and variants you will use, then go to STEP 4. STEP 2's inventory is NOT skipped: list back every screen and state you found and wait for confirmation.
 Before writing markup, decide and record: layout (columns, card recipe, density), what improves on the wireframe, table column typing, badge color map (every status value → semantic color), CTA winner (the ONE fill button), popup structure. Consult the DECISION RULES BRIDGE below for the topic files. State notable decisions in your build summary ("think and decide, then inform") — don't ask about every small choice.
 
 ### STEP 4 — Component mapping
-List every UI element → its `zc-*` component (use the TRANSLATION TABLE below). Anything with no component match is either composed from existing pieces or flagged to the user — never improvised as a lookalike.
+**In MATCH mode, do STEP 4-M below FIRST** and map against measured values, not
+against the screenshot. List every UI element → its `zc-*` component (use the TRANSLATION TABLE below). Anything with no component match is either composed from existing pieces or flagged to the user — never improvised as a lookalike.
+
+### STEP 4-M — EXTRACT THE REFERENCE (MATCH mode; before a line of markup)
+
+```
+node .claude/hooks/zcat-extract.js <reference> [--scope=<selector>] [--out=spec.md]
+```
+
+`<reference>` is a URL, or a captured `.html` saved inside this repo. Read the
+spec it writes, and build from THAT.
+
+**Why this step exists.** MATCH builds kept coming out with every class name
+correct and the pixels wrong: 32px fields built at 36, a 1px border dropped, a
+fill button built as outline, a tick where the design had a dash. The agent had
+the reference open and did look at it, then built from what it REMEMBERED
+seeing. Looking is not measuring, and a remembered design is not a reference.
+
+The extractor reads the reference's own computed styles and writes down every
+distinct recipe on the page, each with the `--zc-*` token its raw value maps to:
+
+- **BUTTONS** — every distinct recipe, with background, border, text colour,
+  height against the 50/36/28/24 scale, radius, and the `data-variant` it
+  infers. Inferred means CONFIRM against `docs/snippets.html`, not trust.
+- **SURFACES** — background, border width and colour, radius, padding, gap.
+- **FIELDS** — heights first, because that is the value that gets guessed.
+- **TEXT** — measured size and weight mapped to the type scale class.
+- **GAPS** — a census of the spacing actually used, most common first.
+- **NO TOKEN MATCH / OFF SCALE** — the escalation list.
+
+**Do not round the escalation list away.** A colour with no token is a change to
+the design system, not to a page: stop and ask. An off-scale size usually means
+the nearest step is right, but say which you took and why.
+
+### The three kinds of reference, and what each one gives you
+
+| the design arrives as | how to read it | what you get |
+|---|---|---|
+| **Figma** | the Figma MCP: `get_metadata` for geometry, `get_variable_defs` for token values, `get_design_context` for detail. Write the numbers into a spec file. | the DESIGN's own values — the best evidence there is. No hover or focus, because Figma has no interaction states |
+| **a URL** | `zcat-extract.js <url>` renders it and reads the computed styles | everything, including hover and focus |
+| **a page saved as `.html` into this repo** | same, `zcat-extract.js <file>` | everything. This is the way past a login wall |
+| a screenshot | nothing can read it | nothing measurable. Eye only |
+
+**FIGMA IS THE PREFERRED SOURCE when the design lives there.** It holds the
+intended values rather than a browser's rendering of them, so a 32px field is
+32 because the designer said so, not because a font happened to lay out that
+way. The MCP is agent-driven, so the sequence is: read Figma, write a spec file,
+then hand the spec to the comparator:
+
+```
+node .claude/hooks/zcat-compare.js <page.html> --ref-spec=<spec.json> --scope=<sel>
+```
+
+Spec shape — **every field except `label` is optional, and an omitted field
+makes NO claim**, so a spec listing only button colours reports only button
+colours:
+
+```json
+{ "source": "figma:<fileKey> node <id>",
+  "elements": [
+    { "label": "Add Index", "kind": "button",
+      "bg": "#EEF1FE", "fg": "#2A65F0", "radius": 6, "h": 32,
+      "fontSize": 14, "fontWeight": 500, "x": 640, "y": 0 },
+    { "label": "Search indexes", "kind": "field", "w": 260, "h": 32 }
+  ] }
+```
+
+Supply `x` and `y` and placement is checked too; leave them out and it is not.
+`kind: "field"` pairs positionally rather than by text, because a placeholder is
+worded differently on the two sides.
+
+**A screenshot alone measures nothing.** No computed styles, no design values,
+nothing to read. Get the Figma node, the URL, or the saved page. If a screenshot
+is genuinely all that exists, record `"referenceScreenshotOnly": true` in the
+feature receipt so the gate states out loud that look, size and placement now
+rest entirely on the scorecard — which is exactly the arrangement that produced
+the defects above.
+
+**Scope it.** Pass the reference's own content selector so the comparison
+excludes shell chrome, which is common to every page and not part of the match.
 
 ### STEP 5 — Build
 - Pages live in the consuming project folder (or a `pages/` folder next to `zcat-ui/`) — NEVER inside `zcat-ui/` or `AI Automation/`.
@@ -353,6 +638,11 @@ grep -nE 'font-size|font-weight|font-family' <page css / style blocks>
 
 ### STEP 7 — Screen Polish & SENIOR DESIGNER REVIEW (COMPULSORY — NO EXEMPTIONS)
 
+**REDESIGN mode only.** In MATCH mode this entire step is replaced by
+**STEP 7-M** below, which is mandatory in its place — never skip from STEP 6
+straight to STEP 8. Critiquing the composition here would be reviewing the
+DESIGNER's screen, not yours.
+
 **This gate runs after EVERY change that alters rendered UI — initial builds,
 fix rounds, designer-correction rounds, component swaps, shell rebuilds, and
 migrations alike.** "It was only a correction" or "I only changed one thing"
@@ -421,7 +711,175 @@ verbatim: *"No meaningful design improvement identified; keeping the current
 composition."* — but "everything passed" is not available if you have not named
 the weakest thing on the screen.
 
+### STEP 7-M — MATCH VERIFICATION (MATCH mode; COMPULSORY, NO EXEMPTIONS)
+
+Replaces STEP 7 in MATCH mode, and it is the whole point of the mode. STEP 7
+asks "is this good?", which reviews the DESIGNER's screen. This step asks the
+only question MATCH mode has: **is it the same?**
+
+**Two automated halves, and this file used to mention neither:**
+
+```
+node .claude/hooks/zcat-match.js   <page.html> <reference> --scope=<sel>
+node .claude/hooks/zcat-compare.js <page.html> <reference> --ref-scope=<sel>
+```
+
+`zcat-match.js` asks **is anything MISSING** — it counts how much of the
+reference's text survived. `zcat-compare.js` asks **does what IS there look
+right** — it measures both pages and diffs every element it can pair, on:
+
+- **LOOK** background, text colour, border width and colour, radius, placeholder
+- **SIZE** height, width, font size and weight
+- **PLACE** relationally, never in absolute coordinates: do two elements share a
+  row here but not there, are their left edges aligned, has their reading order
+  flipped
+- **STATE** hover and focus, driven on the SAME element on both pages and
+  diffed. Resting state is not the screen: a build shipped without the hover
+  band that spans each key row, because nothing had ever triggered it. Pass
+  `--no-states` only when you have a reason and say what it was.
+
+Both write the receipts `zcat-gate-all.py` requires in MATCH mode. Why the
+second one had to exist: a solid blue `fill` button where the reference has a
+pale ghost one scored a PERFECT match, because both say "Add Index". A 480px
+search field where the reference has 260px scored a perfect match. A toolbar
+broken onto two rows scored a perfect match. Three real defects, all invisible,
+all reported green. Counting labels is not comparing designs.
+
+**Fields pair positionally, not by text.** An input's visible words are its
+placeholder, and the two sides often word it differently — "Search indexes"
+against "Search" — so the nth field of a type in reading order is paired with
+the nth. A different field COUNT is reported rather than mis-paired.
+
+**If the reference is only screenshots**, `zcat-compare.js` cannot run: there
+are no computed styles to read. Say so explicitly by recording
+`"referenceScreenshotOnly": true` in the feature receipt. The gate then skips it
+and says out loud that look, size and placement rest entirely on your eye and
+the scorecard below. Never leave it merely un-run.
+
+Neither tool can see whether the result looks RIGHT. This step is the half
+that can.
+
+**Runs after EVERY change that alters rendered UI** — first build, fix rounds,
+component swaps, designer corrections. A screen edited after its last score has
+NO score, and re-scoring it is not optional.
+
+**Nothing is sampled. EVERY screen AND EVERY state from the STEP 2 inventory
+gets its own row.** A screen or state missing from the table fails the BUILD,
+not just that screen. That is not theoretical here: a tabbed page once passed
+five gates while two thirds of it had never been rendered, because a hidden
+panel is invisible to any check that does not open it. So before scoring: open
+every tab, open every popup, trigger every state, and screenshot each one.
+
+**Per screen and state:**
+1. Screenshot the built screen at the reference's width.
+2. Put it beside the reference image and compare by LOOKING.
+3. Score the seven dimensions. For each, record WHAT you compared and WHAT you
+   saw. **A dimension with no recorded observation scores 0.** An unstated score
+   is a guess, and this project has already shipped a build that scored 95-100
+   while the designer said every screen was wrong.
+
+| # | Dimension | Marks | Full marks means |
+|---|---|---|---|
+| 1 | Component and variant | 20 | every element is the same component AND the same variant as the design; nothing improvised, nothing substituted. Radius, padding and height arrive with it |
+| 2 | Counts and completeness | 15 | tabs, columns, buttons, fields, actions and rows all count the same; nothing dropped, nothing added |
+| 3 | Layout, order, grouping | 15 | same blocks, same order, same grouping, same proportions |
+| 4 | Spacing | 15 | the spacing STEP you chose between blocks reads the same as the design |
+| 5 | Alignment | 15 | left edges of stacked blocks, baselines across a row, icon-with-text centring, table columns under their headers, action bar edges |
+| 6 | Colour | 15 | the token you CHOSE reads the same: surface, text, border, and every status colour |
+| 7 | Text and content | 5 | labels, headings, copy, data and units identical |
+
+**Why radius has no row, and why colour and spacing score the CHOICE.** You are
+building from our components and our tokens, so the values are ours before you
+start: the STEP 6 static hook rewrites a raw hex to a token and an off-scale
+pixel onto the scale, and a component's radius, padding and height belong to the
+component, not the page. A row for "does it use our radius" would score the
+LIBRARY, not the build, and award full marks for something you cannot get wrong.
+So instead:
+- **Radius folds into dimension 1**, but it IS scored there. Picking the right
+  component and variant usually lands it; where the component's own radius
+  disagrees with the reference, override it page-scoped and match it. A radius
+  left wrong is a dimension-1 deduction.
+- **Colour and spacing score WHICH one you picked.** Our green and our amber are
+  both ours; amber where the design shows green is a real defect and costs
+  dimension 6. A 16 and a 24 gap are both on the scale; 24 where the design
+  shows 16 costs dimension 4. Never award or deduct for the value merely being
+  a token — that is the hook's job and double-counting it hides the real defect.
+
+**Alignment is scored against the REFERENCE, not only within the page.** The
+audit's `MISALIGNED ROW`, `EDGE MISALIGN` and `BADGE OFF THE ROW BASELINE`
+already catch a page that disagrees with ITSELF, and they stay switched on in
+MATCH mode. Dimension 5 is the other half of the job: the design lines things up
+a particular way and yours has to line up the same way. A screen can be
+perfectly self-consistent and still sit a column where the design does not.
+
+**Marks may be partial, and every deduction must NAME its cause.** Write
+`4 spacing 11/15 — stat row gap is 24 where the design shows 16`, never a bare
+number. A score with no named cause is not a score, it is a feeling with a digit
+on it.
+
+**PASS IS 100/100. There is no other pass.** 99 is a fail with a known defect
+sitting inside it. Below 100: name the shortfall, fix it, re-screenshot,
+re-score. Only the DESIGNER may accept a screen under 100, and then the
+shortfall is recorded on the row with their decision beside it.
+
+**There is now only ONE exception, and it costs no marks:** a value with no
+token where you took the nearest step. Record it as a note on the row.
+
+**A component's internals are NOT an exception any more** (designer's decision,
+2026-09-09). Radius, padding, height and internal spacing must match the
+reference, and you override them page-scoped to get there. So dimension 1 is
+scored on the component AND its measured internals, and a radius that differs
+is a deduction, not a note. Only the SHELL is out of scope, because the layout
+is common to every page.
+
+**A state with no reference cannot be matched.** Dark mode, and any state you
+ADDED because the design omitted it, are judged against this file's rules
+instead and marked `DARK — no reference` or `ADDED — no reference`. They still
+get a row. They are never left out of the table.
+
+**MEASURE, do not eyeball.** Every defect missed in the first real MATCH build
+was invisible in isolation and obvious side by side: 32px fields read as 36,
+a 1px border, fill vs outline, a tick where the design had a dash. The agent
+had rendered all twenty pages and looked at every screenshot, but compared them
+against its MEMORY of the console instead of against a fresh capture at the
+same zoom. So: when the reference is a live page or a saved copy of one, READ
+the numbers out of its DOM with `getComputedStyle` — field heights, border
+widths, radii, font sizes, and each button's variant — and compare numbers to
+numbers. A remembered design is not a reference.
+
+**Never hand-type a `zc-*` control. Copy it from `docs/snippets.html`.** A build
+hand-typed `.zc-checkbox__box` with an inner `<svg>` tick. Every class name was
+correct, so nothing flagged it, and it rendered a tick where the design showed
+an indeterminate dash, because the library draws both with `::after` on an EMPTY
+box. Automated now as `CONTROL MARK HAND-DRAWN`, but the rule is broader than
+the check: the component you copy is right by construction, the one you type is
+right only by luck.
+
+**Enumerate the interaction states, from the reference.** Resting state is not
+the screen. Walk hover, focus, active and disabled for rows, buttons and inputs,
+and TYPE IN THE SEARCH to see the no-results state actually render. A build once
+placed its no-results block after a `flex:1` list, so it rendered pushed to the
+bottom of the page, and nobody had typed in the box to find out.
+
+**Output the scorecard in STEP 8, every row, no summarising:**
+```
+MATCH SCORECARD                 cmp cnt lay spc algn col txt
+max                              20  15  15  15  15  15   5  total
+databases (populated)            20  15  15  15  15  15   5   100  PASS
+databases (empty)                20  15  15  15  15  15   5   100  PASS  ADDED - no reference
+databases (dark)                 20  15  15  15  15  15   5   100  PASS  DARK - no reference
+database detail (Data tab)       20  15  15  15  15  15   5   100  PASS
+create database (popup)          20  15  15  15  15  15   5   100  PASS
+BUILD: PASS only when every row reads 100.
+```
+
 ### STEP 8 — Show the user
+**In MATCH mode, lead with the STEP 7-M scorecard, every row of it**, then the
+screenshots, the components used, any waived audit rules with reasons, and the
+notes for component internals and nearest-step values. Do not report a MATCH
+build as complete unless every row reads 100 or carries the designer's own
+acceptance.
+
 Show the page(s) with the final screenshot, list which zcat components were
 used where, state the design decisions and the senior-designer improvements
 you applied (or the verbatim no-improvement line), and flag anything the

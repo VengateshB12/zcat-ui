@@ -1328,6 +1328,112 @@ function __zcatAudit() {
     }
   }
 
+  /* ── 20b. A control's own mark is the LIBRARY's to draw ────────────── */
+  /* .zc-checkbox__box and .zc-radio__circle must be EMPTY. The library paints
+     the tick AND the indeterminate dash with ::after on an empty box, switching
+     between them off :checked / :indeterminate.
+
+     This exists because of a real defect that every other check waved through.
+     A build hand-typed the checkbox with an inner <svg> tick. Every class name
+     was correct, so HAND-BUILT CONTROL (check 20) skipped it — that check only
+     looks at elements WITHOUT a zc-* class. The rendered result was a tick
+     where the design showed a dash, because the hand-typed svg sat on top of
+     the ::after the library was drawing. Correct classes, wrong pixels, silent.
+
+     The fix is to copy the component from docs/snippets.html rather than type
+     it. This check is the automated half of that instruction. */
+  for (const el of all) {
+    const isBox = el.classList.contains("zc-checkbox__box");
+    const isCircle = el.classList.contains("zc-radio__circle");
+    if (!isBox && !isCircle) continue;
+    if (!el.childNodes.length) continue;
+    const kids = [...el.children].map(c => "<" + c.tagName.toLowerCase() + ">");
+    const text = (el.textContent || "").trim();
+    fail("CONTROL MARK HAND-DRAWN",
+      `.${isBox ? "zc-checkbox__box" : "zc-radio__circle"} must be EMPTY — it ` +
+      `contains ${kids.length ? kids.join(" ") : JSON.stringify(text.slice(0, 12))}. ` +
+      "The library draws the mark with ::after and swaps tick for dash off " +
+      ":checked / :indeterminate, so anything inside covers it and freezes the " +
+      "control on one mark. Copy the component from docs/snippets.html",
+      el);
+  }
+
+  /* ── 20c. A control's SHAPE, not just its class name ───────────────── */
+  /* Two more structures that a correct-looking class name hides.
+
+     SELECT: the usage comment in input.css is
+     `<div class="zc-input-wrap zc-select-wrap">`, and every instance in
+     snippets.html carries BOTH. Written with only .zc-select-wrap, the
+     element gets `cursor:pointer` and nothing else — no border, no height, no
+     padding — because every field style hangs off .zc-input-wrap. A select
+     with no border at all shipped exactly this way.
+
+     CODE BLOCK LINE NUMBERS: .zc-codeblock__lines is `white-space: pre` and is
+     authored as a <pre> whose numbers are separated by NEWLINES. Typed as a
+     row of inline <span>s with no newlines between them, all twenty numbers
+     render on one line. */
+  for (const el of all) {
+    /* NARROWED, after the first version failed our own correct pages — which
+       is this repo's standing signal that a check measured a proxy instead of
+       the thing. `.zc-select-wrap` is a shared BEHAVIOUR hook, not a field: in
+       template.html it legitimately appears as `zc-ghostdd zc-select-wrap`,
+       `zc-select-wrap zc-pagination__pager` and `zc-table__threedot
+       zc-select-wrap`, each supplying its own shell instead of .zc-input-wrap.
+       Demanding zc-input-wrap flagged all three.
+       What is unambiguous is a select-wrap with NO other class at all: nothing
+       owns its styling, so it renders with no border, no height and no padding.
+       That is the defect that shipped, and nothing legitimate looks like it. */
+    if (el.classList.contains("zc-select-wrap") && el.classList.length === 1)
+      fail("CONTROL SHAPE WRONG",
+        ".zc-select-wrap carries no other class, so nothing owns its shell — it " +
+        "renders with no border, height or padding. A field select is " +
+        '`class="zc-input-wrap zc-select-wrap"`; the pager, three-dot and ghost ' +
+        "dropdown each pair it with their own shell class. Copy the one you want " +
+        "from docs/snippets.html", el);
+    /* MEASURE THE COLLAPSE, not the markup. The first version failed our own
+       SQL Console tab, which writes `1<br>2<br>3` — <br> is an inline element
+       but it does break the line, so the numbers stacked correctly and the
+       check was wrong (verified: 5 numbers, 100px tall, 20px line-height).
+       Counting markup shapes means enumerating every valid way to break a
+       line. Counting the RESULT does not: N numbers that occupy one line's
+       height have collapsed, however they were authored. */
+    if (el.classList.contains("zc-codeblock__lines")) {
+      /* COUNT THE RENDERED LINES of both the gutter and the code, by measuring
+         the client rects of their text and counting distinct tops. One rect
+         row per visual line.
+
+         Three earlier versions of this check were wrong, each for a different
+         reason, and they are worth keeping written down:
+           1. "inline children and no newlines" flagged the perfectly valid
+              `1<br>2<br>3` — <br> is inline but does break a line.
+           2. "count digit runs in textContent" always returned 1, because with
+              no separator "12345" IS one run, so it never fired at all.
+           3. "gutter box shorter than the code box" never fired either: the
+              code block is a flex ROW with the default align-items:stretch, so
+              the gutter's BOX is stretched to the code's height even while its
+              TEXT sits on a single line. Measured: box 100px, text 1 line.
+         The box lies. The text does not. */
+      const code = el.parentElement && el.parentElement.querySelector(".zc-codeblock__code");
+      if (code) {
+        const lines = n => {
+          const r = document.createRange();
+          r.selectNodeContents(n);
+          const tops = new Set([...r.getClientRects()]
+            .filter(x => x.width > 0 || x.height > 0)
+            .map(x => Math.round(x.top)));
+          return tops.size;
+        };
+        const lg = lines(el), lc = lines(code);
+        if (lc > 1 && lg < lc)
+          fail("CONTROL SHAPE WRONG",
+            `.zc-codeblock__lines renders ${lg} line(s) of numbers beside ${lc} ` +
+            "lines of code — the gutter has collapsed instead of numbering one " +
+            "per line. It is white-space:pre and needs a real break per number. " +
+            "Copy the code block from docs/snippets.html", el);
+      }
+    }
+  }
+
   /* ── 20. Hand-built controls instead of components ─────────────────── */
   for (const el of all) {
     const hasZc = [...el.classList].some(c => c.startsWith("zc-"));

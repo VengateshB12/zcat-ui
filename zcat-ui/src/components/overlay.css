@@ -327,7 +327,13 @@
    The white sheet's top corners curve at 26px — a raw Figma literal (no
    radius token exists for 26; flagged). The header bar itself carries no
    visible divider: the sheet's own top border draws the single curved line.
-   Dark: unaudited (light values inherit), pending the dark audit.
+   Dark (resolved 2026-09-08): sheet #1A1B1D, border #33373F, title
+   #EEEEEE. The header bar is NOT the dark counterpart of its light hex
+   — it takes the palette's dark GROUND #151516, because this bar paints
+   the full-viewport canvas the sheet is raised on, and a ground stays
+   darker than what sits on it. Figma has no dark value for that
+   variable at all; the reasoning and the measurements sit beside the
+   token in colors.css. Do not "fix" it to #242527.
 
    Usage:
    <div class="zc-fullpopup">

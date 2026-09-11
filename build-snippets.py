@@ -324,17 +324,17 @@ DOC = f'''<!DOCTYPE html>
 <title>zcat UI — copy these</title>
 <link rel="stylesheet" href="../zcat.css?v={cssv}">
 <style>
-  body {{ margin:0; padding:32px; background:var(--zc-bg-page);
-         color:var(--zc-text-primary); font-family:var(--zc-font); }}
+  body {{ margin:0; padding:32px; background:var(--zc-body-bg-body);
+         color:var(--zc-body-text-primary); font-family:var(--zc-font-primary); }}
   .wrap {{ max-width:1000px; margin:0 auto; }}
   .sec {{ margin:40px 0 8px; padding-bottom:8px;
-          border-bottom:1px solid var(--zc-border-subtle); }}
-  .snip {{ margin:24px 0; padding:20px; background:var(--zc-bg-container);
-           border:1px solid var(--zc-border-subtle); border-radius:8px; }}
-  .note {{ margin:6px 0 4px; color:var(--zc-text-secondary); }}
-  .src  {{ margin:0 0 4px; color:var(--zc-text-tertiary); }}
-  .live {{ padding:16px; margin:12px 0; background:var(--zc-bg-page);
-           border:1px dashed var(--zc-border-subtle); border-radius:6px; }}
+          border-bottom:1px solid var(--zc-cards-border-default); }}
+  .snip {{ margin:24px 0; padding:20px; background:var(--zc-body-bg-container);
+           border:1px solid var(--zc-cards-border-default); border-radius:8px; }}
+  .note {{ margin:6px 0 4px; color:var(--zc-body-text-secondary); }}
+  .src  {{ margin:0 0 4px; color:var(--zc-body-text-light); }}
+  .live {{ padding:16px; margin:12px 0; background:var(--zc-body-bg-body);
+           border:1px dashed var(--zc-cards-border-default); border-radius:6px; }}
   .live > * {{ max-width:100%; }}
   /* A popup scrim is position:fixed, so dropped into a preview box it escapes
      and covers the viewport — which stretched the selection card until its
@@ -361,14 +361,14 @@ DOC = f'''<!DOCTYPE html>
                        padding:0; }}
   .live[data-shell] .zc-layout {{ position:absolute !important; inset:0 !important;
                                   height:100% !important; min-height:0 !important; }}
-  pre {{ margin:0; padding:14px; overflow-x:auto; background:var(--zc-bg-page);
-         border:1px solid var(--zc-border-subtle); border-radius:6px; }}
+  pre {{ margin:0; padding:14px; overflow-x:auto; background:var(--zc-body-bg-body);
+         border:1px solid var(--zc-cards-border-default); border-radius:6px; }}
   code {{ font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
           font-size:12px; line-height:20px; }}
-  .glue-note {{ margin:14px 0 6px; color:var(--zc-text-secondary); }}
-  pre.glue {{ background:var(--zc-bg-container); }}
-  .lede {{ padding:16px 20px; background:var(--zc-bg-container);
-           border:1px solid var(--zc-border-subtle); border-radius:8px; }}
+  .glue-note {{ margin:14px 0 6px; color:var(--zc-body-text-secondary); }}
+  pre.glue {{ background:var(--zc-body-bg-container); }}
+  .lede {{ padding:16px 20px; background:var(--zc-body-bg-container);
+           border:1px solid var(--zc-cards-border-default); border-radius:8px; }}
 </style></head><body>
 {sprite}
 <div class="wrap">

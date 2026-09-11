@@ -629,8 +629,11 @@
   --zc-fullpopup-border: #DDE4F6;
   --zc-fullpopup-text: #101F3E;
   --zc-fullpopup-text-secondary: #4D618A;
-  /* Figma full-page-popup-header/bg/bg (node 548:9060, verified 2026-08-28).
-     The dark value below is DERIVED, not from Figma — see the note there. */
+  /* Figma full-page-popup-header/bg/bg (node 548:9060, verified 2026-08-28,
+     re-read 2026-09-08 — same value). This hex is ALSO the light value of
+     --zc-body-bg-hover and 16 other tint tokens. Shared hex, different ROLE:
+     those are tints on a raised surface, this is the ground under one. That
+     distinction decides the dark value — see the note in the dark blocks. */
   --zc-fullpopup-header-bg: #F4F7FE;
   /* The Empty State illustration is an <img>, which CSS cannot normally swap.
      Declaring it as a token and applying it with `content:` lets the theme
@@ -1253,15 +1256,33 @@
   --zc-fullpopup-border: #33373F;
   --zc-fullpopup-text: #EEEEEE;
   --zc-fullpopup-text-secondary: #AAAAAA;
-  /* DERIVED, NOT FROM FIGMA — pending the designer's dark audit.
-     This token had no dark value at all, so the full-page popup's header bar
-     stayed #F4F7FE in dark mode: a pale bar with near-invisible text above a
-     dark sheet. Every sibling (--zc-fullpopup-bg/-text/-text-secondary) already
-     had one; only this was missed.
-     The light relationship is a RECESSED header with the white sheet raised on
-     top of it. #151516 is --zc-body-bg-body, the recessed surface in this
-     palette, so it keeps that relationship against the #1A1B1D sheet. Replace
-     it if the audit says otherwise. */
+  /* GROUND, NOT A TINT — do not re-derive this one from its light hex.
+     RESOLVED 2026-09-08. Figma has no dark value for this variable to read.
+     The wholesale Mode-collection dump (§7.1) enumerated Light+Dark for 493
+     variables and full-page-popup-header/bg/bg carried light only, while its
+     sibling bg-2 (the sheet) carried both. Re-reading node 548:9060 on
+     2026-09-08 returned the light value again. So this is a gap in the Figma
+     file, not an extraction still waiting to happen, and the value below is
+     CHOSEN. The reasoning, checked by rendering the popup in dark and
+     measuring it:
+       .zc-fullpopup is position:fixed inset:0, so this token paints the whole
+       viewport CANVAS and --zc-fullpopup-bg (#1A1B1D) is the sheet raised on
+       top of it. This palette keeps a ground DARKER than what is raised on it,
+       in BOTH themes:
+         ground  --zc-body-bg-body       #EFF2FA light / #151516 dark
+         raised  --zc-body-bg-container  #FFFFFF light / #1A1B1D dark
+       and every raised chrome surface (header, subheader, sidemenu, popup) is
+       #1A1B1D in dark. The canvas therefore takes the dark GROUND, #151516.
+     Canvas-to-sheet contrast ratio, canvas first:
+       light  #F4F7FE on #FFFFFF  1.072  canvas recessed
+       ours   #151516 on #1A1B1D  1.059  canvas recessed  <-- closest match
+       tint   #242527 on #1A1B1D  1.124  canvas RAISED, inverts the component
+     THE TRAP: 16 other tokens carry this token's light hex and 13 of them map
+     to #242527 in dark (the other 3 to #292A2F), so a future wholesale
+     regeneration will try to put #242527 here. It is lighter than the sheet:
+     the bar would rise and the sheet would read as a sunken well, while every
+     class name stayed correct. Guarded by FULLPOPUP CANVAS NOT RECESSED in
+     .claude/hooks/zcat-library-audit.js. */
   --zc-fullpopup-header-bg: #151516;
   }
 }
@@ -1865,7 +1886,9 @@
   --zc-fullpopup-border: #33373F;
   --zc-fullpopup-text: #EEEEEE;
   --zc-fullpopup-text-secondary: #AAAAAA;
-  /* DERIVED, NOT FROM FIGMA — pending the designer's dark audit. Mirrors the
-     media-query block above; see the note there for why #151516. */
+  /* GROUND, NOT A TINT. Figma has no dark value for this variable; #151516 is
+     the palette's dark ground, chosen so the sheet keeps reading as raised.
+     Mirrors the media-query block above — the full reasoning, the numbers and
+     the #242527 trap are in the note there. Do not change one block alone. */
   --zc-fullpopup-header-bg: #151516;
 }

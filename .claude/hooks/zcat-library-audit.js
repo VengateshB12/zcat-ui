@@ -17,6 +17,13 @@
  *                  not drift to the middle of the block
  *   INVISIBLE TEXT text the same colour as what is behind it
  *
+ * It then reads colors.css directly, for two faults no render can show:
+ *   LIGHT-ONLY TOKEN   a light token with no dark counterpart
+ *   FULLPOPUP CANVAS NOT RECESSED
+ *                      the full-page popup's ground gone lighter than the
+ *                      sheet raised on it, which inverts the component while
+ *                      every class name stays correct
+ *
  * Both themes. Usage:
  *   node .claude/hooks/zcat-library-audit.js            # every component
  *   node .claude/hooks/zcat-library-audit.js popup tabs # just these
@@ -174,6 +181,69 @@ const CHECKS = `(() => {
                  "light colour in dark mode, which usually lands as pale text on a " +
                  "dark surface, or a bright panel in a dark page" });
       }
+    }
+  } catch (e) { /* the token pass must never break the render audit */ }
+
+  /* A GROUND MUST STAY DARKER THAN THE SURFACE RAISED ON IT.
+     Checked for the one pair where getting it wrong is unambiguous and
+     invisible to every other check: the full-page popup. .zc-fullpopup paints
+     the whole viewport and .zc-fullpopup__sheet is raised on it, so
+     --zc-fullpopup-header-bg has to be darker than --zc-fullpopup-bg, in both
+     themes, exactly as it is in light.
+
+     Why this needs a check of its own. Figma has NO dark value for
+     full-page-popup-header/bg/bg, so the dark value is chosen rather than
+     read, and its light hex (#F4F7FE) is shared by 16 tint tokens whose dark
+     counterpart is #242527. That is LIGHTER than the #1A1B1D sheet. Any
+     wholesale regeneration from the Figma Mode collection will therefore try
+     to put #242527 here, and the component inverts: the bar rises, the sheet
+     reads as a sunken well, and every class name is still correct.
+
+     Nothing above catches that. LIGHT-ONLY TOKEN only asks whether a dark
+     value EXISTS. The render checks ask whether text is legible, and inverted
+     text is perfectly legible. It is the designer's eye or nothing — so it is
+     this.
+
+     The check compares two measured surfaces and asserts an ORDER. It sets no
+     threshold, which is the part that made the earlier stat-row checks fail
+     good pages: any monotonic lightness measure gives the same verdict here. */
+  try {
+    const css = fs.readFileSync(
+      path.join(PROJECT, "zcat-ui", "src", "tokens", "colors.css"), "utf8");
+    const lines = css.split("\n");
+    const iMedia = lines.findIndex(l => l.includes(':root:not([data-theme="light"])'));
+    const iAttr  = lines.findIndex(l => l.startsWith(':root[data-theme="dark"]'));
+    const lum = hex => {
+      const v = [1, 3, 5].map(i => parseInt(hex.substr(i, 2), 16) / 255)
+        .map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    /* Declarations only. A hex inside a comment must never be read as a value,
+       and these blocks carry long comments full of them. */
+    const grab = (seg, name) => {
+      for (const l of seg) {
+        const m = l.match(new RegExp("^\\s*--zc-" + name + "\\s*:\\s*(#[0-9A-Fa-f]{6})\\s*;"));
+        if (m) return m[1];
+      }
+      return null;
+    };
+    const blocks = iMedia > 0 && iAttr > iMedia
+      ? [["light", lines.slice(0, iMedia)],
+         ["dark",  lines.slice(iMedia, iAttr)],
+         ["dark",  lines.slice(iAttr)]]
+      : [];
+    for (const [theme, seg] of blocks) {
+      const canvas = grab(seg, "fullpopup-header-bg");
+      const sheet  = grab(seg, "fullpopup-bg");
+      if (!canvas || !sheet) continue;
+      if (lum(canvas) >= lum(sheet))
+        results.push({ component: "tokens/colors.css", theme,
+          rule: "FULLPOPUP CANVAS NOT RECESSED",
+          msg: `--zc-fullpopup-header-bg ${canvas} is not darker than the sheet ` +
+               `--zc-fullpopup-bg ${sheet}. That bar paints the full-viewport ` +
+               "canvas the sheet is raised on, so lighter than the sheet inverts " +
+               "the component: the bar rises and the sheet reads as a sunken " +
+               "well. #242527 is the usual way in — see the note in colors.css" });
     }
   } catch (e) { /* the token pass must never break the render audit */ }
 

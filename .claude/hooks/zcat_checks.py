@@ -1,7 +1,40 @@
 #!/usr/bin/env python3
 """Static (text) checks for zcat page files. Extracted so both the PostToolUse
 hook and the Stop gate run exactly the same rules."""
+import glob
+import io
+import os
 import re
+
+# ── every --zc-* custom property the library actually defines ────────────────
+# An UNDEFINED custom property fails SILENTLY in CSS: the whole declaration is
+# dropped and the element renders as if the line were never written. That is
+# how `--zc-cards-bg-default` shipped — a name invented from the pattern of the
+# real ones, which resolved to nothing, so a selected table row had no
+# background at all and every gate stayed green. Nothing else in this toolchain
+# can see it: the value is not a raw hex, the class names are right, and the
+# rendered result just looks like a missing style.
+#
+# Read from src/ rather than hard-coded, so the list cannot drift, and from ALL
+# of src/ rather than only tokens/ because a few properties are declared beside
+# the component that consumes them.
+_TOKENS = None
+
+
+def known_tokens():
+    global _TOKENS
+    if _TOKENS is None:
+        root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        names = set()
+        pat = os.path.join(root, "zcat-ui", "src", "**", "*.css")
+        for p in glob.glob(pat, recursive=True):
+            try:
+                with io.open(p, encoding="utf-8") as fh:
+                    names |= set(re.findall(r"(--zc-[A-Za-z0-9_-]+)\s*:", fh.read()))
+            except OSError:
+                pass
+        _TOKENS = names
+    return _TOKENS
 
 RE_RAWCOLOR = re.compile(
     r'(?:color|background(?:-color)?|border(?:-[a-z]+)?-?color|border|fill|'
@@ -23,10 +56,22 @@ RE_POPUP_W_INLINE = re.compile(r'class="[^"]*zc-popup[^"]*"[^>]*style="[^"]*widt
 RE_GROUP_MAXW = re.compile(r'class="[^"]*zc-input-group[^"]*"[^>]*style="[^"]*max-width')
 
 
-def static_issues(path, text):
-    """Return a list of 'line N: RULE -> snippet' strings."""
+RE_MATCH_MODE = re.compile(r'data-zcat-mode\s*=\s*["\']match["\']', re.I)
+
+
+def static_issues(path, text, match_mode=None):
+    """Return a list of 'line N: RULE -> snippet' strings.
+
+    match_mode: True/False to force it; None (default) means read the page's own
+    `data-zcat-mode="match"` declaration. It is declared IN THE PAGE, not in a
+    receipt, because this runs on every save — long before any receipt exists —
+    and a save-time check cannot consult a document that the build writes at the
+    end. It is also visible to anyone opening the file, which a receipt is not.
+    """
     lines = text.splitlines()
     is_css = path.lower().endswith(".css")
+    if match_mode is None:
+        match_mode = bool(RE_MATCH_MODE.search(text))
     issues = []
 
     def add(n, rule, snip):
@@ -73,11 +118,39 @@ def static_issues(path, text):
                 add(i, "OPACITY USED FOR A STATE — use a colour token "
                        "(--zc-body-icon-disabled, --zc-*-text-disabled, a hover/active "
                        "bg). Opacity cannot be themed and quietly fails contrast", ln)
-        if RE_ZC_RESTYLE.match(ln):
-            add(i, "RESTYLED zc-* CLASS — never redefine library classes; use page-scoped glue classes", ln)
+        # RESTYLING IS SANCTIONED IN MATCH MODE — the designer's call, 2026-09-09:
+        # "Match mode u can restyle as per the given match screens, it should
+        # match 100 percentage of size, container, placement alignment and all."
+        # In REDESIGN mode the rule stands: a page has no business redefining a
+        # shared component. In MATCH mode the given design is the authority and
+        # a component default that disagrees with it has to be overridden, so
+        # blocking here would make a 100% match impossible.
+        # The boundary that remains: the override must live in the PAGE (its own
+        # <style> or page CSS), never in zcat-ui/, so no other page inherits it.
+        # That is enforced by the read-only guard, not by this rule.
+        if RE_ZC_RESTYLE.match(ln) and not match_mode:
+            add(i, "RESTYLED zc-* CLASS — never redefine library classes; use "
+                   "page-scoped glue classes. (Allowed in MATCH mode: declare "
+                   "data-zcat-mode=\"match\" on <html>)", ln)
         m = RE_EMOJI.search(ln)
         if m:
             add(i, f"EMOJI/UNICODE GLYPH '{m.group(0)}' used as icon — use zcat-ui/docs/icons/ stroke icons", ln)
+
+    # UNDEFINED TOKEN — reported once per name, not once per use.
+    known = known_tokens()
+    if known:
+        declared_here = set(re.findall(r"(--zc-[A-Za-z0-9_-]+)\s*:", text))
+        seen = set()
+        for i, ln in enumerate(lines, 1):
+            for name in re.findall(r"var\(\s*(--zc-[A-Za-z0-9_-]+)", ln):
+                if name in known or name in declared_here or name in seen:
+                    continue
+                seen.add(name)
+                add(i, "UNDEFINED TOKEN %s — no such custom property anywhere in "
+                       "zcat-ui/src/. An undefined var() fails SILENTLY: the whole "
+                       "declaration is dropped and the element renders unstyled. Pick "
+                       "the token by its VALUE from src/tokens/colors.css, never by "
+                       "guessing a name that fits the pattern" % name, ln)
 
     if re.search(r"lorem\s+ipsum", text, re.I):
         issues.append("LOREM IPSUM found — use realistic sample data "

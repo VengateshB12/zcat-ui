@@ -330,13 +330,67 @@ const slug = f => path.relative(PROJECT, f).replace(/[\/\\]/g, "__").replace(/\.
     }
     await page.close();
 
+    /* MATCH MODE WAIVER — the decision rules cannot judge a reproduction.
+       A page declares its mode in its own feature receipt (`mode: "match"`),
+       which is the same place zcat-gate-all.py reads it from, so there is no
+       second switch to forget.
+
+       Why this had to become mechanical. The skill told the agent to "waive
+       these per page and say which", but nothing implemented it, so gate 1 ran
+       the full rule set against a faithful reproduction and CTA HIERARCHY alone
+       failed twenty console-accurate pages. An instruction a tool cannot honour
+       is not a rule, it is a wish.
+
+       WAIVED are the rules that encode OUR composition decisions. In MATCH
+       mode the given design already made those calls, and the whole point of
+       the mode is that we do not overrule it. NOT WAIVED, deliberately, are
+       the defect rules — anything broken, misaligned, unreachable or
+       unreadable is still broken, however faithful the copy. Alignment and
+       row-behaviour rules stay ON for exactly that reason: BADGE OFF THE ROW
+       BASELINE, MISALIGNED ROW, EDGE MISALIGN, ROW NOT CLICKABLE,
+       ROW IS NOT THE CLICK TARGET and ROWLINK ON THE CELL are not matters of
+       taste. */
+    const MATCH_WAIVED = new Set([
+      "CTA HIERARCHY", "REPEATED PRIMARY BUTTON", "LONE ACTION BUTTON",
+      "STRETCH TABLE SHARING A PAGE", "FORM ON A PAGE", "COPY NOT A LINK BOX",
+      "TABS IN CONTAINER", "ACTION BAR NOT A CONTAINER HEADER", "CARD PADDING",
+      "NO HIERARCHY", "CONTENT DOES NOT FILL THE CONTAINER",
+    ]);
+    /* THE PAGE'S OWN DECLARATION WINS. `data-zcat-mode="match"` on <html> is
+       read by the save-time static check too, which has no receipt to consult
+       — a receipt is written at the END of a build, so a save-time rule cannot
+       use one. Keeping one source means the two can never disagree about the
+       same page. The receipt stays as a fallback for pages written before the
+       declaration existed. */
+    let mode = "redesign";
+    try {
+      if (/data-zcat-mode\s*=\s*["']match["']/i.test(fs.readFileSync(abs, "utf8")))
+        mode = "match";
+      else {
+        const rc = path.join(STATE, slug(abs) + ".features.json");
+        if (fs.existsSync(rc))
+          mode = (JSON.parse(fs.readFileSync(rc, "utf8")).mode || "redesign").toLowerCase();
+      }
+    } catch (e) { /* unreadable means redesign, the stricter path */ }
+    out.mode = mode;
+    out.waived = [];
+    if (mode === "match") {
+      const keep = [];
+      for (const f of out.fails) (MATCH_WAIVED.has(f.rule) ? out.waived : keep).push(f);
+      out.fails = keep;
+    }
+
     out.ok = out.fails.length === 0;
     out.ts = new Date().toISOString();
     fs.writeFileSync(path.join(STATE, slug(abs) + ".json"), JSON.stringify(out, null, 2));
     if (!out.ok) anyFail = true;
 
     const tag = out.ok ? "PASS" : "FAIL";
-    console.log(`${tag}  ${out.page}  (${out.fails.length} fail, ${out.warns.length} warn, ${out.stats.components || 0} components)`);
+    const modeTag = out.mode === "match" ? "  [MATCH mode]" : "";
+    console.log(`${tag}  ${out.page}${modeTag}  (${out.fails.length} fail, ${out.warns.length} warn, ${out.stats.components || 0} components)`);
+    /* A silent waiver is how a real defect hides behind a mode flag. */
+    for (const w of out.waived)
+      console.log(`   waived ${w.rule}: ${w.msg}\n        at ${w.sel}  (decision rule, MATCH mode)`);
     for (const f of out.fails.slice(0, 25)) console.log(`   FAIL ${f.rule}: ${f.msg}\n        at ${f.sel}`);
     for (const w of out.warns.slice(0, 10)) console.log(`   warn ${w.rule}: ${w.msg}\n        at ${w.sel}`);
   }
