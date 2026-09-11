@@ -3981,7 +3981,18 @@ function renderIcons(s) {
     files.forEach(f => {
       const path = 'icons/' + f;
       h += `<div class="icon-tile" onclick="${escA('copyIconPath(this, ' + JSON.stringify(path) + ')')}" title="${esc(f)}">` +
-           `<img src="${esc(path)}" alt="" loading="lazy">` +
+           /* NOT loading="lazy" — deliberately. It left every tile broken on
+              a real machine: native lazy-loading can sit "pending" forever
+              on a backgrounded tab or an unfocused window, with no error and
+              no network request ever sent, so nothing here even LOOKS wrong
+              in devtools. Removing the attribute made the same file load
+              instantly. Verified in Chrome, not assumed: fetch() to the exact
+              URL always worked; the <img> tag with loading="lazy" sat at
+              naturalWidth 0 for 2+ seconds with zero requests recorded, and
+              loaded the instant the attribute was removed. These are small
+              SVGs — eager-loading all 486 costs nothing next to a tile that
+              silently never renders. */
+           `<img src="${esc(path)}" alt="">` +
            `<span>${esc(f.replace(/\.(svg|png)$/i, ''))}</span></div>`;
     });
     h += `</div>`;
