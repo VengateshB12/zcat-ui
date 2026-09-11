@@ -217,14 +217,39 @@
     .icon-sec:first-child { margin-top: 0; }
     .icon-sec span { font-size: 11px; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--zc-body-text-light); }
     .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; }
+    /* Themed by default (background AND colour follow --zc-* tokens like every
+       other card on this page) — this is the CORRECT default because Common's
+       424 files are uniformly stroke="#101F3E" with no colour of their own, so
+       there is nothing stopping them from repainting for dark mode. Anything
+       that DOES carry its own baked-in colour (a brand mark, a photo, one half
+       of the illustration pair) overrides both properties inline, per tile —
+       see the FIXED_LIGHT / ILLUSTRATION_SURFACE constants in renderIcons(). */
     .icon-tile {
       display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px;
       border: 1px solid var(--zc-body-border-default); border-radius: var(--zc-radius-6);
-      background: #FFFFFF; cursor: pointer; text-align: center;
+      background: var(--zc-cards-bg-primary); color: var(--zc-body-text-primary);
+      cursor: pointer; text-align: center;
     }
     .icon-tile:hover { border-color: var(--zc-body-text-theme); }
     .icon-tile img { width: 28px; height: 28px; object-fit: contain; }
-    .icon-tile span {
+    /* The Common glyph, as a MASK: currentColor paints it from the tile's own
+       `color` above, so light mode reads #101F3E and dark mode reads #EEEEEE
+       with no per-icon work — the same trick shell.css already uses for the
+       service rail, kept LOCAL here (see the comment at .icon-tile__glyph's
+       call site) so its url() resolves against THIS stylesheet, not zcat.css. */
+    .icon-tile__glyph {
+      display: block; width: 28px; height: 28px; background-color: currentColor;
+      -webkit-mask: var(--icon) center / contain no-repeat;
+      mask: var(--icon) center / contain no-repeat;
+    }
+    /* A CLASS, not a bare `span` selector — the mask glyph is ALSO a span, and
+       `.icon-tile span` (class+tag) beat `.icon-tile__glyph` (one class) on
+       specificity, so the label rule's grey silently became the mask's
+       currentColor. Every Common glyph read the LABEL's colour instead of the
+       tile's, in both themes — found by reading the glyph's actual computed
+       background-color rather than trusting that setting `color` on the tile
+       was enough. */
+    .icon-tile__label {
       font-size: 10px; line-height: 13px; color: var(--zc-body-text-light);
       word-break: break-word; max-width: 100%;
     }
@@ -3946,7 +3971,7 @@ function renderTokens(s) {
 }
 
 const ICON_GROUPS = {
-  common: ["AI.svg", "Alert Round.svg", "Alert Triangle.svg", "Arrow Down.svg", "Arrow Left.svg", "Arrow Right.svg", "Browser- Design.svg", "Check circle.svg", "Copy.svg", "Dollar Round.svg", "Download Cloud.svg", "Drag Dots.svg", "Edit Line.svg", "Edit boxy.svg", "Eye Open.svg", "File.svg", "GitHub.svg", "Glass.svg", "Globe.svg", "Home.svg", "Image.svg", "Indian Flag Round.svg", "Info Round.svg", "Link.svg", "Loading 1.svg", "Maximize.svg", "Nine Dot.svg", "Notification.svg", "Paint Brush.svg", "Percentage.svg", "Puzzle.svg", "Question Round.svg", "Refresh.svg", "Rocket 1.svg", "SDK Code.svg", "Settings.svg", "Three dot 1.svg", "Tick.svg", "Upload Cloud.svg", "User.svg", "activity-heart.svg", "activity.svg", "airplay.svg", "alarm-clock-check.svg", "alarm-clock-minus.svg", "alarm-clock-off.svg", "alarm-clock-plus.svg", "alarm-clock.svg", "alert-circle.svg", "alert-triangle.svg", "align-center.svg", "align-justify.svg", "align-left.svg", "align-right.svg", "anchor.svg", "announcement-01.svg", "archive.svg", "arrow-narrow-down-left.svg", "arrow-narrow-down-right.svg", "arrow-narrow-down.svg", "arrow-narrow-left.svg", "arrow-narrow-right.svg", "arrow-narrow-up-left.svg", "arrow-narrow-up-right.svg", "arrow-narrow-up.svg", "atom-02.svg", "award-03.svg", "award-04.svg", "battery-charging-01.svg", "battery-charging-02.svg", "battery-empty.svg", "battery-full.svg", "battery-low.svg", "beaker-02.svg", "bell-02.svg", "bell-minus.svg", "bell-off-01.svg", "bell-ringing-04.svg", "bezier-curve-01.svg", "bluetooth-connect.svg", "bluetooth-off.svg", "bluetooth-on.svg", "bluetooth-signal.svg", "bold-01.svg", "book-closed.svg", "book-open-01.svg", "bookmark-add.svg", "bookmark-check.svg", "bookmark-minus.svg", "bookmark-x.svg", "bookmark.svg", "box.svg", "briefcase-02.svg", "browser.svg", "brush-01.svg", "building-01.svg", "building-02.svg", "calculator.svg", "calendar-check-01.svg", "calendar-check-02.svg", "calendar-date.svg", "calendar-minus-01.svg", "calendar-plus-01.svg", "calendar.svg", "camera-01.svg", "camera-lens.svg", "camera-off.svg", "certificate-01.svg", "certificate-02.svg", "check-circle-broken.svg", "check-circle.svg", "check-heart.svg", "check-square-broken.svg", "check-square.svg", "check-verified-02.svg", "check.svg", "chevron-down-double.svg", "chevron-down.svg", "chevron-left-double.svg", "chevron-left.svg", "chevron-right-double.svg", "chevron-right.svg", "chevron-up-double.svg", "chevron-up.svg", "chrome-cast.svg", "clapperboard.svg", "clipboard.svg", "clock-check.svg", "clock-fast-forward.svg", "clock-plus.svg", "clock-refresh.svg", "clock-rewind.svg", "clock-snooze.svg", "clock-stopwatch.svg", "clock.svg", "cloud-blank-01.svg", "code-02.svg", "code-browser.svg", "code-snippet-01.svg", "code-snippet-02.svg", "code.svg", "colors-02.svg", "colors.svg", "command.svg", "contrast-03.svg", "copy-02.svg", "corner-down-left.svg", "corner-down-right.svg", "corner-left-down.svg", "corner-left-up.svg", "corner-right-down.svg", "corner-right-up.svg", "corner-up-left.svg", "corner-up-right.svg", "crop-01.svg", "cube-02.svg", "cube-outline.svg", "currency-dollar-circle.svg", "currency-pound-circle.svg", "currency-rupee-circle.svg", "currency-yen-circle.svg", "cursor-01.svg", "cursor-02.svg", "cursor-click-01.svg", "database-01.svg", "delete.svg", "disc-02.svg", "dotpoints-01.svg", "dotpoints-02.svg", "dots-grid.svg", "dots-horizontal.svg", "dots-vertical.svg", "download-01.svg", "download-03.svg", "download-cloud-01.svg", "drop.svg", "dropper.svg", "edit-01.svg", "edit-03.svg", "edit-05.svg", "eraser.svg", "expand-04.svg", "eye-off.svg", "eye.svg", "face-id.svg", "fast-backward.svg", "fast-forward.svg", "figma.svg", "file-04.svg", "file-05.svg", "file-07.svg", "file-attachment-04.svg", "file-check-01.svg", "file-check-02.svg", "file-code-01.svg", "file-code-02.svg", "file-download-02.svg", "file-heart-02.svg", "file-lock-02.svg", "file-minus-02.svg", "file-plus-02.svg", "file-plus-03.svg", "file-question-02.svg", "file-search-02.svg", "file-shield-02.svg", "file-x-02.svg", "film-01.svg", "filter-funnel-02.svg", "fingerprint-01.svg", "fingerprint-04.svg", "flag-02.svg", "flash-off.svg", "flash.svg", "flip-backward.svg", "flip-forward.svg", "folder-check.svg", "folder-closed.svg", "folder-code.svg", "folder-download.svg", "folder-lock.svg", "folder-minus.svg", "folder-plus.svg", "folder-question.svg", "folder-search.svg", "folder-shield.svg", "folder-x.svg", "folder.svg", "gift-01.svg", "glasses-02.svg", "globe-01.svg", "globe-05.svg", "google-chrome.svg", "graduation-hat-01.svg", "graduation-hat-02.svg", "hand.svg", "hard-drive.svg", "heading-01.svg", "headphones-02.svg", "heart.svg", "help-circle.svg", "home-02.svg", "hourglass-03.svg", "image-check.svg", "image-down.svg", "image-indent-left.svg", "image-indent-right.svg", "image-left.svg", "image-plus.svg", "image-right.svg", "image-up.svg", "inbox-01.svg", "info-circle.svg", "italic-01.svg", "key-01.svg", "keyboard-01.svg", "keyboard.svg", "laptop-02.svg", "left-indent-01.svg", "left-indent-02.svg", "letter-spacing-01.svg", "letter-spacing-02.svg", "life-buoy-01.svg", "lightbulb-01.svg", "lightbulb-02.svg", "line-height.svg", "link-01.svg", "link-03.svg", "link-broken-01.svg", "link-external-01.svg", "loading-02.svg", "lock-01.svg", "lock-unlocked-01.svg", "log-in-01.svg", "log-out-01.svg", "magic-wand-02.svg", "mail-01.svg", "mail-04.svg", "marker-pin-05.svg", "marker-pin-06.svg", "message-text-square-01.svg", "microphone-01.svg", "microphone-off-01.svg", "minus-circle.svg", "minus.svg", "modem-02.svg", "monitor-02.svg", "moon.svg", "mouse.svg", "move.svg", "music-note-02.svg", "music-note-plus.svg", "navigation-pointer-01.svg", "navigation-pointer-off-01.svg", "notification-text.svg", "paint-pour.svg", "paperclip.svg", "paragraph-spacing.svg", "paragraph-wrap.svg", "passcode-lock.svg", "passcode.svg", "pause-circle.svg", "pen-tool-01.svg", "pen-tool-02.svg", "pen-tool-minus.svg", "pen-tool-plus.svg", "percent-01.svg", "perspective-02.svg", "phone.svg", "pin-02.svg", "plane.svg", "play-circle start.svg", "play-circle-start.svg", "plus-circle.svg", "plus.svg", "podcast.svg", "power-02.svg", "printer.svg", "puzzle-piece-01.svg", "puzzle-piece-02.svg", "qr-code-02.svg", "receipt-check.svg", "receipt.svg", "reflect-02.svg", "refresh-ccw-01.svg", "refresh-ccw-02.svg", "refresh-cw-01.svg", "repeat-03.svg", "right-indent-01.svg", "right-indent-02.svg", "rocket-02.svg", "roller-brush.svg", "route.svg", "rss-02.svg", "ruler.svg", "safe.svg", "sale-04.svg", "save-01.svg", "scale-01.svg", "scan.svg", "scissors-cut-02.svg", "search-md.svg", "search-refraction.svg", "send-03.svg", "server-01.svg", "server-03.svg", "server-06.svg", "settings-01.svg", "settings-02.svg", "share-02.svg", "share-05.svg", "share-06.svg", "share-07.svg", "shield-03.svg", "shield-off.svg", "shield-plus.svg", "shield-tick.svg", "shield-zap.svg", "shopping-bag-03.svg", "shuffle-01.svg", "signal-02.svg", "signal-03.svg", "skip-back.svg", "skip-forward.svg", "slash-circle-01.svg", "sliders-02.svg", "stand.svg", "star-02.svg", "sun.svg", "tablet-01.svg", "tag-01.svg", "tag-03.svg", "terminal-browser.svg", "terminal.svg", "text-input.svg", "thumbs-down.svg", "thumbs-up.svg", "tool-01.svg", "transform.svg", "trash-02.svg", "trash-03.svg", "trophy-01.svg", "tv-02.svg", "type-01.svg", "type-strikethrough-01.svg", "underline-01.svg", "upload-01.svg", "upload-cloud-01.svg", "user-01.svg", "user-check-01.svg", "user-down-01.svg", "user-edit.svg", "user-left-01.svg", "user-minus-01.svg", "user-plus-01.svg", "user-right-01.svg", "user-up-01.svg", "user-x-01.svg", "users-01.svg", "users-check.svg", "users-down.svg", "users-edit.svg", "users-left.svg", "users-minus.svg", "users-plus.svg", "users-right.svg", "users-up.svg", "users-x.svg", "variable.svg", "virus.svg", "voicemail.svg", "volume-max.svg", "volume-min.svg", "volume-minus.svg", "volume-plus.svg", "volume-x.svg", "wallet-02.svg", "wifi-off.svg", "wifi.svg", "x-circle.svg", "x.svg", "youtube.svg", "zap.svg", "zoom-in.svg", "zoom-out.svg"],
+  common: ["AI.svg", "Drag Dots.svg", "GitHub.svg", "Home.svg", "Image.svg", "Indian Flag Round.svg", "Maximize.svg", "Rocket 1.svg", "Tick.svg", "activity-heart.svg", "activity.svg", "airplay.svg", "alarm-clock-check.svg", "alarm-clock-minus.svg", "alarm-clock-off.svg", "alarm-clock-plus.svg", "alarm-clock.svg", "alert-circle.svg", "alert-triangle.svg", "align-center.svg", "align-justify.svg", "align-left.svg", "align-right.svg", "anchor.svg", "announcement-01.svg", "archive.svg", "arrow-narrow-down-left.svg", "arrow-narrow-down-right.svg", "arrow-narrow-down.svg", "arrow-narrow-left.svg", "arrow-narrow-right.svg", "arrow-narrow-up-left.svg", "arrow-narrow-up-right.svg", "arrow-narrow-up.svg", "atom-02.svg", "award-03.svg", "award-04.svg", "battery-charging-01.svg", "battery-charging-02.svg", "battery-empty.svg", "battery-full.svg", "battery-low.svg", "beaker-02.svg", "bell-02.svg", "bell-minus.svg", "bell-off-01.svg", "bell-ringing-04.svg", "bezier-curve-01.svg", "bluetooth-connect.svg", "bluetooth-off.svg", "bluetooth-on.svg", "bluetooth-signal.svg", "bold-01.svg", "book-closed.svg", "book-open-01.svg", "bookmark-add.svg", "bookmark-check.svg", "bookmark-minus.svg", "bookmark-x.svg", "bookmark.svg", "box.svg", "briefcase-02.svg", "browser.svg", "brush-01.svg", "building-01.svg", "building-02.svg", "calculator.svg", "calendar-check-01.svg", "calendar-check-02.svg", "calendar-date.svg", "calendar-minus-01.svg", "calendar-plus-01.svg", "calendar.svg", "camera-01.svg", "camera-lens.svg", "camera-off.svg", "certificate-01.svg", "certificate-02.svg", "check-circle-broken.svg", "check-circle.svg", "check-heart.svg", "check-square-broken.svg", "check-square.svg", "check-verified-02.svg", "check.svg", "chevron-down-double.svg", "chevron-down.svg", "chevron-left-double.svg", "chevron-left.svg", "chevron-right-double.svg", "chevron-right.svg", "chevron-up-double.svg", "chevron-up.svg", "chrome-cast.svg", "clapperboard.svg", "clipboard.svg", "clock-check.svg", "clock-fast-forward.svg", "clock-plus.svg", "clock-refresh.svg", "clock-rewind.svg", "clock-snooze.svg", "clock-stopwatch.svg", "clock.svg", "cloud-blank-01.svg", "code-browser.svg", "code-snippet-01.svg", "code-snippet-02.svg", "colors-02.svg", "command.svg", "contrast-03.svg", "copy-02.svg", "corner-down-left.svg", "corner-down-right.svg", "corner-left-down.svg", "corner-left-up.svg", "corner-right-down.svg", "corner-right-up.svg", "corner-up-left.svg", "corner-up-right.svg", "crop-01.svg", "cube-02.svg", "cube-outline.svg", "currency-dollar-circle.svg", "currency-pound-circle.svg", "currency-rupee-circle.svg", "currency-yen-circle.svg", "cursor-01.svg", "cursor-02.svg", "cursor-click-01.svg", "database-01.svg", "disc-02.svg", "dotpoints-01.svg", "dotpoints-02.svg", "dots-grid.svg", "dots-horizontal.svg", "dots-vertical.svg", "download-01.svg", "download-03.svg", "download-cloud-01.svg", "drop.svg", "dropper.svg", "edit-01.svg", "edit-03.svg", "edit-05.svg", "eraser.svg", "expand-04.svg", "eye-off.svg", "eye.svg", "face-id.svg", "fast-backward.svg", "fast-forward.svg", "figma.svg", "file-04.svg", "file-05.svg", "file-07.svg", "file-attachment-04.svg", "file-check-01.svg", "file-check-02.svg", "file-code-01.svg", "file-code-02.svg", "file-download-02.svg", "file-heart-02.svg", "file-lock-02.svg", "file-minus-02.svg", "file-plus-02.svg", "file-plus-03.svg", "file-question-02.svg", "file-search-02.svg", "file-shield-02.svg", "file-x-02.svg", "film-01.svg", "filter-funnel-02.svg", "fingerprint-01.svg", "fingerprint-04.svg", "flag-02.svg", "flash-off.svg", "flip-backward.svg", "flip-forward.svg", "folder-check.svg", "folder-closed.svg", "folder-code.svg", "folder-download.svg", "folder-lock.svg", "folder-minus.svg", "folder-plus.svg", "folder-question.svg", "folder-search.svg", "folder-shield.svg", "folder-x.svg", "folder.svg", "gift-01.svg", "glasses-02.svg", "globe-01.svg", "globe-05.svg", "google-chrome.svg", "graduation-hat-01.svg", "graduation-hat-02.svg", "hand.svg", "hard-drive.svg", "heading-01.svg", "headphones-02.svg", "heart.svg", "help-circle.svg", "home-02.svg", "hourglass-03.svg", "image-check.svg", "image-down.svg", "image-indent-left.svg", "image-indent-right.svg", "image-left.svg", "image-plus.svg", "image-right.svg", "image-up.svg", "inbox-01.svg", "info-circle.svg", "italic-01.svg", "key-01.svg", "keyboard-01.svg", "laptop-02.svg", "left-indent-01.svg", "left-indent-02.svg", "letter-spacing-01.svg", "letter-spacing-02.svg", "life-buoy-01.svg", "lightbulb-01.svg", "lightbulb-02.svg", "line-height.svg", "link-01.svg", "link-03.svg", "link-broken-01.svg", "link-external-01.svg", "loading-02.svg", "lock-01.svg", "lock-unlocked-01.svg", "log-in-01.svg", "log-out-01.svg", "magic-wand-02.svg", "mail-01.svg", "mail-04.svg", "marker-pin-05.svg", "marker-pin-06.svg", "message-text-square-01.svg", "microphone-01.svg", "microphone-off-01.svg", "minus-circle.svg", "minus.svg", "modem-02.svg", "monitor-02.svg", "moon.svg", "mouse.svg", "move.svg", "music-note-02.svg", "music-note-plus.svg", "navigation-pointer-01.svg", "navigation-pointer-off-01.svg", "notification-text.svg", "paint-pour.svg", "paperclip.svg", "paragraph-spacing.svg", "paragraph-wrap.svg", "passcode-lock.svg", "passcode.svg", "pause-circle.svg", "pen-tool-01.svg", "pen-tool-02.svg", "pen-tool-minus.svg", "pen-tool-plus.svg", "percent-01.svg", "perspective-02.svg", "phone.svg", "pin-02.svg", "plane.svg", "play-circle-start.svg", "plus-circle.svg", "plus.svg", "podcast.svg", "power-02.svg", "printer.svg", "puzzle-piece-01.svg", "puzzle-piece-02.svg", "qr-code-02.svg", "receipt-check.svg", "receipt.svg", "reflect-02.svg", "refresh-ccw-01.svg", "refresh-ccw-02.svg", "refresh-cw-01.svg", "repeat-03.svg", "right-indent-01.svg", "right-indent-02.svg", "rocket-02.svg", "roller-brush.svg", "route.svg", "rss-02.svg", "ruler.svg", "safe.svg", "sale-04.svg", "save-01.svg", "scale-01.svg", "scan.svg", "scissors-cut-02.svg", "search-md.svg", "search-refraction.svg", "send-03.svg", "server-01.svg", "server-03.svg", "server-06.svg", "settings-01.svg", "settings-02.svg", "share-02.svg", "share-05.svg", "share-06.svg", "share-07.svg", "shield-03.svg", "shield-off.svg", "shield-plus.svg", "shield-tick.svg", "shield-zap.svg", "shopping-bag-03.svg", "shuffle-01.svg", "signal-02.svg", "signal-03.svg", "skip-back.svg", "skip-forward.svg", "slash-circle-01.svg", "sliders-02.svg", "stand.svg", "star-02.svg", "sun.svg", "tablet-01.svg", "tag-01.svg", "tag-03.svg", "terminal-browser.svg", "terminal.svg", "text-input.svg", "thumbs-down.svg", "thumbs-up.svg", "tool-01.svg", "transform.svg", "trash-02.svg", "trash-03.svg", "trophy-01.svg", "tv-02.svg", "type-01.svg", "type-strikethrough-01.svg", "underline-01.svg", "upload-01.svg", "upload-cloud-01.svg", "user-01.svg", "user-check-01.svg", "user-down-01.svg", "user-edit.svg", "user-left-01.svg", "user-minus-01.svg", "user-plus-01.svg", "user-right-01.svg", "user-up-01.svg", "user-x-01.svg", "users-01.svg", "users-check.svg", "users-down.svg", "users-edit.svg", "users-left.svg", "users-minus.svg", "users-plus.svg", "users-right.svg", "users-up.svg", "users-x.svg", "variable.svg", "virus.svg", "voicemail.svg", "volume-max.svg", "volume-min.svg", "volume-minus.svg", "volume-plus.svg", "volume-x.svg", "wallet-02.svg", "wifi-off.svg", "wifi.svg", "x-circle.svg", "x.svg", "youtube.svg", "zap.svg", "zoom-in.svg", "zoom-out.svg"],
   /* Split by ACTUAL fill colour read out of each file, not by filename
      pattern — the first version grouped every bare "X.svg" into mono because
      it matched the "1 X.svg" naming pattern, but only checked ONE file's
@@ -3978,7 +4003,12 @@ const ICON_GROUPS = {
    these files carry their own colour and a dark-mode tile would hide them). */
 function copyIconPath(el, path) {
   navigator.clipboard.writeText(path).then(() => {
-    const label = el.querySelector('span');
+    /* .icon-tile__label, not a bare 'span' — a Common tile now has TWO spans
+       (the mask glyph, then the label), and querySelector('span') returns the
+       FIRST one in document order, which is the glyph. That would have set
+       "Copied!" as its textContent — invisible on a masked element with no
+       text node rendered, and silently corrupting the very icon just clicked. */
+    const label = el.querySelector('.icon-tile__label');
     const orig = label.textContent;
     label.textContent = 'Copied!';
     label.classList.add('icon-copied');
@@ -4009,7 +4039,41 @@ function renderIcons(s) {
      depth without depending on the build step at all. */
   const ICONS_BASE = /\/docs\//.test(location.pathname) ? 'icons/' : 'docs/icons/';
   const total = Object.values(ICON_GROUPS).reduce((n, a) => n + a.length, 0);
-  let h = `<div class="tok-note">${total} unique icon files, read straight from <code>docs/icons/</code> — nothing here is a component, just the raw assets. Click a tile to copy its path. The folder holds 486; excluded here (never deleted, still on disk): one unused alpha-mask export, plus 28 files that are a byte-for-byte duplicate of another file already shown — a service's flat mark under its own bare name IS its "-color" file, and 15 pairs across the general icon set share one glyph under two names (e.g. Star.svg = star-02.svg).</div>`;
+  let h = `<div class="tok-note">${total} unique icon files, read straight from <code>docs/icons/</code> — nothing here is a component, just the raw assets. Click a tile to copy its path. The folder holds 486; excluded here (never deleted, still on disk): one unused alpha-mask export, and 66 files that duplicate the SAME glyph under a second name — 28 byte-identical, 38 more the same shape re-exported with different rounding or a regenerated clip-path id, which is why they looked different under a hash check and had to be found by comparing geometry instead (e.g. Copy.svg = copy-02.svg, same icon, not caught until compared shape-by-shape).</div>`;
+  /* Which files carry their OWN colour, and therefore must be shown on a
+     FIXED surface regardless of the docs page's theme toggle — verified by
+     reading the actual fill/stroke out of the files, not assumed from which
+     group they sit in:
+       COMMON is uniformly stroke="#101F3E" in every file — no colour of its
+       own, so it is shown as a currentColor MASK instead of a plain <img>,
+       and both the tile and the glyph now follow the page theme exactly like
+       every other card in this docs app.
+       COLORED / BLACK & WHITE / PHOTOS carry colour baked into the file
+       (brand blue/red, or a literal navy hex, or a photograph) — masking
+       would either recolour a real photo or flatten a two-tone brand mark to
+       a silhouette, and the mono files are ALWAYS #101F3E regardless of
+       theme, so their tile is fixed light in both modes, exactly as it always
+       needs to be for that hex to read.
+     ILLUSTRATION is neither: it is TWO FILES, one built for a light surface
+     and one built for a dark surface — "Empty State Illustration Dark.svg" is
+     mostly black shapes, meant to sit on a dark ground, and rendering it on a
+     fixed white tile (the original bug) made it read as a near-invisible
+     black blob. Each illustration tile now gets the SURFACE ITS OWN FILE was
+     designed for, independent of the page's current theme, so both are
+     always legible side by side rather than one of them only working when
+     the docs page happens to be in the theme that matches it. */
+  const FIXED_LIGHT = 'background:#FFFFFF;border-color:#EBEEF6';
+  const FIXED_LIGHT_LABEL = 'color:#7988A8';
+  /* The ONE Common file that is not stroke="#101F3E" and nothing else —
+     checked by reading every file's actual fill/stroke, not assumed from
+     sitting in the "Common" bucket. (The first pass over-flagged 74 more for
+     a fill="white" that turns out to sit inside their <clipPath> definition —
+     geometry, never rendered — so masking those 74 is correct and confirmed,
+     not a second guess.) Masking this one would flatten a real tricolour flag
+     to a solid block, so it renders as a plain image on a fixed light tile
+     like the logo groups, even though it is browsed under "Common". */
+  const COMMON_NOT_MASKABLE = new Set(['Indian Flag Round.svg']);
+
   let any = false;
   SECTIONS.forEach(sec => {
     if (wantKey && wantKey !== sec.key) return;
@@ -4017,24 +4081,60 @@ function renderIcons(s) {
     if (!files.length) return;
     any = true;
     const isArt = sec.key === 'illustration';
-    h += `<div class="icon-sec">${sec.label} <span>${files.length} · ${esc(sec.hint)}</span></div>` +
-         `<div class="${isArt ? 'icon-grid icon-grid--lg' : 'icon-grid'}">`;
+    const isCommon = sec.key === 'common';
+    h += `<div class="icon-sec">${sec.label} <span>${files.length} · ${esc(sec.hint)}</span></div>`;
+
+    /* ILLUSTRATIONS: one LIVE tile, not two static ones. Two side-by-side
+       tiles is what shipped first, and it does not answer the actual
+       question — it shows the light file always light and the dark file
+       always dark, which proves nothing about how the swap behaves. The real
+       component never shows two files: ONE slot, `--zc-empty-art`, swapped by
+       CSS `content:` per theme (shell.css). So this uses that EXACT markup —
+       `.zc-empty__art` around the light file's own <img> — rather than
+       reinventing the swap. Toggle the docs page's OWN theme and this tile
+       becomes the dark file automatically, because it IS the real component,
+       not a copy of its behaviour. */
+    if (isArt) {
+      const lightFile = ICON_GROUPS.illustration.find(f => !/dark/i.test(f)) || files[0];
+      const darkFile = ICON_GROUPS.illustration.find(f => /dark/i.test(f));
+      const lightPath = ICONS_BASE + lightFile;
+      h += `<div class="icon-grid icon-grid--lg"><div class="icon-tile icon-tile--lg icon-tile--art" title="Live --zc-empty-art, both themes">` +
+           `<div class="zc-empty__art"><img src="${esc(lightPath)}" alt=""></div>` +
+           `<span class="icon-tile__label">--zc-empty-art` +
+           (darkFile ? ` <br>light: ${esc(lightFile)}<br>dark: ${esc(darkFile)}` : '') +
+           `</span></div></div>`;
+      return;
+    }
+
+    /* isArt is always false below — the illustration section returns above,
+       before ever reaching this per-file loop. */
+    h += `<div class="icon-grid">`;
     files.forEach(f => {
       const path = ICONS_BASE + f;
-      h += `<div class="${isArt ? 'icon-tile icon-tile--lg' : 'icon-tile'}" onclick="${escA('copyIconPath(this, ' + JSON.stringify(path) + ')')}" title="${esc(f)}">` +
-           /* NOT loading="lazy" — deliberately. It left every tile broken on
-              a real machine: native lazy-loading can sit "pending" forever
-              on a backgrounded tab or an unfocused window, with no error and
-              no network request ever sent, so nothing here even LOOKS wrong
-              in devtools. Removing the attribute made the same file load
-              instantly. Verified in Chrome, not assumed: fetch() to the exact
-              URL always worked; the <img> tag with loading="lazy" sat at
-              naturalWidth 0 for 2+ seconds with zero requests recorded, and
-              loaded the instant the attribute was removed. These are small
-              SVGs — eager-loading all 486 costs nothing next to a tile that
-              silently never renders. */
-           `<img src="${esc(path)}" alt="">` +
-           `<span>${esc(f.replace(/\.(svg|png)$/i, ''))}</span></div>`;
+      const isMaskable = isCommon && !COMMON_NOT_MASKABLE.has(f);
+      let tileStyle = '', labelStyle = '';
+      if (!isMaskable) { tileStyle = FIXED_LIGHT; labelStyle = FIXED_LIGHT_LABEL; }
+      const styleAttr = tileStyle ? ` style="${escA(tileStyle)}"` : '';
+      h += `<div class="icon-tile" onclick="${escA('copyIconPath(this, ' + JSON.stringify(path) + ')')}" title="${esc(f)}"${styleAttr}>` +
+           (isMaskable
+             /* MASK, not <img> — the glyph is painted with currentColor, so it
+                follows the SAME text token every label and heading on this
+                page already follows, in both themes, automatically. */
+             ? `<span class="icon-tile__glyph" style="--icon:url('${esc(path)}')"></span>`
+             /* NOT loading="lazy" on the <img> path — deliberately. It left
+                every tile broken on a real machine: native lazy-loading can
+                sit "pending" forever on a backgrounded tab or an unfocused
+                window, with no error and no network request ever sent, so
+                nothing here even LOOKS wrong in devtools. Removing the
+                attribute made the same file load instantly. Verified in
+                Chrome, not assumed: fetch() to the exact URL always worked;
+                the <img> tag with loading="lazy" sat at naturalWidth 0 for
+                2+ seconds with zero requests recorded, and loaded the instant
+                the attribute was removed. These are small SVGs — eager-
+                loading all 486 costs nothing next to a tile that silently
+                never renders. */
+             : `<img src="${esc(path)}" alt="">`) +
+           `<span class="icon-tile__label"${labelStyle ? ` style="${escA(labelStyle)}"` : ''}>${esc(f.replace(/\.(svg|png)$/i, ''))}</span></div>`;
     });
     h += `</div>`;
   });
